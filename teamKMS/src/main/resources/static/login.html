@@ -2,28 +2,44 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 <script src="js/es6-promise.auto.min.js"></script>
 <script src="/webjars/axios/dist/axios.min.js"></script>
 <script src="/webjars/http-vue-loader/1.3.5/src/httpVueLoader.js"></script>
 <script src="/webjars/vue-router/3.0.1/dist/vue-router.min.js"></script>
-<link rel="stylesheet"
-	href="/webjars/vuetify/1.2.1/dist/vuetify.min.css">
+<link rel="stylesheet" href="/webjars/vuetify/1.2.1/dist/vuetify.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+
 <title>Team KMS</title>
 </head>
 <body>
-	<div id='login'>
+	<v-app id='login'>
 		<form name="loginform" acton="login" method='post'>
-			<label for="address">ServerAddress</label> 
-				
-			<label for="username">Username</label> 
-		
-			<label for="password">Password</label> 
-
-			 <v-btn color="success" type="submit">Login</v-btn>
-		</form>
-	</div>
+			<v-content>
+		      <v-container fluid fill-height>
+		        <v-layout align-center justify-center>
+		          <v-flex xs12 sm8 md4>
+		            <v-card class="elevation-12">
+		              <v-toolbar dark color="primary">
+		                <v-toolbar-title>Dev Kms</v-toolbar-title>
+		              </v-toolbar>
+		              <v-card-text>
+		                <v-form>
+		                  <v-text-field prepend-icon="person" for="username" label="Login" type="text"></v-text-field>
+		                  <v-text-field prepend-icon="lock"  for="password" label="Password" type="password"></v-text-field>
+		                </v-form>
+		              </v-card-text>
+		              <v-card-actions>
+		                <v-spacer></v-spacer>
+		                <v-btn color="primary" type="submit">Login</v-btn>
+		              </v-card-actions>
+		            </v-card>
+		          </v-flex>
+		        </v-layout>
+		      </v-container>
+	    	</v-content>
+	    </form>
+	</v-app>
 	<script src="/webjars/vue/2.5.16/vue.min.js"></script>
 	<script src="/webjars/vuetify/1.2.1/dist/vuetify.min.js"></script>
 	<script src="js/login.js"></script>

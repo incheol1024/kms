@@ -1,11 +1,4 @@
-Vue.use(Vuetify, {
-  theme: {
-    primary: '#3f51b5',
-    secondary: '#b0bec5',
-    accent: '#8c9eff',
-    error: '#b71c1c'
-  }
-});
+Vue.use(Vuetify);
 Vue.use(VueRouter);
 
 httpVueLoader.httpRequest = function(url) {
@@ -19,6 +12,7 @@ httpVueLoader.httpRequest = function(url) {
 }
 
 httpVueLoader.register(Vue, 'view/title-component.vue');
+httpVueLoader.register(Vue, 'view/menu-component.vue');
 
 const router = new VueRouter({
 	 routes: [
@@ -28,9 +22,9 @@ const router = new VueRouter({
 
 var main = new Vue({
 	router : router,
-	data: function data() {
-    	
-    },
+	data: () => ({
+		drawer : null
+	}),
     methods: {
     	
     }
