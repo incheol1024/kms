@@ -1,0 +1,33 @@
+package com.devworker.kms.service.message;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.stereotype.Service;
+
+import com.devworker.kms.dto.message.MessageDto;
+import com.devworker.kms.util.MessageClient;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+@Service
+public class MessageService {
+	@Value("${message.hook.url}")
+	String url;
+
+	
+	public String sendMessage(MessageDto message) throws InterruptedException, ExecutionException, JsonProcessingException {
+		Future<String> sendInnerMessage = sendAsyncMessage(message);
+		return sendInnerMessage.get();
+	}
+	
+	
+	@Async
+	public Future<String> sendAsyncMessage(MessageDto message) throws JsonProcessingException {
+		MessageDto sendMessage = MessageClient.getInstance().sendMessage(url,message);
+		return new AsyncResult<>(sendMessage.getMessageState());
+	}
+
+}

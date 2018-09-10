@@ -30,16 +30,6 @@ var main = new Vue({
     }
 }).$mount('#app')
 
-
-var OpenError = function OpenError(message){
-	if(typeof message.response == "object"){
-		main.content = message.response.data;	
-	}
-	else
-		main.content = message.stack;
-	main.open();
-}
-
 router.push('title');
 
 /*Vue.config.errorHandler = function (err, vm, info) {
