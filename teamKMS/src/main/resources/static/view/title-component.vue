@@ -18,11 +18,7 @@
 				axios.post("sendmessage", {
 					body : JSON.stringify(_this.curItem)					
 				}).then(function (response) {
-					if (response.status === 200) {
-						console.log('suc');
-					} else {
-						console.log(response.data);
-					}
+					console.log(response.data);
 				}).catch(function (error) {
 					console.log(error);
 				});		
