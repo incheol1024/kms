@@ -19,3 +19,6 @@ insert into KMS.KMSMenu(menu_name,menu_type) values('제 2금융','SITE');
 insert into KMS.KMSMenu(menu_name,menu_type) values('공공기관','SITE');
 insert into KMS.KMSMenu(menu_name,menu_type) values('사기업','SITE');
 insert into KMS.KMSMenu(menu_name,menu_type) values('ETC','SITE');
+
+commit;
+

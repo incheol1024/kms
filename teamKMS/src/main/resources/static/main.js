@@ -19,9 +19,9 @@ httpVueLoader.register(Vue, 'view/qna-component.vue');
 const router = new VueRouter({
 	 routes: [
 		  { path: '/title', component: Vue.component('title-component') },
-		  { path: '/sites', component: Vue.component('sites-component') },
-		  { path: '/solutions', component: Vue.component('solutions-component') },
-		  { path: '/qna', component: Vue.component('qna-component') }
+		  { path: '/sites/:id', component: Vue.component('sites-component') , props: true },
+		  { path: '/solutions/:id', component: Vue.component('solutions-component'), props: true },
+		  { path: '/qna/:id', component: Vue.component('qna-component'), props: true }
 	]
 })
 
@@ -58,7 +58,6 @@ var main = new Vue({
 		},
 		getChild : function getChild(item){			
 			if(item.children.length < 1){
-				console.log(item);
 				 axios.get("getMenuList",{
 					 params: { type: item.type }
 				 })
@@ -72,8 +71,13 @@ var main = new Vue({
 				 })				
 			}
 		},
-		route : function route() {
-			
+		route : function route(children) {
+			if(children.type == 'SOL')
+				router.push('/solutions/' + children.id);
+			else if(children.type == 'SITE')
+				router.push('/sites/' + children.id);
+			else if(children.type == 'QNA')
+				router.push('/qna/' + children.id);
 		}
 	 }
 }).$mount('#app')

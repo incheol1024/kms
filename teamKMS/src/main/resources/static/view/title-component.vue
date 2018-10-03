@@ -1,15 +1,20 @@
 <template>
 <v-content>
-	<v-container fluid fill-height>
-		<v-btn @click="sendClick">Send Message Test</v-btn>
-	</v-container>
+	<v-layout fill-height column justify-center>
+		<v-carousel>
+    		<v-carousel-item v-for="(item,i) in items" :key="i" :src="item" contain></v-carousel-item>
+    	</v-carousel>
+    	<v-btn @click="sendClick">Send Message Test</v-btn>
+	</v-layout>
+	
 </v-content>
 </template>
 
 <script>
   module.exports =  {
 	 data: () => ({
-		 curItem : JSON.parse(JSON.stringify(MessageDto))
+		 curItem : JSON.parse(JSON.stringify(MessageDto)),
+		 items : ['../assets/kms1.png','../assets/kms2.jpg','../assets/kms3.png']
      }),
 	 methods: {
 		 sendClick : function sendClick(item,index){

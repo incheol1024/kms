@@ -32,7 +32,7 @@
     	<v-expansion-panel-content v-for="(item,i) in items" :key="i" >
       		<div slot="header" @click="getChild(item)">{{item.text}}</div>
 	      	<v-list>
-	      		<v-list-tile v-for="(children,k) in item.children" :key="k" @click="">
+	      		<v-list-tile v-for="(children,k) in item.children" :key="k" @click="route(children)">
 		            <v-list-tile-content>
 		              <v-list-tile-title>{{children.name}}</v-list-tile-title>
 		            </v-list-tile-content>
