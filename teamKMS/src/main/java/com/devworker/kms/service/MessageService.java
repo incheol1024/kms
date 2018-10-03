@@ -1,4 +1,4 @@
-package com.devworker.kms.service.message;
+package com.devworker.kms.service;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
-import com.devworker.kms.dto.message.MessageDto;
+import com.devworker.kms.dto.MessageDto;
 import com.devworker.kms.util.MessageClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 

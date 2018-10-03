@@ -1,4 +1,4 @@
-package com.devworker.kms.dto.message;
+package com.devworker.kms.dto;
 
 import com.devworker.kms.dic.MessageType;
 

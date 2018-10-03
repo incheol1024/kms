@@ -1,8 +1,6 @@
 <template>
 <v-content>
-	<v-container fluid fill-height>
-		<v-btn @click="sendClick">Send Message Test</v-btn>
-	</v-container>
+	qna
 </v-content>
 </template>
 

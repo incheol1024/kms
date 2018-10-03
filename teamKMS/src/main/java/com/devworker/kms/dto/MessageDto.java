@@ -1,4 +1,4 @@
-package com.devworker.kms.dto.message;
+package com.devworker.kms.dto;
 
 import java.util.ArrayList;
 import java.util.List;

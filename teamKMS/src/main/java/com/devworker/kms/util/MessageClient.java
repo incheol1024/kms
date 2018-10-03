@@ -10,7 +10,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import com.devworker.kms.dto.message.MessageDto;
+import com.devworker.kms.dto.MessageDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 

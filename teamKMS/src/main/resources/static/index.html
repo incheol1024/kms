@@ -21,11 +21,28 @@
 				<span class="hidden-sm-and-down">KMS</span> 
 			</v-toolbar-title>
 		 	<v-text-field flat solo-inverted hide-details prepend-inner-icon="search" label="Search" class="hidden-sm-and-down"></v-text-field> 
-		 	<v-spacer></v-spacer> 
-		 	<v-btn icon><v-icon>settings_applications</v-icon> </v-btn>
-		 	<v-btn icon><v-icon>cancel</v-icon> </v-btn> </v-toolbar>
-		<menu-component :drawer="drawer"></menu-component>
-		<router-view class="routerBody"></router-view>
+		 	<v-spacer></v-spacer> 		 	
+		 	<v-btn icon @click="logout"><v-icon>settings</v-icon> </v-btn> 
+		 	<v-btn icon @click="logout"><v-icon>help</v-icon> </v-btn> 
+		 	<v-btn icon @click="logout"><v-icon>cancel</v-icon> </v-btn> 
+		 </v-toolbar>
+	 
+	 <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="drawer" fixed app>
+      <v-expansion-panel focusable>
+    	<v-expansion-panel-content v-for="(item,i) in items" :key="i" >
+      		<div slot="header" @click="getChild(item)">{{item.text}}</div>
+	      	<v-list>
+	      		<v-list-tile v-for="(children,k) in item.children" :key="k" @click="">
+		            <v-list-tile-content>
+		              <v-list-tile-title>{{children.name}}</v-list-tile-title>
+		            </v-list-tile-content>
+          		</v-list-tile>	
+	      	</v-list>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+	</v-navigation-drawer>
+	
+	<router-view class="routerBody"></router-view>
 	</v-app>
 	<script src="/webjars/vue/2.5.16/vue.min.js"></script>
 	<script src="/webjars/vuetify/1.2.1/dist/vuetify.min.js"></script>
