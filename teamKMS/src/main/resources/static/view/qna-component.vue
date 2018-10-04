@@ -1,6 +1,7 @@
 <template>
 <v-content>
 	qna {{id}}
+	<v-btn color="primary" @click="writepage">Write</v-btn> 
 </v-content>
 </template>
 
@@ -11,7 +12,9 @@
 		 
      }),
 	 methods: {
-		 
+		 writepage : function writepage(){
+		 	router.push("/qna/write/" + this.id);
+		 }
 	 }
   }
 </script>

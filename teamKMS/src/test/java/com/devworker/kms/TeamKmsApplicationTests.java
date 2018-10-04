@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import com.devworker.kms.dto.MenuDto;
 import com.devworker.kms.dto.MessageDetailDto;
 import com.devworker.kms.dto.MessageDto;
 import com.devworker.kms.service.MenuService;
+import com.devworker.kms.service.MessageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 
@@ -25,14 +27,18 @@ import com.google.gson.Gson;
 public class TeamKmsApplicationTests {
 	@Autowired
 	MenuService menuService;
-
+	@Autowired
+	MessageService messageService;
+	
 	@Test
-	public void makeMessageModel() throws JsonProcessingException {
+	public void makeMessageModel() throws JsonProcessingException, InterruptedException, ExecutionException {
 		Gson mapper = new Gson();
 		MessageDto dto = new MessageDto();
 		dto.setText("ddd");
 		dto.addAttach(new MessageDetailDto());
 		System.out.println(mapper.toJson(dto));
+		String sendMessage = messageService.sendMessage(dto);
+		System.out.println(sendMessage);
 	}
 
 	@Test
