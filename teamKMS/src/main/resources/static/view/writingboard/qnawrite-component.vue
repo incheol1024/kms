@@ -1,31 +1,39 @@
 <template>
 <v-content>
-	qna {{id}}
+	qna {{name}} {{id}}
 	<codemirror v-model="code" :options="cmOptions"></codemirror>
 </v-content>
 </template>
 
 <script>
-//text/x-c++src
-//text/x-csharp
-//text/x-java
-//text/javascript
-//text/x-python
   module.exports =  {
-	 props : ['id'],
+	props : ['id','name'],
 	data () {
-    return {
-      code: 'const a = 10',
-      cmOptions: {
-        tabSize: 4,
-        mode: 'text/x-java',
-        lineNumbers: true,
-        line: true
-      }
-    }
-  },
+	    return {
+	      code: '',
+	      cmOptions: {
+	        tabSize: 4,
+	        mode: '',
+	        lineNumbers: true,
+	        line: true
+	      }
+	    }
+    },
+     created: function () {
+    	console.log(this.name);
+		 	if(this.name == 'C++')
+		 		this.cmOptions.mode = 'text/x-c++src';
+		 	else if(this.name == 'CSharp')
+		 		this.cmOptions.mode =  'text/x-csharp';
+		 	else if(this.name == 'Java')
+		 		this.cmOptions.mode =  'text/x-java';
+		 	else if(this.name == 'Python')
+		 		this.cmOptions.mode =  'text/x-python';
+		 	else
+		 		this.cmOptions.mode =  'text/javascript';
+  	},
 	 methods: {
-		 
+		
 	 }
   }
 </script>

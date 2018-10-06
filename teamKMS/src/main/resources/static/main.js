@@ -26,10 +26,10 @@ const router = new VueRouter({
 		  { path: '/title', component: Vue.component('title-component') },
 		  { path: '/sites/:id', component: Vue.component('sites-component') , props: true },
 		  { path: '/solutions/:id', component: Vue.component('solutions-component'), props: true },
-		  { path: '/qna/:id', component: Vue.component('qna-component'), props: true },
+		  { path: '/qna/:name/:id', component: Vue.component('qna-component'), props: true },
 		  { path: '/sites/write/:id', component: Vue.component('siteswrite-component'), props: true },
 		  { path: '/solutions/write/:id', component: Vue.component('solwrite-component'), props: true },
-		  { path: '/qna/write/:id', component: Vue.component('qnawrite-component'), props: true }
+		  { path: '/qna/write/:name/:id', component: Vue.component('qnawrite-component'), props: true }
 	]
 })
 
@@ -85,7 +85,7 @@ var main = new Vue({
 			else if(children.type == 'SITE')
 				router.push('/sites/' + children.id);
 			else if(children.type == 'QNA')
-				router.push('/qna/' + children.id);
+				router.push('/qna/' + children.name + "/" + children.id);
 		},
 		submit : function submit(){
 			console.log('검색버튼 눌렸다아');
