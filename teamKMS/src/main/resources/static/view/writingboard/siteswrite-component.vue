@@ -11,9 +11,7 @@ module.exports =  {
 	data() {
     return {
       content: '',
-      config: {
-        
-      }
+      config: {}
     };
   },
   methods: {

@@ -17,8 +17,10 @@ import com.devworker.kms.dic.MenuType;
 import com.devworker.kms.dto.MenuDto;
 import com.devworker.kms.dto.MessageDetailDto;
 import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.MenuService;
 import com.devworker.kms.service.MessageService;
+import com.devworker.kms.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 
@@ -29,6 +31,10 @@ public class TeamKmsApplicationTests {
 	MenuService menuService;
 	@Autowired
 	MessageService messageService;
+	@Autowired
+	UserService userService;
+	@Autowired
+	GroupService groupService;
 	
 	@Test
 	public void makeMessageModel() throws JsonProcessingException, InterruptedException, ExecutionException {
@@ -42,8 +48,18 @@ public class TeamKmsApplicationTests {
 	}
 
 	@Test
-	public void getMenuList() {
+	public void getMenuListTest() {
 		List<MenuDto> menuList = menuService.getMenuList(MenuType.SOL);
 		assertThat(menuList, not(IsEmptyCollection.empty()));
+	}
+	
+	@Test
+	public void userTest() {
+		userService.countUser();
+	}
+	
+	@Test
+	public void groupTest() {
+		userService.countUser();
 	}
 }

@@ -20,7 +20,6 @@
 	    }
     },
      created: function () {
-    	console.log(this.name);
 		 	if(this.name == 'C++')
 		 		this.cmOptions.mode = 'text/x-c++src';
 		 	else if(this.name == 'CSharp')

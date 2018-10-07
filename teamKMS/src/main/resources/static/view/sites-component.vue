@@ -1,6 +1,7 @@
 <template>
 <v-content>
 	site {{id}}
+	<v-spacer></v-spacer>
 	<v-btn color="primary"  @click="writepage">Write</v-btn> 
 	
 		<v-data-table :headers="headers" :items="desserts" class="elevation-1">

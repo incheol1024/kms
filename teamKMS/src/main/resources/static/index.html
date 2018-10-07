@@ -47,6 +47,8 @@
     	<v-expansion-panel-content v-for="(item,i) in items" :key="i" >
       		<div slot="header" @click="getChild(item)">{{item.text}}</div>
 	      	<v-list>
+	      		<v-progress-circular aligin-center indeterminate color="primary" v-if="item.children < 1">
+	      		</v-progress-circular>
 	      		<v-list-tile v-for="(children,k) in item.children" :key="k" @click="route(children)">
 		            <v-list-tile-content>
 		              <v-list-tile-title>{{children.name}}</v-list-tile-title>
@@ -57,7 +59,7 @@
       </v-expansion-panel>
 	</v-navigation-drawer>
 	
-	<router-view class="routerBody"></router-view>
+	<router-view></router-view>
 	</v-app>
 	<script src="/webjars/vue/2.5.16/vue.min.js"></script>
 	<script src="/webjars/vuetify/1.2.1/dist/vuetify.min.js"></script>

@@ -17,9 +17,17 @@ httpVueLoader.register(Vue, 'view/title-component.vue');
 httpVueLoader.register(Vue, 'view/sites-component.vue');
 httpVueLoader.register(Vue, 'view/solutions-component.vue');
 httpVueLoader.register(Vue, 'view/qna-component.vue');
+httpVueLoader.register(Vue, 'view/search-component.vue');
+httpVueLoader.register(Vue, 'view/help-component.vue');
+
 httpVueLoader.register(Vue, 'view/writingboard/qnawrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/siteswrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/solwrite-component.vue');
+httpVueLoader.register(Vue, 'view/setting-component.vue');
+
+httpVueLoader.register(Vue, 'view/setting/user-component.vue');
+httpVueLoader.register(Vue, 'view/setting/group-component.vue');
+httpVueLoader.register(Vue, 'view/setting/ETC-component.vue');
 
 const router = new VueRouter({
 	 routes: [
@@ -27,9 +35,26 @@ const router = new VueRouter({
 		  { path: '/sites/:id', component: Vue.component('sites-component') , props: true },
 		  { path: '/solutions/:id', component: Vue.component('solutions-component'), props: true },
 		  { path: '/qna/:name/:id', component: Vue.component('qna-component'), props: true },
+		  { path: '/search', component: Vue.component('search-component')},
+		  { path: '/help', component: Vue.component('help-component')},
 		  { path: '/sites/write/:id', component: Vue.component('siteswrite-component'), props: true },
 		  { path: '/solutions/write/:id', component: Vue.component('solwrite-component'), props: true },
-		  { path: '/qna/write/:name/:id', component: Vue.component('qnawrite-component'), props: true }
+		  { path: '/qna/write/:name/:id', component: Vue.component('qnawrite-component'), props: true },
+		  { path: '/setting', component: Vue.component('setting-component'),
+			  children: [
+			        {
+			          path: 'user',
+			          component:  Vue.component('user-component')
+			        },
+			        {
+			          path: 'group',
+			          component:  Vue.component('group-component')
+			        },
+			        {
+				      path: 'ETC',
+				      component:  Vue.component('ETC-component')
+				    }
+	      ]}
 	]
 })
 
@@ -41,17 +66,20 @@ var main = new Vue({
           {
             text: 'Solutions',
             children: [],
-            type : 'SOL'
+            type : 'SOL',
+            hide : false
           },
           {
             text: 'Sites',
             children: [],
-            type : 'SITE'
+            type : 'SITE',
+            hide : false
           },
           {
               text: 'Dev QnA',
               children: [],
-              type : 'QNA'
+              type : 'QNA',
+              hide : false
           }
         ]
      }),
@@ -70,7 +98,7 @@ var main = new Vue({
 					 params: { type: item.type }
 				 })
 				 .then(function (response) {
-					 item.children = [];
+					 item.hide = true;
 					 for (var i = 0; i < response.data.length; i++) {
 							item.children.push(response.data[i]);
 					 }
@@ -88,13 +116,13 @@ var main = new Vue({
 				router.push('/qna/' + children.name + "/" + children.id);
 		},
 		submit : function submit(){
-			console.log('검색버튼 눌렸다아');
+			router.push('/search');
 		},
 		setting : function setting(){
-			console.log('세팅버튼 눌렸다아');
+			router.push('/setting');
 		},
 		help : function help(){
-			console.log('헬프 버튼 눌렸다아');
+			router.push('/help');
 		}
 	 }
 }).$mount('#app')
