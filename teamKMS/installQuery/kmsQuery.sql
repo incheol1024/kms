@@ -44,3 +44,13 @@ create table KMS.KMSUser (
 
 insert into KMS.KMSUser(user_id,user_name,user_type,user_group) values(1,'ADMIN','ADMIN',1);
 
+create table KMS.KMSCommonPost (
+	post_id INT(11) unsigned auto_increment primary key,
+    post_name VARCHAR(32) NOT NULL,
+    post_user VARCHAR(32) NOT NULL,
+    post_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    post_category INT(11) unsigned,
+    FOREIGN KEY (post_category)
+    REFERENCES KMS.KMSMenu(menu_id) ON UPDATE CASCADE
+);
+

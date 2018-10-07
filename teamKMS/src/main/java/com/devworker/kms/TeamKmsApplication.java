@@ -15,4 +15,6 @@ public class TeamKmsApplication {
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(TeamKmsApplication.class);
 	}
+	
+	
 }

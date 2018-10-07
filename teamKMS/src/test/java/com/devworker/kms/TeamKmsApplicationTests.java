@@ -17,6 +17,7 @@ import com.devworker.kms.dic.MenuType;
 import com.devworker.kms.dto.MenuDto;
 import com.devworker.kms.dto.MessageDetailDto;
 import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.service.FTSService;
 import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.MenuService;
 import com.devworker.kms.service.MessageService;
@@ -35,6 +36,8 @@ public class TeamKmsApplicationTests {
 	UserService userService;
 	@Autowired
 	GroupService groupService;
+	@Autowired
+	FTSService ftsService;
 	
 	@Test
 	public void makeMessageModel() throws JsonProcessingException, InterruptedException, ExecutionException {
@@ -61,5 +64,10 @@ public class TeamKmsApplicationTests {
 	@Test
 	public void groupTest() {
 		userService.countUser();
+	}
+	
+	@Test
+	public void ftsTest() {
+		ftsService.getCount();
 	}
 }
