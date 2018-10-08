@@ -17,6 +17,7 @@ import com.devworker.kms.dic.MenuType;
 import com.devworker.kms.dto.MenuDto;
 import com.devworker.kms.dto.MessageDetailDto;
 import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.ftsdto.PostFTSDto;
 import com.devworker.kms.service.FTSService;
 import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.MenuService;
@@ -67,7 +68,31 @@ public class TeamKmsApplicationTests {
 	}
 	
 	@Test
-	public void ftsTest() {
-		ftsService.getCount();
+	public void ftsgetCountTest() {
+		System.out.println(ftsService.getCount());
+		PostFTSDto dto = new PostFTSDto();
+		dto.setId(1);
+		dto.setCategory(1);
+		dto.setName("aaa");
+		dto.setUser("bbb");
+		ftsService.save(dto);
+		List<PostFTSDto> findbyuser = ftsService.findbyuser("bbb");
+		System.out.println(findbyuser);
 	}
+	
+	@Test
+	public void ftsSaveTest() {
+		PostFTSDto dto = new PostFTSDto();
+		dto.setId(1);
+		dto.setCategory(1);
+		dto.setName("aaa");
+		dto.setUser("bbb");
+		ftsService.save(dto);
+	}
+	
+	@Test
+	public void ftsSearchTest() {
+		List<PostFTSDto> findbyuser = ftsService.findbyuser("bbb");
+		assertThat(findbyuser, not(findbyuser.isEmpty()));
+	}	
 }

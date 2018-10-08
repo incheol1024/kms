@@ -1,14 +1,15 @@
 package com.devworker.kms.ftsdto;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 @Document(indexName="posts", type="posts")
 public class PostFTSDto{	
+	@Id
 	private int id;	
 	private String name;	
-	private String user;	
-	private String time;
-	
+	private String user;
+	private String time;	
 	private int category;
 	
 	public int getId() {
