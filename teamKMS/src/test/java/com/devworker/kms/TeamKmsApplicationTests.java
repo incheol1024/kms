@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.devworker.kms.dao.MenuDao;
 import com.devworker.kms.dic.MenuType;
-import com.devworker.kms.dto.MenuDto;
-import com.devworker.kms.dto.MessageDetailDto;
-import com.devworker.kms.dto.MessageDto;
-import com.devworker.kms.ftsdto.PostFTSDto;
+import com.devworker.kms.dto.MessageDao;
+import com.devworker.kms.dto.MessageDetailDao;
+import com.devworker.kms.ftsdao.PostFTSDao;
 import com.devworker.kms.service.FTSService;
 import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.MenuService;
@@ -43,9 +43,9 @@ public class TeamKmsApplicationTests {
 	@Test
 	public void makeMessageModel() throws JsonProcessingException, InterruptedException, ExecutionException {
 		Gson mapper = new Gson();
-		MessageDto dto = new MessageDto();
+		MessageDao dto = new MessageDao();
 		dto.setText("ddd");
-		dto.addAttach(new MessageDetailDto());
+		dto.addAttach(new MessageDetailDao());
 		System.out.println(mapper.toJson(dto));
 		String sendMessage = messageService.sendMessage(dto);
 		System.out.println(sendMessage);
@@ -53,7 +53,7 @@ public class TeamKmsApplicationTests {
 
 	@Test
 	public void getMenuListTest() {
-		List<MenuDto> menuList = menuService.getMenuList(MenuType.SOL);
+		List<MenuDao> menuList = menuService.getMenuList(MenuType.SOL);
 		assertThat(menuList, not(IsEmptyCollection.empty()));
 	}
 	
@@ -70,19 +70,19 @@ public class TeamKmsApplicationTests {
 	@Test
 	public void ftsgetCountTest() {
 		System.out.println(ftsService.getCount());
-		PostFTSDto dto = new PostFTSDto();
+		PostFTSDao dto = new PostFTSDao();
 		dto.setId(1);
 		dto.setCategory(1);
 		dto.setName("aaa");
 		dto.setUser("bbb");
 		ftsService.save(dto);
-		List<PostFTSDto> findbyuser = ftsService.findbyuser("bbb");
+		List<PostFTSDao> findbyuser = ftsService.findbyuser("bbb");
 		System.out.println(findbyuser);
 	}
 	
 	@Test
 	public void ftsSaveTest() {
-		PostFTSDto dto = new PostFTSDto();
+		PostFTSDao dto = new PostFTSDao();
 		dto.setId(1);
 		dto.setCategory(1);
 		dto.setName("aaa");
@@ -92,7 +92,7 @@ public class TeamKmsApplicationTests {
 	
 	@Test
 	public void ftsSearchTest() {
-		List<PostFTSDto> findbyuser = ftsService.findbyuser("bbb");
+		List<PostFTSDao> findbyuser = ftsService.findbyuser("bbb");
 		assertThat(findbyuser, not(findbyuser.isEmpty()));
 	}	
 }

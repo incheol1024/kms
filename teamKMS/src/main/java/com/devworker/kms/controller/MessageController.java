@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.dto.MessageDao;
 import com.devworker.kms.service.MessageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -16,7 +16,7 @@ public class MessageController {
 	MessageService service;
 	
 	@PostMapping("/sendmessage")
-	public String sendMessage(MessageDto message) {
+	public String sendMessage(MessageDao message) {
 		try {
 			return service.sendMessage(message);
 		} catch (JsonProcessingException e) {

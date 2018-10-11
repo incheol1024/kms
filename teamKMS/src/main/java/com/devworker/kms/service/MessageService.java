@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
-import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.dto.MessageDao;
 import com.devworker.kms.util.MessageClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -18,15 +18,15 @@ public class MessageService {
 	String url;
 
 	
-	public String sendMessage(MessageDto message) throws InterruptedException, ExecutionException, JsonProcessingException {
+	public String sendMessage(MessageDao message) throws InterruptedException, ExecutionException, JsonProcessingException {
 		Future<String> sendInnerMessage = sendAsyncMessage(message);
 		return sendInnerMessage.get();
 	}
 	
 	
 	@Async
-	public Future<String> sendAsyncMessage(MessageDto message) throws JsonProcessingException {
-		MessageDto sendMessage = MessageClient.getInstance().sendMessage(url,message);
+	public Future<String> sendAsyncMessage(MessageDao message) throws JsonProcessingException {
+		MessageDao sendMessage = MessageClient.getInstance().sendMessage(url,message);
 		return new AsyncResult<>(sendMessage.getMessageState());
 	}
 

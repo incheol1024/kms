@@ -2,7 +2,7 @@ package com.devworker.kms.dto;
 
 import com.devworker.kms.dic.MessageType;
 
-public class MessageDetailDto {
+public class MessageDetailDao {
 	private MessageType color = MessageType.GOOD;
 	private String title = "";
 	private String text =  "";

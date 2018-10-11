@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devworker.kms.dao.MenuDao;
 import com.devworker.kms.dic.MenuType;
-import com.devworker.kms.dto.MenuDto;
 import com.devworker.kms.service.MenuService;
 
 @RestController
@@ -17,7 +17,7 @@ public class MenuContorller {
 	MenuService service;
 	
 	@GetMapping("/getMenuList")
-	public List<MenuDto> getMenuList(@RequestParam("type") MenuType type) {
+	public List<MenuDao> getMenuList(@RequestParam("type") MenuType type) {
 		return service.getMenuList(type);
 	}
 }

@@ -1,23 +1,15 @@
-package com.devworker.kms.dto;
+package com.devworker.kms.ftsdao;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
-@Entity
-@Table(name = "KMSTestPost")
-public class PostDto{
+@Document(indexName="posts", type="posts")
+public class PostFTSDao{	
 	@Id
-	@Column(name = "post_id")
-	private int id;
-	@Column(name="post_name")
-	private String name;
-	@Column(name="post_user")
+	private int id;	
+	private String name;	
 	private String user;
-	@Column(name="post_time")
-	private String time;
-	@Column(name="post_category")
+	private String time;	
 	private int category;
 	
 	public int getId() {

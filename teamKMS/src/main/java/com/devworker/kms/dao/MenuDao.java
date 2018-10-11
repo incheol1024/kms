@@ -1,4 +1,4 @@
-package com.devworker.kms.dto;
+package com.devworker.kms.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -6,15 +6,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "KMSGroup")
-public class GroupDto {
+@Table(name = "KMSMenu")
+public class MenuDao {	
 	@Id
-	@Column(name = "group_id")
+	@Column(name = "menu_id")
 	private int id;
-	@Column(name="group_name")
+	@Column(name="menu_name")
 	private String name;
-	@Column(name="group_parent")
-	private int parentid;
+	@Column(name="menu_type")
+	private String type;
 	
 	public int getId() {
 		return id;
@@ -28,12 +28,12 @@ public class GroupDto {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getParentid() {
-		return parentid;
+	public String getType() {
+		return type;
 	}
-	public void setParentid(int parentid) {
-		this.parentid = parentid;
+	public void setType(String type) {
+		this.type = type;
 	}
-
+	
 	
 }

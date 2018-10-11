@@ -3,9 +3,9 @@ package com.devworker.kms.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageDto {
+public class MessageDao {
 	private String text = "";
-	private List<MessageDetailDto> attachments = new ArrayList<>(20);
+	private List<MessageDetailDao> attachments = new ArrayList<>(20);
 	private String messageState = "";
 
 	public void setText(String text) {
@@ -18,7 +18,7 @@ public class MessageDto {
 		return text;
 	}
 	
-	public void addAttach(MessageDetailDto detail) {
+	public void addAttach(MessageDetailDao detail) {
 		if(attachments.size() > 20)
 			throw new RuntimeException("you can't add Sub Message over 20");
 		attachments.add(detail);

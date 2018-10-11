@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-import com.devworker.kms.ftsdto.PostFTSDto;
+import com.devworker.kms.ftsdao.PostFTSDao;
 
-public interface FTSRepo extends ElasticsearchRepository<PostFTSDto,Integer>{
+public interface FTSRepo extends ElasticsearchRepository<PostFTSDao,Integer>{
 	
-	List<PostFTSDto> findByName(String name);
+	List<PostFTSDao> findByName(String name);
 }
