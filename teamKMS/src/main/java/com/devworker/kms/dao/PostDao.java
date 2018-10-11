@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "KMSTestPost")
-public class PostDto{
+@Table(name = "KMSCommonPost")
+public class PostDao{
 	@Id
 	@Column(name = "post_id")
 	private int id;

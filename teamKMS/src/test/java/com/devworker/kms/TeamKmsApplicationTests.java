@@ -64,7 +64,7 @@ public class TeamKmsApplicationTests {
 	
 	@Test
 	public void groupTest() {
-		userService.countUser();
+		groupService.countGroup();
 	}
 	
 	@Test

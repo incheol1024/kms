@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "KMSUser")
-public class UserDto {
+public class UserDao {
 	@Id
 	@Column(name = "user_id")
 	private int id;

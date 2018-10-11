@@ -31,7 +31,7 @@ create table KMS.KMSGroup (
 );
 
 insert into KMS.KMSGroup(group_id,group_name) values(1,'ROOT');
-
+CREATE INDEX FK_GROUP_PARENT ON KMS.KMSGroup(group_parent);
 
 create table KMS.KMSUser (
 	user_id INT(11) unsigned auto_increment primary key,
@@ -43,6 +43,7 @@ create table KMS.KMSUser (
 );
 
 insert into KMS.KMSUser(user_id,user_name,user_type,user_group) values(1,'ADMIN','ADMIN',1);
+CREATE INDEX FK_USER_GROUP ON KMS.KMSUser(user_group);
 
 create table KMS.KMSCommonPost (
 	post_id INT(11) unsigned auto_increment primary key,
@@ -54,3 +55,4 @@ create table KMS.KMSCommonPost (
     REFERENCES KMS.KMSMenu(menu_id) ON UPDATE CASCADE
 );
 
+CREATE INDEX FK_POST_CETE ON KMS.KMSCommonPost(post_category);

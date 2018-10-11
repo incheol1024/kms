@@ -11,6 +11,6 @@ import com.devworker.kms.dao.MenuDao;
 
 public interface MenuRepo extends CrudRepository<MenuDao, Integer>{	
 	
-	@Query("select t from MenuDto t where t.type = :menu_type")
+	@Query("select t from MenuDao t where t.type = :menu_type")
 	List<MenuDao> getMenuList(@Param("menu_type") String type,Sort sort);
 }
