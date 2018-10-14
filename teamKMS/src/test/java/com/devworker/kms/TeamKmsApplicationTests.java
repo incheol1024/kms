@@ -41,7 +41,7 @@ public class TeamKmsApplicationTests {
 	FTSService ftsService;
 	
 	@Test
-	public void makeMessageModel() throws JsonProcessingException, InterruptedException, ExecutionException {
+	public void sendMessageTest() throws JsonProcessingException, InterruptedException, ExecutionException {
 		Gson mapper = new Gson();
 		MessageDao dto = new MessageDao();
 		dto.setText("ddd");

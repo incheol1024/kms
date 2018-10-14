@@ -1,7 +1,5 @@
 <template>
-<v-content>
-	ETC
-</v-content>
+<div>ETC</div>
 </template>
 
 <script>

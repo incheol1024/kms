@@ -2,6 +2,8 @@ Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(window.VueCodemirror);
 Vue.use(VueCkeditor);
+Vue.use(LiquorTree);
+
 
 httpVueLoader.httpRequest = function(url) {
     return axios.get(url)
