@@ -1,9 +1,13 @@
 package com.devworker.kms.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.UserRepo;
 
 @Service("UserService")
@@ -27,5 +31,19 @@ public class UserServiceImpl implements UserService{
 	public void updateUser(UserDao dao) {
 		if(repo.existsById(dao.getId()))
 			repo.save(dao);
+	}
+
+	@Override
+	public UserDao getUser(UserDao dao) {
+		Optional<UserDao> user = repo.findById(dao.getId());
+		if(user.isPresent())
+			return user.get();
+		else
+			throw new NotExistException("User not exist");
+	}
+
+	@Override
+	public List<UserDao> getGroupedUser(UserDao dao) {
+		return repo.getGroupedUser(dao.getGroupId());
 	}
 }
