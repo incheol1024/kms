@@ -1,9 +1,13 @@
 package com.devworker.kms.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.dao.GroupDao;
+import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.GroupRepo;
 
 @Service("GroupService")
@@ -30,5 +34,19 @@ public class GroupServiceImpl implements GroupService{
 	public void updateGroup(GroupDao dao) {
 		if(repo.existsById(dao.getId()))
 			repo.save(dao);
+	}
+
+	@Override
+	public List<GroupDao> getGroupChild(GroupDao dao) {
+		return repo.getGroupChild(dao.getId());
+	}
+
+	@Override
+	public GroupDao getGroup(GroupDao dao) {
+		Optional<GroupDao> group = repo.findById(dao.getId());
+		if(group.isPresent())
+			return group.get();
+		else
+			throw new NotExistException("group not exist");
 	}
 }

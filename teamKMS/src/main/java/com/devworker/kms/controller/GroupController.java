@@ -1,5 +1,7 @@
 package com.devworker.kms.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +27,16 @@ public class GroupController {
 	@PostMapping("/updateGroup")
 	public void updateGroup(GroupDao dao) {
 		service.updateGroup(dao);
+	}
+	
+	@PostMapping("/getGroup")
+	public GroupDao getGroup(GroupDao dao) {
+		return service.getGroup(dao);
+	}
+	
+	@PostMapping("/getGroupChild")
+	public List<GroupDao> getGroupChild(GroupDao dao) {
+		return service.getGroupChild(dao);
 	}
 
 }

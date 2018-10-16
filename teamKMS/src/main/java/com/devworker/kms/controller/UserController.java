@@ -1,5 +1,7 @@
 package com.devworker.kms.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,5 +27,15 @@ public class UserController {
 	@PostMapping("/updateUser")
 	public void updateUser(UserDao dao) {
 		service.updateUser(dao);
+	}
+	
+	@PostMapping("/getUser")
+	public UserDao getUser(UserDao dao) {
+		return service.getUser(dao);
+	}
+	
+	@PostMapping("/getGroupedUser")
+	public List<UserDao> getGroupedUser(UserDao dao) {
+		return service.getGroupedUser(dao);
 	}
 }
