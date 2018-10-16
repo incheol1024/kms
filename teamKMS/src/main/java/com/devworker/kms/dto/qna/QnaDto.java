@@ -4,15 +4,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="KMSQna")
 public class QnaDto {
 
 	@Id
 	@GeneratedValue
 	Long id;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length=300)
 	String title;
 
 	@Column(nullable = false, length = 4000)
