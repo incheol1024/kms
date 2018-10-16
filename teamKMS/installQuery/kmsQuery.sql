@@ -37,7 +37,8 @@ create table KMS.KMSUser (
 	user_id INT(11) unsigned auto_increment primary key,
     user_name VARCHAR(32) NOT NULL,
     user_type VARCHAR(32) NOT NULL,
-    user_group INT(11) unsigned,
+    user_group INT(11) unsigned NOT NULL,
+	user_pass varchar(60) NOT NULL,
     FOREIGN KEY (user_group)
     REFERENCES KMS.KMSGroup(group_id) ON UPDATE CASCADE
 );

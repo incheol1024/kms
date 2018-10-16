@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.dao.GroupDao;
@@ -34,11 +36,13 @@ public class GroupServiceImpl implements GroupService{
 	public void updateGroup(GroupDao dao) {
 		if(repo.existsById(dao.getId()))
 			repo.save(dao);
+		else
+			throw new NotExistException("group not existed");
 	}
 
 	@Override
 	public List<GroupDao> getGroupChild(GroupDao dao) {
-		return repo.getGroupChild(dao.getId());
+		return repo.getGroupChild(dao.getId(),new Sort(Direction.ASC,"name"));
 	}
 
 	@Override

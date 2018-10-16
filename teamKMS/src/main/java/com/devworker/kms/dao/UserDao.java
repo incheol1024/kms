@@ -17,6 +17,8 @@ public class UserDao {
 	private String type;
 	@Column(name="user_group")
 	private int groupId;
+	@Column(name="user_pass")
+	private String password;
 	
 	public int getId() {
 		return id;
@@ -42,4 +44,12 @@ public class UserDao {
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
 	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	
 }

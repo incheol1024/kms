@@ -1,14 +1,13 @@
 <template>
 <v-layout column>
-	<v-flex >
-		<v-data-table :headers="headers" :items="desserts" class="elevation-1">
+	<v-flex>
+		<v-data-table :headers="headers" :items="items"  :pagination.sync="pagination" :loading="loading"
+		 	 :total-items="totalitems" class="elevation-1">
 		    <template slot="items" slot-scope="props">
+		      <td>{{ props.item.id }}</td>
 		      <td>{{ props.item.name }}</td>
-		      <td>{{ props.item.calories }}</td>
-		      <td>{{ props.item.fat }}</td>
-		      <td>{{ props.item.carbs }}</td>
-		      <td>{{ props.item.protein }}</td>
-		      <td>{{ props.item.iron }}</td>
+		      <td>{{ props.item.type }}</td>
+		      <td>{{ props.item.groupId }}</td>
 		    </template>
 		</v-data-table>
 	</v-flex>
@@ -21,31 +20,35 @@
 
 <script>
   module.exports =  {
+		  created: function () {
+				var _this = this;
+				axios.post("getUserList", PageModel)
+				.then(function (response) {
+					for(i = 0 ; i < response.data.content.length; i++)
+						_this.items.push(response.data.content[i]);
+				}).catch(function (error) {
+					console.log(error);
+				})
+			},
 	 data: () => ({
+		 totalitems: 0,
+	     loading: true,
+	     pagination: {},
 		  headers: [
-	          { text: 'Calories', value: 'calories' },
-	          { text: 'Fat (g)', value: 'fat' },
-	          { text: 'Carbs (g)', value: 'carbs' },
-	          { text: 'Protein (g)', value: 'protein' },
-	          { text: 'Iron (%)', value: 'iron' }
+	          { text: 'id', value: 'id' },
+	          { text: 'name', value: 'name' },
+	          { text: 'type', value: 'type' },
+	          { text: 'groupId', value: 'groupId' }
 	        ],
-	        desserts: [
-	          {
-	            value: false,
-	            name: 'Frozen Yogurt',
-	            calories: 159,
-	            fat: 6.0,
-	            carbs: 24,
-	            protein: 4.0,
-	            iron: '1%'
-	          }
+	        items: [
+	         
 	        ],
 	        treeData: [
 	            { text: 'Item 1' },
 	            { text: 'Item 2' },
-	            { text: 'Item 3', state: { selected: true } },
+	            { text: 'Item 3' },
 	            { text: 'Item 4' }
-	          ]
+	        ]
      }),
 	 methods: {
 		 
