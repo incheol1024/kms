@@ -14,34 +14,32 @@
 </head>
 <body>
 	<v-app id='login'>
-		<form name="loginform" acton="login" method='post'>
-			<v-content>
-		      <v-container fluid fill-height>
-		        <v-layout align-center justify-center>
-		          <v-flex xs12 sm8 md4>
-		            <v-card class="elevation-12">
-		              <v-toolbar dark color="primary">
-		                <v-toolbar-title>Dev Kms</v-toolbar-title>
-		              </v-toolbar>
-		              <v-card-text>
-		                <v-form>
-		                  <v-text-field prepend-icon="person" for="username" label="Login" type="text"></v-text-field>
-		                  <v-text-field prepend-icon="lock"  for="password" label="Password" type="password"></v-text-field>
-		                </v-form>
-		              </v-card-text>
-		              <v-card-actions>
-		                <v-spacer></v-spacer>
-		                <v-btn color="primary" type="submit">Login</v-btn>
-		              </v-card-actions>
+		<v-content>
+			 <v-layout align-center justify-center fill-height>
+				<form name="loginform" acton="login" method='post'>			
+					<v-card class="elevation-12">
+						<v-toolbar dark color="primary">
+							<v-toolbar-title>Dev Kms</v-toolbar-title>
+						</v-toolbar>
+						<v-card-text>
+							<v-form>
+								<v-text-field prepend-icon="person" for="username" 
+									label="Login" type="text"></v-text-field>
+								<v-text-field prepend-icon="lock"  for="password" 
+									label="Password" type="password"></v-text-field>
+							</v-form>
+						</v-card-text>
+						<v-card-actions>
+							<v-spacer></v-spacer>
+							<v-btn color="primary" type="submit">Login</v-btn>
+						</v-card-actions>
 		            </v-card>
-		          </v-flex>
-		        </v-layout>
-		      </v-container>
-	    	</v-content>
-	    </form>
+	    		</form>
+	    	</v-layout>
+	    </v-content>
 	</v-app>
-	<script src="/webjars/vue/2.5.16/vue.min.js"></script>
-	<script src="/webjars/vuetify/1.2.1/dist/vuetify.min.js"></script>
-	<script src="js/login.js"></script>
+<script src="/webjars/vue/2.5.16/vue.min.js"></script>
+<script src="/webjars/vuetify/1.2.1/dist/vuetify.min.js"></script>
+<script src="js/login.js"></script>
 </body>
 </html>

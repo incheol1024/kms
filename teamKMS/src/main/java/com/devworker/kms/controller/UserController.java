@@ -1,8 +1,8 @@
 package com.devworker.kms.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,17 +36,17 @@ public class UserController {
 	}
 	
 	@PostMapping("/getGroupedUser")
-	public Page<UserDao> getGroupedUser(UserDao dao,Pageable p) {
-		return service.getGroupedUser(dao, p);
+	public List<UserDao> getGroupedUser(UserDao dao) {
+		return service.getGroupedUser(dao);
 	}
 	
 	@PostMapping("/getUserList")
-	public Page<UserDao> getUserList(Pageable p) {
-		return service.getUserList(p);
+	public List<UserDao> getUserList() {
+		return service.getUserList();
 	}
 	
 	@GetMapping("/getTotalUser")
-	public long getUserList() {
+	public long getTotalUser() {
 		return service.getCount();
 	}
 	

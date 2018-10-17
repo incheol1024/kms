@@ -30,7 +30,7 @@ create table KMS.KMSGroup (
     REFERENCES KMS.KMSGroup(group_id) ON UPDATE CASCADE
 );
 
-insert into KMS.KMSGroup(group_id,group_name) values(1,'ROOT');
+insert into KMS.KMSGroup(group_id,group_name) values(0,'ROOT');
 CREATE INDEX FK_GROUP_PARENT ON KMS.KMSGroup(group_parent);
 
 create table KMS.KMSUser (

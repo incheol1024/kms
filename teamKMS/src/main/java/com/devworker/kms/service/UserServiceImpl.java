@@ -1,7 +1,9 @@
 package com.devworker.kms.service;
 
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.UserRepo;
+import com.devworker.kms.util.CommonUtil;
 
 @Service("UserService")
 public class UserServiceImpl implements UserService{
@@ -53,13 +56,13 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public Page<UserDao> getGroupedUser(UserDao dao,Pageable p) {
-		return repo.getGroupedUser(dao.getGroupId(),p,new Sort(Direction.ASC,"name"));
+	public List<UserDao> getGroupedUser(UserDao dao) {
+		return repo.getGroupedUser(dao.getGroupId(),new Sort(Direction.ASC, "name"));
 	}
 
 	@Override
-	public Page<UserDao> getUserList(Pageable p) {
-		return repo.findAll(p);
+	public List<UserDao> getUserList() {
+		return repo.findAll();
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import com.devworker.kms.dto.MessageDao;
+import com.devworker.kms.dto.MessageDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 
@@ -28,7 +28,7 @@ public class MessageClient {
 		httpClient = HttpClients.createDefault();
 	}
 	
-	public MessageDao sendMessage(String url,MessageDao model) throws JsonProcessingException {
+	public MessageDto sendMessage(String url,MessageDto model) throws JsonProcessingException {
 		HttpPost post = new HttpPost(url);
 		post.addHeader("Content-type" , "application/json");
 		String json = mapper.toJson(model);

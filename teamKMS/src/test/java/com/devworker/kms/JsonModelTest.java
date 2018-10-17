@@ -5,8 +5,8 @@ import org.junit.Test;
 import com.devworker.kms.dao.GroupDao;
 import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dic.UserType;
-import com.devworker.kms.dto.MessageDao;
-import com.devworker.kms.dto.MessageDetailDao;
+import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.dto.MessageDetailDto;
 import com.google.gson.Gson;
 
 public class JsonModelTest {
@@ -14,9 +14,9 @@ public class JsonModelTest {
 	
 	@Test
 	public void makeMessageModel() {	
-		MessageDao dto = new MessageDao();
+		MessageDto dto = new MessageDto();
 		dto.setText("ddd");
-		dto.addAttach(new MessageDetailDao());
+		dto.addAttach(new MessageDetailDto());
 		System.out.println(mapper.toJson(dto));
 	}
 	

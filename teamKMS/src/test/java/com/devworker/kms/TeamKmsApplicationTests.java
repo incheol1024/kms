@@ -13,10 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.devworker.kms.dao.GroupDao;
 import com.devworker.kms.dao.MenuDao;
 import com.devworker.kms.dic.MenuType;
-import com.devworker.kms.dto.MessageDao;
-import com.devworker.kms.dto.MessageDetailDao;
+import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.dto.MessageDetailDto;
 import com.devworker.kms.ftsdao.PostFTSDao;
 import com.devworker.kms.service.FTSService;
 import com.devworker.kms.service.GroupService;
@@ -43,9 +44,9 @@ public class TeamKmsApplicationTests {
 	@Test
 	public void sendMessageTest() throws JsonProcessingException, InterruptedException, ExecutionException {
 		Gson mapper = new Gson();
-		MessageDao dto = new MessageDao();
+		MessageDto dto = new MessageDto();
 		dto.setText("ddd");
-		dto.addAttach(new MessageDetailDao());
+		dto.addAttach(new MessageDetailDto());
 		System.out.println(mapper.toJson(dto));
 		String sendMessage = messageService.sendMessage(dto);
 		System.out.println(sendMessage);
@@ -65,6 +66,19 @@ public class TeamKmsApplicationTests {
 	@Test
 	public void groupTest() {
 		groupService.countGroup();
+		GroupDao dao = new GroupDao();
+		dao.setName("Test");
+		dao.setParentid(0);
+		List<GroupDao> list = groupService.getGroupChild(dao);
+		assertThat(list, not(IsEmptyCollection.empty()));
+	}
+	
+	@Test
+	public void addGroupTest() {
+		GroupDao dao = new GroupDao();
+		dao.setName("Test");
+		dao.setParentid(0);
+		groupService.addGroup(dao);
 	}
 	
 	@Test

@@ -1,9 +1,6 @@
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(window.VueCodemirror);
-Vue.use(VueCkeditor);
-Vue.use(LiquorTree);
-
 
 httpVueLoader.httpRequest = function(url) {
     return axios.get(url)
@@ -11,6 +8,7 @@ httpVueLoader.httpRequest = function(url) {
         return res.data;
     })
     .catch(function(err) {
+    	console.log(err);
         return Promise.reject(err.status);
     });
 }

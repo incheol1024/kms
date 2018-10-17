@@ -13,7 +13,7 @@ public class GroupDao {
 	private int id;
 	@Column(name="group_name")
 	private String name;
-	@Column(name="group_parent")
+	@Column(name="group_parent",nullable = true)
 	private int parentid;
 	
 	public int getId() {
