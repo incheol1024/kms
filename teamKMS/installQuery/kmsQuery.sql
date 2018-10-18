@@ -49,7 +49,6 @@ insert into KMS.KMSUser(user_id,user_name,user_type,user_group,user_pass) values
 #USER , USER
 insert into KMS.KMSUser(user_id,user_name,user_type,user_group,user_pass) values('USER','USER','USER',0,'$2a$10$RpcZZqJ3aBuKVswqVh/ixO8umoYLInnpPA6KnTXDoQlCH0I4Cq5om');
 CREATE INDEX FK_USER_GROUP ON KMS.KMSUser(user_group);
-CREATE INDEX FK_USER_EXT ON KMS.KMSUser(user_extId);
 
 create table KMS.KMSCommonPost (
 	post_id INT(11) unsigned auto_increment primary key,
