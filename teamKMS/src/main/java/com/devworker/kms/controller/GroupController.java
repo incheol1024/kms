@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.dao.GroupDao;
+import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.service.GroupService;
 
 @RestController
@@ -37,6 +38,11 @@ public class GroupController {
 	@PostMapping("/getGroupChild")
 	public List<GroupDao> getGroupChild(GroupDao dao) {
 		return service.getGroupChild(dao);
+	}
+	
+	@PostMapping("/getAllGroupList")
+	public GroupDto getAllGroupList() {
+		return service.getAllGroupList();
 	}
 
 }
