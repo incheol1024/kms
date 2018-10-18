@@ -34,17 +34,22 @@ insert into KMS.KMSGroup(group_id,group_name) values(0,'ROOT');
 CREATE INDEX FK_GROUP_PARENT ON KMS.KMSGroup(group_parent);
 
 create table KMS.KMSUser (
-	user_id INT(11) unsigned auto_increment primary key,
+	user_id VARCHAR(32) primary key,
     user_name VARCHAR(32) NOT NULL,
     user_type VARCHAR(32) NOT NULL,
     user_group INT(11) unsigned NOT NULL,
 	user_pass varchar(60) NOT NULL,
+    user_extId varchar(32) NOT NULL,
     FOREIGN KEY (user_group)
     REFERENCES KMS.KMSGroup(group_id) ON UPDATE CASCADE
 );
 
-insert into KMS.KMSUser(user_id,user_name,user_type,user_group) values(1,'ADMIN','ADMIN',1);
+#ADMIN , ADMIN
+insert into KMS.KMSUser(user_id,user_name,user_type,user_group,user_pass) values('ADMIN','ADMIN','ADMIN',0,'$2a$10$RWMKRWqLCWbjhIjiGzwvqusafXr8Y76JpB5SdaJCHoZeyAhb1aohu');
+#USER , USER
+insert into KMS.KMSUser(user_id,user_name,user_type,user_group,user_pass) values('USER','USER','USER',0,'$2a$10$RpcZZqJ3aBuKVswqVh/ixO8umoYLInnpPA6KnTXDoQlCH0I4Cq5om');
 CREATE INDEX FK_USER_GROUP ON KMS.KMSUser(user_group);
+CREATE INDEX FK_USER_EXT ON KMS.KMSUser(user_extId);
 
 create table KMS.KMSCommonPost (
 	post_id INT(11) unsigned auto_increment primary key,

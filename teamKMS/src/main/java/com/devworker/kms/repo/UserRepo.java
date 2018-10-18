@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.devworker.kms.dao.UserDao;
 
-public interface UserRepo extends PagingAndSortingRepository<UserDao, Integer>{
+public interface UserRepo extends PagingAndSortingRepository<UserDao, String>{
 	@Query("select t from UserDao t where t.groupId = :user_group")
 	List<UserDao> getGroupedUser(@Param("user_group") int groupId,Sort s);
 	

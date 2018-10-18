@@ -3,25 +3,25 @@ package com.devworker.kms.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.UserRepo;
-import com.devworker.kms.util.CommonUtil;
 
 @Service("UserService")
 public class UserServiceImpl implements UserService{
 	@Autowired
 	UserRepo repo;
+	@Autowired
+	PasswordEncoder encoder;
 	
 	@Override
 	@Cacheable(key = "'userCount'", value="userCache")
@@ -31,6 +31,9 @@ public class UserServiceImpl implements UserService{
 	
 	@CacheEvict(key = "'userCount'", value="userCache")
 	public void addUser(UserDao dao) {
+		if(repo.existsById(dao.getId()))
+			throw new DuplicateKeyException("User Id already Has in Server");
+		dao.setPassword(encoder.encode(dao.getPassword()));
 		repo.save(dao);
 	}
 	
@@ -40,10 +43,10 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	public void updateUser(UserDao dao) {
-		if(repo.existsById(dao.getId()))
-			repo.save(dao);
-		else
-			throw new NotExistException("user not existed");
+		UserDao dbUser = getUser(dao);
+		if(!encoder.matches(dao.getPassword(), dbUser.getPassword()))
+			dao.setPassword(encoder.encode(dao.getPassword()));
+		repo.save(dao);
 	}
 
 	@Override	

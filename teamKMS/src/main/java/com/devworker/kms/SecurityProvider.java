@@ -3,8 +3,6 @@ package com.devworker.kms;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -14,28 +12,35 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.service.AuthService;
+
 @Component
 public class SecurityProvider implements AuthenticationProvider {
-	@Autowired(required = true)
-    private HttpServletRequest request;
-	
+	@Autowired
+	AuthService service;
+
 	@Override
-	public Authentication authenticate(Authentication authentication)  {
-		String id = request.getParameter("username");
-		String password = request.getParameter("password");
+	public Authentication authenticate(Authentication authentication) {
+		if (authentication.getName().isEmpty() || authentication.getCredentials().toString().isEmpty())
+			throw new AuthenticationServiceException("id or Password wrong");
 		try {
-			List<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
-			grantedAuths.add(new SimpleGrantedAuthority("ROLE_USER"));
-			return new UsernamePasswordAuthenticationToken(authentication.getName(), authentication.getCredentials(),grantedAuths);
-		} 
-		catch (Exception e) {
+			UserDao dao = new UserDao();
+			dao.setId(authentication.getName());
+			dao.setPassword(authentication.getCredentials().toString());
+			dao = service.auth(dao);
+			List<GrantedAuthority> grantedAuths = new ArrayList<>();
+			grantedAuths.add(new SimpleGrantedAuthority(dao.getType()));
+			return new UsernamePasswordAuthenticationToken(authentication.getName(), authentication.getCredentials(),
+					grantedAuths);
+		} catch (Exception e) {
 			throw new AuthenticationServiceException(e.getMessage());
-		} 
+		}
 	}
 
 	@Override
 	public boolean supports(Class<?> authentication) {
-		 return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
+		return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
 	}
 
 }
