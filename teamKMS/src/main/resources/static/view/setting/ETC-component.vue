@@ -1,5 +1,5 @@
 <template>
-<div>ETC</div>
+<div>Not Use Now</div>
 </template>
 
 <script>

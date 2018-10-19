@@ -6,18 +6,14 @@
 </template>
 
 <script>
-  module.exports =  {
-  	props : ['id'],
-	data() {
+module.exports = {
+  props: ["id"],
+  data() {
     return {
-      content: '',
-      config: {
-        
-      }
+      content: "",
+      config: {}
     };
   },
-  methods: {
-    
-  }
+  methods: {}
 }
 </script>

@@ -6,6 +6,7 @@
       			User List
       			<v-spacer></v-spacer>
 	        	<v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                <v-btn color="primary" dark class="mb-2">New Item</v-btn>
     		</v-card-title>
   			<v-data-table :headers="headers" :items="items" :loading="loading" :search="search" class="elevation-1">
 		    	<template slot="items" slot-scope="props">
@@ -13,6 +14,10 @@
 		      		<td>{{ props.item.name }}</td>
 		      		<td>{{ props.item.type }}</td>
 		      		<td>{{ props.item.groupId }}</td>
+                    <td>
+                      <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
+                      <v-icon small @click="deleteItem(props.item)">delete</v-icon>
+                    </td>
 		    	</template>
 			</v-data-table>
   		</v-card>	
@@ -32,36 +37,45 @@
 </template>
 
 <script>
-module.exports =  {
-	 created  : function() {
-		 this.loading = true;
-		 var _this = this;
-		 axios.post("getUserList")
-		 .then(function (response) {
-			 for (var i = 0; i < response.data.length; i++) {
-				 _this.items.push(response.data[i]);
-			 }
-		 }).catch(function (error) {
-			 console.log(error);
-		 })
-	     this.loading = false;
-	 },
-	 data: () => ({
-		 search: '',
-	     loading: true,
-	     pagination: {},
-		  headers: [
-	          { text: 'id', value: 'id' },
-	          { text: 'name', value: 'name' },
-	          { text: 'type', value: 'type' , sortable: false},
-	          { text: 'groupId', value: 'groupId' , sortable: false }
-	        ],
-	        items: [
-	         
-	        ]
-     }),
-	 methods: {
-		 
-	 }
-}
+module.exports = {
+  created: function() {
+    this.loading = true;
+    var _this = this;
+    axios
+      .post("getUserList")
+      .then(function(response) {
+        for (var i = 0; i < response.data.length; i++) {
+          _this.items.push(response.data[i]);
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    this.loading = false;
+  },
+  data: () => ({
+    search: "",
+    loading: true,
+    pagination: {},
+    headers: [
+      { text: "id", value: "id" },
+      { text: "name", value: "name" },
+      { text: "type", value: "type", sortable: false },
+      { text: "groupId", value: "groupId", sortable: false },
+      { text: "actions", value: "actions", sortable: false }
+    ],
+    items: []
+  }),
+  methods: {
+    editItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem(item) {
+      const index = this.desserts.indexOf(item);
+      confirm("Are you sure you want to delete this item?") && this.desserts.splice(index, 1);
+    }
+  }
+};
 </script>

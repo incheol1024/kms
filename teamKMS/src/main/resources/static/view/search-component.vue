@@ -5,13 +5,9 @@
 </template>
 
 <script>
-  module.exports =  {
-	 props : ['name','id'],
-	 data: () => ({
-	      
-     }),
-	 methods: {
-		
-	 }
-  }
+module.exports = {
+  props: ["name", "id"],
+  data: () => ({}),
+  methods: {}
+};
 </script>

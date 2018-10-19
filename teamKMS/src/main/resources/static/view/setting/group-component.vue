@@ -1,25 +1,41 @@
 <template>
 <v-layout column>
 	<v-flex>
-		<v-treeview :items="items"></v-treeview>
+		<v-treeview :items="items" activatable :active.sync="active" active-class="primary--text">				
+			<v-icon slot="prepend" slot-scope="{ item, active }" :color="active ? 'primary' : ''">
+				mdi-account
+			</v-icon>  			
+		</v-treeview>
 	</v-flex>
 </v-layout>
 </template>
 
 <script>
-module.exports =  {
-	created  : function() {
-		var _this = this;
-		axios.post("getAllGroupList")
-		.then(function (response) {
-			console.log(response.data);
-			_this.items.push(response.data);
-		}).catch(function (error) {
-			console.log(error);
-		})		
-	},
-	data: () => ({
-		items : []
-	})
-}
+module.exports = {
+  created: function() {
+    var _this = this;
+    axios
+      .post("getAllGroupList")
+      .then(function(response) {
+        _this.items.push(response.data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+  },
+  watch: {
+    active: function active(item) {
+		
+	}
+  },
+  data: () => ({
+    active: [],
+    items: []
+  }),
+  methods: {
+    next: function next() {
+      console.log("aaa");
+    }
+  }
+};
 </script>
