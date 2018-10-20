@@ -1,12 +1,12 @@
 <template>
 <v-layout column>
-	<v-flex>
+	<v-flex class="mb-5">
 		<v-card>
     		<v-card-title>
       			User List
       			<v-spacer></v-spacer>
 	        	<v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
-                <v-btn color="primary" dark class="mb-2">New Item</v-btn>
+                <v-btn color="primary" dark class="mb-2" @click="addItem">New User</v-btn>
     		</v-card-title>
   			<v-data-table :headers="headers" :items="items" :loading="loading" :search="search" class="elevation-1">
 		    	<template slot="items" slot-scope="props">
@@ -24,14 +24,25 @@
 	</v-flex>
 	
 	<v-flex>
-		<v-layout>
-			<v-flex>
-				<div>user infomation</div>
-			</v-flex>
-			<v-flex>
-				
-			</v-flex>
-		</v-layout>
+		<v-stepper v-model="stage">
+          <v-stepper-header>
+            <v-stepper-step :complete="stage > 1" step="1">Input Infomation</v-stepper-step>
+            <v-divider></v-divider>
+            <v-stepper-step :complete="stage > 2" step="2">Select Group</v-stepper-step>
+          </v-stepper-header>
+
+        <v-stepper-items>
+          <v-stepper-content step="1">
+            <v-card class="mb-5" color="grey lighten-1"></v-card>
+            <v-btn color="primary" @click="stage = 2">Continue</v-btn>
+          </v-stepper-content>
+
+          <v-stepper-content step="2">
+            <v-card class="mb-5" color="grey lighten-1"></v-card>
+            <v-btn color="primary" @click="kkk">Confirm</v-btn>
+          </v-stepper-content>
+        </v-stepper-items>
+      </v-stepper>
 	</v-flex>
 </v-layout>
 </template>
@@ -64,17 +75,32 @@ module.exports = {
       { text: "groupId", value: "groupId", sortable: false },
       { text: "actions", value: "actions", sortable: false }
     ],
-    items: []
+    items: [],
+    curitem: JSON.parse(JSON.stringify(UserModel)),
+    stage : 0
   }),
   methods: {
+    addItem() {
+      this.curitem = JSON.parse(JSON.stringify(UserModel));
+    },
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+      this.curitem = item;
     },
     deleteItem(item) {
-      const index = this.desserts.indexOf(item);
-      confirm("Are you sure you want to delete this item?") && this.desserts.splice(index, 1);
+      var _this = this;
+      if (confirm("Are you sure you want to delete this item?")) {
+        axios
+          .post("deleteUser", { UserDao: item })
+          .then(function(response) {
+            _this.items.splice(item, 1);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    },
+    kkk(){
+       this.stage = 3;
     }
   }
 };

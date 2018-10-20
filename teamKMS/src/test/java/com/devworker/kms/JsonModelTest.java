@@ -23,8 +23,11 @@ public class JsonModelTest {
 	@Test
 	public void makeUserModel() {
 		UserDao dao = new UserDao();
-		dao.setName("이것");
+		dao.setName("");
 		dao.setType(UserType.USER.name());
+		dao.setPassword("");
+		dao.setGroupId(0);
+		dao.setId("0");
 		System.out.println(mapper.toJson(dao));
 	}
 	
