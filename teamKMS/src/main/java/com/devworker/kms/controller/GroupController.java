@@ -32,7 +32,7 @@ public class GroupController {
 	
 	@PostMapping("/getGroup")
 	public GroupDao getGroup(GroupDao dao) {
-		return service.getGroup(dao);
+		return service.getGroup(dao.getId());
 	}
 	
 	@PostMapping("/getGroupChild")

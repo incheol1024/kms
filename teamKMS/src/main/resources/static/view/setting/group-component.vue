@@ -23,10 +23,12 @@ module.exports = {
         console.log(error);
       });
   },
-  watch: {
-    active: function active(item) {
-		
-	}
+  computed: {      
+      selected () {
+        if (!this.active.length) return undefined
+        const id = this.active[0]
+        return id;
+      }
   },
   data: () => ({
     active: [],

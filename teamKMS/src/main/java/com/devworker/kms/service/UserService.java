@@ -1,16 +1,17 @@
+
 package com.devworker.kms.service;
 
 import java.util.List;
 
-import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.dto.UserDto;
 
 public interface UserService {
 	public long countUser();
-	public void addUser(UserDao dao);
-	public void deleteUser(UserDao dao);
-	public void updateUser(UserDao dao);
-	public UserDao getUser(UserDao dao);
-	public List<UserDao> getGroupedUser(UserDao dao);
-	public List<UserDao> getUserList();
+	public UserDto addUser(UserDto dto);
+	public void deleteUser(String id);
+	public void updateUser(UserDto dto);
+	public UserDto getUser(String id);
+	public List<UserDto> getGroupedUser(UserDto dto);
+	public List<UserDto> getUserList();
 	public long getCount();
 }

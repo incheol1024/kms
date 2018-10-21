@@ -26,6 +26,7 @@ import com.devworker.kms.dao.MenuDao;
 import com.devworker.kms.dic.MenuType;
 import com.devworker.kms.dto.MessageDetailDto;
 import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.ftsdao.PostFTSDao;
 import com.devworker.kms.service.FTSService;
 import com.devworker.kms.service.GroupService;
@@ -84,7 +85,9 @@ public class TeamKmsApplicationTests {
 	@Test
 	public void deleteGroupTest() {
 		GroupDao dao = new GroupDao();
-		dao.setId(124);
+		dao.setId(419);
+		groupService.forceDeleteGroup(dao);
+		dao.setId(426);
 		groupService.forceDeleteGroup(dao);
 	}
 	
@@ -92,7 +95,7 @@ public class TeamKmsApplicationTests {
 	public void makeTreeGroupTest() {
 		GroupDao dao = new GroupDao();
 		dao.setName("TT");
-		dao.setParentid(0);
+		dao.setParentid(420);
 		makeTree(dao);
 		System.out.println(dao.getId());
 	}
@@ -122,8 +125,9 @@ public class TeamKmsApplicationTests {
 	}
 
 	@Test
-	public void userTest() {
-		userService.countUser();
+	public void getUserListTest() throws JsonProcessingException {		
+		List<UserDto> userList = userService.getUserList();
+		assertThat(userList, not(IsEmptyCollection.empty()));
 	}
 
 	@Test

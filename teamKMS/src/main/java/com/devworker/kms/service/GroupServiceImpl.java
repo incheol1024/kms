@@ -66,8 +66,8 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public GroupDao getGroup(GroupDao dao) {
-		Optional<GroupDao> group = repo.findById(dao.getId());
+	public GroupDao getGroup(int id) {
+		Optional<GroupDao> group = repo.findById(id);
 		if(group.isPresent())
 			return group.get();
 		else

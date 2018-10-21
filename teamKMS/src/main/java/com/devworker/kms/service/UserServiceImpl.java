@@ -1,5 +1,6 @@
 package com.devworker.kms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.UserRepo;
 
@@ -20,6 +22,8 @@ import com.devworker.kms.repo.UserRepo;
 public class UserServiceImpl implements UserService{
 	@Autowired
 	UserRepo repo;
+	@Autowired
+	GroupService service;
 	@Autowired
 	PasswordEncoder encoder;
 	
@@ -30,42 +34,63 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@CacheEvict(key = "'userCount'", value="userCache")
-	public void addUser(UserDao dao) {
-		if(repo.existsById(dao.getId()))
+	public UserDto addUser(UserDto dto) {
+		if(repo.existsById(dto.getId()))
 			throw new DuplicateKeyException("User Id already Has in Server");
-		dao.setPassword(encoder.encode(dao.getPassword()));
-		repo.save(dao);
+		dto.setPassword(encoder.encode(dto.getPassword()));
+		String groupName = service.getGroup(dto.getGroupId()).getName();
+		dto.setGroupName(groupName);
+		repo.save(dto.getDao());
+		return dto;
 	}
 	
 	@CacheEvict(key = "'userCount'", value="userCache")
-	public void deleteUser(UserDao dao) {
-		repo.delete(dao);
+	public void deleteUser(String id) {
+		repo.deleteById(id);
 	}
 	
-	public void updateUser(UserDao dao) {
-		UserDao dbUser = getUser(dao);
-		if(!encoder.matches(dao.getPassword(), dbUser.getPassword()))
-			dao.setPassword(encoder.encode(dao.getPassword()));
-		repo.save(dao);
+	public void updateUser(UserDto dto) {
+		UserDto dbUser = getUser(dto.getId());
+		if(dto.getPassword() != dbUser.getPassword() &&
+			!encoder.matches(dto.getPassword(), dbUser.getPassword()))
+				dto.setPassword(encoder.encode(dto.getPassword()));
+		repo.save(dto.getDao());
 	}
 
 	@Override	
-	public UserDao getUser(UserDao dao) {
-		Optional<UserDao> user = repo.findById(dao.getId());
-		if(user.isPresent())
-			return user.get();
+	public UserDto getUser(String id) {
+		Optional<UserDao> user = repo.findById(id);
+		if(user.isPresent()) {
+			UserDto dto = user.get().getDto();
+			String groupName = service.getGroup(dto.getGroupId()).getName();
+			dto.setGroupName(groupName);
+			return dto;
+		}			
 		else
 			throw new NotExistException("User not exist");
 	}
 	
 	@Override
-	public List<UserDao> getGroupedUser(UserDao dao) {
-		return repo.getGroupedUser(dao.getGroupId(),new Sort(Direction.ASC, "name"));
+	public List<UserDto> getGroupedUser(UserDto dto) {
+		List<UserDao> daoList = repo.getGroupedUser(dto.getGroupId(),new Sort(Direction.ASC, "name"));
+		return  getDaoToDtoList(daoList);
 	}
 
 	@Override
-	public List<UserDao> getUserList() {
-		return repo.findAll();
+	public List<UserDto> getUserList() {
+		List<UserDao> daoList = repo.findAll();
+		return getDaoToDtoList(daoList);
+	}
+	
+	private List<UserDto> getDaoToDtoList(List<UserDao> daoList){
+		List<UserDto> dtoList = new ArrayList<>();
+		for(UserDao dao : daoList) {
+			UserDto dto = dao.getDto();
+			String groupName = service.getGroup(dao.getGroupId()).getName();
+			dto.setGroupName(groupName);
+			dtoList.add(dto);
+		}
+		return dtoList;
 	}
 
 	@Override

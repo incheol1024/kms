@@ -16,7 +16,7 @@ public class GroupDao {
 	private int id;
 	@Column(name="group_name")
 	private String name;
-	@Column(name="group_parent",nullable = true)
+	@Column(name="group_parent")
 	private int parentid;
 	
 	public int getId() {

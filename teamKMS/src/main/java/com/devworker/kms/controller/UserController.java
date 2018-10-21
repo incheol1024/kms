@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.service.UserService;
 
 @RestController
@@ -17,32 +17,32 @@ public class UserController {
 	UserService service;	
 	
 	@PostMapping("/addUser")
-	public void addUser(@RequestBody UserDao dao) {
-		service.addUser(dao);
+	public void addUser(@RequestBody UserDto dto) {
+		service.addUser(dto);
 	}
 	
 	@PostMapping("/deleteUser")
-	public void deleteUser(@RequestBody UserDao dao) {
-		service.deleteUser(dao);
+	public void deleteUser(@RequestBody UserDto dto) {
+		service.deleteUser(dto.getId());
 	}
 	
 	@PostMapping("/updateUser")
-	public void updateUser(@RequestBody UserDao dao) {
-		service.updateUser(dao);
+	public void updateUser(@RequestBody UserDto dto) {
+		service.updateUser(dto);
 	}
 	
 	@PostMapping("/getUser")
-	public UserDao getUser(@RequestBody UserDao dao) {
-		return service.getUser(dao);
+	public UserDto getUser(@RequestBody UserDto dto) {
+		return service.getUser(dto.getId());
 	}
 	
 	@PostMapping("/getGroupedUser")
-	public List<UserDao> getGroupedUser(@RequestBody UserDao dao) {
-		return service.getGroupedUser(dao);
+	public List<UserDto> getGroupedUser(@RequestBody UserDto dto) {
+		return service.getGroupedUser(dto);
 	}
 	
 	@PostMapping("/getUserList")
-	public List<UserDao> getUserList() {
+	public List<UserDto> getUserList() {
 		return service.getUserList();
 	}
 	

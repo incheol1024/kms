@@ -3,10 +3,10 @@ package com.devworker.kms;
 import org.junit.Test;
 
 import com.devworker.kms.dao.GroupDao;
-import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dic.UserType;
-import com.devworker.kms.dto.MessageDto;
 import com.devworker.kms.dto.MessageDetailDto;
+import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.dto.UserDto;
 import com.google.gson.Gson;
 
 public class JsonModelTest {
@@ -22,13 +22,14 @@ public class JsonModelTest {
 	
 	@Test
 	public void makeUserModel() {
-		UserDao dao = new UserDao();
-		dao.setName("");
-		dao.setType(UserType.USER.name());
-		dao.setPassword("");
-		dao.setGroupId(0);
-		dao.setId("0");
-		System.out.println(mapper.toJson(dao));
+		UserDto dto = new UserDto();
+		dto.setName("");
+		dto.setType(UserType.USER.name());
+		dto.setPassword("");
+		dto.setGroupId(0);
+		dto.setId("0");
+		dto.setGroupName("");
+		System.out.println(mapper.toJson(dto));
 	}
 	
 	@Test

@@ -12,7 +12,7 @@ public interface GroupService {
 	public void forceDeleteGroup(GroupDao dao);
 	public void updateGroup(GroupDao dao);
 	public List<GroupDao> getGroupChild(GroupDao dao);
-	public GroupDao getGroup(GroupDao dao);
+	public GroupDao getGroup(int id);
 	public GroupDto getAllGroupList();
 	
 }
