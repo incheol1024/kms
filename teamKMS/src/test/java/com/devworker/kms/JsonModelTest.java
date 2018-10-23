@@ -2,8 +2,8 @@ package com.devworker.kms;
 
 import org.junit.Test;
 
-import com.devworker.kms.dao.GroupDao;
 import com.devworker.kms.dic.UserType;
+import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.dto.MessageDetailDto;
 import com.devworker.kms.dto.MessageDto;
 import com.devworker.kms.dto.UserDto;
@@ -34,8 +34,10 @@ public class JsonModelTest {
 	
 	@Test
 	public void makeGroupModel() {
-		GroupDao dao = new GroupDao();
-		dao.setName("저것");
-		System.out.println(mapper.toJson(dao));
+		GroupDto dto = new GroupDto();
+		dto.setId(0);
+		dto.setParentid(0);
+		dto.setName("");
+		System.out.println(mapper.toJson(dto));
 	}
 }

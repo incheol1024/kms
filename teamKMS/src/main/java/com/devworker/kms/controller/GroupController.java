@@ -4,45 +4,58 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.dao.GroupDao;
 import com.devworker.kms.dto.GroupDto;
+import com.devworker.kms.dto.GroupNUserDto;
 import com.devworker.kms.service.GroupService;
+import com.devworker.kms.service.UserService;
 
 @RestController
 public class GroupController {
 	@Autowired
-	GroupService service;
+	GroupService groupService;
+	@Autowired 
+	UserService userService;
 	
 	@PostMapping("/addGroup")
-	public void addGroup(GroupDao dao) {
-		service.addGroup(dao);
+	public int addGroup(@RequestBody GroupDto dto) {
+		return groupService.addGroup(dto);
 	}
 	
 	@PostMapping("/deleteGroup")
-	public void deleteGroup(GroupDao dao) {
-		service.deleteGroup(dao);
+	public void deleteGroup(@RequestBody GroupDto dto) {
+		groupService.deleteGroup(dto.getId());
 	}
 	
 	@PostMapping("/updateGroup")
-	public void updateGroup(GroupDao dao) {
-		service.updateGroup(dao);
+	public void updateGroup(@RequestBody GroupDto dto) {
+		groupService.updateGroup(dto);
 	}
 	
 	@PostMapping("/getGroup")
-	public GroupDao getGroup(GroupDao dao) {
-		return service.getGroup(dao.getId());
+	public GroupDao getGroup(@RequestBody GroupDto dto) {
+		return groupService.getGroup(dto.getId());
 	}
 	
 	@PostMapping("/getGroupChild")
-	public List<GroupDao> getGroupChild(GroupDao dao) {
-		return service.getGroupChild(dao);
+	public List<GroupDto> getGroupChild(@RequestBody GroupDto dto) {
+		return groupService.getGroupChild(dto.getId());
 	}
 	
 	@PostMapping("/getAllGroupList")
 	public GroupDto getAllGroupList() {
-		return service.getAllGroupList();
+		return groupService.getAllGroupList();
 	}
 
+	
+	@PostMapping("/getAllChildList")
+	public GroupNUserDto getAllChildList(@RequestBody GroupDto dto) {
+		GroupNUserDto groupNUserDto = new GroupNUserDto();
+		groupNUserDto.setGroupList(groupService.getGroupChild(dto.getId()));
+		groupNUserDto.setUserList(userService.getGroupedUser(dto.getId()));
+		return groupNUserDto;
+	}
 }

@@ -71,23 +71,25 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public List<UserDto> getGroupedUser(UserDto dto) {
-		List<UserDao> daoList = repo.getGroupedUser(dto.getGroupId(),new Sort(Direction.ASC, "name"));
-		return  getDaoToDtoList(daoList);
+	public List<UserDto> getGroupedUser(int id) {
+		List<UserDao> daoList = repo.getGroupedUser(id,new Sort(Direction.ASC, "name"));
+		return  getDaoToDtoList(daoList,false);
 	}
 
 	@Override
 	public List<UserDto> getUserList() {
 		List<UserDao> daoList = repo.findAll();
-		return getDaoToDtoList(daoList);
+		return getDaoToDtoList(daoList,true);
 	}
 	
-	private List<UserDto> getDaoToDtoList(List<UserDao> daoList){
+	private List<UserDto> getDaoToDtoList(List<UserDao> daoList,boolean addGroupName){
 		List<UserDto> dtoList = new ArrayList<>();
 		for(UserDao dao : daoList) {
 			UserDto dto = dao.getDto();
-			String groupName = service.getGroup(dao.getGroupId()).getName();
-			dto.setGroupName(groupName);
+			if(addGroupName) {
+				String groupName = service.getGroup(dao.getGroupId()).getName();
+				dto.setGroupName(groupName);
+			}			
 			dtoList.add(dto);
 		}
 		return dtoList;

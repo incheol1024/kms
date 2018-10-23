@@ -38,7 +38,7 @@ public class UserController {
 	
 	@PostMapping("/getGroupedUser")
 	public List<UserDto> getGroupedUser(@RequestBody UserDto dto) {
-		return service.getGroupedUser(dto);
+		return service.getGroupedUser(dto.getGroupId());
 	}
 	
 	@PostMapping("/getUserList")

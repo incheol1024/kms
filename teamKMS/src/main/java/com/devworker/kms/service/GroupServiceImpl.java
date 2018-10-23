@@ -1,5 +1,6 @@
 package com.devworker.kms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,35 +26,35 @@ public class GroupServiceImpl implements GroupService{
 	}
 	
 	@Override
-	public int addGroup(GroupDao dao) {
-		GroupDao save = repo.save(dao);
+	public int addGroup(GroupDto dto) {
+		GroupDao save = repo.save(dto.getDao());
 		return save.getId();
 	}
 	
 	@Override
-	public void deleteGroup(GroupDao dao) {
-		repo.delete(dao);
+	public void deleteGroup(int id) {
+		repo.deleteById(id);
 	}
 	
 	@Transactional
 	@Override
-	public void forceDeleteGroup(GroupDao dao) {
-		recurDelete(dao);
-		deleteGroup(dao);
+	public void forceDeleteGroup(int id) {
+		recurDelete(id);
+		deleteGroup(id);
 	}
 	
-	private void recurDelete(GroupDao dao) {
-		List<GroupDao> groupChild = repo.getGroupChild(dao.getId(), new Sort(Direction.ASC,"name"));
+	private void recurDelete(int id) {
+		List<GroupDao> groupChild = repo.getGroupChild(id, new Sort(Direction.ASC,"name"));
 		for(GroupDao sub : groupChild) {
-			recurDelete(sub);
-			deleteGroup(sub);
+			recurDelete(sub.getId());
+			deleteGroup(sub.getId());
 		}
 	}
 	
 	@Override
-	public void updateGroup(GroupDao dao) {
-		if(repo.existsById(dao.getId()))
-			repo.save(dao);
+	public void updateGroup(GroupDto dto) {
+		if(repo.existsById(dto.getId()))
+			repo.save(dto.getDao());
 		else
 			throw new NotExistException("group not existed");
 	}
@@ -61,8 +62,13 @@ public class GroupServiceImpl implements GroupService{
 	
 
 	@Override
-	public List<GroupDao> getGroupChild(GroupDao dao) {
-		return repo.getGroupChild(dao.getId(),new Sort(Direction.ASC,"name"));
+	public List<GroupDto> getGroupChild(int id) {
+		List<GroupDao> groupChild = repo.getGroupChild(id,new Sort(Direction.ASC,"name"));
+		List<GroupDto> list = new ArrayList<>();
+		for(GroupDao dao : groupChild) {
+			list.add(dao.getDto());
+		}
+		return list;
 	}
 
 	@Override

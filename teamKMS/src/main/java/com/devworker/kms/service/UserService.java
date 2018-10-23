@@ -11,7 +11,7 @@ public interface UserService {
 	public void deleteUser(String id);
 	public void updateUser(UserDto dto);
 	public UserDto getUser(String id);
-	public List<UserDto> getGroupedUser(UserDto dto);
+	public List<UserDto> getGroupedUser(int id);
 	public List<UserDto> getUserList();
 	public long getCount();
 }
