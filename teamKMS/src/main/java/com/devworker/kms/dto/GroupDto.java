@@ -5,14 +5,11 @@ import java.util.List;
 
 import com.devworker.kms.dao.GroupDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 public class GroupDto {
 	private int id;
 	private String name;
 	private int parentid;
-	@JsonInclude(Include.NON_EMPTY)
 	private List<GroupDto> children  = new ArrayList<>();
 	
 	public int getId() {
