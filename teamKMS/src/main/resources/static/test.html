@@ -15,7 +15,7 @@
 	<p></p>
 	<div id='test'>
 
-		<tree-component ref="tree" :items="data" :eventbus="treebus" :cachekey="'name'"></tree-component>
+		<tree-component ref="tree" :items="data" :busname="'treebus'" :cachekey="'name'"></tree-component>
 		<input style="border-style:ridge" v-model="text"></input>
 		<button style="border-style:ridge" @click="aadd">add</button>
 		<button style="border-style:ridge" @click="ddelete">delete</button>
@@ -38,7 +38,6 @@
 			data: function data() {
 				return {
 					text: "",
-					treebus : new Vue(),
 					data: {
 						name: 'T1',
 						children: [

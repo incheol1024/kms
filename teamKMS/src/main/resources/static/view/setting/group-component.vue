@@ -3,7 +3,7 @@
   
   <v-flex>  
     <v-layout align-center>
-      <tree-component ref="tree" :items="items" :busname="'tree'" :cachekey="'id'"></tree-component>
+      <tree-component ref="tree" :items="items" :busname="'tree'" :cachekey="'id'" @nodeevent="actived"></tree-component>
           
       <v-tooltip bottom>          
         <v-icon slot="activator" color="pink" @click="Move">arrow_forward</v-icon>        
@@ -78,11 +78,11 @@ module.exports = {
     headers: [{ text: "name", value: "name" }],
     dialog: false,
     updateMode: false
-  }),
-  watch: {
+  }),  
+  methods: {
     actived: function actived() {
       var _this = this;
-      if (_this.actived.length > 0) {
+      if (_this.$refs.tree.active.items) {
         _this.childitems = [];
         this.loading = true;
         axios
@@ -100,9 +100,7 @@ module.exports = {
             console.log(error);
           });
       }
-    }
-  },
-  methods: {
+    },
     confirm: function confirm() {
       var _this = this;
       if (this.updateMode) {
@@ -142,15 +140,15 @@ module.exports = {
       this.newname = this.$refs.tree.active.items.name;
     },
     Move: function Move() {
-       console.log('a');
       var _this = this;
+      var temp = JSON.parse(JSON.stringify(GroupModel));
+      temp.id = _this.$refs.tree.active.items.id;
+      temp.parentid = _this.$refs.subtree.active.items.id;
+      temp.name = _this.$refs.tree.active.items.name;
       axios
-        .post("updateGroup", {
-          id: _this.$refs.tree.active.items.id,
-          parentid: _this.$refs.subtree.active.items.id
-        })
+        .post("updateGroup", temp)
         .then(function(response) {
-          this.$refs.tree.moveNode(_this.$refs.subtree.active.items.id);
+          _this.$refs.tree.moveNode(_this.$refs.subtree.active.items.id);
         })
         .catch(function(error) {
           console.log(error);

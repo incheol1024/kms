@@ -23,6 +23,7 @@ module.exports = {
     activated: function activated(node) {      
       this.active.activeNow = false;
       this.active = node;
+      this.$emit('nodeevent');
     },
     addNode: function addNode(data) {
       this.cache[data[this.cachekey]] = data[this.cachekey];
