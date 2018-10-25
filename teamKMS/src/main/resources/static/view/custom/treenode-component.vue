@@ -12,12 +12,12 @@
 module.exports = {
   props: {
     items: {},
-    parentnode : {}
+    parentnode: {}
   },
   data: () => ({
     showChild: false,
-    iconName: "arrow_right",
-    activeNow : false
+    iconName: "keyboard_arrow_right",
+    activeNow: false
   }),
   methods: {
     activeChange: function activeChange() {
@@ -26,10 +26,10 @@ module.exports = {
     },
     toggle: function toggle() {
       this.showChild = !this.showChild;
-      if (this.showChild) this.iconName = "arrow_drop_down";
-      else this.iconName = "arrow_right";
+      if (this.showChild) this.iconName = "keyboard_arrow_down";
+      else this.iconName = "keyboard_arrow_right";
     },
-    getParent : function getParent() {
+    getParent: function getParent() {
       return this;
     }
   }
@@ -37,11 +37,22 @@ module.exports = {
 </script>
 
 <style>
-.tree-list li {
+.tree-node{
+  align-items: center;
   cursor: pointer;
 }
 
-.active{
-  color : blue;
+.tree-node i {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.tree-node span {
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.87);
+  vertical-align: top;
+}
+
+.active {
+  color: #1976d2 !important;
 }
 </style>

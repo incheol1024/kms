@@ -29,9 +29,11 @@ module.exports = {
       this.active.showChild = true;
     },
     deleteNode: function deleteNode() {
-      console.log("aa")
+      console.log("aa");
       delete this.cache[this.active.items[this.cachekey]];
-      var index = this.active.parentnode.items.children.indexOf(this.active.items);
+      var index = this.active.parentnode.items.children.indexOf(
+        this.active.items
+      );
       this.active.parentnode.items.children.splice(index, 1);
       this.active = {};
     },
@@ -41,7 +43,9 @@ module.exports = {
     moveNode: function moveNode(text) {
       var target = this.cache[text];
       target.children.push(this.active.items);
-      var index = this.active.parentnode.items.children.indexOf(this.active.items);
+      var index = this.active.parentnode.items.children.indexOf(
+        this.active.items
+      );
       this.active.parentnode.items.children.splice(index, 1);
     },
     recurCache(data) {
@@ -58,13 +62,16 @@ module.exports = {
 </script>
   
 <style>
-.tree-list ul {
-  padding-left: 30px;
-  margin: 6px 0;
+.tree-list {
+  font-family: Roboto, sans-serif;
+  line-height: 1.5;
+  padding-left: 28px;
+  margin: 8px 0;
   list-style-type: none;
 }
 
-ul {
+.tree-list ul {
   list-style-type: none;
+  padding-left: 28px;
 }
 </style>
