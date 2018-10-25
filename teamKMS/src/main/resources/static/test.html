@@ -14,8 +14,8 @@
 	<div>KMS Test Page</div>
 	<p></p>
 	<div id='test'>
-		
-		<tree-component ref="tree" :items="data" :active="active"></tree-component>
+
+		<tree-component ref="tree" :items="data" :active="active" :cachekey="'name'"></tree-component>
 		<input style="border-style:ridge" v-model="text"></input>
 		<button style="border-style:ridge" @click="aadd">add</button>
 		<button style="border-style:ridge" @click="ddelete">delete</button>
@@ -32,41 +32,45 @@
 		Vue.component('treenode-component')
 		EventBus = new Vue();
 
-		const GroupModel = {"id":2,"name":"Root","parentid":1,"children":[]}
+		const GroupModel = { "id": 2, "name": "Root", "parentid": 1, "children": [] }
 
 		var main = new Vue({
 			data: function data() {
 				return {
 					text: "",
-					data : {
-						name: 'My Tree',
+					data: {
+						name: 'T1',
 						children: [
-							{ name: 'hello', children : [] },
-							{ name: 'wat' ,children :[]},
+							{ name: 'T2', children: [] },
+							{ name: 'T3', children: [] },
 							{
-								name: 'child folder',
+								name: 'T4',
 								children: [
 									{
-										name: 'child folder',
+										name: 'T5',
 										children: [
-											{ name: 'hello',children :[] },
-											{ name: 'wat',children :[] }
+											{ name: 'T6', children: [] },
+											{ name: 'T7', children: [] }
 										]
 									},
-									{ name: 'hello',children :[] },
-									{ name: 'wat',children :[] },
+									{ name: 'T8', children: [] },
+									{ name: 'T9', children: [] },
 									{
-										name: 'child folder',
+										name: 'T10',
 										children: [
-											{ name: 'hello',children :[] },
-											{ name: 'wat',children :[] }
+											{
+												name: 'T11', children: [
+													{ name: 'T14', children: [] }
+												]
+											},
+											{ name: 'T12', children: [] }
 										]
 									}
 								]
 							}
 						]
 					},
-					active : {}
+					active: {}
 				}
 			},
 			methods: {
@@ -82,7 +86,7 @@
 				},
 				mmove: function mmove() {
 					console.log(this.active);
-					this.$refs.tree.moveNode("My Tree","name");
+					this.$refs.tree.moveNode(this.text, "name");
 				},
 				update: function update() {
 					console.log(this.active);
