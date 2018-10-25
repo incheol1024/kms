@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+	<script src="/webjars/http-vue-loader/1.3.5/src/httpVueLoader.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+	<title>KMS Test Page</title>
+</head>
+
+<body>
+	<div>KMS Test Page</div>
+	<p></p>
+	<div id='test'>
+
+		<tree-component ref="tree" :items="data" :active="active" :cachekey="'name'"></tree-component>
+		<input style="border-style:ridge" v-model="text"></input>
+		<button style="border-style:ridge" @click="aadd">add</button>
+		<button style="border-style:ridge" @click="ddelete">delete</button>
+		<button style="border-style:ridge" @click="update">update</button>
+		<button style="border-style:ridge" @click="mmove">move</button>
+	</div>
+
+	<script src="/webjars/vue/2.5.16/vue.js"></script>
+	<script type="text/javascript">
+		console.log("test");
+		httpVueLoader.register(Vue, 'view/custom/tree-component.vue');
+		httpVueLoader.register(Vue, 'view/custom/treenode-component.vue');
+		Vue.component('tree-component')
+		Vue.component('treenode-component')
+		EventBus = new Vue();
+
+		const GroupModel = { "id": 2, "name": "Root", "parentid": 1, "children": [] }
+
+		var main = new Vue({
+			data: function data() {
+				return {
+					text: "",
+					data: {
+						name: 'T1',
+						children: [
+							{ name: 'T2', children: [] },
+							{ name: 'T3', children: [] },
+							{
+								name: 'T4',
+								children: [
+									{
+										name: 'T5',
+										children: [
+											{ name: 'T6', children: [] },
+											{ name: 'T7', children: [] }
+										]
+									},
+									{ name: 'T8', children: [] },
+									{ name: 'T9', children: [] },
+									{
+										name: 'T10',
+										children: [
+											{
+												name: 'T11', children: [
+													{ name: 'T14', children: [] }
+												]
+											},
+											{ name: 'T12', children: [] }
+										]
+									}
+								]
+							}
+						]
+					},
+					active: {}
+				}
+			},
+			methods: {
+				aadd: function aadd() {
+					console.log(this.active);
+					var model = JSON.parse(JSON.stringify(GroupModel))
+					model.name = this.text;
+					this.$refs.tree.addNode(model);
+				},
+				ddelete: function ddelete() {
+					console.log(this.active);
+					this.$refs.tree.deleteNode();
+				},
+				mmove: function mmove() {
+					console.log(this.active);
+					this.$refs.tree.moveNode(this.text, "name");
+				},
+				update: function update() {
+					console.log(this.active);
+					this.$refs.tree.updateNode(this.text);
+				}
+			}
+		}).$mount('#test');
+	</script>
+</body>
+
+</html>

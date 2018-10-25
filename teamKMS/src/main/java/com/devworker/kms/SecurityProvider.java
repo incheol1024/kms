@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.service.AuthService;
 
 @Component
@@ -28,11 +29,10 @@ public class SecurityProvider implements AuthenticationProvider {
 			UserDao dao = new UserDao();
 			dao.setId(authentication.getName());
 			dao.setPassword(authentication.getCredentials().toString());
-			dao = service.auth(dao);
+			UserDto auth = service.auth(dao);
 			List<GrantedAuthority> grantedAuths = new ArrayList<>();
-			grantedAuths.add(new SimpleGrantedAuthority(dao.getType()));
-			return new UsernamePasswordAuthenticationToken(authentication.getName(), authentication.getCredentials(),
-					grantedAuths);
+			grantedAuths.add(new SimpleGrantedAuthority(auth.getType()));
+			return new UsernamePasswordAuthenticationToken(authentication.getName(), authentication.getCredentials(),grantedAuths);
 		} catch (Exception e) {
 			throw new AuthenticationServiceException(e.getMessage());
 		}

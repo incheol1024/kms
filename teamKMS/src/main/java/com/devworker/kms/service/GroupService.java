@@ -7,12 +7,11 @@ import com.devworker.kms.dto.GroupDto;
 
 public interface GroupService {
 	public long countGroup();
-	public int addGroup(GroupDao dao);
-	public void deleteGroup(GroupDao dao);
-	public void forceDeleteGroup(GroupDao dao);
-	public void updateGroup(GroupDao dao);
-	public List<GroupDao> getGroupChild(GroupDao dao);
-	public GroupDao getGroup(GroupDao dao);
+	public int addGroup(GroupDto dto);
+	public void deleteGroup(int id);
+	public void forceDeleteGroup(int id);
+	public void updateGroup(GroupDto dto);
+	public List<GroupDto> getGroupChild(int id);
+	public GroupDao getGroup(int id);
 	public GroupDto getAllGroupList();
-	
 }

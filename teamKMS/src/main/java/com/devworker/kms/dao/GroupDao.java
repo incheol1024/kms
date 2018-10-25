@@ -7,6 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.devworker.kms.dto.GroupDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "KMSGroup")
 public class GroupDao {
@@ -16,7 +19,7 @@ public class GroupDao {
 	private int id;
 	@Column(name="group_name")
 	private String name;
-	@Column(name="group_parent",nullable = true)
+	@Column(name="group_parent")
 	private int parentid;
 	
 	public int getId() {
@@ -36,6 +39,15 @@ public class GroupDao {
 	}
 	public void setParentid(int parentid) {
 		this.parentid = parentid;
+	}
+	
+	@JsonIgnore
+	public GroupDto getDto() {
+		GroupDto dto = new GroupDto();
+		dto.setId(id);
+		dto.setName(name);
+		dto.setParentid(parentid);
+		return dto;
 	}
 
 	

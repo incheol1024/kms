@@ -1,28 +1,15 @@
-package com.devworker.kms.dao;
+package com.devworker.kms.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import com.devworker.kms.dto.UserDto;
+import com.devworker.kms.dao.UserDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
-@Table(name = "KMSUser")
-public class UserDao{
-	@Id
-	@Column(name = "user_id")
+public class UserDto{
 	private String id;
-	@Column(name="user_name")
 	private String name;
-	@Column(name="user_type")
 	private String type;
-	@Column(name="user_group")
 	private int groupId;
-	@Column(name="user_pass")
+	private String groupName;
 	private String password;
-	
 	
 	public String getId() {
 		return id;
@@ -54,15 +41,21 @@ public class UserDao{
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public String getGroupName() {
+		return groupName;
+	}
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
 	
 	@JsonIgnore
-	public UserDto getDto() {
-		UserDto dto = new UserDto();
-		dto.setId(id);
-		dto.setName(name);
-		dto.setPassword(password);
-		dto.setType(type);
-		dto.setGroupId(groupId);
-		return dto;
+	public UserDao getDao() {
+		UserDao dao = new UserDao();
+		dao.setId(id);
+		dao.setName(name);
+		dao.setGroupId(groupId);
+		dao.setPassword(password);
+		dao.setType(type);
+		return dao;
 	}
 }

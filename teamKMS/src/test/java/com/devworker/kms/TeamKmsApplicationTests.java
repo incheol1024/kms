@@ -24,8 +24,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.devworker.kms.dao.GroupDao;
 import com.devworker.kms.dao.MenuDao;
 import com.devworker.kms.dic.MenuType;
+import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.dto.MessageDetailDto;
 import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.ftsdao.PostFTSDao;
 import com.devworker.kms.service.FTSService;
 import com.devworker.kms.service.GroupService;
@@ -83,25 +85,23 @@ public class TeamKmsApplicationTests {
 	
 	@Test
 	public void deleteGroupTest() {
-		GroupDao dao = new GroupDao();
-		dao.setId(124);
-		groupService.forceDeleteGroup(dao);
+		groupService.forceDeleteGroup(419);		
 	}
 	
 	@Test
 	public void makeTreeGroupTest() {
-		GroupDao dao = new GroupDao();
-		dao.setName("TT");
-		dao.setParentid(0);
-		makeTree(dao);
-		System.out.println(dao.getId());
+		GroupDto dto = new GroupDto();
+		dto.setName("TT");
+		dto.setParentid(420);
+		makeTree(dto);
+		System.out.println(dto.getId());
 	}
 	
-	private void makeTree(GroupDao dao) {
-		int id = groupService.addGroup(dao);
+	private void makeTree(GroupDto dto) {
+		int id = groupService.addGroup(dto);
 		Random random = new Random();
 		for(int i = 0 ; i < random.nextInt(4); i++) {
-			GroupDao sub = new GroupDao();
+			GroupDto sub = new GroupDto();
 			sub.setName("TDF");
 			sub.setParentid(id);
 			makeTree(sub);
@@ -122,8 +122,9 @@ public class TeamKmsApplicationTests {
 	}
 
 	@Test
-	public void userTest() {
-		userService.countUser();
+	public void getUserListTest() throws JsonProcessingException {		
+		List<UserDto> userList = userService.getUserList();
+		assertThat(userList, not(IsEmptyCollection.empty()));
 	}
 
 	@Test
@@ -132,16 +133,16 @@ public class TeamKmsApplicationTests {
 		GroupDao dao = new GroupDao();
 		dao.setName("Test");
 		dao.setParentid(0);
-		List<GroupDao> list = groupService.getGroupChild(dao);
+		List<GroupDto> list = groupService.getGroupChild(dao.getId());
 		assertThat(list, not(IsEmptyCollection.empty()));
 	}
 
 	@Test
 	public void addGroupTest() {
-		GroupDao dao = new GroupDao();
-		dao.setName("Test");
-		dao.setParentid(0);
-		groupService.addGroup(dao);
+		GroupDto dto = new GroupDto();
+		dto.setName("Test");
+		dto.setParentid(0);
+		groupService.addGroup(dto);
 	}
 
 	@Test

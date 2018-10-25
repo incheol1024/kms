@@ -3,13 +3,13 @@ package com.devworker.kms.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.devworker.kms.dao.GroupDao;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class GroupDto {
 	private int id;
 	private String name;
-	@JsonInclude(Include.NON_EMPTY)
+	private int parentid;
 	private List<GroupDto> children  = new ArrayList<>();
 	
 	public int getId() {
@@ -31,5 +31,19 @@ public class GroupDto {
 		this.children = children;
 	}
 	
+	public int getParentid() {
+		return parentid;
+	}
+	public void setParentid(int parentid) {
+		this.parentid = parentid;
+	}
 	
+	@JsonIgnore
+	public GroupDao getDao() {
+		GroupDao dao = new GroupDao();
+		dao.setParentid(parentid);
+		dao.setName(name);
+		dao.setId(id);
+		return dao;
+	}
 }
