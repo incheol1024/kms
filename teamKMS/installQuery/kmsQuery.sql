@@ -1,5 +1,5 @@
-/*create database [databaseName] DEFAULT CHARACTER SET utf8 collate utf8_general_ci;
-오토커밋 꺼라 */
+#create database [databaseName] DEFAULT CHARACTER SET utf8 collate utf8_general_ci;
+#오토커밋 꺼라
 
 create table KMS.KMSMenu (
 	menu_id INT(11) unsigned auto_increment primary key,

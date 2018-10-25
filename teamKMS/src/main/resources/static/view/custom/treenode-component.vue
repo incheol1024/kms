@@ -3,7 +3,7 @@
   <button v-if="items.children && items.children.length" @click="toggle"><i class="material-icons" >{{iconName}}</i></button>
   <span @click="activeChange" v-bind:class="{ active : activeNow }">{{ items.name }}</span>
   <ul v-if="items.children && items.children.length">
-    <treenode-component v-if="showChild" v-for="(child,i) in items.children" :key="i" :items="child" :parentnode="getParent()"></treenode-component>
+    <treenode-component v-if="showChild" v-for="(child,i) in items.children" :key="i" :items="child" :busname="busname" :parentnode="getParent()"></treenode-component>
   </ul>
 </li>
 </template>
@@ -12,16 +12,17 @@
 module.exports = {
   props: {
     items: {},
-    parentnode: {}
+    parentnode: {},
+    busname : ""
   },
   data: () => ({
-    showChild: false,
+    showChild: false,    
     iconName: "keyboard_arrow_right",
     activeNow: false
   }),
   methods: {
     activeChange: function activeChange() {
-      EventBus.$emit("nodechange", this);
+      EventBus.$emit(this.busname, this);
       this.activeNow = !this.activeNow;
     },
     toggle: function toggle() {

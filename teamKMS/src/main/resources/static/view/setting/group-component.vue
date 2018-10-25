@@ -3,18 +3,14 @@
   
   <v-flex>  
     <v-layout align-center>
-      <v-treeview :items="items" activatable :active.sync="active" active-class="primary--text" selectable selected-color="primary"
-        expand-icon="keyboard_arrow_down" on-icon="bookmark" off-icon="bookmark_border" indeterminate-icon="book">       
-      </v-treeview>
+      <tree-component ref="tree" :items="items" :busname="'tree'" :cachekey="'id'"></tree-component>
           
       <v-tooltip bottom>          
         <v-icon slot="activator" color="pink" @click="Move">arrow_forward</v-icon>        
         <span>Move Group</span>
       </v-tooltip>
 
-      <v-treeview :items="items" activatable :active.sync="activeSub" active-class="primary--text" selectable selected-color="primary"
-        expand-icon="keyboard_arrow_down" on-icon="bookmark" off-icon="bookmark_border" indeterminate-icon="book">	          
-      </v-treeview>
+     <tree-component ref="subtree" :items="items" :busname="'subtree'" :cachekey="'id'"></tree-component>
     </v-layout>		  
   </v-flex>        
 
@@ -46,7 +42,7 @@
       Set New Name
     </v-card-title>
     <v-card-text>
-      <v-text-field v-model="curitem.name" label="Name"></v-text-field>
+      <v-text-field v-model="newname" label="Name"></v-text-field>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
@@ -65,68 +61,69 @@ module.exports = {
     axios
       .post("getAllGroupList")
       .then(function(response) {
-        _this.items.push(response.data);
+        _this.items = response.data;
+        _this.$refs.tree.recurCache(_this.items);
+        _this.$refs.subtree.recurCache(_this.items);
       })
       .catch(function(error) {
         console.log(error);
       });
   },
   data: () => ({
-    active: [],
-    activeSub: [],
-    items: [],
+    items: {},
     childitems: [],
+    newname: "",
     search: "",
-    loading: true,
+    loading: false,
     headers: [{ text: "name", value: "name" }],
     dialog: false,
-    updateMode: false,
-    curitem: JSON.parse(JSON.stringify(GroupModel))
+    updateMode: false
   }),
   watch: {
-    active: function active() {
+    actived: function actived() {
       var _this = this;
-      _this.childitems = [];
-      this.loading = true;
-      axios
-        .post("getAllChildList", { id: this.selected() })
-        .then(function(response) {
-          for (i = 0; i < response.data.groupList.length; i++) {
-            _this.childitems.push(response.data.groupList[i]);
-          }
-          for (i = 0; i < response.data.userList.length; i++) {
-            _this.childitems.push(response.data.userList[i]);
-          }
-          _this.loading = false;
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      if (_this.actived.length > 0) {
+        _this.childitems = [];
+        this.loading = true;
+        axios
+          .post("getAllChildList", { id: _this.$refs.tree.active.items.id })
+          .then(function(response) {
+            for (i = 0; i < response.data.groupList.length; i++) {
+              _this.childitems.push(response.data.groupList[i]);
+            }
+            for (i = 0; i < response.data.userList.length; i++) {
+              _this.childitems.push(response.data.userList[i]);
+            }
+            _this.loading = false;
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
     }
   },
   methods: {
     confirm: function confirm() {
-      console.log("aaa");
+      var _this = this;
       if (this.updateMode) {
+        _this.$refs.tree.active.items.name = _this.newname;
         axios
-          .post("updateGroup", this.curitem)
-          .then(function(response) {})
+          .post("updateGroup", _this.$refs.tree.active.items)
+          .then(function(response) {
+            _this.$refs.tree.updateNode(_this.newname);
+          })
           .catch(function(error) {
             console.log(error);
           });
       } else {
-        var _this =  this;
         var temp = JSON.parse(JSON.stringify(GroupModel));
-        temp.parentid = this.curitem.id;
-        temp.name = this.curitem.name;
+        temp.parentid = _this.$refs.tree.active.items.id;
+        temp.name = this.newname;
         axios
           .post("addGroup", temp)
           .then(function(response) {
-            if(!_this.curitem.children)
-              _this.curitem.children = [];
             temp.id = response.data;
-            temp.children = null;
-            _this.curitem.children.push(temp);
+            _this.$refs.tree.addNode(temp);
           })
           .catch(function(error) {
             console.log(error);
@@ -135,64 +132,40 @@ module.exports = {
       this.dialog = false;
     },
     NewItem: function NewItem() {
-      console.log("bb");
       this.dialog = true;
-      var id = this.selected();
-      this.curitem = this.recurFind(this.items[0], id);
       this.updateMode = false;
+      this.newname = "";
     },
     EditName: function EditName() {
-      console.log("bb");
       this.dialog = true;
-      var id = this.selected();
-      this.curitem = this.recurFind(this.items[0], id);
       this.updateMode = true;
+      this.newname = this.$refs.tree.active.items.name;
     },
     Move: function Move() {
-      //TODO tomorrow
-      var id = this.selected();
-      var moved = this.subSelected();
+       console.log('a');
+      var _this = this;
       axios
-        .post("updateGroup", { id: this.selected(), parentid: moved })
+        .post("updateGroup", {
+          id: _this.$refs.tree.active.items.id,
+          parentid: _this.$refs.subtree.active.items.id
+        })
         .then(function(response) {
-
-
+          this.$refs.tree.moveNode(_this.$refs.subtree.active.items.id);
         })
         .catch(function(error) {
           console.log(error);
         });
     },
     DeleteItem: function DeleteItem() {
-      var curId = this.selected();
       var _this = this;
       axios
-        .post("deleteGroup", { id: curId })
+        .post("deleteGroup", { id: _this.$refs.tree.active.items.id })
         .then(function(response) {
-          cur = _this.recurFind(_this.items[0], curId);
-          parent = _this.recurFind(_this.items[0], cur.parentid);
-          parent.children.splice(parent.children.indexOf(cur), 1);
+          _this.$refs.tree.deleteNode();
         })
         .catch(function(error) {
           console.log(error);
         });
-    },
-    selected() {
-      if (!this.active.length) return undefined;
-      const id = this.active[0];
-      return id;
-    },
-    subSelected() {
-      if (!this.activeSub.length) return undefined;
-      const id = this.activeSub[0];
-      return id;
-    },
-    recurFind(item, id) {
-      if (item.id === id) return item;
-      if (item.children) {
-        for (i = 0; i < item.children.length; i++) {
-          return this.recurFind(item.children[i], id);
-        }
-      }
     }
   }
 };

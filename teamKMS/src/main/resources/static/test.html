@@ -15,7 +15,7 @@
 	<p></p>
 	<div id='test'>
 
-		<tree-component ref="tree" :items="data" :active="active" :cachekey="'name'"></tree-component>
+		<tree-component ref="tree" :items="data" :eventbus="treebus" :cachekey="'name'"></tree-component>
 		<input style="border-style:ridge" v-model="text"></input>
 		<button style="border-style:ridge" @click="aadd">add</button>
 		<button style="border-style:ridge" @click="ddelete">delete</button>
@@ -38,6 +38,7 @@
 			data: function data() {
 				return {
 					text: "",
+					treebus : new Vue(),
 					data: {
 						name: 'T1',
 						children: [
@@ -69,27 +70,26 @@
 								]
 							}
 						]
-					},
-					active: {}
+					}
 				}
 			},
 			methods: {
 				aadd: function aadd() {
-					console.log(this.active);
+					console.log(this.activesub);
 					var model = JSON.parse(JSON.stringify(GroupModel))
 					model.name = this.text;
 					this.$refs.tree.addNode(model);
 				},
 				ddelete: function ddelete() {
-					console.log(this.active);
+					console.log(this.activesub);
 					this.$refs.tree.deleteNode();
 				},
 				mmove: function mmove() {
-					console.log(this.active);
-					this.$refs.tree.moveNode(this.text, "name");
+					console.log(this.activesub);
+					this.$refs.tree.moveNode(this.text);
 				},
 				update: function update() {
-					console.log(this.active);
+					console.log(this.activesub);
 					this.$refs.tree.updateNode(this.text);
 				}
 			}
