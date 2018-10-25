@@ -4,24 +4,33 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.devworker.kms.dao.UserDao;
+
 @Entity
-@Table(name="KMSQna")
+@Table(name = "KMSQna")
 public class QnaDto {
 
 	@Id
 	@GeneratedValue
 	Long id;
 
-	@Column(nullable = false, length=300)
+	@Column(name = "title", nullable = false, length = 300)
 	String title;
 
-	@Column(nullable = false, length = 4000)
+	@Column(name = "content", nullable = false, length = 4000)
 	String content;
+	@Column(name = "username", nullable = false)
 	String userName;
+	@Column(name = "replycount", nullable = false)
 	int replyCount;
+	@Column(name = "viewcount", nullable = false)
 	int viewCount;
+
+	//@ManyToOne
+	//UserDao user;
 
 	public Long getId() {
 		return id;
@@ -69,6 +78,12 @@ public class QnaDto {
 
 	public void setViewCount(int viewCount) {
 		this.viewCount = viewCount;
+	}
+
+	@Override
+	public String toString() {
+		return "QnaDto [id=" + id + ", title=" + title + ", content=" + content + ", userName=" + userName
+				+ ", replyCount=" + replyCount + ", viewCount=" + viewCount + "]";
 	}
 
 }
