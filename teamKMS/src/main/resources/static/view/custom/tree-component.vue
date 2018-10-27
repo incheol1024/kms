@@ -1,6 +1,6 @@
 <template>
 <ul class="tree-list">
-	<treenode-component :items="items"></treenode-component>
+	<treenode-component :items="items" :busname="busname"></treenode-component>
 </ul>
 </template>
 
@@ -8,32 +8,31 @@
 module.exports = {
   props: {
     items: {},
-    cachekey: ""
+    cachekey: "",
+    busname : ""
   },
   data: () => ({
     cache: {},
     active: {}
   }),
   created() {
-    EventBus.$on("nodechange", this.activated);
+    EventBus.$on(this.busname, this.activated);
     this.recurCache(this.items);
   },
   methods: {
-    activated: function activated(node) {
+    activated: function activated(node) {      
       this.active.activeNow = false;
       this.active = node;
+      this.$emit('nodeevent');
     },
     addNode: function addNode(data) {
       this.cache[data[this.cachekey]] = data[this.cachekey];
       this.active.items.children.push(data);
       this.active.showChild = true;
     },
-    deleteNode: function deleteNode() {
-      console.log("aa");
+    deleteNode: function deleteNode() {      
       delete this.cache[this.active.items[this.cachekey]];
-      var index = this.active.parentnode.items.children.indexOf(
-        this.active.items
-      );
+      var index = this.active.parentnode.items.children.indexOf(this.active.items);
       this.active.parentnode.items.children.splice(index, 1);
       this.active = {};
     },
@@ -43,9 +42,7 @@ module.exports = {
     moveNode: function moveNode(text) {
       var target = this.cache[text];
       target.children.push(this.active.items);
-      var index = this.active.parentnode.items.children.indexOf(
-        this.active.items
-      );
+      var index = this.active.parentnode.items.children.indexOf(this.active.items);
       this.active.parentnode.items.children.splice(index, 1);
     },
     recurCache(data) {
