@@ -1,7 +1,7 @@
 <template>
 <v-content>
   <v-card-title>
-     <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage"> 글쓰기 </v-btn>
+    <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage"> 글쓰기 </v-btn>
     <v-spacer></v-spacer>
     <v-text-field v-model="search" append-icon="search" label="검색" single-line hide-details></v-text-field>
   </v-card-title>
@@ -19,8 +19,8 @@
     <template slot="items" slot-scope="props">
       <td class="text-xs-left">{{ props.item.viewCount }}</td>
       <td class="text-xs-left">{{ props.item.title }}</td>
-      <td class="text-xs-center">{{ props.item.userName }}</td>
-      <td class="text-xs-center">{{ props.item.replyCount }}</td>
+      <td class="text-xs-left">{{ props.item.userName }}</td>
+      <td class="text-xs-left">{{ props.item.replyCount }}</td>
     </template>
     <v-alert slot="no-results" :value="true" color="error" icon="warning">
       "{{ search }}"에 대한 결과를 찾을 수 없습니다.
@@ -32,6 +32,7 @@
 <script>
 module.exports = {
   name: 'qna',
+  props: ['id', 'name'],
   data: () => ({
     search: '',
     headers: [{
@@ -55,7 +56,7 @@ module.exports = {
     ],
     questions: []
   }),
-  beforeMount: function() {
+  created: function() {
     var item = this.questions;
     this.getQnaList(item);
   },
@@ -63,17 +64,19 @@ module.exports = {
   methods: {
     getQnaList: function(questions) {
       axios.get("qna")
-        .then(function(response) {
-          for (var i = 0; i < response.data.length; i++) {
-            questions.push(response.data[i]);
+        .then(
+          function(response) {
+            for (var i = 0; i < response.data.length; i++) {
+              questions.push(response.data[i]);
+            }
           }
-        })
+        )
         .catch(function(error) {
           console.log(error);
         })
     },
-    moveToWritePage: function(){
-      this.$router.push('/qna/write/:name/:id');
+    moveToWritePage: function() {
+      this.$router.push("/qna/write/" + this.name + "/" + this.id);
     },
     writepage: function writepage() {
       router.push("/qna/write/" + this.name + "/" + this.id);
