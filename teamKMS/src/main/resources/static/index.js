@@ -2,6 +2,7 @@ Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(window.VueCodemirror);
 Vue.use(VueCkeditor);
+Vue.use(VueCharts);
 
 httpVueLoader.httpRequest = function (url) {
 	return axios.get(url)
