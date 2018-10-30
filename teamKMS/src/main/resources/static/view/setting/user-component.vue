@@ -22,7 +22,7 @@
       </v-card>
     </v-flex>
     
-    <v-flex>
+    <v-flex v-if="hidinput">
       <v-stepper v-model="stage">
         <v-stepper-header>
           <v-stepper-step :complete="stage > 1" step="1">Input Infomation</v-stepper-step>
@@ -99,6 +99,7 @@ module.exports = {
     items: [],
     curitem: JSON.parse(JSON.stringify(UserModel)),
     stage: 3,
+    hidinput: false,
     updateMode: false,
     samepass: "",
     usertype: ["USER", "ADMIN"],
@@ -116,11 +117,13 @@ module.exports = {
       this.updateMode = false;
       this.curitem = JSON.parse(JSON.stringify(UserModel));
       this.stage = 1;
+      this.hidinput = true;
     },
     editItem(item) {
       this.updateMode = true;
       this.curitem = item;
       this.stage = 1;
+      this.hidinput = true;
     },
     deleteItem(item) {
       var _this = this;
@@ -138,7 +141,6 @@ module.exports = {
     send() {
       var _this = this;
       this.curitem.groupId = this.selectedTreeId();
-      this.stage = 3;
       var method = "addUser";
       if (this.updateMode) method = "updateUser";
       axios
@@ -149,6 +151,7 @@ module.exports = {
         .catch(function(error) {
           console.log(error);
         });
+      this.hidinput = false;
     }
   }
 };

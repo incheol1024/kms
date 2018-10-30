@@ -128,6 +128,9 @@ var main = new Vue({
 			else if (children.type == 'QNA')
 				router.push('/qna/' + children.name + "/" + children.id);
 		},
+		gotitle : function gotitle() {
+			router.push('/title');
+		},
 		submit: function submit() {
 			router.push('/search');
 		},

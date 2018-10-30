@@ -1,29 +1,38 @@
 <template>
 <v-layout column>
   
-  <v-flex>  
+  <v-flex class="mb-5">  
     <v-layout align-center>
-      <tree-component ref="tree" :items="items" :busname="'tree'" :cachekey="'id'" @nodeevent="actived"></tree-component>
-          
+      <v-card raised>
+        <v-card-title primary-title>
+          <div>
+            <h3 class="headline mb-0">Current Group</h3>            
+          </div>
+        </v-card-title>
+        <tree-component ref="tree" :items="items" :busname="'tree'" :cachekey="'id'" @nodeevent="actived"></tree-component>
+        <v-btn color="primary" @click="NewItem">New</v-btn>
+        <v-btn color="primary" @click="EditName">EditName</v-btn>    
+        <v-btn color="primary" @click="DeleteItem">Delete</v-btn>
+      </v-card>
+
       <v-tooltip bottom>          
         <v-icon slot="activator" color="pink" @click="Move">arrow_forward</v-icon>        
         <span>Move Group</span>
       </v-tooltip>
-
-     <tree-component ref="subtree" :items="items" :busname="'subtree'" :cachekey="'id'"></tree-component>
+    
+     <v-card raised>
+       <v-card-title primary-title>
+          <div>
+            <h3 class="headline mb-0">Moved Group</h3>            
+          </div>
+        </v-card-title>
+      <tree-component ref="subtree" :items="items" :busname="'subtree'" :cachekey="'id'"></tree-component>
+     </v-card>
     </v-layout>		  
-  </v-flex>        
-
-  <v-flex >
-    <v-layout align-center justify-center>
-      <v-btn color="primary" @click="NewItem">New</v-btn>
-      <v-btn color="primary" @click="EditName">EditName</v-btn>    
-      <v-btn color="primary" @click="DeleteItem">Delete</v-btn>
-    </v-layout>
-  </v-flex>
+  </v-flex>      
 
   <v-flex>
-    <v-card>
+    <v-card raised>
       <v-card-title>Child User, Group 
         <v-spacer></v-spacer>
           <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>

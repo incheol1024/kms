@@ -5,7 +5,7 @@
 
 	<v-flex d-flex xs12 lg6 md6>
 	<v-card>
-		<v-card-title class="purple lighten-1">
+		<v-card-title class="purple">
 			<v-icon dark size="30" class="mr-3">mdi-magnify</v-icon>
 			<h2 class="display-1 white--text font-weight-light">New Patch Arrived</h2>
         </v-card-title>
@@ -29,7 +29,7 @@
 	
 	<v-flex d-flex xs12 lg6 md6>
 	<v-card>
-		<v-card-title class="red lighten-1">
+		<v-card-title class="red">
 			<v-icon dark size="30" class="mr-3">mdi-magnify</v-icon>
 			<h2 class="display-1 white--text font-weight-light">Month Error Rate</h2>
         </v-card-title>
@@ -41,7 +41,7 @@
 	
 	<v-flex d-flex xs12 lg6 md6>
 	<v-card>
-		<v-card-title class="cyan lighten-1">
+		<v-card-title class="cyan">
 			<v-icon dark size="30" class="mr-3">mdi-magnify</v-icon>
 			<h2 class="display-1 white--text font-weight-light">New Project Document</h2>
         </v-card-title>
@@ -53,12 +53,12 @@
 	
 	<v-flex d-flex xs12 lg6 md6>
 	<v-card>
-		<v-card-title class="amber lighten-1">
+		<v-card-title class="amber">
 			<v-icon dark size="30" class="mr-3">mdi-magnify</v-icon>
 			<h2 class="display-1 white--text font-weight-light">New Posted</h2>
         </v-card-title>
         <v-container>
-			<v-data-table :headers="headers" :items="items" class="elevation-1">
+			<v-data-table :headers="headers" :items="items" class="elevation-1" hide-actions>
 				<template slot="items" slot-scope="props">
             		<td>{{ props.item.id }}</td>
             		<td>{{ props.item.name }}</td>
