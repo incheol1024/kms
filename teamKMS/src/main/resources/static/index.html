@@ -63,6 +63,18 @@
 	</v-navigation-drawer>
 	
 	<router-view></router-view>
+
+	<v-dialog v-model="dialog" width="500">
+		<v-card>
+			<v-card-title class="headline primary lighten-2" primary-title>
+			Error!!!!
+			</v-card-title>
+			<v-card-text>
+				{{errormsg}}
+			</v-card-text>
+		</v-card>
+	</v-dialog>
+	
 	</v-app>
 	<!-- <script src="/webjars/vue/2.5.16/vue.min.js"></script> -->
 	<script src="/webjars/vue/2.5.16/vue.js"></script>

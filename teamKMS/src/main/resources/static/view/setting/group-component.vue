@@ -75,7 +75,7 @@ module.exports = {
         _this.$refs.subtree.recurCache(_this.items);
       })
       .catch(function(error) {
-        console.log(error);
+        openError(error.response.data);
       });
   },
   data: () => ({
@@ -106,7 +106,7 @@ module.exports = {
             _this.loading = false;
           })
           .catch(function(error) {
-            console.log(error);
+            openError(error.response.data);
           });
       }
     },
@@ -120,7 +120,7 @@ module.exports = {
             _this.$refs.tree.updateNode(_this.newname);
           })
           .catch(function(error) {
-            console.log(error);
+            openError(error.response.data);
           });
       } else {
         var temp = JSON.parse(JSON.stringify(GroupModel));
@@ -133,7 +133,7 @@ module.exports = {
             _this.$refs.tree.addNode(temp);
           })
           .catch(function(error) {
-            console.log(error);
+            openError(error.response.data);
           });
       }
       this.dialog = false;
@@ -160,7 +160,7 @@ module.exports = {
           _this.$refs.tree.moveNode(_this.$refs.subtree.active.items.id);
         })
         .catch(function(error) {
-          console.log(error);
+          openError(error.response.data);
         });
     },
     DeleteItem: function DeleteItem() {
@@ -170,8 +170,8 @@ module.exports = {
         .then(function(response) {
           _this.$refs.tree.deleteNode();
         })
-        .catch(function(error) {
-          console.log(error);
+        .catch(function(error) {   
+            openError(error.response.data);
         });
     }
   }

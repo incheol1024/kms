@@ -89,7 +89,9 @@ var main = new Vue({
 				children: [],
 				type: 'QNA'
 			}
-		]
+		],
+		errormsg : "",
+		dialog : false
 	}),
 	created: function () {
 		this.items.forEach(item => {
@@ -100,10 +102,9 @@ var main = new Vue({
 					.then(function (response) {
 						for (var i = 0; i < response.data.length; i++) {
 							item.children.push(response.data[i]);
-						}
-						event.stopPropagation();
+						}						
 					}).catch(function (error) {
-						console.log(error);
+						openError(error.response.data);
 					})
 			}
 		});
@@ -152,6 +153,13 @@ router.push('title');
 Vue.config.warnHandler = function (err, vm, info) {
 	console.log(err);
 }
+
+openError = function openError(msg){
+	main.errormsg = msg;
+	main.dialog = true;
+}
+
+
 
 //add find polyfill
 if (!Array.prototype.find) {

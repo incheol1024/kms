@@ -72,7 +72,7 @@ module.exports = {
         }
       })
       .catch(function(error) {
-        console.log(error);
+        openError(error.response.data);
       });
     var _this = this;
     axios
@@ -81,7 +81,7 @@ module.exports = {
         _this.groupItem.push(response.data);
       })
       .catch(function(error) {
-        console.log(error);
+        openError(error.response.data);
       });
     this.loading = false;
   },
@@ -108,7 +108,6 @@ module.exports = {
   }),
   methods: {
     selectedTreeId() {
-      console.log('aa');
       if (!this.active.length) return undefined;
       const id = this.active[0];
       return id;
@@ -134,7 +133,7 @@ module.exports = {
             _this.items.splice(_this.items.indexOf(item), 1);
           })
           .catch(function(error) {
-            console.log(error);
+            openError(error.response.data);
           });
       }
     },
@@ -149,7 +148,7 @@ module.exports = {
           if (!_this.updateMode) _this.items.push(response.data[0]);
         })
         .catch(function(error) {
-          console.log(error);
+          openError(error.response.data);
         });
       this.hidinput = false;
     }
