@@ -17,10 +17,12 @@
       </v-tooltip>
     </template>
     <template slot="items" slot-scope="props">
+      <tr @click="moveToSpecificPage(props.item)">
       <td class="text-xs-left">{{ props.item.viewCount }}</td>
       <td class="text-xs-left">{{ props.item.title }}</td>
       <td class="text-xs-left">{{ props.item.userName }}</td>
       <td class="text-xs-left">{{ props.item.replyCount }}</td>
+      </tr>
     </template>
     <v-alert slot="no-results" :value="true" color="error" icon="warning">
       "{{ search }}"에 대한 결과를 찾을 수 없습니다.
@@ -57,17 +59,17 @@ module.exports = {
     questions: []
   }),
   created: function() {
-    var item = this.questions;
-    this.getQnaList(item);
+    var _this = this;
+    this.getQnaList(_this);
   },
 
   methods: {
-    getQnaList: function(questions) {
+    getQnaList: function(_this) {
       axios.get("qna")
         .then(
           function(response) {
             for (var i = 0; i < response.data.length; i++) {
-              questions.push(response.data[i]);
+              _this.questions.push(response.data[i]);
             }
           }
         )
@@ -80,7 +82,21 @@ module.exports = {
     },
     writepage: function writepage() {
       router.push("/qna/write/" + this.name + "/" + this.id);
-    }
+    },
+    moveToSpecificPage: function (question) {
+      var _this = this;
+
+      console.log('question value test : ' , question ); 
+      axios.get("qna/answer/"+question.id)
+        .then(
+          function(response) {
+            router.push("/qna/answer/" + _this.name + "/" + _this.id + "/"+response.data.id);
+
+          }
+        )
+        .catch(function(error) {
+          console.log(error);
+        })    }
   }
 };
 </script>

@@ -3,6 +3,8 @@ package com.devworker.kms.controller.qna;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,20 +37,22 @@ public class QnaController {
 		List<QnaDto> list = qnaService.getFirstPageList();
 		return list;
 	}
+	
+	@PostMapping("/register") 
+	public QnaDto qnaRegiser(@RequestBody QnaDto qnaDto) {
+		return qnaService.registerQuestion(qnaDto);
+	}
 
+	@GetMapping("/answer/{id}")
+	public QnaDto getQnaById(@PathVariable long id) {
+		System.out.println("getQnaById() called");
+		return qnaService.findById(id);
+	}
+	
 	@GetMapping("/search")
 	public String qnaSearchResult() {
 		return "/qna/qnasearch.html";
 	}
 
-	@PostMapping("/register")
-	public QnaDto qnaRegiser(@RequestBody QnaDto qnaDto) {
-		return qnaService.registerQuestion(qnaDto);
-	}
-
-	@GetMapping("{number}")
-	public String qnaChooseResult(@PathVariable long id) {
-		return "";
-	}
 
 }

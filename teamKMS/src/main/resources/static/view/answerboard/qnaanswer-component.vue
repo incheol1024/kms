@@ -1,22 +1,31 @@
 <template>
-<v-content>
-  qna {{name}} {{id}}
 
-  <v-form>
-    <v-layout row wrap>
+  <v-content>
 
-      <v-flex xs12 sm6>
-        <v-text-field v-model="title"></v-text-field>
-      </v-flex>
+    <v-form>
+    
+<v-container>
+      <v-layout row wrap>
 
-      <v-btn color="success" @click="registerQuestion"> registration </v-btn>
-    </v-layout>
-  </v-form>
+        <v-flex xs12 sm6>
+          <v-text-field background-color="lime lighten-5"></v-text-field>
+        </v-flex>
 
+      </v-layout>
+</v-container>
 
+      <v-layout row wrap>
 
-  <codemirror v-model="content"></codemirror>
-</v-content>
+        <v-flex xs12 sm6>
+          <v-textarea outline name="input-7-4" label="Outline textarea" value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."></v-textarea>
+        </v-flex>
+
+      </v-layout>
+
+    </v-form>
+
+  </v-content>
+
 </template>
 
 <script>
@@ -28,19 +37,6 @@ module.exports = {
       content: 'const A = 10',
       _this: this
     }
-  },
-  created: function() {
-
-if (this.name == 'C++')
-      this.cmOptions.mode = 'text/x-c++src';
-    else if (this.name == 'CSharp')
-      this.cmOptions.mode = 'text/x-csharp';
-    else if (this.name == 'Java')
-      this.cmOptions.mode = 'text/x-java';
-    else if (this.name == 'Python')
-      this.cmOptions.mode = 'text/x-python';
-    else
-      this.cmOptions.mode = 'text/javascript';
   },
   methods: {
     registerQuestion: function() {

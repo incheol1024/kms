@@ -9,9 +9,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.devworker.kms.dao.UserDao;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "KMSQna")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class QnaDto {
 
 	@Id
