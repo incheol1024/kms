@@ -1,5 +1,6 @@
 #create database [databaseName] DEFAULT CHARACTER SET utf8 collate utf8_general_ci;
 #오토커밋 꺼라
+#테이블,컬럼은 전부 대문자. 영단어 사이는 언더바를 사용한다.
 
 create table KMS.KMSMenu (
 	menu_id INT(11) unsigned auto_increment primary key,
