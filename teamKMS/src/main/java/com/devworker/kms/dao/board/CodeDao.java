@@ -3,16 +3,13 @@ package com.devworker.kms.dao.board;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "TBL_BOARD")
+@Table(name = "TBL_CODE")
 public class CodeDao {
 
-	@ManyToOne
 	@JoinColumn(name = "board_id", referencedColumnName = "board_id")
 	@Column(name = "board_id")
 	BoardDao boardID;

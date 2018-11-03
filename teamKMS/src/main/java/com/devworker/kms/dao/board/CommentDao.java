@@ -14,10 +14,9 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "TBL_BOARD")
+@Table(name = "TBL_COMMENT")
 public class CommentDao {
 
-	@ManyToOne
 	@JoinColumn(name = "board_id", referencedColumnName = "board_id")
 	@Column(name = "board_id")
 	BoardDao boardId;

@@ -12,10 +12,9 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "TBL_BOARD")
+@Table(name = "TBL_DOC")
 public class DocDao {
 
-	@ManyToOne
 	@JoinColumn(name = "board_id", referencedColumnName = "board_id")
 	@Column(name = "board_id")
 	BoardDao boardID;
