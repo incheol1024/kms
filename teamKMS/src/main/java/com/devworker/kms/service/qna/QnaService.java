@@ -8,7 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.devworker.kms.dao.board.BoardDao;
+import com.devworker.kms.dao.board.CommentDao;
+import com.devworker.kms.dao.board.DocDao;
 import com.devworker.kms.dto.qna.QnaDto;
+import com.devworker.kms.repo.board.BoardRepo;
+import com.devworker.kms.repo.board.CommentRepo;
+import com.devworker.kms.repo.board.DocRepo;
 import com.devworker.kms.repo.qna.QnaRepo;
 import com.devworker.kms.util.CommonUtil;
 
@@ -20,22 +26,46 @@ public class QnaService {
 	@Autowired
 	QnaRepo qnaRepo;
 
-	public List<QnaDto> getFirstPageList() {
-		return qnaRepo.findAll();
+	@Autowired
+	BoardRepo boardRepo;
+
+	@Autowired
+	CommentRepo commentRepo;
+
+	@Autowired
+	DocRepo docRepo;
+
+	public List<BoardDao> getFirstPageList() {
+		return (List<BoardDao>) boardRepo.findAll();
 	}
 
-	public QnaDto registerQuestion(QnaDto question) {
-		int ret = 0;
-		logger.debug(CommonUtil.getCurrentUser());
+	public BoardDao registerQuestion(BoardDao boardDao) {
+		boardDao.setUserId(CommonUtil.getCurrentUser());
+		return boardRepo.save(boardDao);
+	}
 
-		question.setUserName(CommonUtil.getCurrentUser());
-		System.out.println("last QanDto : " + question.toString());
+	public Optional<BoardDao> findById(Integer id) {
+		return boardRepo.findById(id);
+	}
 
-		return qnaRepo.save(question);
+	public int AnswerQna(CommentDao commentDao, BoardDao boardId) {
+		commentDao.setBoardId(boardId);
+		commentRepo.save(commentDao);
+		return 0;
 
 	}
 
-	public QnaDto findById(Long id) {
-		return qnaRepo.getOne(id);
+	public void QnaTest() {
+		BoardDao board = new BoardDao();
+		board.setContents("aaaaaaaaaaa");
+		board.setSubject("aaaaaaaa");
+		board.setUserId("aaaasaaa");
+
+		if (null == boardRepo.save(board)) {
+			System.out.println("save is failed");
+		} else {
+			System.out.println(" save is success");
+		}
+
 	}
 }

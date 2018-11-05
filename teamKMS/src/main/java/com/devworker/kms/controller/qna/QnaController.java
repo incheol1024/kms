@@ -2,6 +2,7 @@ package com.devworker.kms.controller.qna;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dto.qna.QnaDto;
 import com.devworker.kms.service.qna.QnaService;
 
@@ -33,26 +35,28 @@ public class QnaController {
 	QnaService qnaService;
 
 	@GetMapping("")
-	public List<QnaDto> qnaHome() {
-		List<QnaDto> list = qnaService.getFirstPageList();
+	public List<BoardDao> qnaHome() {
+		List<BoardDao> list = qnaService.getFirstPageList();
 		return list;
 	}
 	
 	@PostMapping("/register") 
-	public QnaDto qnaRegiser(@RequestBody QnaDto qnaDto) {
-		return qnaService.registerQuestion(qnaDto);
+	public BoardDao qnaRegiser(@RequestBody BoardDao boardDao) {
+		return qnaService.registerQuestion(boardDao);
 	}
 
 	@GetMapping("/answer/{id}")
-	public QnaDto getQnaById(@PathVariable long id) {
-		System.out.println("getQnaById() called");
-		return qnaService.findById(id);
+	public BoardDao getQnaById(@PathVariable Integer id) {
+		return qnaService.findById(id).get();
 	}
 	
 	@GetMapping("/search")
 	public String qnaSearchResult() {
+		System.out.println("qna test ");
+		qnaService.QnaTest();
 		return "/qna/qnasearch.html";
 	}
 
+	
 
 }

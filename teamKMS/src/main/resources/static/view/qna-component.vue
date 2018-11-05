@@ -18,10 +18,10 @@
     </template>
     <template slot="items" slot-scope="props">
       <tr @click="moveToSpecificPage(props.item)">
-      <td class="text-xs-left">{{ props.item.viewCount }}</td>
-      <td class="text-xs-left">{{ props.item.title }}</td>
-      <td class="text-xs-left">{{ props.item.userName }}</td>
-      <td class="text-xs-left">{{ props.item.replyCount }}</td>
+      <td class="text-xs-left">{{ props.item.hits }}</td>
+      <td class="text-xs-left">{{ props.item.subject }}</td>
+      <td class="text-xs-left">{{ props.item.userId }}</td>
+      <td class="text-xs-left">{{ props.item.hits }}</td>
       </tr>
     </template>
     <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -86,11 +86,12 @@ module.exports = {
     moveToSpecificPage: function (question) {
       var _this = this;
 
-      console.log('question value test : ' , question ); 
-      axios.get("qna/answer/"+question.id)
+      console.log('question value test : ' , question );
+      axios.get("qna/answer/"+ question.boardId)
         .then(
           function(response) {
-            router.push("/qna/answer/" + _this.name + "/" + _this.id + "/"+response.data.id);
+            console.log(1111);
+            router.push("/qna/answer/" + _this.name + "/" + _this.id + "/"+response.data.boardId);
 
           }
         )

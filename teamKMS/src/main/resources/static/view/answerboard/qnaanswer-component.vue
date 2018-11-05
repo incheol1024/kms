@@ -1,31 +1,34 @@
 <template>
+<v-content>
 
-  <v-content>
+  <v-form>
 
-    <v-form>
-    
-<v-container>
+    <v-container>
       <v-layout row wrap>
 
         <v-flex xs12 sm6>
-          <v-text-field background-color="lime lighten-5"></v-text-field>
+          <v-text-field background-color="lime lighten-5" :value="title"></v-text-field>
         </v-flex>
 
       </v-layout>
-</v-container>
+    </v-container>
 
-      <v-layout row wrap>
+    <v-layout row wrap>
 
-        <v-flex xs12 sm6>
-          <v-textarea outline name="input-7-4" label="Outline textarea" value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."></v-textarea>
-        </v-flex>
+      <v-flex xs12 sm6>
+        <v-textarea outline name="input-7-4" label="Outline textarea" :value="content"></v-textarea>
+      </v-flex>
 
-      </v-layout>
+    </v-layout>
 
-    </v-form>
+    <form enctype="multipart/form-data" method="post" action="/image/upload">
+    <input type="file" name="profilePicture" accept="image/jpeg,image/png,image/tiff,image/gif" /> </br>
+    <input type="submit" />
+    <v-btn color="info" @click="registerAnswer"> 등록 </v-btn>
+  </form>
+  </v-form>
 
-  </v-content>
-
+</v-content>
 </template>
 
 <script>
@@ -33,41 +36,46 @@ module.exports = {
   props: ['id', 'name'],
   data() {
     return {
-      title: "title field",
-      content: 'const A = 10',
+      title: "title binding",
+      content: 'content binding',
       _this: this
     }
   },
+
+  created: function() {
+    console.log("id = " + this.$route.params.id);
+    console.log("name = " + this.$route.params.name);
+    console.log("qid = " + this.$route.params.qid);
+    var _this = this;
+    this.getQnabyId(_this);
+  },
   methods: {
-    registerQuestion: function() {
-      var _this = this;
-      axios.post("/qna/register", {
-          id: "",
-          title: this.title,
-          content: "content content content",
-          userName: "",
-          replyCount: "0",
-          viewCount: "0"
-        })
-        .then(
-          function(response) {
-            console.log("registerQuestion is called", response);
-
-            console.log("before router push");
-            router.push("/qna/write" + _this.name + "/" + _this.id);
-
-          }
-
-        )
-        .catch(function(error) {
-          console.log(error);
-        })
-
+    getQnabyId: function(_this) {
+      axios.get("qna/answer/" + _this.$route.params.qid)
+      .then(
+        function(response) {
+          _this.title = response.data.subject;
+          _this.content = response.data.contents;
+        }
+      )
+      .catch(function(error){
+        console.log(error)
+      })
     },
-    moveToQnaPage: function(_this) {
-      console.log("moveToQnaPage is called");
-      this.$router.push("/qna/write/" + _this.name + "/" + _this.id);
+    registerAnswer: function() {
+      console.log("submit button click");
+      axios.post("image/upload/" + _this.$route.params.qid)
+      .then(
+        function(response) {
+          _this.title = response.data.subject;
+          _this.content = response.data.contents;
+        }
+      )
+      .catch(function(error){
+        console.log(error)
+      })
     }
   }
+
 }
 </script>

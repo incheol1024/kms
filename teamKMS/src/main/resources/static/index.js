@@ -27,6 +27,8 @@ httpVueLoader.register(Vue, 'view/writingboard/siteswrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/solwrite-component.vue');
 httpVueLoader.register(Vue, 'view/setting-component.vue');
 
+httpVueLoader.register(Vue, 'view/answerboard/qnaanswer-component.vue');
+
 httpVueLoader.register(Vue, 'view/setting/user-component.vue');
 httpVueLoader.register(Vue, 'view/setting/group-component.vue');
 httpVueLoader.register(Vue, 'view/setting/ETC-component.vue');
@@ -49,6 +51,7 @@ const router = new VueRouter({
 		{ path: '/sites/write/:id', component: Vue.component('siteswrite-component'), props: true },
 		{ path: '/solutions/write/:id', component: Vue.component('solwrite-component'), props: true },
 		{ path: '/qna/write/:name/:id', component: Vue.component('qnawrite-component'), props: true },
+		{ path: '/qna/answer/:name/:id/:qid', component: Vue.component('qnaanswer-component'), props: true },
 		{
 			path: '/setting', component: Vue.component('setting-component'),
 			children: [
