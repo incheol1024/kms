@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class BoardDao {
 
 	@Id
+	@Column( name = "board_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int boardId;
 

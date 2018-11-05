@@ -2,6 +2,7 @@ package com.devworker.kms.dao.board;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "TBL_DOC")
 public class DocDao {
 
-	@JoinColumn(name = "board_id", referencedColumnName = "board_id")
-	@Column(name = "board_id")
-	BoardDao boardID;
+	@ManyToOne
+	@JoinColumn(name="boardId",foreignKey = @ForeignKey(name = "FK_TBL_DOC_TBL_BOARD"))
+	BoardDao boardId;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +35,11 @@ public class DocDao {
 	String docSize;
 
 	public BoardDao getBoardID() {
-		return boardID;
+		return boardId;
 	}
 
-	public void setBoardID(BoardDao boardID) {
-		this.boardID = boardID;
+	public void setBoardID(BoardDao boardId) {
+		this.boardId = boardId;
 	}
 
 	public int getDocId() {

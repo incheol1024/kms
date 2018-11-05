@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,8 +18,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "TBL_COMMENT")
 public class CommentDao {
 
-	@JoinColumn(name = "board_id", referencedColumnName = "board_id")
-	@Column(name = "board_id")
+	@ManyToOne
+	@JoinColumn(name="boardId",foreignKey = @ForeignKey(name = "FK_TBL_DOC_TBL_BOARD"))
 	BoardDao boardId;
 
 	@Id
