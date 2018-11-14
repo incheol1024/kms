@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "TBL_BOARD")
+@Table(name = "KMS_BOARD")
 public class BoardDao {
 
 	@Id

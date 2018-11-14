@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.dao.board.BoardDao;
-import com.devworker.kms.dto.qna.QnaDto;
+import com.devworker.kms.dao.qna.QnaDao;
 import com.devworker.kms.service.qna.QnaService;
 
 import io.netty.handler.codec.http.HttpRequest;

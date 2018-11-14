@@ -1,6 +1,7 @@
 package com.devworker.kms.dao.board;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,15 +13,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.devworker.kms.dto.board.CommentDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-@Table(name = "TBL_COMMENT")
+@Table(name = "KMS_COMMENT")
 public class CommentDao {
 
-	@ManyToOne
-	@JoinColumn(name="boardId",foreignKey = @ForeignKey(name = "FK_TBL_DOC_TBL_BOARD"))
-	BoardDao boardId;
+//	@ManyToOne
+//	@JoinColumn(name="boardId",foreignKey = @ForeignKey(name = "FK_TBL_DOC_TBL_BOARD"))
+
+	@Column(name = "board_id")
+	int boardId;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +42,20 @@ public class CommentDao {
 	String cmtUserId;
 
 	@Column(name = "cmt_date")
-	LocalDate cmtDate;
+	LocalDateTime cmtDate;
+	
+	public CommentDao(CommentDto commentDto) {
+		this.boardId = commentDto.getBoardId();
+		this.cmtContents = commentDto.getCmtContents();
+		this.cmtUserId = commentDto.getCmtUserId();
+		this.cmtDate = LocalDateTime.now();
+	}
 
-	public BoardDao getBoardId() {
+	public int getBoardId() {
 		return boardId;
 	}
 
-	public void setBoardId(BoardDao boardId) {
+	public void setBoardId(int boardId) {
 		this.boardId = boardId;
 	}
 
@@ -68,12 +83,19 @@ public class CommentDao {
 		this.cmtUserId = cmtUserId;
 	}
 
-	public LocalDate getCmtDate() {
+	public LocalDateTime getCmtDate() {
 		return cmtDate;
 	}
 
 	public void setCmtDate(LocalDate cmtDate) {
-		this.cmtDate = cmtDate;
+		this.cmtDate = LocalDateTime.now();
 	}
+
+	@Override
+	public String toString() {
+		return "CommentDao [boardId=" + boardId + ", cmtId=" + cmtId + ", cmtContents=" + cmtContents + ", cmtUserId="
+				+ cmtUserId + ", cmtDate=" + cmtDate + "]";
+	}
+
 
 }

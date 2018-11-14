@@ -10,15 +10,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.devworker.kms.dto.board.CommentDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "TBL_DOC")
+@Table(name = "KMS_DOC")
 public class DocDao {
 
-	@ManyToOne
-	@JoinColumn(name="boardId",foreignKey = @ForeignKey(name = "FK_TBL_DOC_TBL_BOARD"))
-	BoardDao boardId;
+//	@ManyToOne
+//	@JoinColumn(name="boardId",foreignKey = @ForeignKey(name = "FK_TBL_DOC_TBL_BOARD"))
+	
+	@Column( name = "board_id")
+	int boardId;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,13 +35,20 @@ public class DocDao {
 	String docUserId;
 
 	@Column(name = "doc_size")
-	String docSize;
+	int docSize;
 
-	public BoardDao getBoardID() {
+	public DocDao(CommentDto commentDto) {
+		this.boardId = commentDto.getBoardId();
+		this.docPath = commentDto.getFilePath();
+		this.docUserId = commentDto.getCmtUserId();
+		this.docSize =(int) commentDto.getMultiPartFile().getSize();
+	}
+
+	public int getBoardID() {
 		return boardId;
 	}
 
-	public void setBoardID(BoardDao boardId) {
+	public void setBoardID(int boardId) {
 		this.boardId = boardId;
 	}
 
@@ -66,11 +76,11 @@ public class DocDao {
 		this.docUserId = docUserId;
 	}
 
-	public String getDocSize() {
+	public int getDocSize() {
 		return docSize;
 	}
 
-	public void setDocSize(String docSize) {
+	public void setDocSize(int docSize) {
 		this.docSize = docSize;
 	}
 

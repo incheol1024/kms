@@ -36,7 +36,7 @@ public class TeamKmsApplication {
 	@Bean
 	public MultipartResolver multiPartResolver() throws IOException {
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		multipartResolver.setMaxUploadSize(3 * 1024 * 1024);
+		multipartResolver.setMaxUploadSize(100 * 1024 * 1024);
 		return multipartResolver;
 	}
 
