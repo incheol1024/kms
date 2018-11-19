@@ -19,8 +19,8 @@ public class DocDao {
 
 //	@ManyToOne
 //	@JoinColumn(name="boardId",foreignKey = @ForeignKey(name = "FK_TBL_DOC_TBL_BOARD"))
-	
-	@Column( name = "board_id")
+
+	@Column(name = "board_id")
 	int boardId;
 
 	@Id
@@ -37,11 +37,14 @@ public class DocDao {
 	@Column(name = "doc_size")
 	int docSize;
 
+	public DocDao() {
+	}
+
 	public DocDao(CommentDto commentDto) {
 		this.boardId = commentDto.getBoardId();
 		this.docPath = commentDto.getFilePath();
 		this.docUserId = commentDto.getCmtUserId();
-		this.docSize =(int) commentDto.getMultiPartFile().getSize();
+		this.docSize = (int) commentDto.getMultiPartFile().getSize();
 	}
 
 	public int getBoardID() {

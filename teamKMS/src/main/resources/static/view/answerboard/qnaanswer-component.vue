@@ -24,12 +24,12 @@
 
     <v-layout>
       <template v-for="answer in answers">
-      <v-flex xs12>
-        <v-card>
-        {{ answer.cmtContents}}
-      </v-card>
-      </v-flex>
-    </template>
+        <v-flex xs12>
+          <v-card>
+            {{ answer.cmtContents}}
+          </v-card>
+        </v-flex>
+      </template>
 
     </v-layout>
   </v-container>
@@ -37,16 +37,18 @@
 
   <v-form>
 
-    <form enctype="multipart/form-data" method="post" action="/comment/add" @submit.prevent="registerAnswer">
-      <input type="text" name="boardId" value="1" v-model="boardId"/>
-      <input type="text" name="cmtId" value="1"v-model="cmtId"/>
-      <input type="text" name="cmtContents" value="content test" v-model="cmtContents"/>
-      <input type="text" name="cmtUserId" v-model="cmtDate"/>
-      <input type="text" name="cmtDate" v-model="cmtDate"/>
-      <input type="file" name="multiPartFile" ref="file" v-on:change="handleFileUpload"/> </br>
+    <form enctype="multipart/form-data" method="post" action="/comment/add" @submit.prevent="registerFile">
+      <input type="text" name="boardId" value="1" v-model="boardId" />
+      <input type="text" name="cmtId" value="1" v-model="cmtId" />
+      <input type="text" name="cmtContents" value="content test" v-model="cmtContents" />
+      <input type="text" name="cmtUserId" v-model="cmtDate" />
+      <input type="text" name="cmtDate" v-model="cmtDate" />
+      <input type="file" name="multiPartFile" ref="file" v-on:change="handleFileUpload" /> </br>
       <input type="submit" />
       <button> send </button>
     </form>
+
+    
 
   </v-form>
 
@@ -65,7 +67,7 @@ module.exports = {
       cmtContents: "답변 내용을 입력하세요.",
       cmtUserId: "",
       cmtDate: "",
-      multiPartFile: "",
+      multiPartFile: [],
       answers: [],
       _this: this
     }
@@ -124,8 +126,33 @@ module.exports = {
         .catch(function(error) {
           console.log(error)
         })
-    }
-  }
+    },
+    registerFile: function() {
+      console.log("file submit button click");
+      var _this = this;
+      let formData = new FormData();
 
+      formData.append('boardId', this.boardId);
+      formData.append('multiPartFile', this.multiPartFile);
+
+      axios.post('/file/upload',
+          formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        )
+        .then(
+          function(response) {
+            _this.answers.push(response.data);
+            console.log(response.data);
+          }
+        )
+        .catch(function(error) {
+          console.log(error)
+        })
+    }
+
+  }
 }
 </script>

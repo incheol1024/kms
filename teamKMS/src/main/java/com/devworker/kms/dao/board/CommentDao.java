@@ -44,12 +44,17 @@ public class CommentDao {
 	@Column(name = "cmt_date")
 	LocalDateTime cmtDate;
 	
+	public CommentDao() {
+		this.cmtDate = LocalDateTime.now();
+	}
+	
 	public CommentDao(CommentDto commentDto) {
 		this.boardId = commentDto.getBoardId();
 		this.cmtContents = commentDto.getCmtContents();
 		this.cmtUserId = commentDto.getCmtUserId();
 		this.cmtDate = LocalDateTime.now();
 	}
+
 
 	public int getBoardId() {
 		return boardId;

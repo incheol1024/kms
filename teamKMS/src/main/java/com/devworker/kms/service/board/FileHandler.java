@@ -1,14 +1,18 @@
 package com.devworker.kms.service.board;
 
 import java.io.File;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 public interface FileHandler {
 
-	public abstract String getFilePath(String fileKey);
-	
-	public abstract String uploadFile(File file);
-	
-	public abstract File downloadFile(String fileKey);
-	
-	
+	String getFilePath(String fileKey);
+
+	String uploadFile(File file);
+
+	File downloadFile(String fileKey);
+
+	boolean processUploadFile(int boardId, List<MultipartFile> file) throws Exception;
+
 }
