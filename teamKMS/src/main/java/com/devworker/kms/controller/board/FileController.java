@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.devworker.kms.dao.board.DocDao;
 import com.devworker.kms.service.board.FileHandler;
 
 @RestController
@@ -28,13 +28,18 @@ public class FileController {
 	@Autowired
 	FileHandler fileHandler;
 
-	@PostMapping("/upload")
-	public String upload(@RequestParam int boardId, @RequestParam List<MultipartFile> multiPartFile)
-			throws Exception {
-		
-		System.out.println(boardId + "::::::" + multiPartFile);
-		fileHandler.processUploadFile(boardId, multiPartFile);
-		return null;
+	@PostMapping("/upload/comment")
+	public List<DocDao> uploadCommentFile(@RequestParam(name = "boardId") int boardId,
+			@RequestParam(name = "commentId") int commentId,
+			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
+		return fileHandler.processUploadFile(boardId, commentId, multiPartFile);
+	}
+
+	@PostMapping("/upload/board")
+	public List<DocDao> uploadBoardFile(@RequestParam(name = "boardId") int boardId,
+			@RequestParam(name = "commentId") int commentId,
+			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
+		return fileHandler.processUploadFile(boardId, multiPartFile);
 	}
 
 	@GetMapping("/download")

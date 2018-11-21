@@ -22,16 +22,16 @@
 
     <v-divider inset light></v-divider>
 
-    <v-layout>
-      <template v-for="answer in answers">
+    <template v-for="answer in answers">
+      <v-layout row wrap>
+
         <v-flex xs12>
           <v-card>
             {{ answer.cmtContents}}
           </v-card>
         </v-flex>
-      </template>
-
-    </v-layout>
+      </v-layout>
+    </template>
   </v-container>
 
 
@@ -48,7 +48,7 @@
       <button> send </button>
     </form>
 
-    
+
 
   </v-form>
 
@@ -78,18 +78,33 @@ module.exports = {
     console.log("name = " + this.$route.params.name);
     console.log("qid = " + this.$route.params.qid);
     var _this = this;
-    this.getQnabyId(_this);
+    this.getQuestionById(_this);
+    this.getCommentById(_this);
   },
   methods: {
     handleFileUpload: function() {
       this.multiPartFile = this.$refs.file.files[0];
     },
-    getQnabyId: function(_this) {
+    getQuestionById: function(_this) {
       axios.get("qna/answer/" + _this.$route.params.qid)
         .then(
           function(response) {
             _this.title = response.data.subject;
             _this.content = response.data.contents;
+          }
+        )
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
+    getCommentById: function(_this) {
+      axios.get("comment/" + _this.$route.params.qid)
+        .then(
+          function(response) {
+            for (var i = 0; i < response.data.length; i++) {
+              console.log(response.data[i]);
+              _this.answers.push(response.data[i]);
+            }
           }
         )
         .catch(function(error) {

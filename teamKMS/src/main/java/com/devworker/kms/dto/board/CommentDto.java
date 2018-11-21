@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.devworker.kms.dao.board.CommentDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -28,6 +29,13 @@ public class CommentDto {
 	private String bucketName;
 
 	private String filePath;
+
+	public CommentDto(CommentDao commentDao) {
+		this.setBoardId(commentDao.getBoardId());
+		this.setCmtContents(commentDao.getCmtContents());
+		this.setCmtDate(commentDao.getCmtDate());
+		this.setCmtId(commentDao.getCmtId());
+	}
 
 	public int getBoardId() {
 		return boardId;

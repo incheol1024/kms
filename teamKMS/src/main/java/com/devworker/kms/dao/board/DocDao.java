@@ -37,6 +37,9 @@ public class DocDao {
 	@Column(name = "doc_size")
 	int docSize;
 
+	@Column(name = "comment_id")
+	int commentId;
+
 	public DocDao() {
 	}
 
@@ -47,8 +50,12 @@ public class DocDao {
 		this.docSize = (int) commentDto.getMultiPartFile().getSize();
 	}
 
-	public int getBoardID() {
+	public int getBoardId() {
 		return boardId;
+	}
+
+	public void setBoardId(int boardId) {
+		this.boardId = boardId;
 	}
 
 	public void setBoardID(int boardId) {
@@ -85,6 +92,14 @@ public class DocDao {
 
 	public void setDocSize(int docSize) {
 		this.docSize = docSize;
+	}
+
+	public int getCommentId() {
+		return commentId;
+	}
+
+	public void setCommentId(int commentId) {
+		this.commentId = commentId;
 	}
 
 }

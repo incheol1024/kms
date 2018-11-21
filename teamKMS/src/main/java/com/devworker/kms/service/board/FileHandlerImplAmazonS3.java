@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -78,7 +79,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 	}
 
 	@Override
-	public boolean processUploadFile(int boardId, List<MultipartFile> file) throws Exception {
+	public List<DocDao> processUploadFile(int boardId, int CommentId, List<MultipartFile> file) throws Exception {
 
 		if (file.isEmpty())
 			throw new Exception();
@@ -88,6 +89,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 
 		Optional<UserDao> optionalUser = userRepo.findById(CommonUtil.getCurrentUser());
 		UserDao user = optionalUser.get();
+		List<DocDao> docList = new ArrayList<DocDao>();
 
 		for (int i = 0; i < file.size(); i++) {
 
@@ -100,13 +102,13 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 			docDao.setDocPath(key);
 			docDao.setDocSize((int) tmpFile.length());
 			docDao.setDocUserId(user.getName());
-
+			docList.add(docDao);
+			
 			if (docRepo.save(docDao) == null) {
 				throw new Exception();
 			}
 		}
-
-		return true;
+		return docList;
 	}
 
 	@Override
@@ -141,6 +143,12 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 		}
 
 		return file;
+	}
+
+	@Override
+	public List<DocDao> processUploadFile(int boardId, List<MultipartFile> file) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

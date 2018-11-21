@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.devworker.kms.dao.board.DocDao;
+
 public interface FileHandler {
 
 	String getFilePath(String fileKey);
@@ -13,6 +15,8 @@ public interface FileHandler {
 
 	File downloadFile(String fileKey);
 
-	boolean processUploadFile(int boardId, List<MultipartFile> file) throws Exception;
+	List<DocDao> processUploadFile(int boardId, List<MultipartFile> file) throws Exception;
+
+	List<DocDao> processUploadFile(int boardId, int CommentId, List<MultipartFile> file) throws Exception;
 
 }
