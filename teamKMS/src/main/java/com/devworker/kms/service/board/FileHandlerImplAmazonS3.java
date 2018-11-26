@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,12 +32,12 @@ import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.DocRepo;
 import com.devworker.kms.util.CommonUtil;
 
-@Service
+@Component
 public class FileHandlerImplAmazonS3 implements FileHandler {
 
 	private static final String BUCKET_NAME = "incheol1024";
-	private static final String ACCESS_KEY = "AKIAJU4QTJO6732LG5IQ";
-	private static final String SECRET_KEY = "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";
+	private static final String ACCESS_KEY = "";
+	private static final String SECRET_KEY = "";
 
 	private static final String TEMP_PATH = "D:/tmp/";
 	@Autowired
@@ -103,7 +104,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 			docDao.setDocSize((int) tmpFile.length());
 			docDao.setDocUserId(user.getName());
 			docList.add(docDao);
-			
+
 			if (docRepo.save(docDao) == null) {
 				throw new Exception();
 			}
