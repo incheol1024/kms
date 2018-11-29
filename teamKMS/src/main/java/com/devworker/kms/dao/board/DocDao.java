@@ -37,8 +37,8 @@ public class DocDao {
 	@Column(name = "doc_size")
 	int docSize;
 
-	@Column(name = "comment_id")
-	int commentId;
+//	@Column(name = "comment_id")
+//	int commentId;
 
 	public DocDao() {
 	}
@@ -94,12 +94,12 @@ public class DocDao {
 		this.docSize = docSize;
 	}
 
-	public int getCommentId() {
+/*	public int getCommentId() {
 		return commentId;
 	}
 
 	public void setCommentId(int commentId) {
 		this.commentId = commentId;
 	}
-
+*/
 }

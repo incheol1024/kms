@@ -3,10 +3,12 @@ package com.devworker.kms.service.board;
 import java.io.File;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devworker.kms.dao.board.DocDao;
 
+@Service
 public interface FileHandler {
 
 	String getFilePath(String fileKey);

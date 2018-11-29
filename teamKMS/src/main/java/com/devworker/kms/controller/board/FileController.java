@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -26,12 +27,13 @@ import com.devworker.kms.service.board.FileHandler;
 public class FileController {
 
 	@Autowired
+	@Qualifier("fileHandlerImplLocal")
 	FileHandler fileHandler;
 
 	@PostMapping("/upload/comment")
 	public List<DocDao> uploadCommentFile(@RequestParam(name = "boardId") int boardId,
-			@RequestParam(name = "commentId") int commentId,
-			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
+			@RequestParam(name = "cmtId") int commentId,
+			@RequestParam(name = "multiPartFile" ) List<MultipartFile> multiPartFile) throws Exception {
 		return fileHandler.processUploadFile(boardId, commentId, multiPartFile);
 	}
 

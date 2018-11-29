@@ -3,12 +3,14 @@ package com.devworker.kms.controller.board;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.dao.board.CommentDao;
@@ -37,9 +39,10 @@ public class CommentController {
 		return commentService.updateComment(commentDao);
 	}
 
-	@PutMapping("/delete")
-	public void deleteComment(@RequestBody CommentDao commentDao) {
-		commentService.deleteComment(commentDao);
+	@DeleteMapping("/delete")
+	public Integer deleteComment(@RequestParam(name = "cmtId") Integer cmtId) {
+		commentService.deleteComment(cmtId);
+		return cmtId;
 	}
 	
 

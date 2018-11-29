@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dao.board.CommentDao;
+import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.CommentRepo;
 import com.devworker.kms.repo.board.DocRepo;
@@ -30,12 +32,13 @@ public class CommentService {
 	UserRepo userRepo;
 
 	@Autowired
+	@Qualifier("fileHandlerImplLocal")
 	FileHandler fileHandler;
 
 	public CommentDao addComment(CommentDao commentDao) throws Exception {
 		String userId = CommonUtil.getCurrentUser();
 		if (userId == null)
-			throw new Exception();
+			throw new NotExistException("userId");
 
 		Optional<UserDao> optionalUserDao = userRepo.findById(userId);
 		commentDao.setCmtUserId(optionalUserDao.get().getName());
@@ -58,8 +61,8 @@ public class CommentService {
 		return newCommentDao;
 	}
 
-	public void deleteComment(CommentDao commentDao) {
-		commentRepo.delete(commentDao);
+	public void deleteComment(Integer cmtId) {
+		commentRepo.deleteById(cmtId);
 	}
 
 }
