@@ -3,6 +3,7 @@ package com.devworker.kms.service.board.repo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +33,19 @@ public class CommentRepoTest {
 			System.out.println(it.next().toString());
 		}
 		assertThat(commentRepo.findByBoardId(1).size());
+	}
+	
+	@Test
+	public void commentRepo_업데이트_테스트() {
+		
+		Optional<CommentDao> opComment = commentRepo.findById(133);
+		CommentDao comment = opComment.get();
+		
+		comment.setCmtContents("변경 코멘트...");
+		
+		commentRepo.save(comment);
+		
+		
 	}
 
 }

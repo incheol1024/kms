@@ -51,10 +51,12 @@ public class CommentService {
 
 	public CommentDao updateComment(CommentDao commentDao) throws Exception {
 
-		if (commentRepo.findById(commentDao.getCmtId()) == null)
-			throw new Exception();
-
-		CommentDao newCommentDao = commentRepo.save(commentDao);
+		Optional<CommentDao> opComment = commentRepo.findById(commentDao.getCmtId());
+		CommentDao newComment = opComment.get();
+		newComment.setCmtContents(commentDao.getCmtContents());
+		
+		CommentDao newCommentDao = commentRepo.save(newComment);
+		
 		if (newCommentDao == null)
 			throw new Exception();
 
