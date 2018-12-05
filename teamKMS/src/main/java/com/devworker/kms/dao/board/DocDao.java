@@ -43,22 +43,11 @@ public class DocDao {
 	public DocDao() {
 	}
 
-	public DocDao(CommentDto commentDto) {
-		this.boardId = commentDto.getBoardId();
-		this.docPath = commentDto.getFilePath();
-		this.docUserId = commentDto.getCmtUserId();
-		this.docSize = (int) commentDto.getMultiPartFile().getSize();
-	}
-
 	public int getBoardId() {
 		return boardId;
 	}
 
 	public void setBoardId(int boardId) {
-		this.boardId = boardId;
-	}
-
-	public void setBoardID(int boardId) {
 		this.boardId = boardId;
 	}
 

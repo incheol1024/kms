@@ -95,7 +95,7 @@ public class CommentControllerTest {
 		JsonParser jsonParser = new JsonParser();
 		JsonArray jsonArray = (JsonArray) jsonParser.parse(resultString);
 
-		assertThat(jsonArray.size());
+		assertThat(jsonArray.size()).isGreaterThanOrEqualTo(1);
 
 	}
 

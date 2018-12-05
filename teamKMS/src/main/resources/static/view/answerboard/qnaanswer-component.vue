@@ -5,13 +5,17 @@
     <v-layout row wrap mb-5>
       <v-flex xs12>
         <v-card>
-          <div>
-            <h1 class="headline mb-0">Q.{{ title }}</h1>
-          </div>
-          <hr>
-          <div>
-            <h2>{{ content }}</h2>
-          </div>
+          <v-card-title>
+            <div>
+              <h1 class="headline mb-0">Q.{{ title }}</h1>
+            </div>
+          </v-card-title>
+          <v-divider inset light></v-divider>
+          <v-card-text>
+            <div>
+              <h2>{{ content }}</h2>
+            </div>
+          </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn icon>
@@ -28,21 +32,31 @@
       </v-flex>
     </v-layout>
 
-    <v-divider inset light></v-divider>
-
     <template v-for="(answer, index) in answers">
       <v-layout justify-center row mb-4>
 
         <v-flex xs10>
           <v-card>
             <div>
-              <span ma-3>
+              <v-card-title>
+
                 <v-avatar color="grey lighten-4">
 
                 </v-avatar>
-              </span>
-              {{ answer.cmtUserId }} - {{ answer.cmtDate }}
+
+                {{ answer.cmtUserId }} - {{ answer.cmtDate }}
+
+                <v-spacer></v-spacer>
+                <v-btn flat icon>
+                  <v-icon>build</v-icon>
+                </v-btn>
+                <v-btn flat icon @click="deleteComment(answer.cmtId, index)">
+                  <v-icon>delete</v-icon>
+                </v-btn>
+
+                <v-card-title>
             </div>
+            <v-divider inset light></v-divider>
             <v-card-text>
               <div>
                 <span>{{ answer.cmtContents}}</span>
@@ -55,14 +69,6 @@
               <v-btn flat icon color="red lighten-2">
                 <v-icon>thumb_down</v-icon>
               </v-btn>
-              <v-spacer></v-spacer>
-              <v-btn flat icon>
-                <v-icon>build</v-icon>
-              </v-btn>
-              <v-btn flat icon @click="deleteComment(answer.cmtId, index)">
-                <v-icon>delete</v-icon>
-              </v-btn>
-
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -132,18 +138,18 @@ module.exports = {
     handleFileUpload: function() {
       console.log("handleFileUpload is called : ");
       //this.multiPartFile = this.$refs.files.files;
-      
-      let uploadedFiles = this.$refs.files.files;
-      for(var i = 0; i < uploadedFiles.length; i++ ) {
-        this.multiPartFile.push(uploadedFiles[i]);
-        console.log( "uploadedFiles : "+ uploadedFiles[i]);
-        console.log( "multiPartFile : "+ this.multiPartFile[i]);
-      }
-       console.log("this.multiPartFile length: " + this.multiPartFile.length);
 
-       for(var i = 0; i < this.multiPartFile.length; i++) {
-         console.log(this.multiPartFile[i]);
-       }
+      let uploadedFiles = this.$refs.files.files;
+      for (var i = 0; i < uploadedFiles.length; i++) {
+        this.multiPartFile.push(uploadedFiles[i]);
+        console.log("uploadedFiles : " + uploadedFiles[i]);
+        console.log("multiPartFile : " + this.multiPartFile[i]);
+      }
+      console.log("this.multiPartFile length: " + this.multiPartFile.length);
+
+      for (var i = 0; i < this.multiPartFile.length; i++) {
+        console.log(this.multiPartFile[i]);
+      }
 
     },
     getQuestionById: function(_this) {
