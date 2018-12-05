@@ -26,11 +26,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name = "KMS_COMMENT")
 public class CommentDao {
 
-//	@ManyToOne
-//	@JoinColumn(name="boardId",foreignKey = @ForeignKey(name = "FK_TBL_DOC_TBL_BOARD"))
-
-	@Column(name = "board_id")
-	int boardId;
+	@ManyToOne
+	@JoinColumn(name = "board_id")
+	//@Column(name = "board_id")
+	BoardDao boardId;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,11 +49,11 @@ public class CommentDao {
 		this.cmtDate = LocalDateTime.now();
 	}
 
-	public int getBoardId() {
+	public BoardDao getBoardId() {
 		return boardId;
 	}
 
-	public void setBoardId(int boardId) {
+	public void setBoardId(BoardDao boardId) {
 		this.boardId = boardId;
 	}
 

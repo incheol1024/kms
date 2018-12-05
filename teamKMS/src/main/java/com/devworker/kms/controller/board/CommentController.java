@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
 import com.devworker.kms.service.board.CommentService;
 
@@ -29,7 +30,7 @@ public class CommentController {
 	}
 	
 	@GetMapping("/{boardId}")
-	public List<CommentDao> listComment(@PathVariable Integer boardId) throws Exception {
+	public List<CommentDao> listComment(@PathVariable @RequestBody BoardDao boardId) throws Exception {
 		return commentService.findByBoardId(boardId);
 	}
 	

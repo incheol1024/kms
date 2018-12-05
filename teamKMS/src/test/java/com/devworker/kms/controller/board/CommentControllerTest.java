@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
 import com.devworker.kms.repo.board.CommentRepo;
 import com.devworker.kms.service.board.CommentService;
@@ -67,8 +68,11 @@ public class CommentControllerTest {
 	@WithMockUser(value = "USER")
 	@Test
 	public void a_addCommentTest() throws Exception {
+		BoardDao board = new BoardDao();
+		board.setBoardId(1);
+		
 		CommentDao comment = new CommentDao();
-		comment.setBoardId(1);
+		comment.setBoardId(board);
 		comment.setCmtContents("test contents");
 		comment.setCmtUserId("USER");
 
@@ -95,7 +99,7 @@ public class CommentControllerTest {
 		JsonParser jsonParser = new JsonParser();
 		JsonArray jsonArray = (JsonArray) jsonParser.parse(resultString);
 
-		assertThat(jsonArray.size());
+		assertThat(jsonArray.size()).isGreaterThanOrEqualTo(1);
 
 	}
 

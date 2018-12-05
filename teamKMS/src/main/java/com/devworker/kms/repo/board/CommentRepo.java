@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
 
 public interface CommentRepo extends JpaRepository<CommentDao, Integer> {
 
-	List<CommentDao> findByBoardId(int boardId);
+	List<CommentDao> findByBoardId(BoardDao boardObj);
 }

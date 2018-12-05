@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devworker.kms.dao.board.DocDao;
+import com.devworker.kms.dto.board.FileDto;
 
 @Service
 public interface FileHandler {
@@ -20,5 +21,9 @@ public interface FileHandler {
 	List<DocDao> processUploadFile(int boardId, List<MultipartFile> file) throws Exception;
 
 	List<DocDao> processUploadFile(int boardId, int CommentId, List<MultipartFile> file) throws Exception;
+
+	FileDto processUploadFile(int boardId, int CommentId, MultipartFile file) throws Exception;
+
+	FileDto processUploadFile(MultipartFile file) throws Exception;
 
 }

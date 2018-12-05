@@ -2,7 +2,6 @@ package com.devworker.kms.dao.board;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,18 +9,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.devworker.kms.dto.board.CommentDto;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
 @Table(name = "KMS_DOC")
 public class DocDao {
 
-//	@ManyToOne
-//	@JoinColumn(name="boardId",foreignKey = @ForeignKey(name = "FK_TBL_DOC_TBL_BOARD"))
-
-	@Column(name = "board_id")
-	int boardId;
+	@ManyToOne
+	@JoinColumn(name = "board_id")
+	BoardDao boardId;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,28 +31,18 @@ public class DocDao {
 	@Column(name = "doc_size")
 	int docSize;
 
-//	@Column(name = "comment_id")
-//	int commentId;
+	@ManyToOne
+	@JoinColumn(name = "cmt_id")
+	CommentDao commentId;
 
 	public DocDao() {
 	}
 
-	public DocDao(CommentDto commentDto) {
-		this.boardId = commentDto.getBoardId();
-		this.docPath = commentDto.getFilePath();
-		this.docUserId = commentDto.getCmtUserId();
-		this.docSize = (int) commentDto.getMultiPartFile().getSize();
-	}
-
-	public int getBoardId() {
+	public BoardDao getBoardId() {
 		return boardId;
 	}
 
-	public void setBoardId(int boardId) {
-		this.boardId = boardId;
-	}
-
-	public void setBoardID(int boardId) {
+	public void setBoardId(BoardDao boardId) {
 		this.boardId = boardId;
 	}
 
@@ -94,12 +78,12 @@ public class DocDao {
 		this.docSize = docSize;
 	}
 
-/*	public int getCommentId() {
+	public CommentDao getCommentId() {
 		return commentId;
 	}
 
-	public void setCommentId(int commentId) {
+	public void setCommentId(CommentDao commentId) {
 		this.commentId = commentId;
 	}
-*/
+
 }

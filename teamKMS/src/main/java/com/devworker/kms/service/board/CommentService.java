@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.UserRepo;
@@ -45,7 +46,7 @@ public class CommentService {
 		return commentRepo.save(commentDao);
 	}
 
-	public List<CommentDao> findByBoardId(Integer boardId) throws Exception {
+	public List<CommentDao> findByBoardId(BoardDao boardId) throws Exception {
 		return commentRepo.findByBoardId(boardId);
 	}
 

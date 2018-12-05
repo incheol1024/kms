@@ -28,6 +28,7 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dao.board.CommentDao;
 import com.devworker.kms.dao.board.DocDao;
+import com.devworker.kms.dto.board.FileDto;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.DocRepo;
 import com.devworker.kms.util.CommonUtil;
@@ -80,9 +81,9 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 	}
 
 	@Override
-	public List<DocDao> processUploadFile(int boardId, int CommentId, List<MultipartFile> file) throws Exception {
+	public List<DocDao> processUploadFile(int boardId, int CommentId, List<MultipartFile> files) throws Exception {
 
-		if (file.isEmpty())
+		if (files.isEmpty())
 			throw new Exception();
 
 		if (boardId < 0)
@@ -92,14 +93,14 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 		UserDao user = optionalUser.get();
 		List<DocDao> docList = new ArrayList<DocDao>();
 
-		for (int i = 0; i < file.size(); i++) {
+		for (int i = 0; i < files.size(); i++) {
 
-			File tmpFile = new File(TEMP_PATH + file.get(i).getOriginalFilename() + UUID.randomUUID());
-			file.get(i).transferTo(tmpFile);
+			File tmpFile = new File(TEMP_PATH + files.get(i).getOriginalFilename() + UUID.randomUUID());
+			files.get(i).transferTo(tmpFile);
 			String key = uploadFile(tmpFile);
 
 			DocDao docDao = new DocDao();
-			docDao.setBoardID(boardId);
+			docDao.setBoardId(boardId);
 			docDao.setDocPath(key);
 			docDao.setDocSize((int) tmpFile.length());
 			docDao.setDocUserId(user.getName());
@@ -148,6 +149,18 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 
 	@Override
 	public List<DocDao> processUploadFile(int boardId, List<MultipartFile> file) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FileDto processUploadFile(int boardId, int CommentId, MultipartFile file) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FileDto processUploadFile(MultipartFile file) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

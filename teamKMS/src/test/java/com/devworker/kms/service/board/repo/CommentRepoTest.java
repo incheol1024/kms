@@ -2,6 +2,8 @@ package com.devworker.kms.service.board.repo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
 import com.devworker.kms.repo.board.CommentRepo;
 
@@ -18,33 +21,52 @@ import com.devworker.kms.repo.board.CommentRepo;
 @RunWith(SpringRunner.class)
 public class CommentRepoTest {
 
-
 	@Autowired
 	CommentRepo commentRepo;
-	
+
 	@Test
 	public void commentRepo_추가쿼리메소드_테스트() {
-		
-		assertThat(commentRepo.findByBoardId(1));
-		
-		Iterator<CommentDao> it = commentRepo.findByBoardId(1).iterator();
-				
-		while(it.hasNext()) {
+
+		BoardDao board = new BoardDao();
+		board.setBoardId(1);
+
+		assertThat(commentRepo.findByBoardId(board));
+
+		Iterator<CommentDao> it = commentRepo.findByBoardId(board).iterator();
+
+		while (it.hasNext()) {
 			System.out.println(it.next().toString());
 		}
-		assertThat(commentRepo.findByBoardId(1).size());
+		assertThat(commentRepo.findByBoardId(board).size());
 	}
-	
+
 	@Test
 	public void commentRepo_업데이트_테스트() {
-		
-		Optional<CommentDao> opComment = commentRepo.findById(133);
+
+		Optional<CommentDao> opComment = commentRepo.findById(157);
 		CommentDao comment = opComment.get();
-		
+
 		comment.setCmtContents("변경 코멘트...");
-		
+
 		commentRepo.save(comment);
-		
+
+	}
+
+	@Test
+	public void commentRepo_BoarId_객체연관관계_테스트() {
+
+		CommentDao comment = new CommentDao();
+		BoardDao boardDao = new BoardDao();
+		boardDao.setBoardId(1);
+		comment.setBoardId(boardDao);
+		comment.setCmtContents("aabbcc");
+		comment.setCmtDate(LocalDate.now());
+		comment.setCmtUserId("USER");
+
+		CommentDao savedComment = commentRepo.save(comment);
+
+		assertThat(savedComment).isNotNull()
+		.isExactlyInstanceOf(commentRepo.findById(savedComment.getCmtId()).get().getClass());
 		
 	}
 
