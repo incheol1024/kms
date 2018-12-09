@@ -31,7 +31,8 @@ httpVueLoader.register(Vue, 'view/answerboard/qnaanswer-component.vue');
 
 httpVueLoader.register(Vue, 'view/setting/user-component.vue');
 httpVueLoader.register(Vue, 'view/setting/group-component.vue');
-httpVueLoader.register(Vue, 'view/setting/ETC-component.vue');
+httpVueLoader.register(Vue, 'view/setting/ACL-component.vue');
+httpVueLoader.register(Vue, 'view/setting/ACE-component.vue');
 httpVueLoader.register(Vue, 'view/custom/tree-component.vue');
 httpVueLoader.register(Vue, 'view/custom/treenode-component.vue');
 
@@ -64,8 +65,12 @@ const router = new VueRouter({
 					component: Vue.component('group-component')
 				},
 				{
-					path: 'ETC',
-					component: Vue.component('ETC-component')
+					path: 'Acl',
+					component: Vue.component('ACL-component')
+				},
+				{
+					path: 'Ace',
+					component: Vue.component('ACE-component')
 				}
 			]
 		}
