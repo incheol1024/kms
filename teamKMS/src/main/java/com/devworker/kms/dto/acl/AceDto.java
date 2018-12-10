@@ -6,7 +6,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class AceDto {
 	private String aclId;
 	private String aceId;
+	private String aceName;
 	
+	public String getAceName() {
+		return aceName;
+	}
+	public void setAceName(String aceName) {
+		this.aceName = aceName;
+	}
 	public String getAclId() {
 		return aclId;
 	}
