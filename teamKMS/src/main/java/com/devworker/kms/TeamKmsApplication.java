@@ -7,8 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +19,7 @@ import org.springframework.web.multipart.support.MultipartFilter;
 @EnableAsync
 @EnableCaching
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class TeamKmsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(TeamKmsApplication.class, args);
