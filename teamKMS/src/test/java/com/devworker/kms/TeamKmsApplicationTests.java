@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 import javax.sql.DataSource;
 
@@ -25,26 +24,20 @@ import com.devworker.kms.dao.GroupDao;
 import com.devworker.kms.dao.MenuDao;
 import com.devworker.kms.dic.MenuType;
 import com.devworker.kms.dto.GroupDto;
-import com.devworker.kms.dto.MessageDetailDto;
-import com.devworker.kms.dto.MessageDto;
 import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.ftsdao.PostFTSDao;
 import com.devworker.kms.service.FTSService;
 import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.MenuService;
-import com.devworker.kms.service.MessageService;
 import com.devworker.kms.service.UserService;
 import com.devworker.kms.util.CommonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.Gson;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TeamKmsApplicationTests {
 	@Autowired
 	MenuService menuService;
-	@Autowired
-	MessageService messageService;
 	@Autowired
 	UserService userService;
 	@Autowired
@@ -70,17 +63,6 @@ public class TeamKmsApplicationTests {
 		String encode = encoder.encode(value);
 		System.out.println(encode);
 		assertThat(encode, notNullValue());
-	}
-
-	@Test
-	public void sendMessageTest() throws JsonProcessingException, InterruptedException, ExecutionException {
-		Gson mapper = new Gson();
-		MessageDto dto = new MessageDto();
-		dto.setText("ddd");
-		dto.addAttach(new MessageDetailDto());
-		System.out.println(mapper.toJson(dto));
-		String sendMessage = messageService.sendMessage(dto);
-		System.out.println(sendMessage);
 	}
 	
 	@Test

@@ -1,48 +1,73 @@
 <template>
 <v-content>
 	sol {{id}}
+  <v-card-title>
 	<v-btn color="primary"  @click="writepage">Write</v-btn> 
-	
-		<v-data-table :headers="headers" :items="desserts" class="elevation-1">
-    <template slot="items" slot-scope="props">
-      <td>{{ props.item.name }}</td>
-      <td class="text-xs-right">{{ props.item.calories }}</td>
-      <td class="text-xs-right">{{ props.item.fat }}</td>
-      <td class="text-xs-right">{{ props.item.carbs }}</td>
-      <td class="text-xs-right">{{ props.item.protein }}</td>
-      <td class="text-xs-right">{{ props.item.iron }}</td>
+	<v-spacer></v-spacer>
+  </v-card-title>
+  <v-data-table :headers="headers" :items="solutions" :search="search" class="elevation-1">
+	<template slot="headerCell" slot-scope="props">
+      <v-tooltip bottom>
+        <span slot="activator">
+          {{ props.header.text }}
+        </span>
+        <span>
+          {{ props.header.text }}
+        </span>
+      </v-tooltip>
     </template>
+    <template slot="items" slot-scope="props">
+      <td class="text-xs-right">{{ props.item.boardId }}</td>
+      <td class="text-xs-right">{{ props.item.subject }}</td>
+      <td class="text-xs-right">{{ props.item.userId }}</td>
+      <td class="text-xs-right">{{ props.item.hits }}</td>
+      <td class="text-xs-right">{{ props.item.regDate }}</td>
+    </template>
+    <v-alert slot="no-results" :value="true" color="error" icon="warning">
+      "{{ search }}"에 대한 결과를 찾을 수 없습니다.
+    </v-alert>
   </v-data-table>
 </v-content>
 </template>
 
 <script>
   module.exports =  {
-  	 props : ['id'],
+  name: 'solution',
+  	 props : ['id', 'name'],
 	 data: () => ({
 		 headers: [
-	          { text: 'Calories', value: 'calories' },
-	          { text: 'Fat (g)', value: 'fat' },
-	          { text: 'Carbs (g)', value: 'carbs' },
-	          { text: 'Protein (g)', value: 'protein' },
-	          { text: 'Iron (%)', value: 'iron' }
+	          { text: '번호', value: 'id' },
+	          { text: '제목', value: 'title' },
+	          { text: '작성자', value: 'userName' },
+	          { text: '답변수', value: 'replyCount' },
+	          { text: '등록일자', value: 'regDate' }
 	        ],
-	        desserts: [
-	          {
-	            value: false,
-	            name: 'Frozen Yogurt',
-	            calories: 159,
-	            fat: 6.0,
-	            carbs: 24,
-	            protein: 4.0,
-	            iron: '1%'
-	          }
-	        ]
+	        solutions:[]
      }),
+     created: function(){
+     	var _this = this;
+     	this.getSolutionList(_this);
+     },
 	 methods: {
+	 	getSolutionList: function(_this){
+	 		axios.get("/solution")
+	 		.then(
+	 			function(response){
+	 				for ( var i = 0; i < response.data.length; i++){
+	 					_this.solutions.push(response,data[i]);
+	 				}
+	 			}	
+	 		)
+	 		.catch(function(error){
+	 			console.log(error);
+	 		})
+	 	},
+	 	moveToWritePage: function() {
+	      this.$router.push("/solutions/write/" + this.name + "/" + this.id);
+	    },
 		 writepage : function writepage(){
-		 	router.push("/solutions/write/" + this.id);
+		 	router.push("/solutions/write/" + this.name + "/" + this.id);
 		 }
 	 }
-  }
+  };
 </script>

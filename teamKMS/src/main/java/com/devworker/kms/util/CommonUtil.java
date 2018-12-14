@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public abstract class CommonUtil {
 	private CommonUtil() {}
+	private static final String ANONYMOUS = "Anonymous";
 	
 	public static <T> List<T> iterToList(Iterable<T> iter){
 		List<T> list = new ArrayList<>();
@@ -23,6 +24,6 @@ public abstract class CommonUtil {
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
 		    return authentication.getName();
 		}
-		return "Anonymous";
+		return ANONYMOUS;
 	}
 }

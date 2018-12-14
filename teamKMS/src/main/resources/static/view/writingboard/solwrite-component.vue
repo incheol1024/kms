@@ -1,6 +1,6 @@
 <template>
 <v-content>
-	sol {{id}}
+	sol {{name}} {{id}}
 	<vue-ckeditor v-model="content" :config="config" />
 </v-content>
 </template>
