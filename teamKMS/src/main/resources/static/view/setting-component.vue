@@ -1,26 +1,30 @@
 <template>
 <v-content>
 	<v-card flat>
-    <router-view></router-view>
-    <v-bottom-nav :active.sync="bottomNav" :value="true" shift :color="color">
-    
-      <v-btn dark @click="moveUser">
-        <span>User</span>
-        <v-icon>history</v-icon>
-      </v-btn>
-
-      <v-btn dark @click="moveGroup">
-        <span>Group</span>
-        <v-icon>favorite</v-icon>
-      </v-btn>
-
-      <v-btn dark @click="moveETC">
-        <span>ETC</span>
-        <v-icon>place</v-icon>
-      </v-btn>
+      <router-view></router-view>
+      <v-bottom-nav :active.sync="bottomNav" :value="true" shift :color="color">
       
-    </v-bottom-nav>
-  </v-card>
+        <v-btn dark @click="moveUser">
+          <span>User</span>
+          <v-icon>history</v-icon>
+        </v-btn>
+
+        <v-btn dark @click="moveGroup">
+          <span>Group</span>
+          <v-icon>favorite</v-icon>
+        </v-btn>
+
+        <v-btn dark @click="moveACL">
+          <span>ACL</span>
+          <v-icon>visibility</v-icon>
+        </v-btn>
+        
+        <v-btn dark @click="moveACE">
+          <span>ACE</span>
+          <v-icon>clear_all</v-icon>
+        </v-btn>        
+      </v-bottom-nav>
+    </v-card>
 </v-content>
 </template>
 
@@ -37,8 +41,11 @@
 		moveGroup : function moveGroup() {
 			router.push('/setting/group');		
 		},
-		moveETC : function moveETC() {
-			router.push('/setting/ETC');		
+		moveACL : function moveACL() {
+			router.push('/setting/Acl');		
+		},
+		moveACE : function moveACE() {
+			router.push('/setting/Ace');		
 		}
 	 },
 	 mounted: function () {
@@ -50,6 +57,7 @@
           case 0: return 'blue-grey'
           case 1: return 'teal'
           case 2: return 'brown'
+          case 3: return 'blue'
         }
       }
     }
