@@ -26,6 +26,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
 import com.devworker.kms.dao.board.DocDao;
 import com.devworker.kms.dto.board.FileDto;
@@ -81,12 +82,9 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 	}
 
 	@Override
-	public List<DocDao> processUploadFile(int boardId, int CommentId, List<MultipartFile> files) throws Exception {
+	public List<DocDao> processUploadFile(BoardDao boardId, int CommentId, List<MultipartFile> files) throws Exception {
 
 		if (files.isEmpty())
-			throw new Exception();
-
-		if (boardId < 0)
 			throw new Exception();
 
 		Optional<UserDao> optionalUser = userRepo.findById(CommonUtil.getCurrentUser());

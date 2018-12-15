@@ -94,11 +94,7 @@ public class DocControllerTest {
 			assertThat(jsonObject.get("docSize")).isNotNull().isInstanceOf(Long.class);
 			
 		}
-<<<<<<< HEAD
-=======
-		
 
->>>>>>> branch 'master' of https://github.com/incheol1024/kns.git
 	}
 
 	@Test

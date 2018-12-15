@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.DocDao;
 import com.devworker.kms.dto.board.FileDto;
 import com.devworker.kms.repo.UserRepo;
@@ -68,7 +69,7 @@ public class FileHandlerImplLocal implements FileHandler {
 	}
 
 	@Override
-	public List<DocDao> processUploadFile(int boardId, int CommentId, List<MultipartFile> file) throws Exception {
+	public List<DocDao> processUploadFile(BoardDao boardId, int CommentId, List<MultipartFile> file) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

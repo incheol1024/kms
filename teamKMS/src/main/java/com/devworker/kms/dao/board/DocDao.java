@@ -38,19 +38,11 @@ public class DocDao {
 	public DocDao() {
 	}
 
-<<<<<<< HEAD
 	public BoardDao getBoardId() {
-=======
-	public int getBoardId() {
->>>>>>> branch 'master' of https://github.com/incheol1024/kns.git
 		return boardId;
 	}
 
-<<<<<<< HEAD
 	public void setBoardId(BoardDao boardId) {
-=======
-	public void setBoardId(int boardId) {
->>>>>>> branch 'master' of https://github.com/incheol1024/kns.git
 		this.boardId = boardId;
 	}
 
