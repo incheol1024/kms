@@ -4,13 +4,14 @@ import java.time.LocalDateTime;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CommentDto {
 
-	private int boardId;
+	private BoardDao boardId;
 
 	private int cmtId;
 
@@ -37,12 +38,12 @@ public class CommentDto {
 		this.setCmtId(commentDao.getCmtId());
 	}
 
-	public int getBoardId() {
+	public BoardDao getBoardId() {
 		return boardId;
 	}
 
-	public void setBoardId(int boardId) {
-		this.boardId = boardId;
+	public void setBoardId(BoardDao boardDao) {
+		this.boardId = boardDao;
 	}
 
 	public int getCmtId() {
