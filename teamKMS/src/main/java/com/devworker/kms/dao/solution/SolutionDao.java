@@ -30,9 +30,9 @@ public class SolutionDao {
 	@Column(name = "username", nullable = false, length = 100)
 	String userName;
 	
-	@Column(name = "reg_date")
+	@Column(name = "reg_date", nullable = false)
 	LocalDate regDate;
-	@Column(name = "up_date")
+	@Column(name = "up_date", nullable = false)
 	LocalDate upDate;
 	
 	@Column(name = "replycount", nullable = false)

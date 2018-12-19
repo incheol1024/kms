@@ -4,6 +4,7 @@
   <v-card-title>
 	<v-btn color="primary"  @click="writepage">Write</v-btn> 
 	<v-spacer></v-spacer>
+	<v-text-field v-model="search" append-icon="search" label="검색" single-line hide-details></v-text-field>
   </v-card-title>
   <v-data-table :headers="headers" :items="solutions" :search="search" class="elevation-1">
 	<template slot="headerCell" slot-scope="props">
@@ -35,6 +36,7 @@
   name: 'solution',
   	 props : ['id', 'name'],
 	 data: () => ({
+	 	search: '',
 		 headers: [
 	          { text: '번호', value: 'id' },
 	          { text: '제목', value: 'title' },
@@ -50,7 +52,7 @@
      },
 	 methods: {
 	 	getSolutionList: function(_this){
-	 		axios.get("/solution")
+	 		axios.get("solution")
 	 		.then(
 	 			function(response){
 	 				for ( var i = 0; i < response.data.length; i++){
@@ -63,10 +65,10 @@
 	 		})
 	 	},
 	 	moveToWritePage: function() {
-	      this.$router.push("/solutions/write/" + this.name + "/" + this.id);
+	      this.$router.push("/solutions/write/" + this.id);
 	    },
 		 writepage : function writepage(){
-		 	router.push("/solutions/write/" + this.name + "/" + this.id);
+		 	router.push("/solutions/write/" + this.id);
 		 }
 	 }
   };
