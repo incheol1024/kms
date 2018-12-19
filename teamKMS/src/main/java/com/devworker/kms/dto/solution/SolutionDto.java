@@ -1,5 +1,7 @@
 package com.devworker.kms.dto.solution;
 
-public class SolutionDto {
+import com.devworker.kms.dto.board.CommentDto;
 
+public class SolutionDto {
+	private CommentDto[] commentDto;
 }
