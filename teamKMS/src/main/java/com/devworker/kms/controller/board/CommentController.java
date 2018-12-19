@@ -45,5 +45,10 @@ public class CommentController {
 		return cmtId;
 	}
 	
+	@PostMapping("like")
+	public CommentDao updateCommentLike( @RequestBody CommentDao commentDao) {
+		return commentService.updateCommentLike(commentDao);
+	}
+	
 
 }

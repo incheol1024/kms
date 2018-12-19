@@ -1,8 +1,7 @@
-package com.devworker.kms.service.board.repo;
+package com.devworker.kms.repo.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Optional;
@@ -15,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
-import com.devworker.kms.repo.board.CommentRepo;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -40,6 +38,7 @@ public class CommentRepoTest {
 		assertThat(commentRepo.findByBoardId(board).size());
 	}
 
+	
 	@Test
 	public void commentRepo_업데이트_테스트() {
 
@@ -60,7 +59,7 @@ public class CommentRepoTest {
 		boardDao.setBoardId(1);
 		comment.setBoardId(boardDao);
 		comment.setCmtContents("aabbcc");
-		comment.setCmtDate(LocalDate.now());
+		comment.setCmtDate(LocalDateTime.now());
 		comment.setCmtUserId("USER");
 
 		CommentDao savedComment = commentRepo.save(comment);
@@ -69,5 +68,34 @@ public class CommentRepoTest {
 		.isExactlyInstanceOf(commentRepo.findById(savedComment.getCmtId()).get().getClass());
 		
 	}
+	
+	@Test
+	public void commentRepo_좋아요_테스트( ) {
+	
+		CommentDao comment = commentRepo.findById(162).get();
+		int oriLikeNumber = comment.getCmtLike();
+		comment.setCmtLike(1);
+		
+		CommentDao savedComment = commentRepo.save(comment);
+		
+		assertThat(savedComment).isNotNull();
+		assertThat(oriLikeNumber + 1).isEqualByComparingTo(savedComment.getCmtLike());
+		
+	}
+	
+	@Test
+	public void CommentRepo_싫어요_테스트() {
+
+		CommentDao comment = commentRepo.findById(162).get();
+		int oriUnLikeNumber = comment.getCmtUnlike();
+		comment.setCmtUnlike(1);
+		
+		CommentDao savedComment = commentRepo.save(comment);
+		
+		assertThat(savedComment).isNotNull();
+		assertThat(oriUnLikeNumber + 1).isEqualByComparingTo(savedComment.getCmtUnlike());
+	
+	}
+	
 
 }

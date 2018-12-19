@@ -65,7 +65,7 @@ module.exports = {
 
   methods: {
     getQnaList: function(_this) {
-      axios.get("qna")
+      axios.get("/qna")
         .then(
           function(response) {
             for (var i = 0; i < response.data.length; i++) {

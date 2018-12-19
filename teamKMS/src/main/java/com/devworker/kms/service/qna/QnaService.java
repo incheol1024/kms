@@ -23,7 +23,7 @@ import com.devworker.kms.util.CommonUtil;
 public class QnaService {
 
 	private Logger logger = LoggerFactory.getLogger(QnaService.class);
-
+	
 	@Autowired
 	QnaRepo qnaRepo;
 
@@ -32,7 +32,7 @@ public class QnaService {
 
 	@Autowired
 	CommentRepo commentRepo;
-
+	
 	@Autowired
 	DocRepo docRepo;
 
@@ -50,16 +50,9 @@ public class QnaService {
 	}
 
 	public QnaDao findPostById(Integer id) {
-		// return boardRepo.findById(id);
 
 		Optional<BoardDao> opBoardDao = boardRepo.findById(id);
-		try {
 			BoardDao boardDao = opBoardDao.get();
-			
-		} catch (NoSuchElementException e) {
-
-		}
-
 		return null;
 	}
 
@@ -69,17 +62,4 @@ public class QnaService {
 
 	}
 
-	public void QnaTest() {
-		BoardDao board = new BoardDao();
-		board.setContents("aaaaaaaaaaa");
-		board.setSubject("aaaaaaaa");
-		board.setUserId("aaaasaaa");
-
-		if (null == boardRepo.save(board)) {
-			System.out.println("save is failed");
-		} else {
-			System.out.println(" save is success");
-		}
-
-	}
 }

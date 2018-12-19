@@ -36,11 +36,10 @@ public class QnaController {
 
 	@GetMapping("")
 	public List<BoardDao> qnaHome() {
-		List<BoardDao> list = qnaService.getFirstPageList();
-		return list;
+		return qnaService.getFirstPageList();
 	}
-	
-	@PostMapping("/register") 
+
+	@PostMapping("/register")
 	public BoardDao qnaRegiser(@RequestBody BoardDao boardDao) {
 		return qnaService.registerQuestion(boardDao);
 	}
@@ -49,14 +48,5 @@ public class QnaController {
 	public BoardDao getQnaById(@PathVariable Integer id) {
 		return qnaService.findById(id).get();
 	}
-	
-	@GetMapping("/search")
-	public String qnaSearchResult() {
-		System.out.println("qna test ");
-		qnaService.QnaTest();
-		return "/qna/qnasearch.html";
-	}
-
-	
 
 }

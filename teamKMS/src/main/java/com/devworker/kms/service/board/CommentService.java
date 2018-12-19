@@ -16,7 +16,9 @@ import com.devworker.kms.repo.board.CommentRepo;
 import com.devworker.kms.repo.board.DocRepo;
 import com.devworker.kms.util.CommonUtil;
 
-/**
+/** 
+ *  Comment Service 클래스 입니다.  Comment와 관련 된 CRUD 메소드가 구현되어 있습니다.
+ * 
  * @author Hwang In Cheol
  */
 
@@ -35,6 +37,7 @@ public class CommentService {
 	@Autowired
 	@Qualifier("fileHandlerImplLocal")
 	FileHandler fileHandler;
+
 
 	public CommentDao addComment(CommentDao commentDao) throws Exception {
 		String userId = CommonUtil.getCurrentUser();
@@ -55,11 +58,11 @@ public class CommentService {
 		Optional<CommentDao> opComment = commentRepo.findById(commentDao.getCmtId());
 		CommentDao newComment = opComment.get();
 		newComment.setCmtContents(commentDao.getCmtContents());
-		
+
 		CommentDao newCommentDao = commentRepo.save(newComment);
-		
+
 		if (newCommentDao == null)
-			throw new Exception();
+			throw new RuntimeException();
 
 		return newCommentDao;
 	}
@@ -68,4 +71,30 @@ public class CommentService {
 		commentRepo.deleteById(cmtId);
 	}
 
+	public CommentDao updateCommentLike(CommentDao commentDao) {
+
+		Optional<CommentDao> opComment = commentRepo.findById(commentDao.getCmtId());
+
+		if (!opComment.isPresent())
+			throw new RuntimeException();
+
+		CommentDao oldComment = opComment.get();
+		oldComment.setCmtLike(1); // 1이라는 좋아요 final 상수를 만들어야겠음.
+
+		return commentRepo.save(oldComment);
+	}
+public CommentDao updateCommentUnLike(CommentDao commentDao) {
+		Optional<CommentDao> opComment = commentRepo.findById(commentDao.getCmtId());
+
+		if (!opComment.isPresent())
+			throw new RuntimeException();
+
+		CommentDao oldComment = opComment.get();
+		oldComment.setCmtUnlike(1); // 1이라는 싫어요 final 상수를 만들어야겠음.
+
+		return commentRepo.save(oldComment);
+
+	}
+
+	
 }

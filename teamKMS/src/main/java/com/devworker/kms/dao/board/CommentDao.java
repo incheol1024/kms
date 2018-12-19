@@ -1,11 +1,9 @@
 package com.devworker.kms.dao.board;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,22 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLUpdate;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.devworker.kms.dto.board.CommentDto;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
 @Table(name = "KMS_COMMENT")
 public class CommentDao {
 
 	@ManyToOne
 	@JoinColumn(name = "board_id")
-	//@Column(name = "board_id")
+	// @Column(name = "board_id")
 	BoardDao boardId;
 
 	@Id
@@ -44,6 +33,12 @@ public class CommentDao {
 
 	@Column(name = "cmt_date")
 	LocalDateTime cmtDate;
+
+	@Column(name = "cmt_like")
+	int cmtLike;
+
+	@Column(name = "cmt_unlike")
+	int cmtUnlike;
 
 	public CommentDao() {
 		this.cmtDate = LocalDateTime.now();
@@ -85,14 +80,36 @@ public class CommentDao {
 		return cmtDate;
 	}
 
-	public void setCmtDate(LocalDate cmtDate) {
-		this.cmtDate = LocalDateTime.now();
+	public void setCmtDate(LocalDateTime cmtDate) {
+		this.cmtDate = cmtDate;
+	}
+
+	public int getCmtLike() {
+		return cmtLike;
+	}
+
+	public void setCmtLike(int cmtLike) {
+		this.cmtLike += cmtLike;
+	}
+
+	public int getCmtUnlike() {
+		return cmtUnlike;
+	}
+
+	public void setCmtUnlike(int cmtUnlike) {
+		this.cmtUnlike += cmtUnlike;
 	}
 
 	@Override
 	public String toString() {
-		return "CommentDao [boardId=" + boardId + ", cmtId=" + cmtId + ", cmtContents=" + cmtContents + ", cmtUserId="
-				+ cmtUserId + ", cmtDate=" + cmtDate + "]";
+		return "CommentDao [boardId=" + boardId + ", cmtId=" + cmtId + ", cmtContents="
+				+ cmtContents + ", cmtUserId=" + cmtUserId + ", cmtDate=" + cmtDate
+				+ ", cmtLike=" + cmtLike + ", cmtUnlike=" + cmtUnlike + ", getBoardId()="
+				+ getBoardId() + ", getCmtId()=" + getCmtId() + ", getCmtContents()="
+				+ getCmtContents() + ", getCmtUserId()=" + getCmtUserId()
+				+ ", getCmtDate()=" + getCmtDate() + ", getCmtLike()=" + getCmtLike()
+				+ ", getCmtUnlike()=" + getCmtUnlike() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 
 }
