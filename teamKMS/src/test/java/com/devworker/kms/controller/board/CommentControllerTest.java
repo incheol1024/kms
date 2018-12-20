@@ -126,7 +126,25 @@ public class CommentControllerTest {
 
 	@WithMockUser(value = "USER")
 	@Test
-	public void d_deleteCommentTest() throws JsonProcessingException, Exception {
+	public void d_updateLikeTest() {
+		
+		
+		
+	}
+	
+	@WithMockUser(value = "USER")
+	@Test
+	public void d_updateUnlikeTest() {
+		
+		
+	}
+	
+	
+	
+	
+	@WithMockUser(value = "USER")
+	@Test
+	public void f_deleteCommentTest() throws JsonProcessingException, Exception {
 
 		String resultString = this.mvc
 				.perform(delete("/comment/delete").contentType(MediaType.APPLICATION_JSON).param("cmtId",
@@ -135,5 +153,6 @@ public class CommentControllerTest {
 
 		assertThat(cmtId, CoreMatchers.is(Integer.valueOf(resultString)));
 	}
+	
 
 }

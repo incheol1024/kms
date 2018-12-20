@@ -18,9 +18,9 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 @Component
 public class FileUploadUtil {
 
-	private static final String BUCKET_NAME = "incheol1024";
-	private static final String ACCESS_KEY = "AKIAIQLQIYATWBZFHUZQ";
-	private static final String SECRET_KEY = "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";
+	private static final String BUCKET_NAME = "";
+	private static final String ACCESS_KEY = "";
+	private static final String SECRET_KEY = "";
 	private AmazonS3 amazonS3;
 
 	public boolean processRegistration(MultipartFile file)

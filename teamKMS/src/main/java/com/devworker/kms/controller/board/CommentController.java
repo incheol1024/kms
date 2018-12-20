@@ -45,10 +45,15 @@ public class CommentController {
 		return cmtId;
 	}
 	
-	@PostMapping("like")
+	@PostMapping("/like")
 	public CommentDao updateCommentLike( @RequestBody CommentDao commentDao) {
 		return commentService.updateCommentLike(commentDao);
 	}
-	
+
+	@PostMapping("/unlike")
+	public CommentDao updateCommentUnlike( @RequestBody CommentDao commentDao) {
+		return commentService.updateCommentUnLike(commentDao);
+
+	}
 
 }
