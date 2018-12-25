@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.dao.board.BoardDao;
@@ -20,14 +21,17 @@ public class SolutionService {
 
 	private Logger logger = LoggerFactory.getLogger(SolutionService.class);
 	
+	@Autowired
 	SolutionRepo solutionRepo;
 	
+	@Autowired
 	BoardRepo boardRepo;
+	
 	public List<BoardDao> getFirstPageList() {
 		return (List<BoardDao>) boardRepo.findAll();
 	}
 
-	public BoardDao registerQuestion(BoardDao boardDao) {
+	public BoardDao registerSolution(BoardDao boardDao) {
 		boardDao.setUserId(CommonUtil.getCurrentUser());
 		return boardRepo.save(boardDao);
 	}
@@ -37,8 +41,6 @@ public class SolutionService {
 	}
 
 	public SolutionDao findPostById(Integer id) {
-		// return boardRepo.findById(id);
-
 		Optional<BoardDao> opBoardDao = boardRepo.findById(id);
 		try {
 			BoardDao boardDao = opBoardDao.get();

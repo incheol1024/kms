@@ -19,25 +19,25 @@ public class SolutionDao {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 	
-	@Column(name = "title", nullable = false, length = 300)
+	@Column(name = "title")
 	String title;
-	@Column(name = "solution", nullable = false, length = 100)
+	@Column(name = "solution")
 	String solution;
-	@Column(name = "site", nullable = false, length = 100)
+	@Column(name = "site")
 	String site;
-	@Column(name = "content", nullable = false, length = 4000)
+	@Column(name = "content")
 	String content;
-	@Column(name = "username", nullable = false, length = 100)
+	@Column(name = "username")
 	String userName;
 	
-	@Column(name = "reg_date", nullable = false)
+	@Column(name = "reg_date")
 	LocalDate regDate;
-	@Column(name = "up_date", nullable = false)
+	@Column(name = "up_date")
 	LocalDate upDate;
 	
-	@Column(name = "replycount", nullable = false)
+	@Column(name = "replycount")
 	int replyCount;
-	@Column(name = "viewcount", nullable = false)
+	@Column(name = "viewcount")
 	int viewCount;
 	
 	public Long getId() {
@@ -119,9 +119,4 @@ public class SolutionDao {
 		this.viewCount = viewCount;
 	}
 
-	@Override
-	public String toString() {
-		return "SolutionDto [id=" + id + ", title=" + title + ", solution=" + solution + ", site=" + site + ", content=" + content + ", userName=" + userName
-				+ ", reg_date=" + regDate + ", up_date=" + upDate + ", replyCount=" + replyCount + ", viewCount=" + viewCount + "]";
-	}
 }
