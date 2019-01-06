@@ -2,6 +2,8 @@ package com.devworker.kms.controller;
 
 import java.util.List;
 
+import com.devworker.kms.dic.PermissionType;
+import com.devworker.kms.service.acl.AclPermission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,17 +18,17 @@ public class AclController {
 	AceService aceService;
 	@Autowired
 	AclService aclService;
-	
+
 	public String createAcl(AclDto acl) {
 		return aclService.createAcl(acl);
 	}
 	
 	public AclDto getAcl(AclDto acl) {
-		return aclService.getAcl(acl);
+		return aclService.getAcl(acl.getAclId());
 	}
 	
 	public void deleteAcl(AclDto acl) {
-		aclService.delete(acl);
+		aclService.delete(acl.getAclId());
 	}
 	
 	public List<AclDto> getAclList(){
@@ -42,10 +44,10 @@ public class AclController {
 	}
 	
 	public void removeAce(AceDto ace) {
-		aceService.removeAce(ace);
+		aceService.removeAce(ace.getAclId(),ace.getAceId());
 	}
 	
-	public List<AceDto> getAceList(AceDto dto){
-		return aceService.getAceList(dto);
+	public List<AceDto> getAceList(AceDto ace){
+		return aceService.getAceList(ace.getAceId());
 	}
 }

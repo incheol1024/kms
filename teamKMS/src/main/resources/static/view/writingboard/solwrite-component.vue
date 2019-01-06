@@ -31,7 +31,7 @@
   </div>
 
   <div class="text-xs-center">
-    <v-btn color="success"@click="solutionpage">글쓰기</v-btn>
+    <v-btn color="success" @click="solutionpage">글쓰기</v-btn>
     <v-btn color="error"  @click="solutionpage">취소</v-btn>    
   </div> 
 

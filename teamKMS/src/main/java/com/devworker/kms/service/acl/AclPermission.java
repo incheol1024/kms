@@ -11,5 +11,5 @@ import com.devworker.kms.dic.PermissionType;
 @Retention(RUNTIME)
 @Target(METHOD)
 public @interface AclPermission {
-	public PermissionType type();
+	PermissionType type();
 }

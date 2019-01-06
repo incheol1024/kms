@@ -9,14 +9,14 @@ public interface AclService {
 
 	String createAcl(AclDto acl);
 
-	AclDto getAcl(AclDto acl);
+	AclDto getAcl(String aclId);
 
-	void delete(AclDto acl);
+	void delete(String aclId);
 
 	List<AclDto> getAclList();
 
 	void updateAcl(AclDto acl);
 	
-	boolean checkPermission(String aclId, PermissionType type);
+	boolean checkPermission(String userId, PermissionType type);
 
 }

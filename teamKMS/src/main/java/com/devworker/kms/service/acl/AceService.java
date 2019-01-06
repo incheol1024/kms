@@ -9,11 +9,12 @@ public interface AceService {
 
 	void addAce(AceDto ace);
 
-	void removeAce(AceDto ace);
+	void removeAce(String aclId,String aceId);
 
-	List<AceDto> getAceList(AceDto dto);
+	List<AceDto> getAceList(String aceId);
 	
-	AceDto getAce(AceDto dto);
+	AceDto getAce(String aclId,String aceId);
+
+
 	
-	public boolean checkPermission(String aceId, PermissionType type);
 }

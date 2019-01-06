@@ -13,4 +13,5 @@ public interface GroupRepo extends CrudRepository<GroupDao, Integer>{
 	@Query("select t from GroupDao t where t.parentid = :group_parent")
 	List<GroupDao> getGroupChild(@Param("group_parent") int id ,Sort s);
 
+
 }

@@ -2,6 +2,7 @@ package com.devworker.kms.service.acl;
 
 import java.lang.reflect.Method;
 
+import com.devworker.kms.dto.acl.AceDto;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -23,10 +24,7 @@ public class AclAspect {
 	AclService aclService;
 	@Autowired
 	AceService aceService;
-	@Autowired 
-	UserService userService;
-	@Autowired
-	GroupService groupService;
+
 	
 	@Before("@annotation(AclPermission)")
 	public void checkPermission(JoinPoint joinPoint) {
@@ -35,15 +33,9 @@ public class AclAspect {
 	    Method method = signature.getMethod();
 	    AclPermission myAnnotation = method.getAnnotation(AclPermission.class);
 	    PermissionType targetType = myAnnotation.type();
-	    UserDto user = userService.getUser(currentUser);
-	    GroupDao group = groupService.getGroup(user.getGroupId());
-	    
-	    
-	    
-		//getCurrentGroup Id
-		//getAcl 
-		//getFunctionName
-		//check while author
-		//checkPermission
+	    switch (method.getName()){
+			//we need method type
+		}
+		aclService.checkPermission(currentUser,targetType);
 	}
 }

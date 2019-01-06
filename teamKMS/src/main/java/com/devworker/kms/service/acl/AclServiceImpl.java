@@ -1,7 +1,11 @@
 package com.devworker.kms.service.acl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.devworker.kms.dao.acl.AclDao;
+import com.devworker.kms.service.GroupService;
+import com.devworker.kms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,31 +20,29 @@ public class AclServiceImpl implements AclService{
 
 	@Override
 	public String createAcl(AclDto acl) {
-		return null;
+		return repo.save(acl.getDao()).getAclId();
 	}
 
 	@Override
-	public AclDto getAcl(AclDto acl) {
-		// TODO Auto-generated method stub
-		return null;
+	public AclDto getAcl(String aclId) {
+		return repo.findById(aclId).get().getDto();
 	}
 
 	@Override
-	public void delete(AclDto acl) {
-		// TODO Auto-generated method stub
-		
+	public void delete(String aclId) {
+		repo.deleteById(aclId);
 	}
 
 	@Override
 	public List<AclDto> getAclList() {
-		// TODO Auto-generated method stub
-		return null;
+		List<AclDao> list = repo.findAll();
+		List<AclDto> dtoList = list.stream().map(aclDao -> aclDao.getDto()).collect(Collectors.toList());
+		return dtoList;
 	}
 
 	@Override
 	public void updateAcl(AclDto acl) {
-		// TODO Auto-generated method stub
-		
+		repo.save(acl.getDao());
 	}
 
 	@Override
