@@ -3,6 +3,7 @@ package com.devworker.kms.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -26,10 +27,10 @@ public class UserServiceImpl implements UserService{
 	GroupService service;
 	@Autowired
 	PasswordEncoder encoder;
-	
+
 	@Override
 	@Cacheable(key = "'userCount'", value="userCache")
-	public long countUser() {
+	public long getCount() {
 		return repo.count();
 	}
 	
@@ -59,15 +60,10 @@ public class UserServiceImpl implements UserService{
 
 	@Override	
 	public UserDto getUser(String id) {
-		Optional<UserDao> user = repo.findById(id);
-		if(user.isPresent()) {
-			UserDto dto = user.get().getDto();
-			String groupName = service.getGroup(dto.getGroupId()).getName();
-			dto.setGroupName(groupName);
-			return dto;
-		}			
-		else
-			throw new NotExistException("User not exist");
+		return repo.findById(id).map(userDao -> userDao.getDto()).map(userDto -> {
+					userDto.setGroupName(service.getGroup(userDto.getGroupId()).getName());
+					return userDto;
+				}).orElseThrow(() -> new NotExistException("User not exist"));
 	}
 	
 	@Override
@@ -83,20 +79,10 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	private List<UserDto> getDaoToDtoList(List<UserDao> daoList,boolean addGroupName){
-		List<UserDto> dtoList = new ArrayList<>();
-		for(UserDao dao : daoList) {
-			UserDto dto = dao.getDto();
-			if(addGroupName) {
-				String groupName = service.getGroup(dao.getGroupId()).getName();
-				dto.setGroupName(groupName);
-			}			
-			dtoList.add(dto);
-		}
-		return dtoList;
-	}
-
-	@Override
-	public long getCount() {
-		return repo.count();
+		return daoList.parallelStream().map(userDao -> userDao.getDto())
+				.map(userDto -> { if(addGroupName)
+					userDto.setGroupName(service.getGroup(userDto.getGroupId()).getName());
+					return userDto;
+		}).collect(Collectors.toList());
 	}
 }

@@ -6,12 +6,11 @@ import java.util.List;
 import com.devworker.kms.dto.UserDto;
 
 public interface UserService {
-	public long countUser();
-	public UserDto addUser(UserDto dto);
-	public void deleteUser(String id);
-	public void updateUser(UserDto dto);
-	public UserDto getUser(String id);
-	public List<UserDto> getGroupedUser(int id);
-	public List<UserDto> getUserList();
-	public long getCount();
+	UserDto addUser(UserDto dto);
+	void deleteUser(String id);
+	void updateUser(UserDto dto);
+	UserDto getUser(String id);
+	List<UserDto> getGroupedUser(int id);
+	List<UserDto> getUserList();
+	long getCount();
 }

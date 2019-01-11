@@ -26,10 +26,7 @@
 	</properties>
 
 	<repositories>
-		<repository>
-			<id>Talan Repository</id>
-			<url>http://nexus.talanlabs.com/content/repositories/releases/</url>
-		</repository>
+
 	</repositories>
 
 	<dependencies>
@@ -52,7 +49,6 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
-			<!-- <version>5.1.1.RELEASE</version> -->
 			<scope>test</scope>
 		</dependency>
 
@@ -84,9 +80,6 @@
 			<version>2.3.1</version>
 		</dependency>
 
-		<!-- current use mysql <dependency> <groupId>com.oracle</groupId> <artifactId>ojdbc</artifactId> 
-			<version>6</version> </dependency> -->
-
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -95,12 +88,6 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
-
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
 		</dependency>
 
 		<dependency>
@@ -157,21 +144,21 @@
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
-			<version>1.2.1</version>
+			<version>1.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk</artifactId>
-			<version>1.11.66</version>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.11.480</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
-			<scope>compile</scope>
+			<version>1.1.1</version>
+			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>

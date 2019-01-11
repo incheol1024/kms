@@ -3,6 +3,7 @@ package com.devworker.kms.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -45,39 +46,27 @@ public class GroupServiceImpl implements GroupService{
 	
 	private void recurDelete(int id) {
 		List<GroupDao> groupChild = repo.getGroupChild(id, new Sort(Direction.ASC,"name"));
-		for(GroupDao sub : groupChild) {
-			recurDelete(sub.getId());
-			deleteGroup(sub.getId());
-		}
+		groupChild.parallelStream().forEach(groupDao -> {
+			recurDelete(groupDao.getId());
+			deleteGroup(groupDao.getId());
+		});
 	}
 	
 	@Override
 	public void updateGroup(GroupDto dto) {
-		if(repo.existsById(dto.getId()))
-			repo.save(dto.getDao());
-		else
-			throw new NotExistException("group not existed");
+		if(repo.existsById(dto.getId()))  repo.save(dto.getDao());
+		else throw new NotExistException("group not existed");
 	}
-	
-	
 
 	@Override
 	public List<GroupDto> getGroupChild(int id) {
 		List<GroupDao> groupChild = repo.getGroupChild(id,new Sort(Direction.ASC,"name"));
-		List<GroupDto> list = new ArrayList<>();
-		for(GroupDao dao : groupChild) {
-			list.add(dao.getDto());
-		}
-		return list;
+		return groupChild.stream().map(groupDao -> groupDao.getDto()).collect(Collectors.toList());
 	}
 
 	@Override
 	public GroupDao getGroup(int id) {
-		Optional<GroupDao> group = repo.findById(id);
-		if(group.isPresent())
-			return group.get();
-		else
-			throw new NotExistException("group not exist");
+		return repo.findById(id).orElseThrow(() -> new NotExistException("group not exist"));
 	}
 
 	@Override

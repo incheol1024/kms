@@ -1,7 +1,8 @@
 package com.devworker.kms.util;
 
-import java.io.IOException;
-
+import com.devworker.kms.dto.MessageDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -10,9 +11,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import com.devworker.kms.dto.MessageDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.Gson;
+import java.io.IOException;
 
 public class MessageClient {
 	private static MessageClient messageClient = new MessageClient();
@@ -22,7 +21,6 @@ public class MessageClient {
 	}
 	
 	CloseableHttpClient httpClient;
-	Gson mapper = new Gson();
 	
 	private MessageClient() {
 		httpClient = HttpClients.createDefault();
@@ -31,7 +29,8 @@ public class MessageClient {
 	public MessageDto sendMessage(String url,MessageDto model) throws JsonProcessingException {
 		HttpPost post = new HttpPost(url);
 		post.addHeader("Content-type" , "application/json");
-		String json = mapper.toJson(model);
+		ObjectMapper mapper = new ObjectMapper();
+		String json = mapper.writeValueAsString(model);
 		HttpEntity entity = new StringEntity(json, "utf-8");
 		post.setEntity(entity);
 		try(CloseableHttpResponse response = httpClient.execute(post)){

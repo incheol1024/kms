@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.devworker.kms.dao.acl.AclDao;
+import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ public class AclServiceImpl implements AclService{
 
 	@Override
 	public AclDto getAcl(String aclId) {
-		return repo.findById(aclId).get().getDto();
+		return repo.findById(aclId).
+				orElseThrow(() -> {throw new NotExistException("acl Not Found");}).getDto();
 	}
 
 	@Override
@@ -36,8 +38,7 @@ public class AclServiceImpl implements AclService{
 	@Override
 	public List<AclDto> getAclList() {
 		List<AclDao> list = repo.findAll();
-		List<AclDto> dtoList = list.stream().map(aclDao -> aclDao.getDto()).collect(Collectors.toList());
-		return dtoList;
+		return list.stream().map(aclDao -> aclDao.getDto()).collect(Collectors.toList());
 	}
 
 	@Override
