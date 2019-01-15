@@ -34,13 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
         .loginPage("/login")	
-        .failureHandler(new AuthenticationFailureHandler() {
-			@Override
-			public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-					AuthenticationException exception) throws IOException, ServletException {
-				response.setStatus(HttpStatus.UNAUTHORIZED.value());
-			}
-		})
+        .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
         .defaultSuccessUrl("/", true);
         
         http.logout()

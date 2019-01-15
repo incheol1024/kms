@@ -41,7 +41,7 @@ Vue.component('treenode-component')
 
 EventBus = new Vue();
 
-const router = new VueRouter({
+router = new VueRouter({
 	routes: [
 		{ path: '/title', component: Vue.component('title-component') },
 		{ path: '/sites/:id', component: Vue.component('sites-component'), props: true },

@@ -21,14 +21,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.devworker.kms.dao.GroupDao;
-import com.devworker.kms.dao.MenuDao;
+import com.devworker.kms.dao.menu.MenuDao;
 import com.devworker.kms.dic.MenuType;
 import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.ftsdao.PostFTSDao;
 import com.devworker.kms.service.FTSService;
 import com.devworker.kms.service.GroupService;
-import com.devworker.kms.service.MenuService;
+import com.devworker.kms.service.menu.MenuService;
 import com.devworker.kms.service.UserService;
 import com.devworker.kms.util.CommonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
