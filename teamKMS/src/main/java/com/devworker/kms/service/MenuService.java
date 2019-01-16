@@ -1,4 +1,4 @@
-package com.devworker.kms.service.menu;
+package com.devworker.kms.service;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.devworker.kms.dao.menu.MenuDao;
+import com.devworker.kms.dao.MenuDao;
 import com.devworker.kms.dic.MenuType;
-import com.devworker.kms.repo.menu.MenuRepo;
+import com.devworker.kms.repo.MenuRepo;
 
 @Service
 public class MenuService {

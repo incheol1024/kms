@@ -1,7 +1,5 @@
 package com.devworker.kms;
 
-import java.io.IOException;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -48,5 +46,4 @@ public class TeamKmsApplication {
 		multipartFilter.setMultipartResolverBeanName("multipartReso‌​lver");
 		return multipartFilter;
 	}
-
 }

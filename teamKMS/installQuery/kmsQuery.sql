@@ -26,17 +26,6 @@ insert into KMS.KMSMenu(menu_name,menu_type) values('ETC','SITE');
 
 CREATE unique index UK_MENU_SAME ON KMS.KMSMenu(menu_name,menu_type);
 
-create table KMS.KMS_MenuRight(
-  menu_id INT(11) unsigned primary key,
-  sid VARCHAR(32)  not null,
-  HasPermission VARCHAR(50) not null,
-  FOREIGN KEY (menu_id)
-    REFERENCES KMS.KMSMenu(menu_id) ON UPDATE CASCADE
-) default character set utf8 collate utf8_general_ci ;
-
-CREATE INDEX FK_MenuRight_SID ON KMS.KMS_MenuRight(sid);
-CREATE unique index UK_MenuRight_SAMELAVEL ON KMS.KMS_MenuRight(menu_id,sid);
-
 create table KMS.KMSGroup (
 	group_id INT(11) unsigned auto_increment primary key,
     group_name VARCHAR(32) NOT NULL,

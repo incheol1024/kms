@@ -1,4 +1,4 @@
-package com.devworker.kms.dao.menu;
+package com.devworker.kms.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
