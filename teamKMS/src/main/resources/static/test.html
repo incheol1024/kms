@@ -2,98 +2,236 @@
 <html>
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-	<script src="/webjars/http-vue-loader/1.3.5/src/httpVueLoader.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <script src="/webjars/http-vue-loader/1.3.5/src/httpVueLoader.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
-	<title>KMS Test Page</title>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
+    <title>KMS Test Page</title>
 </head>
 
 <body>
-	<div>KMS Test Page</div>
-	<p></p>
-	<div id='test'>
-
-		<tree-component ref="tree" :items="data" :busname="'treebus'" :cachekey="'name'"></tree-component>
-		<input style="border-style:ridge" v-model="text"></input>
+<div>KMS Test Page</div>
+<p></p>
+<v-app id='test'>
+		<span>
+			TreeTest
+		<tree-component ref="tree" :items="datas" :busname="'treebus'" :cachekey="'name'"></tree-component>
+		<input style="border-style:ridge" v-model="text"/>
 		<button style="border-style:ridge" @click="aadd">add</button>
 		<button style="border-style:ridge" @click="ddelete">delete</button>
 		<button style="border-style:ridge" @click="update">update</button>
 		<button style="border-style:ridge" @click="mmove">move</button>
-	</div>
+		</span>
 
-	<script src="/webjars/vue/2.5.16/vue.js"></script>
-	<script type="text/javascript">
-		console.log("test");
-		httpVueLoader.register(Vue, 'view/custom/tree-component.vue');
-		httpVueLoader.register(Vue, 'view/custom/treenode-component.vue');
-		Vue.component('tree-component')
-		Vue.component('treenode-component')
-		EventBus = new Vue();
+		<span>
+			Table Test
+		<table-component :header="header" :pagefunction="page"></table-component>
+		</span>
+</v-app>
+<script src="/webjars/vue/2.5.16/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+<script type="text/javascript">
+    console.log("test");
+	Vue.use(Vuetify);
 
-		const GroupModel = { "id": 2, "name": "Root", "parentid": 1, "children": [] }
+	httpVueLoader.register(Vue, 'view/custom/tree-component.vue');
+    httpVueLoader.register(Vue, 'view/custom/treenode-component.vue');
+	httpVueLoader.register(Vue, 'view/custom/table-component.vue');
+    Vue.component('tree-component')
+    Vue.component('treenode-component')
+	Vue.component('table-component')
 
-		var main = new Vue({
-			data: function data() {
-				return {
-					text: "",
-					data: {
-						name: 'T1',
-						children: [
-							{ name: 'T2', children: [] },
-							{ name: 'T3', children: [] },
-							{
-								name: 'T4',
-								children: [
-									{
-										name: 'T5',
-										children: [
-											{ name: 'T6', children: [] },
-											{ name: 'T7', children: [] }
-										]
-									},
-									{ name: 'T8', children: [] },
-									{ name: 'T9', children: [] },
-									{
-										name: 'T10',
-										children: [
-											{
-												name: 'T11', children: [
-													{ name: 'T14', children: [] }
-												]
-											},
-											{ name: 'T12', children: [] }
-										]
-									}
-								]
-							}
-						]
+	EventBus = new Vue();
+
+    const GroupModel = {"id": 2, "name": "Root", "parentid": 1, "children": []}
+
+    var main = new Vue({
+        data: function data() {
+            return {
+            	//table
+				header :  [
+				{
+					text: 'Dessert (100g serving)',
+					align: 'left',
+					sortable: false,
+					value: 'name'
+				},
+				{ text: 'Calories', value: 'calories' },
+				{ text: 'Fat (g)', value: 'fat' },
+				{ text: 'Carbs (g)', value: 'carbs' },
+				{ text: 'Protein (g)', value: 'protein' },
+				{ text: 'Iron (%)', value: 'iron' }
+				],
+				//tree
+                text: "",
+                datas: {
+                    name: 'T1',
+                    children: [
+                        {name: 'T2', children: []},
+                        {name: 'T3', children: []},
+                        {
+                            name: 'T4',
+                            children: [
+                                {
+                                    name: 'T5',
+                                    children: [
+                                        {name: 'T6', children: []},
+                                        {name: 'T7', children: []}
+                                    ]
+                                },
+                                {name: 'T8', children: []},
+                                {name: 'T9', children: []},
+                                {
+                                    name: 'T10',
+                                    children: [
+                                        {
+                                            name: 'T11', children: [
+                                                {name: 'T14', children: []}
+                                            ]
+                                        },
+                                        {name: 'T12', children: []}
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        methods: {
+            aadd: function aadd() {
+                console.log(this.activesub);
+                var model = JSON.parse(JSON.stringify(GroupModel))
+                model.name = this.text;
+                this.$refs.tree.addNode(model);
+            },
+            ddelete: function ddelete() {
+                console.log(this.activesub);
+                this.$refs.tree.deleteNode();
+            },
+            mmove: function mmove() {
+                console.log(this.activesub);
+                this.$refs.tree.moveNode(this.text);
+            },
+            update: function update() {
+                console.log(this.activesub);
+                this.$refs.tree.updateNode(this.text);
+            },
+			//table function
+			page : function page(item) {
+            	console.log(item)
+				var _this = this
+				return new Promise(function (resolve, reject) {
+					var items = _this.getItem()
+					var total = items.length
+					if (item.page > 0) {
+						items = items.slice((item.page - 1) * item.size, item.page * item.size)
 					}
-				}
+					resolve(new function(){
+						return {
+							data : items
+						}
+					})
+				})
 			},
-			methods: {
-				aadd: function aadd() {
-					console.log(this.activesub);
-					var model = JSON.parse(JSON.stringify(GroupModel))
-					model.name = this.text;
-					this.$refs.tree.addNode(model);
-				},
-				ddelete: function ddelete() {
-					console.log(this.activesub);
-					this.$refs.tree.deleteNode();
-				},
-				mmove: function mmove() {
-					console.log(this.activesub);
-					this.$refs.tree.moveNode(this.text);
-				},
-				update: function update() {
-					console.log(this.activesub);
-					this.$refs.tree.updateNode(this.text);
-				}
+			getItem : function getItem () {
+				return [
+					{
+						value: false,
+						name: 'Frozen Yogurt',
+						calories: 159,
+						fat: 6.0,
+						carbs: 24,
+						protein: 4.0,
+						iron: '1%'
+					},
+					{
+						value: false,
+						name: 'Ice cream sandwich',
+						calories: 237,
+						fat: 9.0,
+						carbs: 37,
+						protein: 4.3,
+						iron: '1%'
+					},
+					{
+						value: false,
+						name: 'Eclair',
+						calories: 262,
+						fat: 16.0,
+						carbs: 23,
+						protein: 6.0,
+						iron: '7%'
+					},
+					{
+						value: false,
+						name: 'Cupcake',
+						calories: 305,
+						fat: 3.7,
+						carbs: 67,
+						protein: 4.3,
+						iron: '8%'
+					},
+					{
+						value: false,
+						name: 'Gingerbread',
+						calories: 356,
+						fat: 16.0,
+						carbs: 49,
+						protein: 3.9,
+						iron: '16%'
+					},
+					{
+						value: false,
+						name: 'Jelly bean',
+						calories: 375,
+						fat: 0.0,
+						carbs: 94,
+						protein: 0.0,
+						iron: '0%'
+					},
+					{
+						value: false,
+						name: 'Lollipop',
+						calories: 392,
+						fat: 0.2,
+						carbs: 98,
+						protein: 0,
+						iron: '2%'
+					},
+					{
+						value: false,
+						name: 'Honeycomb',
+						calories: 408,
+						fat: 3.2,
+						carbs: 87,
+						protein: 6.5,
+						iron: '45%'
+					},
+					{
+						value: false,
+						name: 'Donut',
+						calories: 452,
+						fat: 25.0,
+						carbs: 51,
+						protein: 4.9,
+						iron: '22%'
+					},
+					{
+						value: false,
+						name: 'KitKat',
+						calories: 518,
+						fat: 26.0,
+						carbs: 65,
+						protein: 7,
+						iron: '6%'
+					}
+				]
 			}
-		}).$mount('#test');
-	</script>
+        }
+    }).$mount('#test');
+</script>
 </body>
 
 </html>

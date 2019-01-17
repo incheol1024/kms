@@ -35,9 +35,11 @@ httpVueLoader.register(Vue, 'view/setting/ACL-component.vue');
 httpVueLoader.register(Vue, 'view/setting/ACE-component.vue');
 httpVueLoader.register(Vue, 'view/custom/tree-component.vue');
 httpVueLoader.register(Vue, 'view/custom/treenode-component.vue');
+httpVueLoader.register(Vue, 'view/custom/table-component.vue');
 
 Vue.component('tree-component')
 Vue.component('treenode-component')
+Vue.component('table-component')
 
 EventBus = new Vue();
 
