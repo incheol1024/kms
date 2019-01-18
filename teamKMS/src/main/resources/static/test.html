@@ -125,12 +125,16 @@
 				return new Promise(function (resolve, reject) {
 					var items = _this.getItem()
 					var total = items.length
-					if (item.page > 0) {
+					if (item.page > 0 && item.size > 0) {
 						items = items.slice((item.page - 1) * item.size, item.page * item.size)
+						console.log(items)
 					}
 					resolve(new function(){
 						return {
-							data : items
+							data : {
+								list : items,
+								total : total
+							}
 						}
 					})
 				})
