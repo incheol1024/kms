@@ -1,10 +1,7 @@
 package com.devworker.kms;
 
 import com.devworker.kms.dic.UserType;
-import com.devworker.kms.dto.GroupDto;
-import com.devworker.kms.dto.MessageDetailDto;
-import com.devworker.kms.dto.MessageDto;
-import com.devworker.kms.dto.UserDto;
+import com.devworker.kms.dto.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -38,6 +35,20 @@ public class JsonModelTest {
 		dto.setId(0);
 		dto.setParentid(0);
 		dto.setName("");
+		System.out.println(mapper.writeValueAsString(dto));
+	}
+
+	@Test
+	public void makeBasePageDto() throws JsonProcessingException {
+		BasePageResDto<String> dto = new BasePageResDto<>();
+		dto.getList().add("");
+		dto.setTotal(30);
+		System.out.println(mapper.writeValueAsString(dto));
+	}
+
+	@Test
+	public void makeBasePageReqDto() throws JsonProcessingException {
+		BasePageReqDto<String> dto = new BasePageReqDto<>();
 		System.out.println(mapper.writeValueAsString(dto));
 	}
 }
