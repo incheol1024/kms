@@ -16,9 +16,11 @@ import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.DocDao;
 import com.devworker.kms.dto.board.FileDto;
+import com.devworker.kms.exception.FileNotSavedException;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.DocRepo;
 import com.devworker.kms.util.CommonUtil;
+import com.devworker.kms.util.FileTransactionUtil;
 
 @Service
 public class DocService {
@@ -39,17 +41,25 @@ public class DocService {
 		UserDao user = optionalUser.get();
 		List<DocDao> docList = new ArrayList<DocDao>();
 
-		for (int i = 0; i < files.size(); i++) {
-			FileDto fileDto = fileHandler.processUploadFile(files.get(i));
+		for (MultipartFile file : files) {
+			FileDto fileDto = fileHandler.processUploadFile(file);
 			DocDao docDao = new DocDao();
 			docDao.setBoardId(boardId);
-			// docDao.setCmtId(cmtId); // 데이터베이스에 컬럼 추가 필요 DocDao에도 추가 필요
+			docDao.setCmtId(cmtId);
 			docDao.setDocPath(fileDto.getPath());
 			docDao.setDocSize(fileDto.getSize());
 			docDao.setDocUserId(user.getName());
 
-			if (docRepo.save(docDao) == null) 
-				throw new RuntimeException();
+			if (docRepo.save(docDao) == null)
+				throw new FileNotSavedException("File Not Saved Database");
+
+			// 파일을 하나하나 저장하는데.. 댓글 저장 트랜잭션을 처리하기 위해서...
+			// 저장이 완료된 파일들은 메모리에 올려두고.. 하나씩 메모리에 올려두고..
+			// 나중에 댓글이 등록이 되면.. 댓글에 해당하는 파일들만 등록 처리해야함
+			// 조건1. 메모리에 올라간 파일 정보와 댓글정보가 같은 키값을 갖고 있어야 한다.
+			// 조건2. 파일 등록처리가 완료 되면 메모리를 해제해야 한다.
+			// 조건3. 파일 등록 처리를 하다가 예외가 발생하면 메모리를 해제해야한다. 
+			//
 			
 			docList.add(docDao);
 		}

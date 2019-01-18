@@ -33,7 +33,7 @@ public class DocDao {
 
 	@ManyToOne
 	@JoinColumn(name = "cmt_id")
-	CommentDao commentId;
+	CommentDao cmtId;
 
 	public DocDao() {
 	}
@@ -78,12 +78,13 @@ public class DocDao {
 		this.docSize = docSize;
 	}
 
-	public CommentDao getCommentId() {
-		return commentId;
+	public CommentDao getCmtId() {
+		return cmtId;
 	}
 
-	public void setCommentId(CommentDao commentId) {
-		this.commentId = commentId;
+	public void setCmtId(int cmtId) {
+		CommentDao commentDao = new CommentDao();
+		commentDao.setCmtId(cmtId);
 	}
 
 }

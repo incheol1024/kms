@@ -45,9 +45,9 @@ public class CommentController {
 		return cmtId;
 	}
 	
-	@PostMapping("/like")
-	public CommentDao updateCommentLike( @RequestBody CommentDao commentDao) {
-		return commentService.updateCommentLike(commentDao);
+	@PostMapping("{cmtId}/like")
+	public CommentDao updateCommentLike(@PathVariable int cmtId) {
+		return commentService.updateCommentLike(cmtId);
 	}
 
 	@PostMapping("/unlike")

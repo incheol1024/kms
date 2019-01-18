@@ -24,6 +24,11 @@ import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.DocDao;
 import com.devworker.kms.service.board.DocService;
 
+/**
+ * @author Hwang In Cheol
+ * @version 1.0
+ * 파일 처리하는 컨트롤러 입니다.
+*/
 @RestController
 @RequestMapping("/file")
 public class DocController {
@@ -35,14 +40,14 @@ public class DocController {
 	DocService docSevice;
 
 	@PostMapping("/upload/comment")
-	public List<DocDao> uploadCommentFile(@RequestBody BoardDao boardId,
+	public List<DocDao> uploadCommentFile(@RequestParam(name = "boardId") BoardDao boardId,
 			@RequestParam(name = "cmtId") int cmtId,
 			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
 		return docService.addDoc(boardId, cmtId, multiPartFile);
 	}
 
 	@PostMapping("/upload/board")
-	public List<DocDao> uploadBoardFile(@RequestBody BoardDao boardId,
+	public List<DocDao> uploadBoardFile(@RequestParam(name = "boardId") BoardDao boardId,
 			@RequestParam(name = "cmtId") int cmtId,
 			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
 		return docService.addDoc(boardId, cmtId, multiPartFile);

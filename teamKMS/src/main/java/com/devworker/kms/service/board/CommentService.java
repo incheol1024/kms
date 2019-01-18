@@ -95,9 +95,9 @@ public class CommentService {
 	 * @param commentDao must not be {@literal null}.
 	 * @return CommentDao
 	 */
-	public CommentDao updateCommentLike(CommentDao commentDao) {
+	public CommentDao updateCommentLike(int cmtId) {
 
-		Optional<CommentDao> opComment = commentRepo.findById(commentDao.getCmtId());
+		Optional<CommentDao> opComment = commentRepo.findById(cmtId);
 
 		if (!opComment.isPresent())
 			throw new RuntimeException();
