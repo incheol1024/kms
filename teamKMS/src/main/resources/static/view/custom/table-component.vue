@@ -45,7 +45,7 @@
             getSpringType : function getSpringType(pagination) {
                 let str = "asc";
                 if(pagination.descending) str = "desc";
-                return {page: pagination.page , size : pagination.rowsPerPage, sort : pagination.sortBy + "," + str}
+                return {page: pagination.page , size : pagination.rowsPerPage, direction : str, name : pagination.sortBy }
             }
         }
     }
