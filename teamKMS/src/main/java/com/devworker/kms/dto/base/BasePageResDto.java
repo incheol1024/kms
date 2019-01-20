@@ -1,11 +1,11 @@
-package com.devworker.kms.dto;
+package com.devworker.kms.dto.base;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BasePageResDto<T> {
-    private List<T> list = new ArrayList();
     private long total = 0;
+    private List<T> list = new ArrayList();
 
     public List<T> getList() {
         return list;

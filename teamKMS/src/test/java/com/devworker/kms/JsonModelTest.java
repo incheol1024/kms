@@ -2,6 +2,8 @@ package com.devworker.kms;
 
 import com.devworker.kms.dic.UserType;
 import com.devworker.kms.dto.*;
+import com.devworker.kms.dto.base.BasePageReqDto;
+import com.devworker.kms.dto.base.BasePageResDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;

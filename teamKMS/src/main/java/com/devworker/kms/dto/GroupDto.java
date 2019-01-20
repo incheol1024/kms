@@ -6,8 +6,6 @@ import java.util.List;
 import com.devworker.kms.dao.GroupDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.validation.constraints.NotBlank;
-
 public class GroupDto {
 	private int id;
 	private String name;
