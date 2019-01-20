@@ -51,7 +51,7 @@ public class DocRepoTest {
 
 		DocDao doc = new DocDao();
 		doc.setBoardId(board);
-		doc.setCommentId(comment);
+		//doc.setCommentId(comment);
 		doc.setDocPath("testPath");
 		doc.setDocSize(5);
 		doc.setDocUserId("USER");

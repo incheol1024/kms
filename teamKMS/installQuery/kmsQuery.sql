@@ -56,6 +56,21 @@ insert into KMS.KMSUser(user_id,user_name,user_type,user_group,user_pass) values
 insert into KMS.KMSUser(user_id,user_name,user_type,user_group,user_pass) values('USER','USER','USER',1,'$2a$10$RpcZZqJ3aBuKVswqVh/ixO8umoYLInnpPA6KnTXDoQlCH0I4Cq5om');
 CREATE INDEX FK_USER_GROUP ON KMS.KMSUser(user_group);
 
+create table KMS.KMS_ACL (
+AclId varchar(36) PRIMARY KEY,
+AclName varchar(36) not null unique,
+HasPermission VARCHAR(50) not null
+);
+
+create table KMS.KMS_ACE(
+AclId varchar(36) not null,
+AceId varchar(32) not null,
+CONSTRAINT FK_ACLID foreign key(AclId) REFERENCES KMS_ACL(AclId)
+);
+
+CREATE INDEX IDX_ACLID ON KMS_ACE(AclId);
+CREATE INDEX IDX_ACEID ON KMS.KMS_ACE(AceId);
+CREATE unique INDEX IDX_NOTINSAMEACL ON KMS.KMS_ACE(AclId,AceId);
 
 
 
