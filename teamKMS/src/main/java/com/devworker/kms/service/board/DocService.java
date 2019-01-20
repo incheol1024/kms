@@ -40,6 +40,7 @@ public class DocService {
 		Optional<UserDao> optionalUser = userRepo.findById(CommonUtil.getCurrentUser());
 		UserDao user = optionalUser.get();
 		List<DocDao> docList = new ArrayList<DocDao>();
+		String key = "";
 
 		for (MultipartFile file : files) {
 			FileDto fileDto = fileHandler.processUploadFile(file);
@@ -53,14 +54,13 @@ public class DocService {
 			if (docRepo.save(docDao) == null)
 				throw new FileNotSavedException("File Not Saved Database");
 
+			key = FileTransactionUtil.putFileInfo(key, docDao.getDocId());
+			// 값에 DocId 대신에 DocDao 넣는것을 고려해보자.
+
 			// 파일을 하나하나 저장하는데.. 댓글 저장 트랜잭션을 처리하기 위해서...
 			// 저장이 완료된 파일들은 메모리에 올려두고.. 하나씩 메모리에 올려두고..
 			// 나중에 댓글이 등록이 되면.. 댓글에 해당하는 파일들만 등록 처리해야함
 			// 조건1. 메모리에 올라간 파일 정보와 댓글정보가 같은 키값을 갖고 있어야 한다.
-			// 조건2. 파일 등록처리가 완료 되면 메모리를 해제해야 한다.
-			// 조건3. 파일 등록 처리를 하다가 예외가 발생하면 메모리를 해제해야한다. 
-			//
-			
 			docList.add(docDao);
 		}
 		return docList;

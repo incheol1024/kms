@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.devworker.kms.exception.FileMemoryNotRemovedException;
 
@@ -14,33 +15,46 @@ import com.devworker.kms.exception.FileMemoryNotRemovedException;
  */
 public class FileTransactionUtil {
 
-	private static Map<Integer, List<Integer>> fileData = new HashMap<Integer, List<Integer>>();
+	/**
+	 * HashMap field is storing fileData and UUID key which converted to String Object
+	*/
+	private static final Map<String, List<Integer>> fileData = new HashMap<String, List<Integer>>();
+
+	
+	/** 
+	 * FileTransactionUtil class do not allow create object, because it is UTIL class 
+	*/
+	private FileTransactionUtil() {
+		
+	}
 
 	/**
 	 * @author Hwang In Cheol
-	 * @param Comment Id value
-	 * @param Doc     Id value, is considered File Id
+	 * @param String key We use java.util.UUID for HashMap key, so parameter should
+	 *               be converted to String
+	 * @param        int docId value, is considered File Id
 	 */
-	public static void putFileInfo(int cmtId, int docId) {
-		List<Integer> oriFileList = null;
+	public static String putFileInfo(String key, int docId) {
 
-		if ((oriFileList = fileData.get(cmtId)) != null) {
-			oriFileList.add(docId);
-			return;
+		if (key != null && fileData.containsKey(key)) {
+			List<Integer> fileList = fileData.get(key);
+			fileList.add(docId);
+			return key;
 		}
 
+		String newKey = UUID.randomUUID().toString();
 		List<Integer> fileList = new ArrayList<Integer>();
 		fileList.add(docId);
-		fileData.put(cmtId, fileList);
-
+		fileData.put(newKey, fileList);
+		return newKey;
 	}
 
 	/**
 	 * @author Hwang In Cheol
 	 * @param Comment Id value
 	 */
-	public static int getFileCount(int cmtId) {
-		return fileData.get(cmtId).size();
+	public static int getFileCount(String key) {
+		return fileData.get(key).size();
 	}
 
 	/**
@@ -51,24 +65,24 @@ public class FileTransactionUtil {
 	 * @return If Expected value equals to actual value, then return true, if not
 	 *         return false
 	 */
-	public static boolean isSameTransaction(int cmtId, int expectedFileCount) {
-		return expectedFileCount == getFileCount(cmtId) ? true : false;
+	public static boolean isSameTransaction(String key, int expectedFileCount) {
+		return expectedFileCount == getFileCount(key) ? true : false;
 	}
 
 	/**
 	 * @author Hwang In Cheol
 	 * @param Comment Id value
-	 * @return 
-	 * @throws Exception 
+	 * @return
+	 * @throws Exception
 	 */
-	public static boolean removeFileInfoMemory(int cmtId) throws Exception {
-		List<Integer> returnFileData = fileData.remove(cmtId);
+	public static void removeFileInfoMemory(String key) throws Exception {
+		List<Integer> returnFileData = fileData.remove(key);
 		if (returnFileData != null) {
 			returnFileData = null;
-			return true;
+			// return true;
 		}
 		throw new FileMemoryNotRemovedException();
-		//return false;
+		// return false;
 	}
 
 }

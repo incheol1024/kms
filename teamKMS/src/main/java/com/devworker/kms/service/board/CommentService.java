@@ -11,11 +11,13 @@ import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
 import com.devworker.kms.dic.LikeType;
+import com.devworker.kms.exception.FileTransactionException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.CommentRepo;
 import com.devworker.kms.repo.board.DocRepo;
 import com.devworker.kms.util.CommonUtil;
+import com.devworker.kms.util.FileTransactionUtil;
 
 /**
  * Comment Service 클래스 입니다. Comment와 관련 된 CRUD 메소드가 구현되어 있습니다.
@@ -52,6 +54,30 @@ public class CommentService {
 
 		Optional<UserDao> optionalUserDao = userRepo.findById(userId);
 		commentDao.setCmtUserId(optionalUserDao.get().getName());
+		return commentRepo.save(commentDao);
+	}
+
+	public CommentDao addComment(CommentDao commentDao, String fileTransactKey, int fileCount) throws Exception {
+		String userId = CommonUtil.getCurrentUser();
+		if (userId == null)
+			throw new NotExistException("userId");
+
+		Optional<UserDao> optionalUserDao = userRepo.findById(userId);
+		commentDao.setCmtUserId(optionalUserDao.get().getName());
+
+		if (FileTransactionUtil.isSameTransaction(fileTransactKey, fileCount)) {
+			
+			throw new FileTransactionException();
+		}
+		// 동일 트랜잭션이 아니면 예외를 던집니다.
+
+		FileTransactionUtil.removeFileInfoMemory(fileTransactKey);
+		// 동일 트랜잭션에서 파일이 처리되었는지 확인되면 해당 키에
+		// 메모리를 해제합니다.
+
+		// 조건2. 파일 등록처리가 완료 되면 메모리를 해제해야 한다.
+		// 조건3. 파일 등록 처리를 하다가 예외가 발생하면 메모리를 해제해야한다.
+
 		return commentRepo.save(commentDao);
 	}
 
