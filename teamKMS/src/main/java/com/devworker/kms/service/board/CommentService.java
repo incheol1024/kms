@@ -11,8 +11,8 @@ import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
 import com.devworker.kms.dic.LikeType;
-import com.devworker.kms.exception.FileTransactionException;
 import com.devworker.kms.exception.NotExistException;
+import com.devworker.kms.exception.board.FileTransactionException;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.CommentRepo;
 import com.devworker.kms.repo.board.DocRepo;
@@ -30,6 +30,9 @@ public class CommentService {
 
 	@Autowired
 	CommentRepo commentRepo;
+
+	@Autowired
+	DocService docService;
 
 	@Autowired
 	DocRepo docRepo;
@@ -57,6 +60,13 @@ public class CommentService {
 		return commentRepo.save(commentDao);
 	}
 
+	/**
+	 * @param commentDao      commentDao 객체입니다.
+	 * @param fileTransactKey 트랜잭션 처리를 위한 키 값입니다.
+	 * @param fileCount       트랜잭션 처리를 위해 파일 갯수를 비교하기 위한 값입니다.
+	 * @return 트랜잭션이 정상 처리 되면 등록된 CommentDao 객체를 리턴합니다.
+	 * @throws Exception 여러가지 예외를 던질 수 있습니다. 호출하는 컨트롤러에서 예외를 구분하여 처리해야 합니다.
+	 */
 	public CommentDao addComment(CommentDao commentDao, String fileTransactKey, int fileCount) throws Exception {
 		String userId = CommonUtil.getCurrentUser();
 		if (userId == null)
@@ -66,14 +76,21 @@ public class CommentService {
 		commentDao.setCmtUserId(optionalUserDao.get().getName());
 
 		if (FileTransactionUtil.isSameTransaction(fileTransactKey, fileCount)) {
-			
+
+			/*
+			 * 파일 rollback 과정(파일에 대한 DB정보와 물리적파일 삭제)에서 예외가 발생할 수 있음. 어떻게 처리할 것인지 생각해봐야함.
+			 */
+			docService.rollbackFileTransaction(fileTransactKey);
+
+			/*
+			 * FileTransactionException 예외 발생 checked Exception 이며, 최종적으로 컨트롤러에서 해당 예외를 처리
+			 * 해야함.
+			 */
 			throw new FileTransactionException();
 		}
-		// 동일 트랜잭션이 아니면 예외를 던집니다.
 
+		// 동일 트랜잭션에서 파일이 처리되었는지 확인되면 해당 키에 매핑되는 메모리 해제함.
 		FileTransactionUtil.removeFileInfoMemory(fileTransactKey);
-		// 동일 트랜잭션에서 파일이 처리되었는지 확인되면 해당 키에
-		// 메모리를 해제합니다.
 
 		// 조건2. 파일 등록처리가 완료 되면 메모리를 해제해야 한다.
 		// 조건3. 파일 등록 처리를 하다가 예외가 발생하면 메모리를 해제해야한다.

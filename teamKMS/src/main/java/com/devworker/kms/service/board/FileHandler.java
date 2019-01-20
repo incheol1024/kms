@@ -27,4 +27,5 @@ public interface FileHandler {
 
 	FileDto processUploadFile(MultipartFile file) throws Exception;
 
+	void deleteFile(int docId) throws Exception;
 }

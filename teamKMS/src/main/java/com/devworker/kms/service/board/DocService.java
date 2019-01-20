@@ -16,12 +16,20 @@ import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.DocDao;
 import com.devworker.kms.dto.board.FileDto;
-import com.devworker.kms.exception.FileNotSavedException;
+import com.devworker.kms.exception.board.FileNotSavedException;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.DocRepo;
 import com.devworker.kms.util.CommonUtil;
 import com.devworker.kms.util.FileTransactionUtil;
 
+/**
+ * @author Incheol
+ *
+ */
+/**
+ * @author Incheol
+ *
+ */
 @Service
 public class DocService {
 
@@ -74,13 +82,27 @@ public class DocService {
 		return null;
 	}
 
-	public void deleteDoc(int docId) {
+	public void deleteDoc(int docId) throws Exception {
+		Optional<DocDao> opDocDao = docRepo.findById(docId);
+		if (!opDocDao.isPresent())
+			throw new RuntimeException("Doc is not found"); // 지정 예외 구현 해야함.
 
+		DocDao docDao = opDocDao.get();
+		fileHandler.deleteFile(docId);
+		docRepo.delete(docDao);
 	}
 
 	public File downDoc(String trim) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void rollbackFileTransaction(String fileTransactKey) throws Exception {
+		List<Integer> fileList = FileTransactionUtil.getFileList(fileTransactKey);
+		for (Integer fList : fileList) {
+			deleteDoc(fList);
+		}
+
 	}
 
 }

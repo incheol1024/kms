@@ -80,4 +80,9 @@ public class FileHandlerImplLocal implements FileHandler {
 		return null;
 	}
 
+	@Override
+	public void deleteFile(int docId) throws Exception {
+		
+	}
+
 }

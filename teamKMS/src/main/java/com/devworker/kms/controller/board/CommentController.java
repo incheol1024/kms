@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
-import com.devworker.kms.exception.FileTransactionException;
 import com.devworker.kms.service.board.CommentService;
-import com.devworker.kms.service.board.DocService;
 
 @RestController
 @RequestMapping("/comment")
@@ -52,7 +50,7 @@ public class CommentController {
 		return cmtId;
 	}
 
-	@PostMapping("{cmtId}/like")
+	@PostMapping("/{cmtId}/like")
 	public CommentDao updateCommentLike(@PathVariable int cmtId) {
 		return commentService.updateCommentLike(cmtId);
 	}

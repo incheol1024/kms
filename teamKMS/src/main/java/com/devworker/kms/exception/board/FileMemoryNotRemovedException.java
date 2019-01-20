@@ -1,4 +1,4 @@
-package com.devworker.kms.exception;
+package com.devworker.kms.exception.board;
 
 public class FileMemoryNotRemovedException extends Exception {
 

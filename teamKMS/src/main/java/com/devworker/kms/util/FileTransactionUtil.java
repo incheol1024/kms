@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.devworker.kms.exception.FileMemoryNotRemovedException;
+import com.devworker.kms.exception.board.FileMemoryNotRemovedException;
 
 /**
  * @author Hwang In Cheol
@@ -16,16 +16,17 @@ import com.devworker.kms.exception.FileMemoryNotRemovedException;
 public class FileTransactionUtil {
 
 	/**
-	 * HashMap field is storing fileData and UUID key which converted to String Object
-	*/
+	 * HashMap field is storing fileData and UUID key which converted to String
+	 * Object
+	 */
 	private static final Map<String, List<Integer>> fileData = new HashMap<String, List<Integer>>();
 
-	
-	/** 
-	 * FileTransactionUtil class do not allow create object, because it is UTIL class 
-	*/
+	/**
+	 * FileTransactionUtil class do not allow create object, because it is UTIL
+	 * class
+	 */
 	private FileTransactionUtil() {
-		
+
 	}
 
 	/**
@@ -51,10 +52,20 @@ public class FileTransactionUtil {
 
 	/**
 	 * @author Hwang In Cheol
-	 * @param Comment Id value
+	 * @param String key We use java.util.UUID for HashMap key, so parameter should
+	 *               be converted to String
 	 */
 	public static int getFileCount(String key) {
 		return fileData.get(key).size();
+	}
+
+	/**
+	 * @author Hwang In Cheol
+	 * @param String key We use java.util.UUID for HashMap key, so parameter should
+	 *               be converted to String
+	 */
+	public static List<Integer> getFileList(String key) {
+		return fileData.get(key);
 	}
 
 	/**
@@ -71,7 +82,8 @@ public class FileTransactionUtil {
 
 	/**
 	 * @author Hwang In Cheol
-	 * @param Comment Id value
+	 * @param String key We use java.util.UUID for HashMap key, so parameter should
+	 *               be converted to String
 	 * @return
 	 * @throws Exception
 	 */
