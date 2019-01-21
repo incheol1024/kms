@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/login").permitAll()
         .antMatchers("/**").authenticated();
 
-        http.formLogin()
+        http.httpBasic().and().formLogin()
         .loginPage("/login")	
         .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
         .defaultSuccessUrl("/", true);

@@ -6,16 +6,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import javax.sql.DataSource;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -34,7 +39,7 @@ import com.devworker.kms.util.CommonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment  = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TeamKmsApplicationTests {
 	@Autowired
 	MenuService menuService;
@@ -48,6 +53,8 @@ public class TeamKmsApplicationTests {
 	PasswordEncoder encoder;
 	@Autowired
 	DataSource dataSource;
+	@Autowired
+	TestRestTemplate testRestTemplate;
 
 	@WithMockUser(value = "ADMIN")
 	@Test
@@ -107,6 +114,14 @@ public class TeamKmsApplicationTests {
 	public void getUserListTest() throws JsonProcessingException {		
 		List<UserDto> userList = userService.getUserList();
 		assertThat(userList, not(IsEmptyCollection.empty()));
+	}
+
+	@WithMockUser(value = "ADMIN")
+	@Test
+	public void getUserListPagingTest() throws JsonProcessingException {
+		List<UserDto> l = new ArrayList<>();
+		List<UserDto> list = testRestTemplate.withBasicAuth("ADMIN","ADMIN").getForEntity("/getUserListPage?page=1&size=10&sort=name,desc", l.getClass()).getBody();
+		assertThat(list,notNullValue());
 	}
 
 	@Test

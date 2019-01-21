@@ -1,15 +1,16 @@
 package com.devworker.kms.controller;
 
-import java.util.List;
-
+import com.devworker.kms.dto.UserDto;
+import com.devworker.kms.dto.base.BasePageResDto;
+import com.devworker.kms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devworker.kms.dto.UserDto;
-import com.devworker.kms.service.UserService;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -44,6 +45,13 @@ public class UserController {
 	@PostMapping("/getUserList")
 	public List<UserDto> getUserList() {
 		return service.getUserList();
+	}
+
+	@GetMapping("/getUserListPage")
+	public BasePageResDto<UserDto> getUserListPaging(Pageable pageable)
+	{
+		BasePageResDto<UserDto> ret = service.getUserListPage(pageable);
+		return ret;
 	}
 	
 	@GetMapping("/getTotalUser")

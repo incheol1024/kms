@@ -41,7 +41,7 @@ public class JsonModelTest {
 	}
 
 	@Test
-	public void makeBasePageDto() throws JsonProcessingException {
+	public void makeBasePageResDto() throws JsonProcessingException {
 		BasePageResDto<String> dto = new BasePageResDto<>();
 		dto.getList().add("");
 		dto.setTotal(30);

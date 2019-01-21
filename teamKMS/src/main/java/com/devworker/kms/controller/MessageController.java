@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.dto.MessageDto;
@@ -16,15 +17,8 @@ public class MessageController {
 	MessageService service;
 	
 	@PostMapping("/sendmessage")
-	public String sendMessage(MessageDto message) {
-		try {
-			return service.sendMessage(message);
-		} catch (JsonProcessingException e) {
-			return "Json Process Has Error";
-		} catch (InterruptedException | ExecutionException e) {
-			Thread.currentThread().interrupt();
-			return "send Message Fail";
-		}
+	public String sendMessage(@RequestBody  MessageDto message) {
+		return service.sendMessage(message);
 	}
 	
 }

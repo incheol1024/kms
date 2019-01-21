@@ -1,23 +1,23 @@
 package com.devworker.kms.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.dto.UserDto;
+import com.devworker.kms.dto.base.BasePageResDto;
+import com.devworker.kms.exception.NotExistException;
+import com.devworker.kms.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.devworker.kms.dao.UserDao;
-import com.devworker.kms.dto.UserDto;
-import com.devworker.kms.exception.NotExistException;
-import com.devworker.kms.repo.UserRepo;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("UserService")
 public class UserServiceImpl implements UserService{
@@ -33,7 +33,20 @@ public class UserServiceImpl implements UserService{
 	public long getCount() {
 		return repo.count();
 	}
-	
+
+	@Override
+	public BasePageResDto<UserDto> getUserListPage(Pageable pageable) {
+		Page<UserDao> page = repo.findAll(pageable);
+		BasePageResDto<UserDto> ret = new BasePageResDto<>();
+		ret.setList(page.stream().map(userDao -> userDao.getDto()).map(userDto -> {
+			userDto.setGroupName(service.getGroup(userDto.getGroupId()).getName());
+			return userDto;
+		}).collect(Collectors.toList()));
+		ret.setTotal(page.getTotalElements());
+		return ret;
+	}
+
+
 	@CacheEvict(key = "'userCount'", value="userCache")
 	public UserDto addUser(UserDto dto) {
 		if(repo.existsById(dto.getId()))
@@ -85,4 +98,6 @@ public class UserServiceImpl implements UserService{
 					return userDto;
 		}).collect(Collectors.toList());
 	}
+
+
 }

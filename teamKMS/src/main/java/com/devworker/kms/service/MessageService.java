@@ -18,9 +18,14 @@ public class MessageService {
 	String url;
 
 	
-	public String sendMessage(MessageDto message) throws InterruptedException, ExecutionException, JsonProcessingException {
-		Future<String> sendInnerMessage = sendAsyncMessage(message);
-		return sendInnerMessage.get();
+	public String sendMessage(MessageDto message) {
+		try {
+			Future<String> sendInnerMessage = sendAsyncMessage(message);
+			return sendInnerMessage.get();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
 	}
 	
 	
