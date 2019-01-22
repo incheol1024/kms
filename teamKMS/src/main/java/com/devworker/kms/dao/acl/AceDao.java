@@ -1,5 +1,8 @@
 package com.devworker.kms.dao.acl;
 
+import com.devworker.kms.dto.acl.AceDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity(name = "KMS_ACE")
@@ -26,5 +29,13 @@ public class AceDao {
 
     public void setAceId(String aceId) {
         this.aceId = aceId;
+    }
+
+    @JsonIgnore
+    public AceDto getDto(){
+        AceDto dto = new AceDto();
+        dto.setAceId(aceId);
+        dto.setAclId(aclId);
+        return dto;
     }
 }
