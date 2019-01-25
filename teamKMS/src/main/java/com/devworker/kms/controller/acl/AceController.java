@@ -24,7 +24,10 @@ public class AceController {
 
     @DeleteMapping("/ace/{aclId}/{aceId}")
     public void deleteAce(@PathVariable String aclId, @PathVariable String aceId){
-        aceService.deleteAce(aclId,aceId);
+        AceDto dto = new AceDto();
+        dto.setAclId(aclId);
+        dto.setAceId(aceId);
+        aceService.deleteAce(dto);
     }
 
     @GetMapping("/ace")
