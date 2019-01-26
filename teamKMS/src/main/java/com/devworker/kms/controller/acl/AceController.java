@@ -8,21 +8,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/ace")
 public class AceController {
     @Autowired
     AceService aceService;
 
-    @PutMapping("/ace")
+    @PutMapping
     public String addAce(@RequestBody AceDto dto) {
         return aceService.addAce(dto);
     }
 
-    @PostMapping("/ace")
+    @PostMapping
     public void updateAce(@RequestBody AceDto dto) {
         aceService.updateAce(dto);
     }
 
-    @DeleteMapping("/ace/{aclId}/{aceId}")
+    @DeleteMapping("/{aclId}/{aceId}")
     public void deleteAce(@PathVariable String aclId, @PathVariable String aceId){
         AceDto dto = new AceDto();
         dto.setAclId(aclId);
@@ -30,12 +31,12 @@ public class AceController {
         aceService.deleteAce(dto);
     }
 
-    @GetMapping("/ace")
+    @GetMapping
     public Page<AceDto> getAceList(Pageable pageable){
         return aceService.getAceList(pageable);
     }
 
-    @GetMapping("/ace/{aclId}")
+    @GetMapping("/{aclId}")
     public Page<AceDto> getAceListByAclId(@PathVariable String aclId, Pageable pageable) {
         return aceService.getAceListByAclId(aclId,pageable);
     }

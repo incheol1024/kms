@@ -31,8 +31,7 @@ httpVueLoader.register(Vue, 'view/answerboard/qnaanswer-component.vue');
 
 httpVueLoader.register(Vue, 'view/setting/user-component.vue');
 httpVueLoader.register(Vue, 'view/setting/group-component.vue');
-httpVueLoader.register(Vue, 'view/setting/ACL-component.vue');
-httpVueLoader.register(Vue, 'view/setting/ACE-component.vue');
+httpVueLoader.register(Vue, 'view/setting/permission-component.vue');
 httpVueLoader.register(Vue, 'view/custom/tree-component.vue');
 httpVueLoader.register(Vue, 'view/custom/treenode-component.vue');
 httpVueLoader.register(Vue, 'view/custom/table-component.vue');
@@ -67,12 +66,8 @@ router = new VueRouter({
 					component: Vue.component('group-component')
 				},
 				{
-					path: 'Acl',
-					component: Vue.component('ACL-component')
-				},
-				{
-					path: 'Ace',
-					component: Vue.component('ACE-component')
+					path: 'permission',
+					component: Vue.component('permission-component')
 				}
 			]
 		}
@@ -106,9 +101,7 @@ var main = new Vue({
 	created: function () {
 		this.items.forEach(item => {
 			if (item.children.length < 1) {
-				axios.get("getMenuList", {
-					params: { type: item.type }
-				})
+				axios.get("menu/" + item.type)
 					.then(function (response) {
 						for (var i = 0; i < response.data.length; i++) {
 							item.children.push(response.data[i]);

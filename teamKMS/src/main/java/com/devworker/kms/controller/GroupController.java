@@ -3,9 +3,7 @@ package com.devworker.kms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.devworker.kms.dao.GroupDao;
 import com.devworker.kms.dto.GroupDto;
@@ -14,48 +12,48 @@ import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.UserService;
 
 @RestController
+@RequestMapping("group")
 public class GroupController {
 	@Autowired
 	GroupService groupService;
 	@Autowired 
 	UserService userService;
-	
-	@PostMapping("/addGroup")
+
+	@PutMapping
 	public int addGroup(@RequestBody GroupDto dto) {
 		return groupService.addGroup(dto);
 	}
 	
-	@PostMapping("/deleteGroup")
-	public void deleteGroup(@RequestBody GroupDto dto) {
-		groupService.deleteGroup(dto.getId());
+	@DeleteMapping("{groupId}")
+	public void deleteGroup(@PathVariable int groupId) {
+		groupService.deleteGroup(groupId);
 	}
 	
-	@PostMapping("/updateGroup")
+	@PostMapping
 	public void updateGroup(@RequestBody GroupDto dto) {
 		groupService.updateGroup(dto);
 	}
 	
-	@PostMapping("/getGroup")
-	public GroupDao getGroup(@RequestBody GroupDto dto) {
-		return groupService.getGroup(dto.getId());
+	@GetMapping("{groupId}")
+	public GroupDao getGroup(@PathVariable int groupId) {
+		return groupService.getGroup(groupId);
 	}
 	
-	@PostMapping("/getGroupChild")
-	public List<GroupDto> getGroupChild(@RequestBody GroupDto dto) {
-		return groupService.getGroupChild(dto.getId());
+	@GetMapping("/childGroup/{groupId}")
+	public List<GroupDto> getGroupChild(@PathVariable int groupId) {
+		return groupService.getGroupChild(groupId);
 	}
 	
-	@PostMapping("/getAllGroupList")
+	@GetMapping
 	public GroupDto getAllGroupList() {
 		return groupService.getAllGroupList();
 	}
 
-	
-	@PostMapping("/getAllChildList")
-	public GroupNUserDto getAllChildList(@RequestBody GroupDto dto) {
+	@GetMapping("/child/{groupId}")
+	public GroupNUserDto getAllChildList(@PathVariable int groupId) {
 		GroupNUserDto groupNUserDto = new GroupNUserDto();
-		groupNUserDto.setGroupList(groupService.getGroupChild(dto.getId()));
-		groupNUserDto.setUserList(userService.getGroupedUser(dto.getId()));
+		groupNUserDto.setGroupList(groupService.getGroupChild(groupId));
+		groupNUserDto.setUserList(userService.getGroupedUser(groupId));
 		return groupNUserDto;
 	}
 }

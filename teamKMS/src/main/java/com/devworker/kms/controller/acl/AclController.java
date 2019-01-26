@@ -8,31 +8,32 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/acl")
 public class AclController {
     @Autowired
     AclService aclService;
 
-    @PutMapping("/acl")
+    @PutMapping
     public String addAcl(@RequestBody AclDto dto) {
         return aclService.addAcl(dto);
     }
 
-    @PostMapping("/acl")
+    @PostMapping
     public void updateAcl(@RequestBody AclDto dto){
         aclService.updateAcl(dto);
     }
 
-    @DeleteMapping("/acl/{aclId}")
+    @DeleteMapping("/{aclId}")
     public void deleteAcl(@PathVariable String aclId) {
         aclService.deleteAcl(aclId);
     }
 
-    @GetMapping("/acl/{aclId}")
+    @GetMapping("/{aclId}")
     public AclDto getAcl(@PathVariable String aclId) {
         return aclService.getAcl(aclId);
     }
 
-    @GetMapping("/acl")
+    @GetMapping
     public Page<AclDto> getAclList(Pageable pageable) {
         return aclService.getAclPage(pageable);
     }

@@ -21,7 +21,7 @@ public class AclUtil {
         aceService = ace;
     }
 
-    public static boolean checkPermission(String ownerId, String url){
+    public static <T> boolean checkPermission(String ownerId, String url,T t){
         if(CommonUtil.getCurrentUser().equals(ownerId))
             return true;
         //url check
@@ -31,4 +31,6 @@ public class AclUtil {
         //group check by recursive
         return false;
     }
+
+
 }

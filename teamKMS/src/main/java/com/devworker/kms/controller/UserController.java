@@ -5,56 +5,49 @@ import com.devworker.kms.dto.base.BasePageResDto;
 import com.devworker.kms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 	@Autowired
 	UserService service;	
 	
-	@PostMapping("/addUser")
+	@PutMapping
 	public void addUser(@RequestBody UserDto dto) {
 		service.addUser(dto);
 	}
 	
-	@PostMapping("/deleteUser")
-	public void deleteUser(@RequestBody UserDto dto) {
-		service.deleteUser(dto.getId());
+	@DeleteMapping("/{userId}")
+	public void deleteUser(@PathVariable String userId) {
+		service.deleteUser(userId);
 	}
 	
-	@PostMapping("/updateUser")
+	@PostMapping
 	public void updateUser(@RequestBody UserDto dto) {
 		service.updateUser(dto);
 	}
 	
-	@PostMapping("/getUser")
-	public UserDto getUser(@RequestBody UserDto dto) {
-		return service.getUser(dto.getId());
+	@GetMapping("/{userId}")
+	public UserDto getUser(@PathVariable String userId) {
+		return service.getUser(userId);
 	}
 	
-	@PostMapping("/getGroupedUser")
-	public List<UserDto> getGroupedUser(@RequestBody UserDto dto) {
-		return service.getGroupedUser(dto.getGroupId());
-	}
-	
-	@PostMapping("/getUserList")
-	public List<UserDto> getUserList() {
-		return service.getUserList();
+	@GetMapping("/group/{groupId}")
+	public List<UserDto> getGroupedUser(@PathVariable int groupId) {
+		return service.getGroupedUser(groupId);
 	}
 
-	@GetMapping("/getUserListPage")
+	@GetMapping
 	public BasePageResDto<UserDto> getUserListPaging(Pageable pageable)
 	{
 		BasePageResDto<UserDto> ret = service.getUserListPage(pageable);
 		return ret;
 	}
 	
-	@GetMapping("/getTotalUser")
+	@GetMapping("/total")
 	public long getTotalUser() {
 		return service.getCount();
 	}

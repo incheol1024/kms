@@ -15,14 +15,10 @@
         </v-btn>
 
         <v-btn dark @click="moveACL">
-          <span>ACL</span>
+          <span>Permission</span>
           <v-icon>visibility</v-icon>
         </v-btn>
-        
-        <v-btn dark @click="moveACE">
-          <span>ACE</span>
-          <v-icon>clear_all</v-icon>
-        </v-btn>        
+
       </v-bottom-nav>
     </v-card>
 </v-content>
@@ -42,11 +38,8 @@
 			router.push('/setting/group');		
 		},
 		moveACL : function moveACL() {
-			router.push('/setting/Acl');		
+			router.push('/setting/permission');
 		},
-		moveACE : function moveACE() {
-			router.push('/setting/Ace');		
-		}
 	 },
 	 mounted: function () {
 	    router.push('/setting/user');
