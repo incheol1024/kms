@@ -12,6 +12,6 @@ public interface GroupService {
 	void forceDeleteGroup(int id);
 	void updateGroup(GroupDto dto);
 	List<GroupDto> getGroupChild(int id);
-	GroupDao getGroup(int id);
+	GroupDto getGroup(int id);
 	GroupDto getAllGroupList();
 }

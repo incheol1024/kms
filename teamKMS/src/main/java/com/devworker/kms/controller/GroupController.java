@@ -35,7 +35,7 @@ public class GroupController {
 	}
 	
 	@GetMapping("{groupId}")
-	public GroupDao getGroup(@PathVariable int groupId) {
+	public GroupDto getGroup(@PathVariable int groupId) {
 		return groupService.getGroup(groupId);
 	}
 	

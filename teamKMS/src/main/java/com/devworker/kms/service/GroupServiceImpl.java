@@ -1,20 +1,17 @@
 package com.devworker.kms.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import com.devworker.kms.dao.GroupDao;
+import com.devworker.kms.dto.GroupDto;
+import com.devworker.kms.exception.NotExistException;
+import com.devworker.kms.repo.GroupRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devworker.kms.dao.GroupDao;
-import com.devworker.kms.dto.GroupDto;
-import com.devworker.kms.exception.NotExistException;
-import com.devworker.kms.repo.GroupRepo;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service("GroupService")
 public class GroupServiceImpl implements GroupService{
@@ -65,8 +62,8 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public GroupDao getGroup(int id) {
-		return repo.findById(id).orElseThrow(() -> new NotExistException("group not exist"));
+	public GroupDto getGroup(int id) {
+		return repo.findById(id).map(groupDao -> groupDao.getDto()).orElseThrow(() -> new NotExistException("group not exist"));
 	}
 
 	@Override
