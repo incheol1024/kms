@@ -5,6 +5,9 @@ import com.devworker.kms.dto.base.BasePageResDto;
 import com.devworker.kms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,7 +44,10 @@ public class UserController {
 	}
 
 	@GetMapping
-	public BasePageResDto<UserDto> getUserListPaging(Pageable pageable)
+	public BasePageResDto<UserDto> getUserListPaging(@PageableDefault(size = 999999)
+														 @SortDefault.SortDefaults({
+																 @SortDefault(sort = "name", direction = Sort.Direction.DESC)
+														 }) Pageable pageable)
 	{
 		BasePageResDto<UserDto> ret = service.getUserListPage(pageable);
 		return ret;

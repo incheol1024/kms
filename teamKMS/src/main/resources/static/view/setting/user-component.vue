@@ -65,10 +65,10 @@ module.exports = {
     this.loading = true;
     var _this = this;
     axios
-      .post("getUserList")
+      .get("user")
       .then(function(response) {
-        for (var i = 0; i < response.data.length; i++) {
-          _this.items.push(response.data[i]);
+        for (var i = 0; i < response.data.list.length; i++) {
+          _this.items.push(response.data.list[i]);
         }
       })
       .catch(function(error) {
@@ -76,7 +76,7 @@ module.exports = {
       });
     var _this = this;
     axios
-      .post("getAllGroupList")
+      .get("group")
       .then(function(response) {
         _this.groupItem.push(response.data);
       })
@@ -116,19 +116,19 @@ module.exports = {
       this.updateMode = false;
       this.curitem = JSON.parse(JSON.stringify(UserModel));
       this.stage = 1;
-      this.hidinput = true;
+      this.hidenput = true;
     },
     editItem(item) {
       this.updateMode = true;
       this.curitem = item;
       this.stage = 1;
-      this.hidinput = true;
+      this.hidenput = true;
     },
     deleteItem(item) {
       var _this = this;
       if (confirm("Are you sure you want to delete this item?")) {
         axios
-          .post("deleteUser", item)
+          .delete("user/" + item.id)
           .then(function(response) {
             _this.items.splice(_this.items.indexOf(item), 1);
           })
@@ -138,19 +138,18 @@ module.exports = {
       }
     },
     send() {
-      var _this = this;
+      let _this = this;
       this.curitem.groupId = this.selectedTreeId();
-      var method = "addUser";
-      if (this.updateMode) method = "updateUser";
-      axios
-        .post(method, _this.curitem)
+      let promise = axios.put("user", _this.curitem);
+      if (this.updateMode) promise = axios.post("user", _this.curitem)
+        promise
         .then(function(response) {
           if (!_this.updateMode) _this.items.push(response.data[0]);
         })
         .catch(function(error) {
           openError(error.response.data);
         });
-      this.hidinput = false;
+      this.hidenput = false;
     }
   }
 };

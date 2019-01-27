@@ -68,7 +68,7 @@ module.exports = {
   created: function() {
     var _this = this;
     axios
-      .post("getAllGroupList")
+      .get("group")
       .then(function(response) {
         _this.items = response.data;
         _this.$refs.tree.recurCache(_this.items);
@@ -95,12 +95,12 @@ module.exports = {
         _this.childitems = [];
         this.loading = true;
         axios
-          .post("getAllChildList", { id: _this.$refs.tree.active.items.id })
+          .get("group/child/" + _this.$refs.tree.active.items.id)
           .then(function(response) {
-            for (i = 0; i < response.data.groupList.length; i++) {
+            for (let i = 0; i < response.data.groupList.length; i++) {
               _this.childitems.push(response.data.groupList[i]);
             }
-            for (i = 0; i < response.data.userList.length; i++) {
+            for (let i = 0; i < response.data.userList.length; i++) {
               _this.childitems.push(response.data.userList[i]);
             }
             _this.loading = false;
@@ -115,7 +115,7 @@ module.exports = {
       if (this.updateMode) {
         _this.$refs.tree.active.items.name = _this.newname;
         axios
-          .post("updateGroup", _this.$refs.tree.active.items)
+          .post("group", _this.$refs.tree.active.items)
           .then(function(response) {
             _this.$refs.tree.updateNode(_this.newname);
           })
@@ -127,7 +127,7 @@ module.exports = {
         temp.parentid = _this.$refs.tree.active.items.id;
         temp.name = this.newname;
         axios
-          .post("addGroup", temp)
+          .put("group", temp)
           .then(function(response) {
             temp.id = response.data;
             _this.$refs.tree.addNode(temp);
@@ -155,7 +155,7 @@ module.exports = {
       temp.parentid = _this.$refs.subtree.active.items.id;
       temp.name = _this.$refs.tree.active.items.name;
       axios
-        .post("updateGroup", temp)
+        .post("group", temp)
         .then(function(response) {
           _this.$refs.tree.moveNode(_this.$refs.subtree.active.items.id);
         })
@@ -166,7 +166,7 @@ module.exports = {
     DeleteItem: function DeleteItem() {
       var _this = this;
       axios
-        .post("deleteGroup", { id: _this.$refs.tree.active.items.id })
+        .delete("group/" + _this.$refs.tree.active.items.id)
         .then(function(response) {
           _this.$refs.tree.deleteNode();
         })

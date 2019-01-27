@@ -12,7 +12,7 @@ import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.UserService;
 
 @RestController
-@RequestMapping("group")
+@RequestMapping("/group")
 public class GroupController {
 	@Autowired
 	GroupService groupService;

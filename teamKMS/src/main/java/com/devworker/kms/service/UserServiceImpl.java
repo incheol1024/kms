@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service("UserService")
-public class UserServiceImpl implements UserService{
+public class
+UserServiceImpl implements UserService{
 	@Autowired
 	UserRepo repo;
 	@Autowired
