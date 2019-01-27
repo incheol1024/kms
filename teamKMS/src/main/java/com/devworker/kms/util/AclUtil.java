@@ -5,6 +5,7 @@ import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.dto.acl.AceDto;
 import com.devworker.kms.dto.acl.AclDto;
+import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.UserService;
 import com.devworker.kms.service.acl.AceService;
@@ -42,14 +43,9 @@ public class AclUtil {
         aceService = ace;
     }
 
-    public static <T> boolean checkPermission(String ownerId, String url,T t){
+    public static boolean checkPermission(String ownerId, PermissionType type){
         String current = CommonUtil.getCurrentUser();
-
         if(current.equals(ownerId)) return true;
-
-        //권한 종류 설정하는 부분 필요함
-        PermissionType type = null;
-
         if(checkInner(current,type)) return true;
         UserDto user = userService.getUser(current);
         GroupDto group = groupService.getGroup(user.getGroupId());
@@ -57,10 +53,12 @@ public class AclUtil {
             if(checkInner(String.valueOf(group.getId()),type)) return true;
             group = groupService.getGroup(group.getParentid());
         }
-        return false;
+        throw new NotAllowException("You Have Not Permission.");
     }
 
-    private static boolean checkInner(String aceId, PermissionType type){
+    public static boolean checkPermission(PermissionType type){ return checkPermission("",type);}
+
+        private static boolean checkInner(String aceId, PermissionType type){
         List<AceDto> aceList;
         if((aceList = aceService.getAceByAceId(aceId)) != null){
             for(AceDto sub : aceList){

@@ -1,9 +1,11 @@
 package com.devworker.kms.service;
 
 import com.devworker.kms.dao.GroupDao;
+import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.GroupRepo;
+import com.devworker.kms.util.AclUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -25,12 +27,14 @@ public class GroupServiceImpl implements GroupService{
 	
 	@Override
 	public int addGroup(GroupDto dto) {
+		AclUtil.checkPermission(PermissionType.CREATEGROUP);
 		GroupDao save = repo.save(dto.getDao());
 		return save.getId();
 	}
 	
 	@Override
 	public void deleteGroup(int id) {
+		AclUtil.checkPermission(PermissionType.DELETEGROUP);
 		repo.deleteById(id);
 	}
 	

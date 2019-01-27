@@ -35,7 +35,9 @@ create table KMS.KMSGroup (
 ) default character set utf8 collate utf8_general_ci ;
 
 insert into KMS.KMSGroup(group_id,group_name) values(0,'ROOT');
-insert into KMS.KMSGroup(group_id,group_name,group_parent) values(1,'DefaultGroup',0);
+insert into KMS.KMSGroup(group_id,group_name,group_parent) values(1,'AdminGroup',0);
+insert into KMS.KMSGroup(group_id,group_name,group_parent) values(2,'UserGroup',0);
+
 CREATE INDEX FK_GROUP_PARENT ON KMS.KMSGroup(group_parent);
 CREATE unique index UK_GROUP_SAMELAVEL ON KMS.KMSGroup(group_parent,group_name);
 
@@ -53,13 +55,13 @@ create table KMS.KMSUser (
 #ADMIN , ADMIN
 insert into KMS.KMSUser(user_id,user_name,user_type,user_group,user_pass) values('ADMIN','ADMIN','ADMIN',1,'$2a$10$RWMKRWqLCWbjhIjiGzwvqusafXr8Y76JpB5SdaJCHoZeyAhb1aohu');
 #USER , USER
-insert into KMS.KMSUser(user_id,user_name,user_type,user_group,user_pass) values('USER','USER','USER',1,'$2a$10$RpcZZqJ3aBuKVswqVh/ixO8umoYLInnpPA6KnTXDoQlCH0I4Cq5om');
+insert into KMS.KMSUser(user_id,user_name,user_type,user_group,user_pass) values('USER','USER','USER',2,'$2a$10$RpcZZqJ3aBuKVswqVh/ixO8umoYLInnpPA6KnTXDoQlCH0I4Cq5om');
 CREATE INDEX FK_USER_GROUP ON KMS.KMSUser(user_group);
 
 create table KMS.KMS_ACL (
 AclId varchar(36) PRIMARY KEY,
 AclName varchar(36) not null unique,
-HasPermission VARCHAR(50) not null
+HasPermission VARCHAR() not null
 );
 
 create table KMS.KMS_ACE(
@@ -71,6 +73,13 @@ CONSTRAINT FK_ACLID foreign key(AclId) REFERENCES KMS_ACL(AclId)
 CREATE INDEX IDX_ACLID ON KMS_ACE(AclId);
 CREATE INDEX IDX_ACEID ON KMS.KMS_ACE(AceId);
 CREATE unique INDEX IDX_NOTINSAMEACL ON KMS.KMS_ACE(AclId,AceId);
+
+insert into KMS.KMS_ACL(AclId,AclName,HasPermission) values('ADMIN','ADMIN','1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18');
+insert into KMS.KMS_ACL(AclId,AclName,HasPermission) values('USER','USER','4');
+
+insert into KMS.KMS_ACE(AclId,AceId) values('ADMIN','ADMIN');
+insert into KMS.KMS_ACE(AclId,AceId) values('USER','USER');
+
 
 
 

@@ -45,7 +45,7 @@ public class AclDto {
         AclDao dao = new AclDao();
         dao.setAclId(aclId);
         dao.setAclName(aclName);
-        dao.setHasPermission(hasPermission.stream().map(permissionType -> permissionType.name()).collect(Collectors.joining(",")));
+        dao.setHasPermission(hasPermission.stream().map(permissionType -> permissionType.getName()).collect(Collectors.joining(",")));
         return dao;
     }
 }
