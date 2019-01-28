@@ -20,7 +20,7 @@ public class GroupDao {
 	@Column(name="group_name")
 	private String name;
 	@Column(name="group_parent")
-	private int parentid;
+	private Integer parentid;
 	
 	public int getId() {
 		return id;

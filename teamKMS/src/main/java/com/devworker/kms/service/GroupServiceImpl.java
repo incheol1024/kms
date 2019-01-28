@@ -3,6 +3,8 @@ package com.devworker.kms.service;
 import com.devworker.kms.dao.GroupDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.GroupDto;
+import com.devworker.kms.dto.UserDto;
+import com.devworker.kms.exception.ChildFoundException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.GroupRepo;
 import com.devworker.kms.util.AclUtil;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 public class GroupServiceImpl implements GroupService{
 	@Autowired
 	GroupRepo repo;
+	@Autowired
+	UserService userService;
 	
 	@Override
 	public long countGroup() {
@@ -35,6 +39,9 @@ public class GroupServiceImpl implements GroupService{
 	@Override
 	public void deleteGroup(int id) {
 		AclUtil.checkPermission(PermissionType.DELETEGROUP);
+		List<UserDto> groupedUser = userService.getGroupedUser(id);
+		if(groupedUser.size() > 0)
+			throw new ChildFoundException("Group Has Child. You Must Delete First");
 		repo.deleteById(id);
 	}
 	
@@ -55,6 +62,7 @@ public class GroupServiceImpl implements GroupService{
 	
 	@Override
 	public void updateGroup(GroupDto dto) {
+		AclUtil.checkPermission(PermissionType.MODIFYGROUP);
 		if(repo.existsById(dto.getId()))  repo.save(dto.getDao());
 		else throw new NotExistException("group not existed");
 	}

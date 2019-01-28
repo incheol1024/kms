@@ -67,8 +67,7 @@
 module.exports = {
   created: function() {
     var _this = this;
-    axios
-      .get("group")
+    axios.get("group")
       .then(function(response) {
         _this.items = response.data;
         _this.$refs.tree.recurCache(_this.items);
@@ -94,28 +93,24 @@ module.exports = {
       if (_this.$refs.tree.active.items) {
         _this.childitems = [];
         this.loading = true;
-        axios
-          .get("group/child/" + _this.$refs.tree.active.items.id)
+        axios.get("group/child/" + _this.$refs.tree.active.items.id)
           .then(function(response) {
-            for (let i = 0; i < response.data.groupList.length; i++) {
+            for (let i = 0; i < response.data.groupList.length; i++)
               _this.childitems.push(response.data.groupList[i]);
-            }
-            for (let i = 0; i < response.data.userList.length; i++) {
+            for (let i = 0; i < response.data.userList.length; i++)
               _this.childitems.push(response.data.userList[i]);
-            }
-            _this.loading = false;
           })
           .catch(function(error) {
             openError(error.response.data);
           });
+        _this.loading = false;
       }
     },
     confirm: function confirm() {
-      var _this = this;
+      let _this = this;
       if (this.updateMode) {
         _this.$refs.tree.active.items.name = _this.newname;
-        axios
-          .post("group", _this.$refs.tree.active.items)
+        axios.post("group", _this.$refs.tree.active.items)
           .then(function(response) {
             _this.$refs.tree.updateNode(_this.newname);
           })
@@ -123,11 +118,10 @@ module.exports = {
             openError(error.response.data);
           });
       } else {
-        var temp = JSON.parse(JSON.stringify(GroupModel));
+        let temp = JSON.parse(JSON.stringify(GroupModel));
         temp.parentid = _this.$refs.tree.active.items.id;
         temp.name = this.newname;
-        axios
-          .put("group", temp)
+        axios.put("group", temp)
           .then(function(response) {
             temp.id = response.data;
             _this.$refs.tree.addNode(temp);
@@ -136,7 +130,6 @@ module.exports = {
             openError(error.response.data);
           });
       }
-      this.dialog = false;
     },
     NewItem: function NewItem() {
       this.dialog = true;
@@ -149,13 +142,12 @@ module.exports = {
       this.newname = this.$refs.tree.active.items.name;
     },
     Move: function Move() {
-      var _this = this;
-      var temp = JSON.parse(JSON.stringify(GroupModel));
+      let _this = this;
+      let temp = JSON.parse(JSON.stringify(GroupModel));
       temp.id = _this.$refs.tree.active.items.id;
       temp.parentid = _this.$refs.subtree.active.items.id;
       temp.name = _this.$refs.tree.active.items.name;
-      axios
-        .post("group", temp)
+      axios.post("group", temp)
         .then(function(response) {
           _this.$refs.tree.moveNode(_this.$refs.subtree.active.items.id);
         })
@@ -164,9 +156,8 @@ module.exports = {
         });
     },
     DeleteItem: function DeleteItem() {
-      var _this = this;
-      axios
-        .delete("group/" + _this.$refs.tree.active.items.id)
+      let _this = this;
+      axios.delete("group/" + _this.$refs.tree.active.items.id)
         .then(function(response) {
           _this.$refs.tree.deleteNode();
         })

@@ -57,7 +57,6 @@ public class AclUtil {
     }
 
     public static boolean checkPermission(PermissionType type){ return checkPermission("",type);}
-
         private static boolean checkInner(String aceId, PermissionType type){
         List<AceDto> aceList;
         if((aceList = aceService.getAceByAceId(aceId)) != null){

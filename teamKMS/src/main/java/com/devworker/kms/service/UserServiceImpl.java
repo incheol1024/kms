@@ -1,10 +1,12 @@
 package com.devworker.kms.service;
 
 import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.dto.base.BasePageResDto;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.UserRepo;
+import com.devworker.kms.util.AclUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -50,6 +52,7 @@ UserServiceImpl implements UserService{
 
 	@CacheEvict(key = "'userCount'", value="userCache")
 	public UserDto addUser(UserDto dto) {
+		AclUtil.checkPermission(PermissionType.CREATEUSER);
 		if(repo.existsById(dto.getId()))
 			throw new DuplicateKeyException("User Id already Has in Server");
 		dto.setPassword(encoder.encode(dto.getPassword()));
@@ -61,10 +64,12 @@ UserServiceImpl implements UserService{
 	
 	@CacheEvict(key = "'userCount'", value="userCache")
 	public void deleteUser(String id) {
+		AclUtil.checkPermission(PermissionType.DELETEUSER);
 		repo.deleteById(id);
 	}
 	
 	public void updateUser(UserDto dto) {
+		AclUtil.checkPermission(PermissionType.MODIFYUSER);
 		UserDto dbUser = getUser(dto.getId());
 		if(dto.getPassword() != dbUser.getPassword() &&
 			!encoder.matches(dto.getPassword(), dbUser.getPassword()))
