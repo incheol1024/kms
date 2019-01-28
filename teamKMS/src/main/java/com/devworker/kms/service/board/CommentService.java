@@ -47,8 +47,9 @@ public class CommentService {
 	/**
 	 * Comment(댓글) 등록 시 호출 되는 메소드입니다.
 	 * 
-	 * @param
-	 * @return CommentDao
+	 * @param commentDao
+	 * @return
+	 * @throws Exception
 	 */
 	public CommentDao addComment(CommentDao commentDao) throws Exception {
 		String userId = CommonUtil.getCurrentUser();
@@ -84,7 +85,7 @@ public class CommentService {
 
 			/*
 			 * FileTransactionException 예외 발생 checked Exception 이며, 최종적으로 컨트롤러에서 해당 예외를 처리
-			 * 해야함.
+			 * 해야하는데
 			 */
 			throw new FileTransactionException();
 		}

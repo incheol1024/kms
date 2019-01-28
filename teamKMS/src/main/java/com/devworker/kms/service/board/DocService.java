@@ -26,10 +26,6 @@ import com.devworker.kms.util.FileTransactionUtil;
  * @author Incheol
  *
  */
-/**
- * @author Incheol
- *
- */
 @Service
 public class DocService {
 
