@@ -1,28 +1,47 @@
 <template>
 <v-content>
-	sol {{name}} {{id}} write page
+	sol {{name}} {{id}} write page [ {{Solution}} / {{Site}} / {{selected}} ]test
 
-  <v-container id="dropdown-example" grid-list-xl>
+  <v-container id="solution_write" grid-list-xl>
     <v-layout row wrap>
+      <v-flex xs12 sm6 md3>
+          <v-text-field
+            label="title"
+            placeholder="title"
+          ></v-text-field>
+      </v-flex>
       <v-flex xs12 sm4>
         <p>Solution</p>
         <v-overflow-btn
             :items="Solution"
-            label="Overflow Btn"
-            target="#dropdown-example"
-        >
-        </v-overflow-btn>
+            label="Solution"
+            target="solution_write"
+        ></v-overflow-btn>
       </v-flex>
       <v-flex xs12 sm4>
         <p>Site</p>
         <v-overflow-btn
           :items="Site"
-          label="Overflow Btn"
-          segmented
-          target="#dropdown-example"
+          label="Site"
+          target="solution_write"
         ></v-overflow-btn>
       </v-flex>
-
+        <v-flex xs12 sm2>
+        <select v-model="selected">
+          <option disabled value="">select</option>
+          <option>ECM</option>
+          <option>EDM</option>
+          <option>ETC</option>
+        </select>
+      </v-flex>
+      <v-flex xs12 sm2>
+        <select v-model="selected2">
+          <option disabled value="">select</option>
+          <option>st1</option>
+          <option>st2</option>
+          <option>st3</option>
+        </select>
+      </v-flex>
     </v-layout>
   </v-container>
 
@@ -31,8 +50,8 @@
   </div>
 
   <div class="text-xs-center">
-    <v-btn color="success" @click="solutionpage">글쓰기</v-btn>
-    <v-btn color="error"  @click="solutionpage">취소</v-btn>    
+    <v-btn color="success" @click="try_write">글쓰기</v-btn>
+    <v-btn color="error"   @click="cancel_write">취소</v-btn>    
   </div> 
 
 </v-content>
@@ -41,25 +60,35 @@
 
 <script>
 module.exports = {
-  name: 'solutionwrite',
+  name: 'solution_write',
   props: ["id"],
   data: () => ({
       Solution: ['ECM', 'EDM', 'ETC'],
-      Site: [
-        { text: 'list', callback: () => console.log('list') },
-        { text: 'favorite', callback: () => console.log('favorite') },
-        { text: 'delete', callback: () => console.log('delete') }
-      ]
+      Site: [ 'site1', 'site2', 'site3'],
+      selected: '',
+      selected2: ''
     }),
   created: function(){
+      console.log("id = " + this.$route.params.id);
      	var _this = this;
-     	this.getSolutionList(_this);
   },
   methods: {
-    moveToSolutionPage: function() {
-	      this.$router.push("/solutions/" + this.id);
+    try_write: function() {
+      //this.$router.push("/solutions/" + this.id);
+      axios.post('/solution/register',{
+        
+      })
+      .then(
+        function(response){
+          _this.answers.push(response.data);
+          console.log(response.data);
+        }
+      )
+      .catch(function(error){
+        console.log("[ERR] : " + error)
+      })
 	  },
-		solutionpage : function solutionpage(){
+		cancel_write : function(){
 			router.push("/solutions/" + this.id);
     }
   }

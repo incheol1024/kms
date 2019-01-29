@@ -25,20 +25,8 @@ public class SolutionDao {
 	String solution;
 	@Column(name = "site")
 	String site;
-	@Column(name = "content")
-	String content;
-	@Column(name = "username")
-	String userName;
-	
-	@Column(name = "reg_date")
-	LocalDate regDate;
-	@Column(name = "up_date")
-	LocalDate upDate;
-	
 	@Column(name = "replycount")
 	int replyCount;
-	@Column(name = "viewcount")
-	int viewCount;
 	
 	public Long getId() {
 		return id;
@@ -72,51 +60,12 @@ public class SolutionDao {
 		this.site = site;
 	}
 	
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	
-	public LocalDate getRegDate() {
-		return regDate;
-	}
-
-	public void setRegDate(LocalDate regDate) {
-		this.regDate = regDate;
-	}
-
-	public LocalDate getUpdDate() {
-		return upDate;
-	}
-
-	public void setUpdDate(LocalDate updDate) {
-		this.upDate = updDate;
-	}
 	public int getReplyCount() {
 		return replyCount;
 	}
 
 	public void setReplyCount(int replyCount) {
 		this.replyCount = replyCount;
-	}
-
-	public int getViewCount() {
-		return viewCount;
-	}
-
-	public void setViewCount(int viewCount) {
-		this.viewCount = viewCount;
 	}
 
 }
