@@ -46,7 +46,7 @@ public class GroupDao {
 		GroupDto dto = new GroupDto();
 		dto.setId(id);
 		dto.setName(name);
-		dto.setParentid(parentid);
+		dto.setParentId(parentid);
 		return dto;
 	}
 

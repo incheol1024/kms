@@ -8,8 +8,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class JsonModelTest {
-	ObjectMapper mapper = new ObjectMapper();
+	private ObjectMapper mapper = new ObjectMapper();
 	
 	@Test
 	public void makeMessageModel() throws JsonProcessingException {
@@ -35,7 +39,7 @@ public class JsonModelTest {
 	public void makeGroupModel() throws JsonProcessingException {
 		GroupDto dto = new GroupDto();
 		dto.setId(0);
-		dto.setParentid(0);
+		dto.setParentId(0);
 		dto.setName("");
 		System.out.println(mapper.writeValueAsString(dto));
 	}
@@ -52,5 +56,14 @@ public class JsonModelTest {
 	public void makeBasePageReqDto() throws JsonProcessingException {
 		BasePageReqDto<String> dto = new BasePageReqDto<>();
 		System.out.println(mapper.writeValueAsString(dto));
+	}
+
+	@Test
+	public void test()  {
+		Map<String,String> map = new HashMap<>();
+		Map<String, String> collect = map.entrySet().stream().filter(entry -> "12".equals(entry.getKey().substring(0, 2))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		Map<String, String> collect1 = map.entrySet().stream().filter(entry -> "22".equals(entry.getKey().substring(0, 2))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		Map<String, String> collect2 =map.entrySet().stream().filter(entry -> "32".equals(entry.getKey().substring(0, 2))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
 	}
 }

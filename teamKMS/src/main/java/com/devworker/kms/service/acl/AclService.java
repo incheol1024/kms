@@ -1,5 +1,6 @@
 package com.devworker.kms.service.acl;
 
+import com.devworker.kms.dao.acl.AclDao;
 import com.devworker.kms.dto.acl.AclDto;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.acl.AclRepo;
@@ -10,8 +11,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AclService {
-    @Autowired
+    private final
     AclRepo aclRepo;
+
+    @Autowired
+    public AclService(AclRepo aclRepo) {
+        this.aclRepo = aclRepo;
+    }
 
 
     public String addAcl(AclDto dto) {
@@ -29,7 +35,7 @@ public class AclService {
     }
 
     public Page<AclDto> getAclPage(Pageable pageable) {
-        return aclRepo.findAll(pageable).map(aclDao -> aclDao.getDto());
+        return aclRepo.findAll(pageable).map(AclDao::getDto);
     }
 
     public void updateAcl(AclDto dto) {

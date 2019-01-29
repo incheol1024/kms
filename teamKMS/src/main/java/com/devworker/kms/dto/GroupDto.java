@@ -7,9 +7,17 @@ import com.devworker.kms.dao.GroupDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class GroupDto {
+    public static final GroupDto ROOTGROUP;
+
+	static {
+		ROOTGROUP = new GroupDto();
+		ROOTGROUP.parentId = -1;
+		ROOTGROUP.name = "ROOT";
+		ROOTGROUP.id = 0;
+	}
 	private int id;
 	private String name;
-	private int parentid;
+	private int parentId;
 	private List<GroupDto> children  = new ArrayList<>();
 	
 	public int getId() {
@@ -31,17 +39,17 @@ public class GroupDto {
 		this.children = children;
 	}
 	
-	public int getParentid() {
-		return parentid;
+	public int getParentId() {
+		return parentId;
 	}
-	public void setParentid(int parentid) {
-		this.parentid = parentid;
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
 	}
 	
 	@JsonIgnore
 	public GroupDao getDao() {
 		GroupDao dao = new GroupDao();
-		dao.setParentid(parentid);
+		dao.setParentid(parentId);
 		dao.setName(name);
 		dao.setId(id);
 		return dao;

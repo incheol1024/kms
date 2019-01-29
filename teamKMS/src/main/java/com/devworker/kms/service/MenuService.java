@@ -13,9 +13,14 @@ import com.devworker.kms.repo.MenuRepo;
 
 @Service
 public class MenuService {
-	@Autowired
+	private final
 	MenuRepo repo;
-	
+
+	@Autowired
+	public MenuService(MenuRepo repo) {
+		this.repo = repo;
+	}
+
 	public List<MenuDao> getMenuList(MenuType type) {
 		return repo.getMenuList(type.name(), new Sort(Direction.ASC,"name"));
 	}

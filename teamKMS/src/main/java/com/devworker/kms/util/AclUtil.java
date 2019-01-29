@@ -18,10 +18,10 @@ import java.util.List;
 @Component
 public class AclUtil {
     private AclUtil(){}
-    static AclService aclService;
-    static AceService aceService;
-    static UserService userService;
-    static GroupService groupService;
+    private static AclService aclService;
+    private static AceService aceService;
+    private static UserService userService;
+    private static GroupService groupService;
 
     @Autowired
     public void setAclService(AclService acl){
@@ -43,21 +43,22 @@ public class AclUtil {
         aceService = ace;
     }
 
-    public static boolean checkPermission(String ownerId, PermissionType type){
+    public static void checkPermission(String ownerId, PermissionType type){
         String current = CommonUtil.getCurrentUser();
-        if(current.equals(ownerId)) return true;
-        if(checkInner(current,type)) return true;
+        if(current.equals(ownerId)) return;
+        if(checkInner(current,type)) return;
         UserDto user = userService.getUser(current);
         GroupDto group = groupService.getGroup(user.getGroupId());
-        while(group != null) {
-            if(checkInner(String.valueOf(group.getId()),type)) return true;
-            group = groupService.getGroup(group.getParentid());
+        while(group != null && group.getParentId() != -1) {
+            if(checkInner(String.valueOf(group.getId()),type)) return;
+            group = groupService.getGroup(group.getParentId());
         }
         throw new NotAllowException("You Have Not Permission.");
     }
 
-    public static boolean checkPermission(PermissionType type){ return checkPermission("",type);}
-        private static boolean checkInner(String aceId, PermissionType type){
+    public static void checkPermission(PermissionType type){ checkPermission("",type);}
+
+    private static boolean checkInner(String aceId, PermissionType type){
         List<AceDto> aceList;
         if((aceList = aceService.getAceByAceId(aceId)) != null){
             for(AceDto sub : aceList){

@@ -1,19 +1,22 @@
 package com.devworker.kms.dao.board;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.devworker.kms.dao.MenuDao;
 
 @Entity
 @Table(name = "KMS_QNA_CODE")
 public class QnaCodeDao {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private String temp;
 
-	@JoinColumn(name = "menu_id")
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
 	private MenuDao menuId;
 
-	@JoinColumn(name = "board_id")
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "board_id", referencedColumnName = "board_id")
 	private BoardDao boardId;
 
 	public MenuDao getMenuId() {

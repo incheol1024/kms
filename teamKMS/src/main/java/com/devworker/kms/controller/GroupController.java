@@ -1,25 +1,27 @@
 package com.devworker.kms.controller;
 
-import java.util.List;
-
-import com.devworker.kms.dic.PermissionType;
-import com.devworker.kms.util.AclUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import com.devworker.kms.dao.GroupDao;
 import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.dto.GroupNUserDto;
 import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/group")
 public class GroupController {
-	@Autowired
+	private final
 	GroupService groupService;
-	@Autowired 
+	private final
 	UserService userService;
+
+	@Autowired
+	public GroupController(GroupService groupService, UserService userService) {
+		this.groupService = groupService;
+		this.userService = userService;
+	}
 
 	@PutMapping
 	public int addGroup(@RequestBody GroupDto dto) {

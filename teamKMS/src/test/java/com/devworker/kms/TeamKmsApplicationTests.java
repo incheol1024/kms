@@ -12,15 +12,12 @@ import java.util.Random;
 
 import javax.sql.DataSource;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.env.Environment;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -58,7 +55,7 @@ public class TeamKmsApplicationTests {
 
 	@WithMockUser(value = "ADMIN")
 	@Test
-	public void getCurrentUserTest() throws Exception {
+	public void getCurrentUserTest()  {
 		String userName = CommonUtil.getCurrentUser();
 		System.out.println(userName);
 		assertThat(userName, notNullValue());
@@ -81,7 +78,7 @@ public class TeamKmsApplicationTests {
 	public void makeTreeGroupTest() {
 		GroupDto dto = new GroupDto();
 		dto.setName("TT");
-		dto.setParentid(420);
+		dto.setParentId(420);
 		makeTree(dto);
 		System.out.println(dto.getId());
 	}
@@ -92,7 +89,7 @@ public class TeamKmsApplicationTests {
 		for(int i = 0 ; i < random.nextInt(4); i++) {
 			GroupDto sub = new GroupDto();
 			sub.setName("TDF");
-			sub.setParentid(id);
+			sub.setParentId(id);
 			makeTree(sub);
 		}
 	}
@@ -111,16 +108,18 @@ public class TeamKmsApplicationTests {
 	}
 
 	@Test
-	public void getUserListTest() throws JsonProcessingException {		
+	public void getUserListTest()  {
 		List<UserDto> userList = userService.getUserList();
 		assertThat(userList, not(IsEmptyCollection.empty()));
 	}
 
 	@WithMockUser(value = "ADMIN")
 	@Test
-	public void getUserListPagingTest() throws JsonProcessingException {
+	public void getUserListPagingTest() {
 		List<UserDto> l = new ArrayList<>();
-		List<UserDto> list = testRestTemplate.withBasicAuth("ADMIN","ADMIN").getForEntity("/getUserListPage?page=1&size=10&sort=name,desc", l.getClass()).getBody();
+		List<UserDto> list = testRestTemplate.
+				withBasicAuth("ADMIN","ADMIN").
+				getForEntity("/getUserListPage?page=1&size=10&sort=name,desc", l.getClass()).getBody();
 		assertThat(list,notNullValue());
 	}
 
@@ -138,7 +137,7 @@ public class TeamKmsApplicationTests {
 	public void addGroupTest() {
 		GroupDto dto = new GroupDto();
 		dto.setName("Test");
-		dto.setParentid(0);
+		dto.setParentId(0);
 		groupService.addGroup(dto);
 	}
 

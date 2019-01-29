@@ -10,8 +10,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/ace")
 public class AceController {
-    @Autowired
+    private final
     AceService aceService;
+
+    @Autowired
+    public AceController(AceService aceService) {
+        this.aceService = aceService;
+    }
 
     @PutMapping
     public String addAce(@RequestBody AceDto dto) {
@@ -24,7 +29,7 @@ public class AceController {
     }
 
     @DeleteMapping("/{aclId}/{aceId}")
-    public void deleteAce(@PathVariable String aclId, @PathVariable String aceId){
+    public void deleteAce(@PathVariable String aclId, @PathVariable String aceId) {
         AceDto dto = new AceDto();
         dto.setAclId(aclId);
         dto.setAceId(aceId);
@@ -32,7 +37,7 @@ public class AceController {
     }
 
     @GetMapping
-    public Page<AceDto> getAceList(Pageable pageable){
+    public Page<AceDto> getAceList(Pageable pageable) {
         return aceService.getAceList(pageable);
     }
 

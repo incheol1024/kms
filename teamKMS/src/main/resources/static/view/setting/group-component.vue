@@ -109,6 +109,7 @@ module.exports = {
     confirm: function confirm() {
       let _this = this;
       if (this.updateMode) {
+        console.log("aa");
         _this.$refs.tree.active.items.name = _this.newname;
         axios.post("group", _this.$refs.tree.active.items)
           .then(function(response) {
@@ -119,8 +120,9 @@ module.exports = {
           });
       } else {
         let temp = JSON.parse(JSON.stringify(GroupModel));
-        temp.parentid = _this.$refs.tree.active.items.id;
+        temp.parentId = _this.$refs.tree.active.items.id;
         temp.name = this.newname;
+        console.log(temp);
         axios.put("group", temp)
           .then(function(response) {
             temp.id = response.data;
@@ -145,7 +147,7 @@ module.exports = {
       let _this = this;
       let temp = JSON.parse(JSON.stringify(GroupModel));
       temp.id = _this.$refs.tree.active.items.id;
-      temp.parentid = _this.$refs.subtree.active.items.id;
+      temp.parentId = _this.$refs.subtree.active.items.id;
       temp.name = _this.$refs.tree.active.items.name;
       axios.post("group", temp)
         .then(function(response) {
