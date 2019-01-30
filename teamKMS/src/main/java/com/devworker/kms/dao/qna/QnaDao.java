@@ -20,16 +20,16 @@ public class QnaDao {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 
-	@Column(name = "title", nullable = false, length = 300)
+	@Column(name = "title")
 	String title;
 
-	@Column(name = "content", nullable = false, length = 4000)
+	@Column(name = "content")
 	String content;
-	@Column(name = "username", nullable = false)
+	@Column(name = "username")
 	String userName;
-	@Column(name = "replycount", nullable = false)
+	@Column(name = "replycount")
 	int replyCount;
-	@Column(name = "viewcount", nullable = false)
+	@Column(name = "viewcount")
 	int viewCount;
 
 	//@ManyToOne

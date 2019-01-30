@@ -34,9 +34,9 @@ public class QnaController {
 	@Autowired
 	QnaService qnaService;
 
-	@GetMapping("")
-	public List<BoardDao> qnaHome() {
-		return qnaService.getFirstPageList();
+	@GetMapping("{menuId}")
+	public List<BoardDao> qnaHome(@PathVariable int menuId) {
+		return qnaService.getFirstPageList(menuId);
 	}
 
 	@PostMapping("/register")
