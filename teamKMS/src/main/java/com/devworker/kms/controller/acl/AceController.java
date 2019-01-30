@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/ace")
 public class AceController {
@@ -19,12 +21,12 @@ public class AceController {
     }
 
     @PutMapping
-    public String addAce(@RequestBody AceDto dto) {
+    public String addAce(@Valid @RequestBody AceDto dto) {
         return aceService.addAce(dto);
     }
 
     @PostMapping
-    public void updateAce(@RequestBody AceDto dto) {
+    public void updateAce(@Valid  @RequestBody AceDto dto) {
         aceService.updateAce(dto);
     }
 

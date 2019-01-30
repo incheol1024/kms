@@ -7,13 +7,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class AclDto {
+    @NotBlank
     private String aclId;
+    @NotBlank
     private String aclName;
+    @NotNull
     private List<PermissionType> hasPermission;
 
     public String getAclId() {

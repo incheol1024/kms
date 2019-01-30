@@ -10,16 +10,18 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@Valid
 public class UserController {
 	@Autowired
 	UserService service;	
 	
 	@PutMapping
-	public void addUser(@RequestBody UserDto dto) {
+	public void addUser(@Valid  @RequestBody UserDto dto) {
 		service.addUser(dto);
 	}
 	
@@ -29,7 +31,7 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public void updateUser(@RequestBody UserDto dto) {
+	public void updateUser(@Valid  @RequestBody UserDto dto) {
 		service.updateUser(dto);
 	}
 	

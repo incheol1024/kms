@@ -2,9 +2,15 @@ package com.devworker.kms.dto;
 
 import com.devworker.kms.dic.MessageType;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class MessageDetailDto {
+	@NotNull
 	private MessageType color = MessageType.GOOD;
+	@NotBlank
 	private String title = "";
+	@NotBlank
 	private String text =  "";
 	
 	public void setType(MessageType type) {

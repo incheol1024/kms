@@ -32,9 +32,7 @@
                             for (var i = 0; i < max; i++) {
                                 _this.dataset.push(response.data.list[i]);
                             }
-                        }).catch(function (error) {
-                            alert(error);
-                        })
+                        }).catch(catchPromise);
                     }finally {
                         this.loading = false
                     }

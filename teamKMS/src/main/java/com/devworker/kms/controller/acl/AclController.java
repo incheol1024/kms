@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/acl")
 public class AclController {
@@ -14,12 +16,12 @@ public class AclController {
     AclService aclService;
 
     @PutMapping
-    public String addAcl(@RequestBody AclDto dto) {
+    public String addAcl(@Valid @RequestBody AclDto dto) {
         return aclService.addAcl(dto);
     }
 
     @PostMapping
-    public void updateAcl(@RequestBody AclDto dto){
+    public void updateAcl(@Valid @RequestBody AclDto dto){
         aclService.updateAcl(dto);
     }
 

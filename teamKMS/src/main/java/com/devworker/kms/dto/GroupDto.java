@@ -6,6 +6,9 @@ import java.util.List;
 import com.devworker.kms.dao.GroupDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+
 public class GroupDto {
     public static final GroupDto ROOTGROUP;
 
@@ -15,8 +18,11 @@ public class GroupDto {
 		ROOTGROUP.name = "ROOT";
 		ROOTGROUP.id = 0;
 	}
+	@Min(value = 0)
 	private int id;
+	@NotBlank
 	private String name;
+	@Min(value = 0)
 	private int parentId;
 	private List<GroupDto> children  = new ArrayList<>();
 	
@@ -49,7 +55,7 @@ public class GroupDto {
 	@JsonIgnore
 	public GroupDao getDao() {
 		GroupDao dao = new GroupDao();
-		dao.setParentid(parentId);
+		dao.setParentId(parentId);
 		dao.setName(name);
 		dao.setId(id);
 		return dao;

@@ -1,10 +1,13 @@
 package com.devworker.kms.dto;
 
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDto {
+	@NotBlank
 	private String text = "";
+	@NotBlank
 	private List<MessageDetailDto> attachments = new ArrayList<>(20);
 	private String messageState = "";
 

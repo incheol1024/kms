@@ -1,15 +1,13 @@
 package com.devworker.kms.controller;
 
-import java.util.concurrent.ExecutionException;
-
+import com.devworker.kms.dto.MessageDto;
+import com.devworker.kms.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devworker.kms.dto.MessageDto;
-import com.devworker.kms.service.MessageService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import javax.validation.Valid;
 
 @RestController
 public class MessageController {
@@ -17,7 +15,7 @@ public class MessageController {
 	MessageService service;
 	
 	@PostMapping("/sendmessage")
-	public String sendMessage(@RequestBody  MessageDto message) {
+	public String sendMessage(@Valid  @RequestBody  MessageDto message) {
 		return service.sendMessage(message);
 	}
 	

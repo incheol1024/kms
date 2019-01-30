@@ -20,7 +20,7 @@ public class GroupDao {
 	@Column(name="group_name")
 	private String name;
 	@Column(name="group_parent")
-	private Integer parentid;
+	private Integer parentId;
 	
 	public int getId() {
 		return id;
@@ -34,11 +34,11 @@ public class GroupDao {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getParentid() {
-		return parentid;
+	public int getParentId() {
+		return parentId;
 	}
-	public void setParentid(int parentid) {
-		this.parentid = parentid;
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
 	}
 	
 	@JsonIgnore
@@ -46,7 +46,7 @@ public class GroupDao {
 		GroupDto dto = new GroupDto();
 		dto.setId(id);
 		dto.setName(name);
-		dto.setParentId(parentid);
+		dto.setParentId(parentId);
 		return dto;
 	}
 

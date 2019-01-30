@@ -3,8 +3,12 @@ package com.devworker.kms.dto.acl;
 import com.devworker.kms.dao.acl.AceDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.validation.constraints.NotBlank;
+
 public class AceDto {
+    @NotBlank
     private String aclId;
+    @NotBlank
     private String aceId;
 
     public String getAclId() {

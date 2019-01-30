@@ -33,7 +33,6 @@ import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.MenuService;
 import com.devworker.kms.service.UserService;
 import com.devworker.kms.util.CommonUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment  = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -117,8 +116,8 @@ public class TeamKmsApplicationTests {
 	@Test
 	public void getUserListPagingTest() {
 		List<UserDto> l = new ArrayList<>();
-		List<UserDto> list = testRestTemplate.
-				withBasicAuth("ADMIN","ADMIN").
+		List list = testRestTemplate.
+				withBasicAuth("ADMIN", "ADMIN").
 				getForEntity("/getUserListPage?page=1&size=10&sort=name,desc", l.getClass()).getBody();
 		assertThat(list,notNullValue());
 	}
@@ -128,7 +127,7 @@ public class TeamKmsApplicationTests {
 		groupService.countGroup();
 		GroupDao dao = new GroupDao();
 		dao.setName("Test");
-		dao.setParentid(0);
+		dao.setParentId(0);
 		List<GroupDto> list = groupService.getGroupChild(dao.getId());
 		assertThat(list, not(IsEmptyCollection.empty()));
 	}

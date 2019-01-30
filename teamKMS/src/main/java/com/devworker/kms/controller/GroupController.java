@@ -7,6 +7,7 @@ import com.devworker.kms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,7 @@ public class GroupController {
 	}
 
 	@PutMapping
-	public int addGroup(@RequestBody GroupDto dto) {
+	public int addGroup(@Valid @RequestBody GroupDto dto) {
 		return groupService.addGroup(dto);
 	}
 	
@@ -34,7 +35,7 @@ public class GroupController {
 	}
 	
 	@PostMapping
-	public void updateGroup(@RequestBody GroupDto dto) {
+	public void updateGroup(@Valid @RequestBody GroupDto dto) {
 		groupService.updateGroup(dto);
 	}
 	

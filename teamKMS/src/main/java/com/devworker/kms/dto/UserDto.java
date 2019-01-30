@@ -3,12 +3,18 @@ package com.devworker.kms.dto;
 import com.devworker.kms.dao.UserDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import javax.validation.constraints.NotBlank;
+
 public class UserDto{
+	@NotBlank
 	private String id;
+	@NotBlank
 	private String name;
+	@NotBlank
 	private String type;
 	private int groupId;
 	private String groupName;
+	@NotBlank
 	private String password;
 	
 	public String getId() {
