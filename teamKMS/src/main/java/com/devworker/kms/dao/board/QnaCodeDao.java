@@ -9,13 +9,13 @@ import com.devworker.kms.dao.MenuDao;
 public class QnaCodeDao {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String temp;
+	private long temp;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
 	private MenuDao menuId;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "board_id", referencedColumnName = "board_id")
 	private BoardDao boardId;
 

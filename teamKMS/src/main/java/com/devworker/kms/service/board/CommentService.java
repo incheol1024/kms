@@ -63,7 +63,7 @@ public class CommentService {
 
 	/**
 	 * @param commentDao      commentDao 객체입니다.
-	 * @param fileTransactKey 트랜잭션 처리를 위한 키 값입니다.
+	 * @param fileTransactKey 파일 트랜잭션 처리를 위한 키 값입니다.
 	 * @param fileCount       트랜잭션 처리를 위해 파일 갯수를 비교하기 위한 값입니다.
 	 * @return 트랜잭션이 정상 처리 되면 등록된 CommentDao 객체를 리턴합니다.
 	 * @throws Exception 여러가지 예외를 던질 수 있습니다. 호출하는 컨트롤러에서 예외를 구분하여 처리해야 합니다.
@@ -76,7 +76,7 @@ public class CommentService {
 		Optional<UserDao> optionalUserDao = userRepo.findById(userId);
 		commentDao.setCmtUserId(optionalUserDao.get().getName());
 
-		if (FileTransactionUtil.isSameTransaction(fileTransactKey, fileCount)) {
+		if (!FileTransactionUtil.isSameTransaction(fileTransactKey, fileCount)) {
 
 			/*
 			 * 파일 rollback 과정(파일에 대한 DB정보와 물리적파일 삭제)에서 예외가 발생할 수 있음. 어떻게 처리할 것인지 생각해봐야함.

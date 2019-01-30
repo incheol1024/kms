@@ -40,7 +40,7 @@ public class DocService {
 	FileHandler fileHandler;
 
 	@Transactional
-	public List<DocDao> addDoc(BoardDao boardId, int cmtId, List<MultipartFile> files) throws Exception {
+	public String addDoc(BoardDao boardId, int cmtId, List<MultipartFile> files) throws Exception {
 		Optional<UserDao> optionalUser = userRepo.findById(CommonUtil.getCurrentUser());
 		UserDao user = optionalUser.get();
 		List<DocDao> docList = new ArrayList<DocDao>();
@@ -67,7 +67,7 @@ public class DocService {
 			// 조건1. 메모리에 올라간 파일 정보와 댓글정보가 같은 키값을 갖고 있어야 한다.
 			docList.add(docDao);
 		}
-		return docList;
+		return key;
 	}
 
 	public List<DocDao> listDoc(int boardId) {

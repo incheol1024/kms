@@ -39,20 +39,39 @@ public class DocController {
 	@Autowired
 	DocService docSevice;
 
+	/**
+	 * @param boardId
+	 * @param cmtId
+	 * @param multiPartFile
+	 * @return fileTransactKey of String type
+	 * @throws Exception
+	 */
 	@PostMapping("/upload/comment")
-	public List<DocDao> uploadCommentFile(@RequestParam(name = "boardId") BoardDao boardId,
+	public String uploadCommentFile(@RequestParam(name = "boardId") BoardDao boardId,
 			@RequestParam(name = "cmtId") int cmtId,
 			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
 		return docService.addDoc(boardId, cmtId, multiPartFile);
 	}
 
+	/**
+	 * @param boardId
+	 * @param cmtId
+	 * @param multiPartFile
+	 * @return fileTransactKey of String type
+	 * @throws Exception
+	 */
 	@PostMapping("/upload/board")
-	public List<DocDao> uploadBoardFile(@RequestParam(name = "boardId") BoardDao boardId,
+	public String uploadBoardFile(@RequestParam(name = "boardId") BoardDao boardId,
 			@RequestParam(name = "cmtId") int cmtId,
 			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
 		return docService.addDoc(boardId, cmtId, multiPartFile);
 	}
 
+	/**
+	 * @param filekey is docId that KMS_DOC table primary column value 
+	 * @return ResponseEntity 로 리턴하고있지만.. 다른 방식으로 리턴하는게 좋아보임 아직은 모름.
+	 * @throws IOException
+	 */
 	@GetMapping("/download")
 	public ResponseEntity<Resource> download(@RequestParam(name = "filekey") String filekey) throws IOException {
 		File file = docService.downDoc(filekey.trim());
