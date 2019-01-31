@@ -9,8 +9,7 @@
                             <h3 class="headline mb-0">Current Group</h3>
                         </div>
                     </v-card-title>
-                    <tree-component ref="tree" :items="items" :busname="'tree'" :cachekey="'id'"
-                                    @nodeevent="actived"></tree-component>
+                    <tree-component ref="tree" :items="items" :busname="'tree'" :cachekey="'id'" @nodeevent="actived"></tree-component>
                     <v-btn color="primary" @click="NewItem">New</v-btn>
                     <v-btn color="primary" @click="EditName">EditName</v-btn>
                     <v-btn color="primary" @click="DeleteItem">Delete</v-btn>
@@ -72,10 +71,10 @@
             var _this = this;
             axios.get("group")
                 .then(value => {
-                    _this.items = response.data;
+                    _this.items = value.data;
                     _this.$refs.tree.recurCache(_this.items);
                     _this.$refs.subtree.recurCache(_this.items);
-                }).catch(catchPromise);
+                }).catch(reason => catchPromise(reason));
         },
         data: () => ({
             items: {},
@@ -99,7 +98,7 @@
                                 _this.childitems.push(response.data.groupList[i]);
                             for (let i = 0; i < response.data.userList.length; i++)
                                 _this.childitems.push(response.data.userList[i]);
-                        }).catch(catchPromise);
+                        }).catch(reason => catchPromise(reason));
                 }
                 _this.loading = false;
             },
@@ -108,18 +107,16 @@
                 if (this.updateMode) {
                     _this.$refs.tree.active.items.name = _this.newname;
                     axios.post("group", _this.$refs.tree.active.items)
-                        .then(value => _this.$refs.tree.updateNode(_this.newname))
-                        .catch(catchPromise);
+                        .then(_this.$refs.tree.updateNode(_this.newname))
+                        .catch(reason => catchPromise(reason));
                 } else {
                     let temp = JSON.parse(JSON.stringify(GroupModel));
                     temp.parentId = _this.$refs.tree.active.items.id;
                     temp.name = this.newname;
-                    axios.put("group", temp)
-                        .then(value => {
-                            temp.id = response.data;
+                    axios.put("group", temp).then(value => {
+                            temp.id = value.data;
                             _this.$refs.tree.addNode(temp)
-                        })
-                        .catch(catchPromise);
+                        }).catch(reason => catchPromise(reason));
                 }
                 this.dialog = false;
             },
@@ -140,14 +137,14 @@
                 temp.parentId = _this.$refs.subtree.active.items.id;
                 temp.name = _this.$refs.tree.active.items.name;
                 axios.post("group", temp)
-                    .then(value => _this.$refs.tree.moveNode(_this.$refs.subtree.active.items.id))
-                    .catch(catchPromise);
+                    .then(_this.$refs.tree.moveNode(_this.$refs.subtree.active.items.id))
+                    .catch(reason => catchPromise(reason));
             },
             DeleteItem: function DeleteItem() {
                 let _this = this;
                 axios.delete("group/" + _this.$refs.tree.active.items.id)
-                    .then(value => _this.$refs.tree.deleteNode())
-                    .catch(catchPromise);
+                    .then(_this.$refs.tree.deleteNode())
+                    .catch(reason => catchPromise(reason));
             }
         }
     };

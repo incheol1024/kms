@@ -26,7 +26,7 @@
         <v-flex v-if="hideInput">
             <v-stepper v-model="stage">
                 <v-stepper-header>
-                    <v-stepper-step :complete="stage > 1" step="1">Input Infomation</v-stepper-step>
+                    <v-stepper-step :complete="stage > 1" step="1">Input Information</v-stepper-step>
                     <v-divider></v-divider>
                     <v-stepper-step :complete="stage > 2" step="2">Select Group</v-stepper-step>
                 </v-stepper-header>
@@ -88,19 +88,18 @@
             this.loading = true;
             let _this = this;
             axios.get("user").then(value => {
-                for (let i = 0; i < response.data.list.length; i++)
-                    _this.items.push(response.data.list[i]);
-            }).catch(catchPromise);
+                for (let i = 0; i < value.data.list.length; i++)
+                    _this.items.push(value.data.list[i]);
+            }).catch(reason => catchPromise(reason));
             axios.get("group")
-                .then(value => _this.groupItem.push(response.data))
-                .catch(catchPromise);
+                .then(value => _this.groupItem.push(value.data))
+                .catch(reason => catchPromise(reason));
             this.loading = false;
         },
         methods: {
             selectedTreeId() {
                 if (!this.active.length) return undefined;
-                const id = this.active[0];
-                return id;
+                return this.active[0];
             },
             addItem() {
                 this.updateMode = false;
@@ -118,8 +117,8 @@
                 var _this = this;
                 if (confirm("Are you sure you want to delete this item?")) {
                     axios.delete("user/" + item.id)
-                        .then(value => _this.items.splice(_this.items.indexOf(item), 1))
-                        .catch(catchPromise);
+                        .then(_this.items.splice(_this.items.indexOf(item), 1))
+                        .catch(reason => catchPromise(reason));
                 }
             },
             send() {
@@ -127,8 +126,8 @@
                 this.curitem.groupId = this.selectedTreeId();
                 let promise = axios.put("user", _this.curitem);
                 if (this.updateMode) promise = axios.post("user", _this.curitem)
-                promise.then(value => { if (!_this.updateMode) _this.items.push(response.data[0]) })
-                    .catch(catchPromise);
+                promise.then(value => { if (!_this.updateMode) _this.items.push(value.data[0]) })
+                    .catch(reason => catchPromise(reason));
                 this.stage = 3;
                 this.hideInput = false;
             }

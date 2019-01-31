@@ -97,7 +97,7 @@ var main = new Vue({
 		errormsg : "",
 		dialog : false
 	}),
-	created: function () {
+	created: function created() {
 		this.items.forEach(item => {
 			if (item.children.length < 1) {
 				axios.get("menu/" + item.type)
@@ -111,8 +111,7 @@ var main = new Vue({
 	},
 	methods: {
 		logout: function logout() {
-			axios.post("logout")
-				.then(function (response) {
+			axios.post("logout").then(function (response) {
 					window.location.replace('login');
 				}).catch(function (error) {
 					window.location.replace('login');

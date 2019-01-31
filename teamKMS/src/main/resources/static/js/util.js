@@ -4,20 +4,12 @@ const jsTojavaPage = function (pagination) {
     return {page: pagination.page, size: pagination.rowsPerPage, sort: pagination.sortBy + "," + str}
 };
 
-const ajaxCall = function(promise){
-
-
-}
-
 const catchPromise = function (error) {
-    openError(error.response.data);
-}
-
-
-
-
-
-
+    if(error.response !== 'undefined')
+        openError(error.response.data);
+    else
+        openError(error)
+};
 
 if (!Array.prototype.find) {
     Object.defineProperty(Array.prototype, 'find', {
