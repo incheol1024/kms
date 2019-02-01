@@ -6,7 +6,7 @@
                 <v-card raised>
                     <v-card-title primary-title>
                         <div>
-                            <h3 class="headline mb-0">Current Group</h3>
+                            <h4 class="headline mb-0">Current Group</h4>
                         </div>
                     </v-card-title>
                     <tree-component ref="tree" :items="items" :busname="'tree'" :cachekey="'id'" @nodeevent="actived"></tree-component>
@@ -23,7 +23,7 @@
                 <v-card raised>
                     <v-card-title primary-title>
                         <div>
-                            <h3 class="headline mb-0">Moved Group</h3>
+                            <h4 class="headline mb-0">Moved Group</h4>
                         </div>
                     </v-card-title>
                     <tree-component ref="subtree" :items="items" :busname="'subtree'" :cachekey="'id'"></tree-component>
