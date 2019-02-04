@@ -6,15 +6,20 @@ import com.devworker.kms.dao.MenuDao;
 
 @Entity
 @Table(name = "KMS_QNA_CODE")
+@IdClass(QnaCodeDaoId.class)
 public class QnaCodeDao {
+
+/*	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long temp;
-
+*/
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
 	private MenuDao menuId;
 
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "board_id", referencedColumnName = "board_id")
 	private BoardDao boardId;

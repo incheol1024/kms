@@ -1,6 +1,7 @@
 package com.devworker.kms.service.board;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dao.board.BoardDao;
+import com.devworker.kms.dao.board.CommentDao;
 import com.devworker.kms.dao.board.DocDao;
 import com.devworker.kms.dto.board.FileDto;
 import com.devworker.kms.exception.board.FileNotSavedException;
@@ -39,6 +41,14 @@ public class DocService {
 	@Qualifier(value = "fileHandlerImplLocal")
 	FileHandler fileHandler;
 
+	/**
+	 * 글 또는 댓글에 이미지 첨부 시 수행되는 메소드 입니다.
+	 * @param boardId
+	 * @param cmtId
+	 * @param files
+	 * @return
+	 * @throws Exception
+	 */
 	@Transactional
 	public String addDoc(BoardDao boardId, int cmtId, List<MultipartFile> files) throws Exception {
 		Optional<UserDao> optionalUser = userRepo.findById(CommonUtil.getCurrentUser());
@@ -49,8 +59,10 @@ public class DocService {
 		for (MultipartFile file : files) {
 			FileDto fileDto = fileHandler.processUploadFile(file);
 			DocDao docDao = new DocDao();
+			CommentDao commentDao = new CommentDao();
+			commentDao.setCmtId(cmtId);
 			docDao.setBoardId(boardId);
-			docDao.setCmtId(cmtId);
+			docDao.setCmtId(commentDao);
 			docDao.setDocPath(fileDto.getPath());
 			docDao.setDocSize(fileDto.getSize());
 			docDao.setDocUserId(user.getName());
@@ -59,29 +71,63 @@ public class DocService {
 				throw new FileNotSavedException("File Not Saved Database");
 
 			key = FileTransactionUtil.putFileInfo(key, docDao.getDocId());
-			// 값에 DocId 대신에 DocDao 넣는것을 고려해보자.
-
-			// 파일을 하나하나 저장하는데.. 댓글 저장 트랜잭션을 처리하기 위해서...
-			// 저장이 완료된 파일들은 메모리에 올려두고.. 하나씩 메모리에 올려두고..
-			// 나중에 댓글이 등록이 되면.. 댓글에 해당하는 파일들만 등록 처리해야함
-			// 조건1. 메모리에 올라간 파일 정보와 댓글정보가 같은 키값을 갖고 있어야 한다.
 			docList.add(docDao);
 		}
 		return key;
 	}
 
+	/**
+	 * @param boardId
+	 * @return
+	 */
 	public List<DocDao> listDoc(int boardId) {
-		return docRepo.findByBoardId(boardId);
+		BoardDao boardDao = new BoardDao();
+		boardDao.setBoardId(boardId);
+		return docRepo.findByBoardId(boardDao);
 	}
 
-	public DocDao updateDoc(int boardId, int cmtId, List<MultipartFile> multiPartFile) {
-		return null;
+	/**
+	 * 게시판글 또는 댓글의 이미지를 수정 시 수행되는 서비스 메소드 입니다.
+	 * @param boardId
+	 * @param cmtId
+	 * @param multiPartFile
+	 * @return transactKey type of String
+	 * @throws Exception
+	 */
+	@Transactional
+	public String updateDoc(int boardId, int cmtId, List<MultipartFile> multiPartFile) throws Exception {
+		BoardDao boardDao = new BoardDao();
+		boardDao.setBoardId(boardId);
+		CommentDao commentDao = new CommentDao();
+		commentDao.setCmtId(cmtId);
+		DocDao docDao = new DocDao();
+		docDao.setBoardId(boardDao);
+		docDao.setCmtId(commentDao);
+		/*
+		 * DocDao 객체를 생성하는데.. 업데이트 할 DocDao 객체만 가져온다.
+		 * DocDao 객체만 가져와서.
+		 * 
+		*/
+		String key="";
+		
+		for (MultipartFile file : multiPartFile) {
+			FileDto fileDto = fileHandler.processUploadFile(file);
+			docDao.setDocPath(fileDto.getPath());
+			docDao.setDocSize(fileDto.getSize());
+			docDao.setDocUserId(CommonUtil.getCurrentUser());
+			
+			if(docRepo.save(docDao) == null) 
+				throw new FileNotFoundException("File Not Saved Database");
+			
+			key =  FileTransactionUtil.putFileInfo(key, docDao.getDocId());
+		}
+		return key;
 	}
 
 	public void deleteDoc(int docId) throws Exception {
 		Optional<DocDao> opDocDao = docRepo.findById(docId);
 		if (!opDocDao.isPresent())
-			throw new RuntimeException("Doc is not found"); // 지정 예외 구현 해야함.
+			throw new RuntimeException("Doc is not found");  
 
 		DocDao docDao = opDocDao.get();
 		fileHandler.deleteFile(docId);

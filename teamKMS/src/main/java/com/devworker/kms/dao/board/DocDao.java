@@ -13,14 +13,18 @@ import javax.persistence.Table;
 @Table(name = "KMS_DOC")
 public class DocDao {
 
-	@ManyToOne
-	@JoinColumn(name = "board_id")
-	BoardDao boardId;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "doc_id")
 	int docId;
+
+	@ManyToOne
+	@JoinColumn(name = "board_id")
+	BoardDao boardId;
+
+	@ManyToOne
+	@JoinColumn(name = "cmt_id")
+	CommentDao cmtId;
 
 	@Column(name = "doc_path")
 	String docPath;
@@ -30,10 +34,6 @@ public class DocDao {
 
 	@Column(name = "doc_size")
 	int docSize;
-
-	@ManyToOne
-	@JoinColumn(name = "cmt_id")
-	CommentDao cmtId;
 
 	public DocDao() {
 	}
@@ -82,9 +82,8 @@ public class DocDao {
 		return cmtId;
 	}
 
-	public void setCmtId(int cmtId) {
-		CommentDao commentDao = new CommentDao();
-		commentDao.setCmtId(cmtId);
+	public void setCmtId(CommentDao cmtId) {
+		this.cmtId = cmtId;
 	}
 
 }
