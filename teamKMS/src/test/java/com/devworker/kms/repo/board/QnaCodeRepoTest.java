@@ -44,7 +44,7 @@ public class QnaCodeRepoTest {
 	@Test
 	public void _쿼리메소드테스트() {
 		List<QnaCodeDao> list = qnaCodeRepo.findByMenuId(menuRepo.findById(menuId).get());
-		assertThat(list.size()).isNotNull().isGreaterThan(1);
+		assertThat(list.size()).isNotNull().isGreaterThan(0);
 	}
 
 	@Test

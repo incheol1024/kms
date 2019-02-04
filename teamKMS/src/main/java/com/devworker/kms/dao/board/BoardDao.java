@@ -1,6 +1,6 @@
 package com.devworker.kms.dao.board;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "KMS_BOARD")
@@ -30,10 +28,10 @@ public class BoardDao {
 	String userId;
 
 	@Column(name = "reg_date")
-	LocalDate regDate;
+	LocalDateTime regDate;
 
 	@Column(name = "upd_date")
-	LocalDate updDate;
+	LocalDateTime updDate;
 
 	@Column(name = "hits")
 	int hits;
@@ -70,19 +68,19 @@ public class BoardDao {
 		this.userId = userId;
 	}
 
-	public LocalDate getRegDate() {
+	public LocalDateTime getRegDate() {
 		return regDate;
 	}
 
-	public void setRegDate(LocalDate regDate) {
+	public void setRegDate(LocalDateTime regDate) {
 		this.regDate = regDate;
 	}
 
-	public LocalDate getUpdDate() {
+	public LocalDateTime getUpdDate() {
 		return updDate;
 	}
 
-	public void setUpdDate(LocalDate updDate) {
+	public void setUpdDate(LocalDateTime updDate) {
 		this.updDate = updDate;
 	}
 
@@ -94,4 +92,12 @@ public class BoardDao {
 		this.hits = hits;
 	}
 
+	@Override
+	public String toString() {
+		return "BoardDao [boardId=" + boardId + ", subject=" + subject + ", contents=" + contents + ", userId=" + userId
+				+ ", regDate=" + regDate + ", updDate=" + updDate + ", hits=" + hits + "]";
+	}
+
+	
+	
 }

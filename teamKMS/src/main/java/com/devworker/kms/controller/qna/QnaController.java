@@ -34,14 +34,17 @@ public class QnaController {
 	@Autowired
 	QnaService qnaService;
 
-	@GetMapping("{menuId}")
+	@GetMapping("/{menuId}")
 	public List<BoardDao> qnaHome(@PathVariable int menuId) {
 		return qnaService.getFirstPageList(menuId);
 	}
 
-	@PostMapping("/register")
-	public BoardDao qnaRegiser(@RequestBody BoardDao boardDao) {
-		return qnaService.registerQuestion(boardDao);
+	@PostMapping("/register/{menuId}")
+	public String createQuestion(@RequestBody BoardDao boardDao, @PathVariable int menuId) {
+		logger.debug("BoardDao message Converting {} ", boardDao);
+		logger.debug("PathVariable data binding {} ", menuId);
+		qnaService.createQuestion(boardDao, menuId);
+		return boardDao.toString();
 	}
 
 	@GetMapping("/answer/{id}")

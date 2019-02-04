@@ -1,9 +1,13 @@
 package com.devworker.kms.service.qna;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,18 +59,33 @@ public class QnaService {
 	 */
 	public List<BoardDao> getFirstPageList(int menuId) {
 		MenuDao menuDao = menuRepo.findById(menuId).get();
+/*		
 		List<QnaCodeDao> qnaList = qnaCodeRepo.findByMenuId(menuDao);
+	
 		List<BoardDao> boardList = new ArrayList<BoardDao>();
+		logger.debug("boardDao.toString() {}" + qnaList.get(0).toString()); 
 		for(QnaCodeDao qna : qnaList) {
+			logger.debug("QnaCOdeDao 조회 BoardDao 리스트 {}", qna.getBoardId());
 			boardList.add(qna.getBoardId());
 		}
 		
-		return boardList;
+		//return boardList;
+*/		
+		return null;
 	}
 
-	public BoardDao registerQuestion(BoardDao boardDao) {
+	@Transactional
+	public BoardDao createQuestion(BoardDao boardDao, int menuId) {
 		boardDao.setUserId(CommonUtil.getCurrentUser());
-		return boardRepo.save(boardDao);
+		boardDao.setRegDate(LocalDateTime.now());
+		boardDao.setUpdDate(LocalDateTime.now());
+		BoardDao savedBoardDao = boardRepo.save(boardDao);
+		MenuDao menuDao = menuRepo.findById(menuId).get();
+		QnaCodeDao qnaCodeDao = new QnaCodeDao();
+		qnaCodeDao.setBoardId(boardDao);
+		qnaCodeDao.setMenuId(menuDao);
+		qnaCodeRepo.save(qnaCodeDao);
+		return savedBoardDao;
 	}
 
 	public Optional<BoardDao> findById(Integer id) {

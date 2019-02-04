@@ -31,7 +31,9 @@ public class DocRepoTest {
 	@Test
 	public void a_findByboardId_Test() {
 
-		List<DocDao> list = docRepo.findByBoardId(1);
+		BoardDao boardDao = new BoardDao();
+		boardDao.setBoardId(1);
+		List<DocDao> list = docRepo.findByBoardId(boardDao);
 
 		System.out.println(list.size());
 
