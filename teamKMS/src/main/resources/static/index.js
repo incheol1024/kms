@@ -145,13 +145,13 @@ var main = new Vue({
 
 router.push('title');
 
-/*Vue.config.errorHandler = function (err, vm, info) {
+Vue.config.errorHandler = function (err, vm, info) {
 	console.log(err);
-}*/
-/*
+}
+
 Vue.config.warnHandler = function (err, vm, info) {
 	console.log(err);
-}*/
+}
 
 openError = function openError(msg){
 	main.errormsg = msg;

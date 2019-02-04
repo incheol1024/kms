@@ -5,10 +5,12 @@ const jsTojavaPage = function (pagination) {
 };
 
 const catchPromise = function (error) {
-    if(error.response !== 'undefined')
+    if(typeof error.response === 'undefined')
+        openError(error.message);
+    else if(typeof error.response.data !== 'undefined')
         openError(error.response.data);
     else
-        openError(error)
+        openError(error.response);
 };
 
 if (!Array.prototype.find) {

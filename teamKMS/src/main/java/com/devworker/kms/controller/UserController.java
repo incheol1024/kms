@@ -1,9 +1,9 @@
 package com.devworker.kms.controller;
 
 import com.devworker.kms.dto.UserDto;
-import com.devworker.kms.dto.base.BasePageResDto;
 import com.devworker.kms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -41,18 +41,14 @@ public class UserController {
 	}
 	
 	@GetMapping("/group/{groupId}")
-	public List<UserDto> getGroupedUser(@PathVariable int groupId) {
-		return service.getGroupedUser(groupId);
+	public Page<UserDto> getGroupedUser(@PathVariable int groupId, Pageable pageable) {
+		return service.getGroupedUser(groupId,pageable);
 	}
 
 	@GetMapping
-	public BasePageResDto<UserDto> getUserListPaging(@PageableDefault(size = 999999)
-														 @SortDefault.SortDefaults({
-																 @SortDefault(sort = "name", direction = Sort.Direction.DESC)
-														 }) Pageable pageable)
+	public Page<UserDto> getUserListPaging(Pageable pageable)
 	{
-		BasePageResDto<UserDto> ret = service.getUserListPage(pageable);
-		return ret;
+		return  service.getUserListPage(pageable);
 	}
 	
 	@GetMapping("/total")
