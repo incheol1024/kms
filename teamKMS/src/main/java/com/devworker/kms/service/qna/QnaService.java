@@ -59,19 +59,20 @@ public class QnaService {
 	 */
 	public List<BoardDao> getFirstPageList(int menuId) {
 		MenuDao menuDao = menuRepo.findById(menuId).get();
-/*		
-		List<QnaCodeDao> qnaList = qnaCodeRepo.findByMenuId(menuDao);
+		
+		List<QnaCodeDao> qnaCodeList = qnaCodeRepo.findByMenuId(menuDao);
 	
 		List<BoardDao> boardList = new ArrayList<BoardDao>();
-		logger.debug("boardDao.toString() {}" + qnaList.get(0).toString()); 
-		for(QnaCodeDao qna : qnaList) {
+		
+		logger.debug("boardDao.toString() {}" + qnaCodeList.get(0).toString()); 
+		for(QnaCodeDao qna : qnaCodeList) {
 			logger.debug("QnaCOdeDao 조회 BoardDao 리스트 {}", qna.getBoardId());
 			boardList.add(qna.getBoardId());
 		}
 		
-		//return boardList;
-*/		
-		return null;
+		return boardList;
+		
+		//return null;
 	}
 
 	@Transactional

@@ -38,6 +38,11 @@ public class DocDao {
 	public DocDao() {
 	}
 
+	public DocDao(Integer docId, CommentDao cmtId) {
+		this.docId = docId;
+		this.cmtId = cmtId;
+	}
+
 	public BoardDao getBoardId() {
 		return boardId;
 	}

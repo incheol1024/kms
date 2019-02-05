@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
+import com.devworker.kms.dao.board.DocDao;
 import com.devworker.kms.dic.LikeType;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.exception.board.FileTransactionException;
@@ -68,14 +69,15 @@ public class CommentService {
 	 * @return 트랜잭션이 정상 처리 되면 등록된 CommentDao 객체를 리턴합니다.
 	 * @throws Exception 여러가지 예외를 던질 수 있습니다. 호출하는 컨트롤러에서 예외를 구분하여 처리해야 합니다.
 	 */
-	public CommentDao addComment(CommentDao commentDao, String fileTransactKey, int fileCount) throws Exception {
+	public CommentDao addComment(int boardId, String cmtContents, String fileTransactKey, int fileCount)
+			throws Exception {
 		String userId = CommonUtil.getCurrentUser();
-		if (userId == null)
-			throw new NotExistException("userId");
-
 		Optional<UserDao> optionalUserDao = userRepo.findById(userId);
-		commentDao.setCmtUserId(optionalUserDao.get().getName());
 
+		CommentDao commentDao = new CommentDao(new BoardDao(boardId), cmtContents);
+		commentDao.setCmtUserId(optionalUserDao.get().getName());
+		CommentDao savedCommentDao = commentRepo.save(commentDao);
+		
 		if (!FileTransactionUtil.isSameTransaction(fileTransactKey, fileCount)) {
 
 			/*
@@ -90,13 +92,25 @@ public class CommentService {
 			throw new FileTransactionException();
 		}
 
-		// 동일 트랜잭션에서 파일이 처리되었는지 확인되면 해당 키에 매핑되는 메모리 해제함.
+		/*
+		 * KMS_DOC 테이블에 해당 이미지 정보 commentId 업데이트 필요 수행하려면 1. docId 를 메모리에서 가져온다. 2.
+		 * docId 를 가지고 업데이트한다. 3. 업데이트 확인 되면 메모리 해제 후 정상 리턴한다. 4. 업데이트 실패하면 파일트랜잭션 롤백
+		 * 메소드 호출한다.
+		 */
+
+		List<Integer> fileList = FileTransactionUtil.getFileList(fileTransactKey);
+		for (Integer docId : fileList) {
+			if(docRepo.save(new DocDao(docId, savedCommentDao)) == null )
+				docService.rollbackFileTransaction(fileTransactKey);
+		}
+
 		FileTransactionUtil.removeFileInfoMemory(fileTransactKey);
+		// 동일 트랜잭션에서 파일이 처리되었는지 확인되면 해당 키에 매핑되는 메모리 해제함.
 
 		// 조건2. 파일 등록처리가 완료 되면 메모리를 해제해야 한다.
 		// 조건3. 파일 등록 처리를 하다가 예외가 발생하면 메모리를 해제해야한다.
 
-		return commentRepo.save(commentDao);
+		return savedCommentDao;
 	}
 
 	public List<CommentDao> findByBoardId(BoardDao boardId) throws Exception {

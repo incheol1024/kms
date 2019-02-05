@@ -1,6 +1,6 @@
 package com.devworker.kms.service.solution;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,8 +33,8 @@ public class SolutionService {
 
 	public BoardDao registerSolution(BoardDao boardDao) {
 		boardDao.setUserId(CommonUtil.getCurrentUser());
-		boardDao.setRegDate(LocalDate.now());
-		boardDao.setUpdDate(LocalDate.now());
+		boardDao.setRegDate(LocalDateTime.now());
+		boardDao.setUpdDate(LocalDateTime.now());
 		
 //		boardDao.setBoardId(boardId);
 		boardDao.setSubject("subject");

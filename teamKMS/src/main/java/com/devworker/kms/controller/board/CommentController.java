@@ -2,6 +2,8 @@ package com.devworker.kms.controller.board;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +16,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
+import com.devworker.kms.dto.board.CommentAndFileTransactionDto;
+import com.devworker.kms.dto.board.FileTransactionDto;
 import com.devworker.kms.service.board.CommentService;
 
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
 
+	private Logger logger = LoggerFactory.getLogger(CommentController.class);
+	
 	@Autowired
 	CommentService commentService;
 
@@ -28,13 +34,19 @@ public class CommentController {
 		return commentService.addComment(commentDao);
 	}
 
-	@PostMapping("/add/files")
-	public CommentDao addComment(@RequestBody CommentDao commentDao, @RequestParam String fileTransactKey,
-			@RequestParam int fileCount) throws Exception {
-		return commentService.addComment(commentDao, fileTransactKey, fileCount);
+	@PostMapping("/add/files/{boardId}")
+	public CommentDao addComment(@PathVariable int boardId, @RequestBody CommentAndFileTransactionDto comFileDto) throws Exception {
+
+		logger.debug("RequestBody Test = {}", comFileDto);
+/*		logger.debug("PathVaiable boardId = {}", boardId);
+		logger.debug("RequestBody CommentDao = {}", commentDao);
+		logger.debug("FileTranctionDto = {}", fileTransactionDto);
+*/		
+		return null;
+		//return commentService.addComment(boardId, cmtContents, fileTransactKey, fileCount);
 	}
 
-	@GetMapping("/{boardId}")
+	@GetMapping("/list/{boardId}")
 	public List<CommentDao> listComment(@PathVariable @RequestBody BoardDao boardId) throws Exception {
 		return commentService.findByBoardId(boardId);
 	}

@@ -15,12 +15,12 @@ public class QnaCodeDao {
 	private long temp;
 */
 	@Id
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "menu_id", referencedColumnName = "menu_id")
 	private MenuDao menuId;
 
-	@Id
-	@ManyToOne(fetch = FetchType.LAZY)
+	@Id 
+	@ManyToOne
 	@JoinColumn(name = "board_id", referencedColumnName = "board_id")
 	private BoardDao boardId;
 

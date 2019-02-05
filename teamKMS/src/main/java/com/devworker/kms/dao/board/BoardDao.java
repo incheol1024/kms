@@ -36,6 +36,12 @@ public class BoardDao {
 	@Column(name = "hits")
 	int hits;
 
+	public BoardDao() {
+	}
+	public BoardDao(int boardId) {
+		this.boardId = boardId;
+	}
+
 	public int getBoardId() {
 		return boardId;
 	}

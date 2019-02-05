@@ -18,6 +18,7 @@ import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.CommentDao;
 import com.devworker.kms.dao.board.DocDao;
 import com.devworker.kms.dto.board.FileDto;
+import com.devworker.kms.dto.board.FileTransactionDto;
 import com.devworker.kms.exception.board.FileNotSavedException;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.DocRepo;
@@ -50,19 +51,22 @@ public class DocService {
 	 * @throws Exception
 	 */
 	@Transactional
-	public String addDoc(BoardDao boardId, int cmtId, List<MultipartFile> files) throws Exception {
+	public FileTransactionDto addDoc(
+			//BoardDao boardId, 
+			//int cmtId,
+			List<MultipartFile> files) throws Exception {
 		Optional<UserDao> optionalUser = userRepo.findById(CommonUtil.getCurrentUser());
 		UserDao user = optionalUser.get();
-		List<DocDao> docList = new ArrayList<DocDao>();
-		String key = "";
-
+		String fileTransactKey = "";
+		int fileCount = 0;
+		
 		for (MultipartFile file : files) {
 			FileDto fileDto = fileHandler.processUploadFile(file);
 			DocDao docDao = new DocDao();
-			CommentDao commentDao = new CommentDao();
-			commentDao.setCmtId(cmtId);
-			docDao.setBoardId(boardId);
-			docDao.setCmtId(commentDao);
+			//CommentDao commentDao = new CommentDao();
+			//commentDao.setCmtId(cmtId);
+			//docDao.setBoardId(null);
+			//docDao.setCmtId(null);
 			docDao.setDocPath(fileDto.getPath());
 			docDao.setDocSize(fileDto.getSize());
 			docDao.setDocUserId(user.getName());
@@ -70,10 +74,14 @@ public class DocService {
 			if (docRepo.save(docDao) == null)
 				throw new FileNotSavedException("File Not Saved Database");
 
-			key = FileTransactionUtil.putFileInfo(key, docDao.getDocId());
-			docList.add(docDao);
+			fileTransactKey = FileTransactionUtil.putFileInfo(fileTransactKey, docDao.getDocId());
+			fileCount += 1; 
 		}
-		return key;
+		
+		FileTransactionDto fileTransactionDto = new FileTransactionDto();
+		fileTransactionDto.setFileTransactKey(fileTransactKey);
+		fileTransactionDto.setFileCount(fileCount);
+		return fileTransactionDto;
 	}
 
 	/**

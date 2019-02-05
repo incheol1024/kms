@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.board.DocDao;
+import com.devworker.kms.dto.board.FileTransactionDto;
 import com.devworker.kms.service.board.DocService;
 
 /**
@@ -47,10 +48,13 @@ public class DocController {
 	 * @throws Exception
 	 */
 	@PostMapping("/upload/comment")
-	public String uploadCommentFile(@RequestParam(name = "boardId") BoardDao boardId,
-			@RequestParam(name = "cmtId") int cmtId,
+	public FileTransactionDto uploadCommentFile(@RequestParam(name = "boardId") BoardDao boardId,
+			//@RequestParam(name = "cmtId") int cmtId,
 			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
-		return docService.addDoc(boardId, cmtId, multiPartFile);
+		return docService.addDoc(
+				//boardId, 
+				//cmtId, 
+				multiPartFile);
 	}
 
 	/**
@@ -60,13 +64,14 @@ public class DocController {
 	 * @return fileTransactKey of String type
 	 * @throws Exception
 	 */
+/*	
 	@PostMapping("/upload/board")
 	public String uploadBoardFile(@RequestParam(name = "boardId") BoardDao boardId,
 			@RequestParam(name = "cmtId") int cmtId,
 			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
 		return docService.addDoc(boardId, cmtId, multiPartFile);
 	}
-
+*/
 	/**
 	 * @param filekey is docId that KMS_DOC table primary column value 
 	 * @return ResponseEntity 로 리턴하고있지만.. 다른 방식으로 리턴하는게 좋아보임 아직은 모름.

@@ -47,7 +47,7 @@
                 {{ answer.cmtUserId }} - {{ answer.cmtDate }}
 
                 <v-spacer></v-spacer>
-                <v-btn flat icon @click="changeCommentStatus(answer.cmtId, index)">
+                <v-btn flat icon>
                   <v-icon>build</v-icon>
                 </v-btn>
                 <v-btn flat icon @click="deleteComment(answer.cmtId, index)">
@@ -61,19 +61,15 @@
               <div>
                 <span>{{ answer.cmtContents}}</span>
               </div>
+
             </v-card-text>
             <v-card-actions>
-              <v-btn flat icon color="blue lighten-2" @click="updateLike(answer.cmtId)">
+              <v-btn flat icon color="blue lighten-2">
                 <v-icon>thumb_up</v-icon>
               </v-btn>
               <v-btn flat icon color="red lighten-2">
                 <v-icon>thumb_down</v-icon>
               </v-btn>
-              <v-spacer></v-spacer>
-              <template v-if="updateShow" >
-              <v-btn color="success">수정하기</v-btn>
-              <v-btn color="warning">취소하기</v-btn>
-              </template>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -101,11 +97,11 @@
       <input type="submit" value="댓글 등록 테스트" />
     </form>
 
-      <form @submit.prevent="addFile">
-        <input type="file" id="files" ref="files" multiple @change="handleFileUpload()" />
-        <!-- <input type="submit" value="파일 등록 테스트" /> -->
-        <v-btn @click="addFile"> 파일등록테스트</v-btn>
-      </form>
+    <form @submit.prevent="addFile">
+      <input type="file" id="files" ref="files" multiple @change="handleFileUpload()" />
+      <!-- <input type="submit" value="파일 등록 테스트" /> -->
+      <v-btn @click="addFile"> 파일등록테스트</v-btn>
+    </form>
 
 
   </v-form>
@@ -127,7 +123,9 @@ module.exports = {
       cmtDate: "",
       multiPartFile: [],
       answers: [],
-      updateShow: [],
+      docs: [],
+      fileTransactKey:"",
+      fileCount:0,
       _this: this
     }
   },
@@ -139,8 +137,9 @@ module.exports = {
     var _this = this;
     this.getQuestionById(_this);
     this.getCommentById(_this);
-  //  this.setShowValue();
+    //this.getDocById(_this);
   },
+
   methods: {
     handleFileUpload: function() {
       console.log("handleFileUpload is called : ");
@@ -159,18 +158,6 @@ module.exports = {
       }
 
     },
-    changeCommentStatus: function(cmtId, index) {
-      console.log("changeCommentStatus is called cmtId =  " + cmtId + ", index = " + index);
-
-      this.updateShow = !this.updateShow
-
-    },
-    setShowValue: function(cmtId, index) {
-      console.log("changeCommentStatus is called cmtId =  " + cmtId + ", index = " + index);
-
-      this.updateShow = !this.updateShow
-
-    },
     getQuestionById: function(_this) {
       axios.get("qna/answer/" + _this.$route.params.qid)
         .then(
@@ -184,7 +171,7 @@ module.exports = {
         })
     },
     getCommentById: function(_this) {
-      axios.get("comment/" + _this.$route.params.qid)
+      axios.get("comment/list/" + _this.$route.params.qid)
         .then(
           function(response) {
             for (var i = 0; i < response.data.length; i++) {
@@ -197,7 +184,27 @@ module.exports = {
           console.log(error)
         })
     },
+    getDocById: function(_this) {
+      axios.get("comment/" + _this.$route.params.qid)
+        .then(
+          function(response) {
+            for (var i = 0; i < response.data.length; i++) {
+              console.log(response.data[i]);
+              _this.docs.push(response.data[i]);
+            }
+          }
+        )
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
     addComment: function() {
+
+      if(this.fileTransactKey != null) {
+        this.addCommentFile(this.fileTransactKey, this.fileCount);
+        return;
+      }
+      
       console.log("addComment function is called");
       var _this = this;
       let formData = new FormData();
@@ -211,9 +218,7 @@ module.exports = {
         .then(
           function(response) {
             // router.push("/qna/answer/" + _this.name + "/" + _this.id + "/" + response.data.boardId );
-
-            _this.answers.push(response.data);
-
+            //_this.answers.push(response.data);
             console.log(response.data);
           }
         )
@@ -221,11 +226,37 @@ module.exports = {
           console.log(error)
         })
     },
-    updateComment: function(cmtId, index) {
-      console.log("updateComment function is called cmtId = " + cmtId + "index = " + index);
+    addCommentFile: function(fileTransactKey, fileCount) {
+      
+      console.log("addComment function is called and fileTransactKey = " + fileTransactKey + " and fileCount = " + fileCount);
+      var _this = this;
+
+      axios.post('/comment/add/files/' + this.$route.params.qid, {
+          "commentDao": {
+            "cmtContents": this.cmtContents
+          },
+          "fileTranscationDto": {
+            "fileTransactKey": fileTransactKey,
+            "fileCount": fileCount
+          }
+                  })
+        .then(
+          function(response) {
+            // router.push("/qna/answer/" + _this.name + "/" + _this.id + "/" + response.data.boardId );
+            //_this.answers.push(response.data);
+            console.log(response.data);
+          }
+        )
+        .catch(function(error) {
+          console.log(error)
+        })
+    },
+    updateComment: function() {
+      console.log("updateComment function is called");
       axios.post('/comment/update', {
           boardId: this.boardId,
-          cmtContents: this.cmtId
+          cmtId: this.cmtId,
+          cmtContents: this.cmtContents
         })
         .then(
           function(response) {
@@ -265,10 +296,10 @@ module.exports = {
     addFile: function() {
       console.log("file submit button click" + "boarId: " + this.boardId + ", cmtId: " + this.cmtId + " , multipartFile: " + this.multiPartFile);
       var _this = this;
-      let formData = new FormData();
+      let formData = new FormData(); 
 
       formData.append('boardId', this.boardId);
-      formData.append('cmtId', this.cmtId);
+      //formData.append('cmtId', this.cmtId);
       for (var i = 0; i < this.multiPartFile.length; i++) {
         let file = this.multiPartFile[i];
         formData.append('multiPartFile', file);
@@ -283,7 +314,10 @@ module.exports = {
         .then(
           function(response) {
             //            _this.answers.push(response.data);
-            console.log(response.data);
+            console.log(response.data.fileTransactKey);
+            console.log(response.data.fileCount);
+            _this.fileTransactKey = response.data.fileTransactKey;
+            _this.fileCount = response.data.fileCount;
           }
         )
         .catch(function(error) {
@@ -292,8 +326,7 @@ module.exports = {
     },
     updateLike: function(cmtId) {
       console.log("updateLike function is called");
-      var _this = this;
-      axios.post('/comment/' + cmtId + '/like/')
+      axios.post('/comment/like' + cmtId)
         .then(
           function(response) {
             _this.answers.push(response.data);
@@ -306,7 +339,7 @@ module.exports = {
     },
     updateUnLike: function() {
       console.log("updateUnLike function is called");
-      axios.post('/comment/' + cmtId + '/unlike', {
+      axios.post('/comment/unlike', {
           cmtId: this.cmtId
         })
         .then(
@@ -322,7 +355,6 @@ module.exports = {
           console.log(error)
         })
     }
-
   }
 }
 </script>

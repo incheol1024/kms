@@ -43,6 +43,12 @@ public class CommentDao {
 	public CommentDao() {
 		this.cmtDate = LocalDateTime.now();
 	}
+	
+	public CommentDao(BoardDao boardId, String cmtContents) {
+		this.boardId = boardId;
+		this.cmtContents = cmtContents;
+		this.cmtDate = LocalDateTime.now();
+	}
 
 	public BoardDao getBoardId() {
 		return boardId;
