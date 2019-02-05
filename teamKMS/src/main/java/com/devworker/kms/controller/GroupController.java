@@ -52,7 +52,12 @@ public class GroupController {
 	
 	@GetMapping
 	public GroupDto getAllGroupList() {
-		return groupService.getAllGroupList();
+		return groupService.getAllGroupTree();
+	}
+
+	@GetMapping("/list")
+	public Page<GroupDto> getAllGroupTree(Pageable pageable){
+		return groupService.getAllGroupList(pageable);
 	}
 
 	@GetMapping("/child/{groupId}")

@@ -12,5 +12,6 @@ public interface GroupService {
 	void updateGroup(GroupDto dto);
 	Page<GroupDto> getGroupChild(int id, Pageable pageable);
 	GroupDto getGroup(int id);
-	GroupDto getAllGroupList();
+	GroupDto getAllGroupTree();
+	Page<GroupDto> getAllGroupList(Pageable pageable);
 }

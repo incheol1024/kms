@@ -3,7 +3,8 @@
                   :total-items="total" :loading="loading" must-sort class="elevation-1">
         <template slot="items" slot-scope="props">
             <tr>
-                <td v-for="value in props.item">{{ value }}</td>
+
+                <td v-if="mappingheader(prop)" v-for="(value,prop) in props.item">{{ value }}</td>
                 <td v-if="deletefunction != null || editfunction != null">
                     <v-icon v-if="editfunction" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
                     <v-icon v-if="deletefunction" small @click="deleteItem(props.item)">delete</v-icon>
@@ -62,6 +63,14 @@
                 let _this = this;
                 this.editfunction(item).then(_this.dataset.splice(_this.dataset.indexOf(item), 1))
                     .catch(reason => catchPromise(reason));
+            },
+            mappingheader : function mappingheader(prop) {
+                let max = this.header.length;
+                for (let i = 0; i < max; i++) {
+                    if(this.header[i].value === prop)
+                    return true;
+                }
+                return false;
             }
         }
     }

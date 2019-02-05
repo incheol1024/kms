@@ -4,7 +4,7 @@
             <v-card>
                 <v-card-title class="title">Acl List</v-card-title>
                 <v-layout>
-                    <table-component :header="aclheader" :pagefunction="aclpage" action="true"></table-component>
+                    <table-component :header="aclheader" :pagefunction="aclpage" :addfunction=null :deletefunction=null :editfunction=null :search=null></table-component>
                 </v-layout>
             </v-card>
         </v-flex>
@@ -17,7 +17,7 @@
                     <v-flex class="mr-3">
                         user,group 검색 가능한 테이블
                         그리고 선택
-                        <table-component :header="ugheader" :pagefunction="ugpage" action="true"></table-component>
+                        <table-component :header="ugheader" :pagefunction="ugpage" :addfunction=null :deletefunction=null :editfunction=null :search=null></table-component>
                     </v-flex>
 
                     <v-flex>
@@ -60,7 +60,7 @@
                 return axios.get("acl", item)
             },
             ugpage: function ugpage(item) {
-                return axios.get("group",item)
+                return axios.get("group/list",item)
             }
         }
     }

@@ -13,6 +13,7 @@ public class ExceptionController {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(value = Exception.class)
 	public String handleError(Exception e) {
+		e.printStackTrace();
 		return (e.getMessage() != null) ? e.getMessage() : "Server Null Pointer Exception";
 	}
 }

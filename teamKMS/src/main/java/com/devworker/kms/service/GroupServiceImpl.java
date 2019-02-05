@@ -83,8 +83,7 @@ public class GroupServiceImpl implements GroupService{
 	@Override
 	public Page<GroupDto> getGroupChild(int id, Pageable pageable) {
 		Page<GroupDao> groupChild = repo.getGroupChild(id,pageable);
-		Page<GroupDto> dtoChild = groupChild.map(GroupDao::getDto);
-		return dtoChild;
+		return groupChild.map(GroupDao::getDto);
 	}
 
 	@Override
@@ -94,14 +93,19 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	@Override
-	public GroupDto getAllGroupList() {
+	public GroupDto getAllGroupTree() {
 		GroupDto dto = new GroupDto();
 		dto.setId(0);
 		dto.setName("Root");
 		recurTreeMaker(dto);
 		return dto;
 	}
-	
+
+	@Override
+	public Page<GroupDto> getAllGroupList(Pageable pageable) {
+		return repo.findAll(pageable).map(GroupDao::getDto);
+	}
+
 	private void recurTreeMaker(GroupDto dto) {
 		Page<GroupDao> groupChild = repo.getGroupChild(dto.getId(),CommonUtil.getPage(Integer.MAX_VALUE));
 		for(GroupDao dao : groupChild) {

@@ -1,24 +1,19 @@
 package com.devworker.kms.service.solution;
 
-<<<<<<< HEAD
-=======
-import java.time.LocalDate;
->>>>>>> branch 'master' of https://github.com/incheol1024/kns.git
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.devworker.kms.dao.board.BoardDao;
 import com.devworker.kms.dao.solution.SolutionDao;
 import com.devworker.kms.repo.board.BoardRepo;
 import com.devworker.kms.repo.solution.SolutionRepo;
 import com.devworker.kms.util.CommonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class SolutionService {
