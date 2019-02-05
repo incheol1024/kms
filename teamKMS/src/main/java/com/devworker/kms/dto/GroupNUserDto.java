@@ -1,25 +1,27 @@
 package com.devworker.kms.dto;
 
+import org.springframework.data.domain.Page;
+
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GroupNUserDto {
 	@NotNull
-	private List<GroupDto> groupList = new ArrayList<>();
+	private Page<GroupDto> groupList;
 	@NotNull
-	private List<UserDto> userList = new ArrayList<>();
-	
-	public List<GroupDto> getGroupList() {
+	private Page<UserDto> userList;
+
+	public Page<GroupDto> getGroupList() {
 		return groupList;
 	}
-	public void setGroupList(List<GroupDto> groupList) {
+	public void setGroupList(Page<GroupDto> groupList) {
 		this.groupList = groupList;
 	}
-	public List<UserDto> getUserList() {
+	public Page<UserDto> getUserList() {
 		return userList;
 	}
-	public void setUserList(List<UserDto> userList) {
+	public void setUserList(Page<UserDto> userList) {
 		this.userList = userList;
 	}
 }

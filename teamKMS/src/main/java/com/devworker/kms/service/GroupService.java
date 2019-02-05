@@ -1,9 +1,8 @@
 package com.devworker.kms.service;
 
-import java.util.List;
-
-import com.devworker.kms.dao.GroupDao;
 import com.devworker.kms.dto.GroupDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface GroupService {
 	long countGroup();
@@ -11,7 +10,7 @@ public interface GroupService {
 	void deleteGroup(int id);
 	void forceDeleteGroup(int id);
 	void updateGroup(GroupDto dto);
-	List<GroupDto> getGroupChild(int id);
+	Page<GroupDto> getGroupChild(int id, Pageable pageable);
 	GroupDto getGroup(int id);
 	GroupDto getAllGroupList();
 }

@@ -9,8 +9,12 @@ import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.GroupRepo;
 import com.devworker.kms.util.AclUtil;
+import com.devworker.kms.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -45,8 +49,8 @@ public class GroupServiceImpl implements GroupService{
 	public void deleteGroup(int id) {
 		if(id == 0) throw  new NotAllowException("ROOT CAN'T Be Deleted");
 		AclUtil.checkPermission(PermissionType.DELETEGROUP);
-		List<UserDto> groupedUser = userService.getGroupedUser(id);
-		if(groupedUser.size() > 0) throw new ChildFoundException("Group Has Child. You Must Delete First");
+		Page<UserDto> groupedUser = userService.getGroupedUser(id, CommonUtil.getPage(1));
+		if(groupedUser.hasContent()) throw new ChildFoundException("Group Has Child. You Must Delete First");
 		repo.deleteById(id);
 	}
 	
@@ -69,22 +73,18 @@ public class GroupServiceImpl implements GroupService{
 	}
 
 	private void recurDelete(int id) {
-		List<GroupDao> groupChild = repo.getGroupChild(id, new Sort(Direction.ASC,"name"));
-		groupChild.parallelStream().forEach(groupDao -> {
-			recurDelete(groupDao.getId());
-			deleteGroup(groupDao.getId());
-		});
+		Page<GroupDao> groupChild = repo.getGroupChild(id, CommonUtil.getPage(Integer.MAX_VALUE));
+		for(GroupDao dao : groupChild){
+			recurDelete(dao.getId());
+			deleteGroup(dao.getId());
+		}
 	}
 
 	@Override
-	public List<GroupDto> getGroupChild(int id) {
-		List<GroupDao> groupChild = repo.getGroupChild(id,new Sort(Direction.ASC,"name"));
-		List<GroupDto> list = new ArrayList<>();
-		for (GroupDao groupDao : groupChild) {
-			GroupDto dto = groupDao.getDto();
-			list.add(dto);
-		}
-		return list;
+	public Page<GroupDto> getGroupChild(int id, Pageable pageable) {
+		Page<GroupDao> groupChild = repo.getGroupChild(id,pageable);
+		Page<GroupDto> dtoChild = groupChild.map(GroupDao::getDto);
+		return dtoChild;
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class GroupServiceImpl implements GroupService{
 	}
 	
 	private void recurTreeMaker(GroupDto dto) {
-		List<GroupDao> groupChild = repo.getGroupChild(dto.getId(), new Sort(Direction.ASC,"name"));
+		Page<GroupDao> groupChild = repo.getGroupChild(dto.getId(),CommonUtil.getPage(Integer.MAX_VALUE));
 		for(GroupDao dao : groupChild) {
 			GroupDto sub = new GroupDto();
 			sub.setId(dao.getId());

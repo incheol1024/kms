@@ -47,11 +47,21 @@
 <script>
     module.exports = {
         data: () => ({
-            aclheader: [],
-            aclpage: Function,
-            ugheader: [],
-            ugpage: Function
+            aclheader: [
+                {text: 'aclId', value: 'aclId'},
+                {text: 'aclName', value: 'aclName'}
+            ],
+            ugheader: [
+                {text: 'name', value: 'name'}
+            ]
         }),
-        methods: {}
+        methods: {
+            aclpage: function aclpage(item) {
+                return axios.get("acl", item)
+            },
+            ugpage: function ugpage(item) {
+                return axios.get("group",item)
+            }
+        }
     }
 </script>

@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -108,8 +109,8 @@ public class TeamKmsApplicationTests {
 
 	@Test
 	public void getUserListTest()  {
-		List<UserDto> userList = userService.getUserList();
-		assertThat(userList, not(IsEmptyCollection.empty()));
+		Page<UserDto> userList = userService.getUserList(CommonUtil.getPage(Integer.MAX_VALUE));
+		assertThat(userList, not(userList.hasContent()));
 	}
 
 	@WithMockUser(value = "ADMIN")
@@ -128,8 +129,8 @@ public class TeamKmsApplicationTests {
 		GroupDao dao = new GroupDao();
 		dao.setName("Test");
 		dao.setParentId(0);
-		List<GroupDto> list = groupService.getGroupChild(dao.getId());
-		assertThat(list, not(IsEmptyCollection.empty()));
+		Page<GroupDto> list = groupService.getGroupChild(dao.getId(), CommonUtil.getPage(1));
+		assertThat(list, not(list.hasContent()));
 	}
 
 	@Test

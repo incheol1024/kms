@@ -3,6 +3,9 @@ package com.devworker.kms.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,5 +20,9 @@ public abstract class CommonUtil {
 		    return authentication.getName();
 		}
 		return ANONYMOUS;
+	}
+
+	public static Pageable getPage(int size){
+		return PageRequest.of(0,size);
 	}
 }

@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    <script src="/webjars/http-vue-loader/1.3.5/src/httpVueLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.0/src/httpVueLoader.js"></script>
 	<script src="/js/model.js"></script>
+	<script src="/js/util.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
     <title>KMS Test Page</title>
@@ -13,7 +14,7 @@
 
 <body>
 <div>KMS Test Page</div>
-<p></p>
+
 <v-app id='test'>
 		<span>
 			TreeTest
@@ -27,14 +28,17 @@
 
 		<span>
 			Table Test
-		<table-component :header="header" :pagefunction="page" action="true"></table-component>
+		<table-component :header="header" :pagefunction="page" :addfunction=null :deletefunction=null :editfunction=null :search=null></table-component>
 		</span>
 </v-app>
-<script src="/webjars/vue/2.5.16/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+
 <script type="text/javascript">
     console.log("test");
 	Vue.use(Vuetify);
+
+
 
 	httpVueLoader.register(Vue, 'view/custom/tree-component.vue');
     httpVueLoader.register(Vue, 'view/custom/treenode-component.vue');
@@ -56,8 +60,7 @@
 					{ text: 'Carbs (g)', value: 'carbs' },
 					{ text: 'Protein (g)', value: 'protein' },
 					{ text: 'Iron (%)', value: 'iron' },
-					{ text: 'aa', value : 'bb'},
-					{ text : 'action' , value : 'cc'}
+					{ text: 'aa', value : 'bb'}
 				],
 				//tree
                 text: "",
@@ -128,12 +131,21 @@
 					resolve(new function(){
 						return {
 							data : {
-								list : items,
-								total : total
+								content : items,
+								totalElements : total
 							}
 						}
 					})
 				})
+			},
+			addp : function addp(){
+
+			},
+			delp : function delp(item){
+
+			},
+			editp : function editp(item){
+
 			},
 			getItem : function getItem () {
 				return [

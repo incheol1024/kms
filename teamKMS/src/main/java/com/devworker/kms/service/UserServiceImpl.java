@@ -3,7 +3,6 @@ package com.devworker.kms.service;
 import com.devworker.kms.dao.UserDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.UserDto;
-import com.devworker.kms.dto.base.BasePageResDto;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.util.AclUtil;
@@ -14,17 +13,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Service ("UserService")
-public class
-UserServiceImpl implements UserService {
+@Service("UserService")
+public class UserServiceImpl implements UserService {
     private final
     UserRepo repo;
     private final
@@ -33,29 +26,29 @@ UserServiceImpl implements UserService {
     PasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl( UserRepo repo,@Lazy GroupService service, PasswordEncoder encoder) {
+    public UserServiceImpl(UserRepo repo, @Lazy GroupService service, PasswordEncoder encoder) {
         this.repo = repo;
         this.service = service;
         this.encoder = encoder;
     }
 
     @Override
-    @Cacheable (key = "'userCount'", value = "userCache")
+    @Cacheable(key = "'userCount'", value = "userCache")
     public long getCount() {
         return repo.count();
     }
 
     @Override
-    public BasePageResDto<UserDto> getUserListPage(Pageable pageable) {
-        Page<UserDao> page = repo.findAll(pageable);
-        BasePageResDto<UserDto> ret = new BasePageResDto<>();
-        ret.setList(page.stream().map(UserDao::getDto).peek(userDto -> userDto.setGroupName(service.getGroup(userDto.getGroupId()).getName())).collect(Collectors.toList()));
-        ret.setTotal(page.getTotalElements());
-        return ret;
+    public Page<UserDto> getUserListPage(Pageable pageable) {
+        Page<UserDao> daoPage = repo.findAll(pageable);
+        return daoPage.map(UserDao::getDto).map(userDto -> {
+            userDto.setGroupName(service.getGroup(userDto.getGroupId()).getName());
+            return userDto;
+        });
     }
 
 
-    @CacheEvict (key = "'userCount'", value = "userCache")
+    @CacheEvict(key = "'userCount'", value = "userCache")
     public UserDto addUser(UserDto dto) {
         AclUtil.checkPermission(PermissionType.CREATEUSER);
         if (repo.existsById(dto.getId()))
@@ -67,7 +60,7 @@ UserServiceImpl implements UserService {
         return dto;
     }
 
-    @CacheEvict (key = "'userCount'", value = "userCache")
+    @CacheEvict(key = "'userCount'", value = "userCache")
     public void deleteUser(String id) {
         AclUtil.checkPermission(PermissionType.DELETEUSER);
         repo.deleteById(id);
@@ -90,23 +83,24 @@ UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getGroupedUser(int id) {
-        List<UserDao> daoList = repo.getGroupedUser(id, new Sort(Direction.ASC, "name"));
+    public Page<UserDto> getGroupedUser(int id, Pageable pageable) {
+        Page<UserDao> daoList = repo.getGroupedUser(id, pageable);
         return getDaoToDtoList(daoList, false);
     }
 
     @Override
-    public List<UserDto> getUserList() {
-        List<UserDao> daoList = repo.findAll();
+    public Page<UserDto> getUserList(Pageable pageable) {
+        Page<UserDao> daoList = repo.findAll(pageable);
         return getDaoToDtoList(daoList, true);
     }
 
-    private List<UserDto> getDaoToDtoList(List<UserDao> daoList, boolean addGroupName) {
-        return daoList.parallelStream().map(UserDao::getDto)
-                .peek(userDto -> {
+    private Page<UserDto> getDaoToDtoList(Page<UserDao> daoList, boolean addGroupName) {
+        return daoList.map(UserDao::getDto)
+                .map(userDto -> {
                     if (addGroupName)
                         service.getGroup(userDto.getGroupId()).setName(userDto.getGroupName());
-                }).collect(Collectors.toList());
+                    return userDto;
+                });
     }
 
 

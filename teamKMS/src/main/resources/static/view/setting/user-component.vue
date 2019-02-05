@@ -88,8 +88,8 @@
             this.loading = true;
             let _this = this;
             axios.get("user").then(value => {
-                for (let i = 0; i < value.data.list.length; i++)
-                    _this.items.push(value.data.list[i]);
+                for (let i = 0; i < value.data.content.length; i++)
+                    _this.items.push(value.data.content[i]);
             }).catch(reason => catchPromise(reason));
             axios.get("group")
                 .then(value => _this.groupItem.push(value.data))

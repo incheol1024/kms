@@ -5,10 +5,11 @@ import com.devworker.kms.dto.GroupNUserDto;
 import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/group")
@@ -45,8 +46,8 @@ public class GroupController {
 	}
 	
 	@GetMapping("/childGroup/{groupId}")
-	public List<GroupDto> getGroupChild(@PathVariable int groupId) {
-		return groupService.getGroupChild(groupId);
+	public Page<GroupDto> getGroupChild(@PathVariable int groupId, Pageable pageable) {
+		return groupService.getGroupChild(groupId,pageable);
 	}
 	
 	@GetMapping
@@ -55,10 +56,10 @@ public class GroupController {
 	}
 
 	@GetMapping("/child/{groupId}")
-	public GroupNUserDto getAllChildList(@PathVariable int groupId) {
+	public GroupNUserDto getAllChildList(@PathVariable int groupId,Pageable pageable) {
 		GroupNUserDto groupNUserDto = new GroupNUserDto();
-		groupNUserDto.setGroupList(groupService.getGroupChild(groupId));
-		groupNUserDto.setUserList(userService.getGroupedUser(groupId));
+		groupNUserDto.setGroupList(groupService.getGroupChild(groupId, pageable));
+		groupNUserDto.setUserList(userService.getGroupedUser(groupId, pageable));
 		return groupNUserDto;
 	}
 }
