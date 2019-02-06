@@ -1,11 +1,14 @@
 <template>
     <v-layout column>
-        <v-flex class="mb-3">
+        <v-flex>
             <v-card>
                 <v-card-title class="title">Acl List</v-card-title>
                 <v-layout>
-                    <table-component :header="aclheader" :pagefunction="aclpage" :addfunction=null :deletefunction=null :editfunction=null :search=null></table-component>
+                    <table-component :header="aclheader" :pagefunction="aclpage" :addfunction=null :deletefunction="delacl" :editfunction="editacl" :search=null></table-component>
                 </v-layout>
+                <v-card-actions>
+                    <v-btn color="primary">New ACL</v-btn>
+                </v-card-actions>
             </v-card>
         </v-flex>
 
@@ -15,22 +18,18 @@
                 <v-layout>
 
                     <v-flex class="mr-3">
-                        user,group 검색 가능한 테이블
-                        그리고 선택
                         <table-component :header="ugheader" :pagefunction="ugpage" :addfunction=null :deletefunction=null :editfunction=null :search=null></table-component>
                     </v-flex>
 
                     <v-flex>
-                        acl 리스트 >> user,또는 그룹이 선태된 경우
-                        그 이름의 acl은 활성화 시킴. 선택 후 confirm으로 업데이트 또는 new 시킴
                         <v-list>
-                            <v-list-tile>
+                            <v-list-tile v-for="value in acllist">
                                 <v-list-tile-action>
                                     <v-checkbox></v-checkbox>
                                 </v-list-tile-action>
 
                                 <v-list-tile-content>
-                                    <v-list-tile-title>Notifications</v-list-tile-title>
+                                    <v-list-tile-title>{{value.aclName}}</v-list-tile-title>
                                     <v-list-tile-sub-title>Allow notifications</v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </v-list-tile>
@@ -46,22 +45,47 @@
 
 <script>
     module.exports = {
+        created: function created() {
+            let _this = this;
+            axios.get("acl", {
+                params : getJavaMaxPage()
+            }).then(value => {
+                _this.total = value.data.totalElements;
+                let max = value.data.content.length;
+                for (let i = 0; i < max; i++) {
+                    _this.dataset.push(value.data.content[i]);
+                }
+            }).catch(reason => catchPromise(reason));
+        },
         data: () => ({
             aclheader: [
                 {text: 'aclId', value: 'aclId'},
-                {text: 'aclName', value: 'aclName'}
+                {text: 'aclName', value: 'aclName'},
+                {text: "action", sortable : false}
             ],
             ugheader: [
                 {text: 'name', value: 'name'}
-            ]
+            ],
+            acllist : {}
         }),
         methods: {
-            aclpage: function aclpage(item) {
-                return axios.get("acl", item)
+            aclpage: function aclpage(page) {
+                return axios.get("acl", {
+                    params : page
+                })
             },
-            ugpage: function ugpage(item) {
-                return axios.get("group/list",item)
+            delacl: function delacl(item) {
+                return axios.delete("acl/" + item.aclId)
+            },
+            editacl: function editacl(item) {
+                return axios.post("acl" ,item)
+            },
+            ugpage: function ugpage(page) {
+                return axios.get("group/list",{
+                    params : page
+                })
             }
+
         }
     }
 </script>

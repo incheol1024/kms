@@ -94,10 +94,10 @@
                     _this.childitems = [];
                     axios.get("group/child/" + _this.$refs.tree.active.items.id)
                         .then(response => {
-                            for (let i = 0; i < response.data.groupList.length; i++)
-                                _this.childitems.push(response.data.groupList[i]);
-                            for (let i = 0; i < response.data.userList.length; i++)
-                                _this.childitems.push(response.data.userList[i]);
+                            for (let i = 0; i < response.data.groupList.content.length; i++)
+                                _this.childitems.push(response.data.groupList.content[i]);
+                            for (let i = 0; i < response.data.userList.content.length; i++)
+                                _this.childitems.push(response.data.userList.content[i]);
                         }).catch(reason => catchPromise(reason));
                 }
                 _this.loading = false;

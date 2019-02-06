@@ -1,7 +1,11 @@
 const jsTojavaPage = function (pagination) {
     var str = "asc";
     if (pagination.descending) str = "desc";
-    return {page: pagination.page, size: pagination.rowsPerPage, sort: pagination.sortBy + "," + str}
+    return {page: pagination.page-1, size: pagination.rowsPerPage, sort: pagination.sortBy + "," + str}
+};
+
+const getJavaMaxPage = function () {
+    return {page: pagination.page - 1, size: 9999999999}
 };
 
 const catchPromise = function (error) {
