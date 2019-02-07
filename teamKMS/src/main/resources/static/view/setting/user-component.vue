@@ -4,11 +4,10 @@
             <v-card>
                 <v-card-title> User List
                     <v-spacer></v-spacer>
-                    <v-text-field v-model="search" append-icon="search" label="Search" single-line
-                                  hide-details></v-text-field>
+                    <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     <v-btn color="primary" dark class="mb-2" @click="addItem">New User</v-btn>
                 </v-card-title>
-                <v-data-table :headers="headers" :items="items" :loading="loading" :search="search" class="elevation-1">
+                <v-data-table :headers="headers" :items="items" :pagination.sync="pagination" :total-items="total" :loading="loading" :search="search" class="elevation-1">
                     <template slot="items" slot-scope="props">
                         <td>{{ props.item.id }}</td>
                         <td>{{ props.item.name }}</td>
@@ -67,6 +66,7 @@
             search: "",
             loading: true,
             pagination: {},
+            total : 0,
             headers: [
                 {text: "id", value: "id"},
                 {text: "name", value: "name"},
@@ -84,17 +84,30 @@
             active: [],
             groupItem: [],
         }),
+        watch: {
+            pagination: {
+                handler() {
+                    this.loading = true;
+                    this.items = [];
+                    let _this = this;
+                    axios.get("user", {
+                        params : jsTojavaPage(this.pagination)
+                    }).then(value => {
+                        _this.total = value.data.totalElements;
+                        let max = value.data.content.length;
+                        for (let i = 0; i < max; i++) {
+                            _this.items.push(value.data.content[i]);
+                        }
+                    }).catch(reason => catchPromise(reason));
+                    this.loading = false
+                }
+            }
+        },
         created: function () {
-            this.loading = true;
             let _this = this;
-            axios.get("user").then(value => {
-                for (let i = 0; i < value.data.content.length; i++)
-                    _this.items.push(value.data.content[i]);
-            }).catch(reason => catchPromise(reason));
             axios.get("group")
                 .then(value => _this.groupItem.push(value.data))
                 .catch(reason => catchPromise(reason));
-            this.loading = false;
         },
         methods: {
             selectedTreeId() {

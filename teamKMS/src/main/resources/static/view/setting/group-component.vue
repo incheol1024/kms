@@ -42,6 +42,7 @@
                               class="elevation-1">
                     <template slot="items" slot-scope="props">
                         <td>{{ props.item.name }}</td>
+                        <td>{{ props.item.type }}</td>
                     </template>
                 </v-data-table>
             </v-card>
@@ -82,7 +83,9 @@
             newname: "",
             search: "",
             loading: false,
-            headers: [{text: "name", value: "name"}],
+            headers: [{text: "name", value: "name"},
+                {text: "type", value: "type"},
+            ],
             dialog: false,
             updateMode: false
         }),
@@ -94,10 +97,14 @@
                     _this.childitems = [];
                     axios.get("group/child/" + _this.$refs.tree.active.items.id)
                         .then(response => {
-                            for (let i = 0; i < response.data.groupList.content.length; i++)
+                            for (let i = 0; i < response.data.groupList.content.length; i++) {
+                                response.data.groupList.content[i].type = "Group";
                                 _this.childitems.push(response.data.groupList.content[i]);
-                            for (let i = 0; i < response.data.userList.content.length; i++)
+                            }
+                            for (let i = 0; i < response.data.userList.content.length; i++) {
+                                response.data.userList.content[i].type = "User";
                                 _this.childitems.push(response.data.userList.content[i]);
+                            }
                         }).catch(reason => catchPromise(reason));
                 }
                 _this.loading = false;

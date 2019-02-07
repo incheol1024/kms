@@ -5,7 +5,7 @@ const jsTojavaPage = function (pagination) {
 };
 
 const getJavaMaxPage = function () {
-    return {page: pagination.page - 1, size: 9999999999}
+    return {page: 0, size: 9999999999}
 };
 
 const catchPromise = function (error) {

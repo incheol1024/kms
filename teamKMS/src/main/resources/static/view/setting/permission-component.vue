@@ -30,7 +30,7 @@
 
                                 <v-list-tile-content>
                                     <v-list-tile-title>{{value.aclName}}</v-list-tile-title>
-                                    <v-list-tile-sub-title>Allow notifications</v-list-tile-sub-title>
+                                    <v-list-tile-sub-title></v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </v-list-tile>
                         </v-list>
@@ -50,10 +50,9 @@
             axios.get("acl", {
                 params : getJavaMaxPage()
             }).then(value => {
-                _this.total = value.data.totalElements;
                 let max = value.data.content.length;
                 for (let i = 0; i < max; i++) {
-                    _this.dataset.push(value.data.content[i]);
+                    _this.acllist.push(value.data.content[i]);
                 }
             }).catch(reason => catchPromise(reason));
         },
@@ -66,7 +65,7 @@
             ugheader: [
                 {text: 'name', value: 'name'}
             ],
-            acllist : {}
+            acllist : []
         }),
         methods: {
             aclpage: function aclpage(page) {

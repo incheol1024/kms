@@ -1,12 +1,14 @@
 package com.devworker.kms.service.acl;
 
 import com.devworker.kms.dao.acl.AceDao;
+import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.acl.AceDto;
 import com.devworker.kms.repo.acl.AceRepo;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.devworker.kms.util.AclUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,16 +29,19 @@ public class AceService {
     }
 
     public String addAce(AceDto dto) {
+        AclUtil.checkPermission(PermissionType.CREATEPERMISSION);
         aclService.getAcl(dto.getAclId());
         return aceRepo.save(dto.getDao()).getAceId();
     }
 
     public void updateAce(AceDto dto) {
+        AclUtil.checkPermission(PermissionType.MODIFYPERMISSION);
         aclService.getAcl(dto.getAclId());
         aceRepo.save(dto.getDao());
     }
 
     public void deleteAce(AceDto dto) {
+        AclUtil.checkPermission(PermissionType.DELETEPERMISSION);
         aceRepo.delete(dto.getDao());
     }
 
