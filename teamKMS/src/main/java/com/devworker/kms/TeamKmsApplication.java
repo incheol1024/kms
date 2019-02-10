@@ -1,50 +1,77 @@
 package com.devworker.kms;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.multipart.support.MultipartFilter;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableAsync
 @EnableCaching
+@EnableSwagger2
 @SpringBootApplication
 @EnableAspectJAutoProxy
 public class TeamKmsApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(TeamKmsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TeamKmsApplication.class, args);
+    }
 
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(TeamKmsApplication.class);
-	}
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(TeamKmsApplication.class);
+    }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public MultipartResolver multiPartResolver() {
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		multipartResolver.setMaxUploadSize(100 * 1024 * 1024);
-		return multipartResolver;
-	}
+    @Bean
+    public MultipartResolver multiPartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(100 * 1024 * 1024);
+        return multipartResolver;
+    }
 
-	@Bean
-	@Order(0)
-	public MultipartFilter multipartFilter() {
-		MultipartFilter multipartFilter = new MultipartFilter();
-		multipartFilter.setMultipartResolverBeanName("multipartReso‌​lver");
-		return multipartFilter;
-	}
+    @Bean
+    @Order (0)
+    public MultipartFilter multipartFilter() {
+        MultipartFilter multipartFilter = new MultipartFilter();
+        multipartFilter.setMultipartResolverBeanName("multipartReso‌​lver");
+        return multipartFilter;
+    }
+
+    @Bean
+    public CacheManager getCache() {
+        return new EhCacheCacheManager(ehCacheManagerFactoryBean().getObject());
+    }
+
+    @Bean
+    public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
+        EhCacheManagerFactoryBean bean = new EhCacheManagerFactoryBean();
+        bean.setShared(true);
+        return bean;
+    }
+
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select().apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class)).build();
+    }
+
 }
