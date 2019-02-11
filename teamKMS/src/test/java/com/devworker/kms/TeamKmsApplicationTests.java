@@ -97,7 +97,7 @@ public class TeamKmsApplicationTests {
 	@Test
 	public void cleanAllTreeTest() throws SQLException {
 		Connection connection = dataSource.getConnection();
-		connection.createStatement().executeQuery("delete from KMS.KMSGroup where group_id != 0;");
+		connection.createStatement().executeQuery("delete from KMS.KMS_Group where group_id != 0;");
 		connection.commit();
 	}
 

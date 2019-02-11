@@ -15,8 +15,6 @@
                                 <v-list-tile-sub-title>Allow notifications</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
-
-
                     </v-list>
                 </v-layout>
                 <v-card-actions>
@@ -33,16 +31,14 @@
                         <v-text-field label="Acl Id"></v-text-field>
                         <v-text-field label="Acl Name"></v-text-field>
                         <v-container fluid>
-                            <v-checkbox v-model="selected" label="A" value="a"></v-checkbox>
-                            <v-checkbox v-model="selected" label="b" value="b"></v-checkbox>
-                            <v-checkbox v-model="selected" label="c" value="c"></v-checkbox>
-                            <v-checkbox v-model="selected" label="e" value="e"></v-checkbox>
-                            <v-checkbox v-model="selected" label="d" value="d"></v-checkbox>
-                            <v-checkbox v-model="selected" label="f" value="f"></v-checkbox>
-                            <v-checkbox v-model="selected" label="g" value="g"></v-checkbox>
-                            <v-checkbox v-model="selected" label="f" value="f"></v-checkbox>
-                            <v-checkbox v-model="selected" label="f" value="f"></v-checkbox>
-                            <v-checkbox v-model="selected" label="d" value="d"></v-checkbox>
+                            <v-layout v-for="i in 3" :key="i">
+                                <v-checkbox v-model="selected" label="User" :value="i"></v-checkbox>
+                                <v-checkbox v-model="selected" label="Group" :value="i+3"></v-checkbox>
+                                <v-checkbox v-model="selected" label="Permission" :value="i+6"></v-checkbox>
+                                <v-checkbox v-model="selected" label="Qna" :value="i+9"></v-checkbox>
+                                <v-checkbox v-model="selected" label="SOL" :value="i+12"></v-checkbox>
+                                <v-checkbox v-model="selected" label="SITE" :value="i+15"></v-checkbox>
+                            </v-layout>
                         </v-container>
                     </v-form>
                 </v-layout>

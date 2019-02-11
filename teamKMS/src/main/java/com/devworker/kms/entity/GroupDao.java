@@ -11,7 +11,7 @@ import com.devworker.kms.dto.GroupDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "KMSGroup")
+@Table(name = "KMS_Group")
 public class GroupDao {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

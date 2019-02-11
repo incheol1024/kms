@@ -9,7 +9,7 @@ import com.devworker.kms.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "KMSUser")
+@Table(name = "KMS_User")
 public class UserDao{
 	@Id
 	@Column(name = "user_id")
