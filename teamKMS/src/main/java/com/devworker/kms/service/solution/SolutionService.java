@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @Service
 public class SolutionService {
-
+ 
 	private Logger logger = LoggerFactory.getLogger(SolutionService.class);
 	
 	@Autowired

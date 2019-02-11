@@ -84,20 +84,8 @@ module.exports = {
       router.push("/qna/write/" + this.name + "/" + this.id);
     },
     moveToSpecificPage: function (question) {
-      var _this = this;
-
-      console.log('question value test : ' , question );
-      axios.get("qna/answer/"+ question.boardId)
-        .then(
-          function(response) {
-            console.log(1111);
-            router.push("/qna/answer/" + _this.name + "/" + _this.id + "/"+response.data.boardId);
-
-          }
-        )
-        .catch(function(error) {
-          console.log(error);
-        })    }
+      router.push("/qna/answer/" + _this.name + "/" + _this.id + "/"+ response.data.boardId);
+    }
   }
 };
 </script>

@@ -95,7 +95,7 @@ public class BoardDao {
 	}
 
 	public void setHits(int hits) {
-		this.hits = hits;
+		this.hits += hits;
 	}
 
 	@Override

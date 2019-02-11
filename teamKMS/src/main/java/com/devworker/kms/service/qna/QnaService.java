@@ -87,8 +87,10 @@ public class QnaService {
 		return savedBoardDao;
 	}
 
-	public Optional<BoardDao> findById(Integer id) {
-		return boardRepo.findById(id);
+	public BoardDao findById(Integer id) {
+		BoardDao boardDao = boardRepo.findById(id).get();
+		boardDao.setHits(1);
+		return boardRepo.save(boardDao);
 	}
 
 	public QnaDao findPostById(Integer id) {
