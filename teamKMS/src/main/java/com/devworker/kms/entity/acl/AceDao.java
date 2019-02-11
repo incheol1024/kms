@@ -1,4 +1,4 @@
-package com.devworker.kms.dao.acl;
+package com.devworker.kms.entity.acl;
 
 import com.devworker.kms.dto.acl.AceDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;

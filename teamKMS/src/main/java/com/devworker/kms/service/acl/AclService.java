@@ -1,6 +1,6 @@
 package com.devworker.kms.service.acl;
 
-import com.devworker.kms.dao.acl.AclDao;
+import com.devworker.kms.entity.acl.AclDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.acl.AclDto;
 import com.devworker.kms.exception.NotExistException;

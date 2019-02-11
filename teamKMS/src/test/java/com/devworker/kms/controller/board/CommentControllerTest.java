@@ -1,8 +1,8 @@
 /*
 package com.devworker.kms.controller.board;
 
-import com.devworker.kms.dao.board.BoardDao;
-import com.devworker.kms.dao.board.CommentDao;
+import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.board.CommentDao;
 import com.devworker.kms.repo.board.CommentRepo;
 import com.devworker.kms.service.board.CommentService;
 import com.fasterxml.jackson.core.JsonProcessingException;

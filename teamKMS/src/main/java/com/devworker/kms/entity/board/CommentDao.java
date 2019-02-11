@@ -1,4 +1,4 @@
-package com.devworker.kms.dao.board;
+package com.devworker.kms.entity.board;
 
 import java.time.LocalDateTime;
 

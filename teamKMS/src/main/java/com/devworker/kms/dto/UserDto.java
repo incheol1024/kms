@@ -1,19 +1,26 @@
 package com.devworker.kms.dto;
 
-import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.entity.UserDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotBlank;
 
 public class UserDto{
 	@NotBlank
+	@ApiModelProperty(notes = "사용자의 아이디. 중복 불가능하다.",required = true)
 	private String id;
+	@ApiModelProperty(notes = "사용자의 표기상의 이름",required = true)
 	@NotBlank
 	private String name;
+	@ApiModelProperty(notes = "사용자의 type. 현재는 이를 특별히 사용하지 않는다",required = true)
 	@NotBlank
 	private String type;
+	@ApiModelProperty(notes = "현재 부모 그룹. 반드시 지정되어야 한다.",required = true)
 	private int groupId;
+	@ApiModelProperty(notes = "부모 그룹의 이름. 특정한 경우에만 데이터가 채워진다.")
 	private String groupName;
+	@ApiModelProperty(notes = "사용자의 암호. 어떤경우에도 암호가 복호화 된 상태로 전달되어서는 안된다.")
 	@NotBlank
 	private String password;
 	

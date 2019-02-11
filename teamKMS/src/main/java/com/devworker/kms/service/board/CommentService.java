@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.devworker.kms.dao.UserDao;
-import com.devworker.kms.dao.board.BoardDao;
-import com.devworker.kms.dao.board.CommentDao;
-import com.devworker.kms.dao.board.DocDao;
+import com.devworker.kms.entity.UserDao;
+import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.board.CommentDao;
+import com.devworker.kms.entity.board.DocDao;
 import com.devworker.kms.dic.LikeType;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.exception.board.FileTransactionException;

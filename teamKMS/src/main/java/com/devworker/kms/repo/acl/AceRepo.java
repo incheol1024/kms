@@ -1,6 +1,6 @@
 package com.devworker.kms.repo.acl;
 
-import com.devworker.kms.dao.acl.AceDao;
+import com.devworker.kms.entity.acl.AceDao;
 import java.util.List;
 
 import org.springframework.data.domain.Page;

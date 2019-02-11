@@ -1,6 +1,6 @@
 package com.devworker.kms.service;
 
-import com.devworker.kms.dao.GroupDao;
+import com.devworker.kms.entity.GroupDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.dto.UserDto;
@@ -13,15 +13,9 @@ import com.devworker.kms.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service("GroupService")
 public class GroupServiceImpl implements GroupService{

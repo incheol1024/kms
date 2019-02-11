@@ -1,4 +1,4 @@
-package com.devworker.kms.dao.board;
+package com.devworker.kms.entity.board;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.entity.UserDao;
 
 @Entity
 @Table(name = "KMS_LIKE_CHECK")

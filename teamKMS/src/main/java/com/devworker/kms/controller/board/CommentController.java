@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devworker.kms.dao.board.BoardDao;
-import com.devworker.kms.dao.board.CommentDao;
+import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.board.CommentDao;
 import com.devworker.kms.dto.board.CommentAndFileTransactionDto;
-import com.devworker.kms.dto.board.FileTransactionDto;
 import com.devworker.kms.service.board.CommentService;
 
 @RestController

@@ -1,6 +1,6 @@
 package com.devworker.kms.repo;
 
-import com.devworker.kms.dao.GroupDao;
+import com.devworker.kms.entity.GroupDao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

@@ -6,11 +6,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.devworker.kms.dao.MenuDao;
+import com.devworker.kms.entity.MenuDao;
 import com.devworker.kms.dic.MenuType;
 import com.devworker.kms.service.MenuService;
-
-import javax.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/menu")

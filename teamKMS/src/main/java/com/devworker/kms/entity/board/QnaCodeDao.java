@@ -1,8 +1,8 @@
-package com.devworker.kms.dao.board;
+package com.devworker.kms.entity.board;
 
 import javax.persistence.*;
 
-import com.devworker.kms.dao.MenuDao;
+import com.devworker.kms.entity.MenuDao;
 
 @Entity
 @Table(name = "KMS_QNA_CODE")

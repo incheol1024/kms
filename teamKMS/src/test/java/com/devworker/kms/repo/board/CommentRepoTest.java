@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.devworker.kms.dao.board.BoardDao;
-import com.devworker.kms.dao.board.CommentDao;
+import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.board.CommentDao;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)

@@ -1,4 +1,4 @@
-package com.devworker.kms.dao.acl;
+package com.devworker.kms.entity.acl;
 
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.acl.AclDto;
@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Entity
 @Table(name = "KMS_ACL")

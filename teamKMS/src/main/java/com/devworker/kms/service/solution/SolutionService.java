@@ -1,7 +1,7 @@
 package com.devworker.kms.service.solution;
 
-import com.devworker.kms.dao.board.BoardDao;
-import com.devworker.kms.dao.solution.SolutionDao;
+import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.solution.SolutionDao;
 import com.devworker.kms.repo.board.BoardRepo;
 import com.devworker.kms.repo.solution.SolutionRepo;
 import com.devworker.kms.util.CommonUtil;

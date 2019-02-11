@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import com.devworker.kms.dao.MenuDao;
+import com.devworker.kms.entity.MenuDao;
 import com.devworker.kms.dic.MenuType;
 import com.devworker.kms.repo.MenuRepo;
 

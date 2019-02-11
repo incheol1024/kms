@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -14,12 +13,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.devworker.kms.dao.MenuDao;
-import com.devworker.kms.dao.board.BoardDao;
-import com.devworker.kms.dao.board.CommentDao;
-import com.devworker.kms.dao.board.DocDao;
-import com.devworker.kms.dao.board.QnaCodeDao;
-import com.devworker.kms.dao.qna.QnaDao;
+import com.devworker.kms.entity.MenuDao;
+import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.board.CommentDao;
+import com.devworker.kms.entity.board.QnaCodeDao;
+import com.devworker.kms.entity.qna.QnaDao;
 import com.devworker.kms.repo.MenuRepo;
 import com.devworker.kms.repo.board.BoardRepo;
 import com.devworker.kms.repo.board.CommentRepo;

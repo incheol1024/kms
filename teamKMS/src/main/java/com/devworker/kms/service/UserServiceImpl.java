@@ -1,6 +1,6 @@
 package com.devworker.kms.service;
 
-import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.entity.UserDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.exception.NotExistException;

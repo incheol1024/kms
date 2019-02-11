@@ -23,8 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.devworker.kms.dao.GroupDao;
-import com.devworker.kms.dao.MenuDao;
+import com.devworker.kms.entity.GroupDao;
+import com.devworker.kms.entity.MenuDao;
 import com.devworker.kms.dic.MenuType;
 import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.dto.UserDto;

@@ -3,8 +3,9 @@ package com.devworker.kms.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.devworker.kms.dao.GroupDao;
+import com.devworker.kms.entity.GroupDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -18,12 +19,17 @@ public class GroupDto {
 		ROOTGROUP.name = "ROOT";
 		ROOTGROUP.id = 0;
 	}
+
+	@ApiModelProperty(notes = "그룹 아이디. 디비에서 Auto increase한다")
 	@Min(value = 0)
 	private int id;
+	@ApiModelProperty(notes = "그룹의 이름",required = true)
 	@NotBlank
 	private String name;
+	@ApiModelProperty(notes = "부모 그룹의 이름",required = true)
 	@Min(value = 0)
 	private int parentId;
+	@ApiModelProperty(notes = "자식 그룹의 리스트. 특정 함수에서만 데이터가 채워짐")
 	private List<GroupDto> children  = new ArrayList<>();
 	
 	public int getId() {

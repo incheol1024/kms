@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.devworker.kms.dao.board.QnaCodeDao;
+import com.devworker.kms.entity.board.QnaCodeDao;
 import com.devworker.kms.repo.MenuRepo;
 
 @SpringBootTest

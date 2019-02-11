@@ -1,6 +1,6 @@
 package com.devworker.kms.service.acl;
 
-import com.devworker.kms.dao.acl.AceDao;
+import com.devworker.kms.entity.acl.AceDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.acl.AceDto;
 import com.devworker.kms.repo.acl.AceRepo;

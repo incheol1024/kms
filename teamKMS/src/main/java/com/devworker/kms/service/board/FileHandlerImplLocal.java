@@ -1,10 +1,7 @@
 package com.devworker.kms.service.board;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,13 +9,11 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.devworker.kms.dao.UserDao;
-import com.devworker.kms.dao.board.BoardDao;
-import com.devworker.kms.dao.board.DocDao;
+import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.board.DocDao;
 import com.devworker.kms.dto.board.FileDto;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.DocRepo;
-import com.devworker.kms.util.CommonUtil;
 
 @Component
 @Primary

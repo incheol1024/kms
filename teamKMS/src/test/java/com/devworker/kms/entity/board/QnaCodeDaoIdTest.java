@@ -1,7 +1,6 @@
-package com.devworker.kms.dao.board;
+package com.devworker.kms.entity.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;

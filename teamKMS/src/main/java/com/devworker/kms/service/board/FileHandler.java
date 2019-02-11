@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.devworker.kms.dao.board.BoardDao;
-import com.devworker.kms.dao.board.DocDao;
+import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.board.DocDao;
 import com.devworker.kms.dto.board.FileDto;
 
 @Service

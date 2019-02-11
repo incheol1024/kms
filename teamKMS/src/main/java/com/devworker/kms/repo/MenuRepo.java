@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.devworker.kms.dao.MenuDao;
+import com.devworker.kms.entity.MenuDao;
 
 public interface MenuRepo extends CrudRepository<MenuDao, Integer>{	
 	

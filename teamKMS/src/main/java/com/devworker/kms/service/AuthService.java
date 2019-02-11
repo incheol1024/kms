@@ -5,7 +5,7 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.devworker.kms.dao.UserDao;
+import com.devworker.kms.entity.UserDao;
 import com.devworker.kms.dto.UserDto;
 
 @Service
