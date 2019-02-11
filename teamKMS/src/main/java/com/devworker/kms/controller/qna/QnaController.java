@@ -39,7 +39,7 @@ public class QnaController {
 
 	@GetMapping("/answer/{id}")
 	public BoardDao getQnaById(@PathVariable Integer id) {
-		return qnaService.findById(id).get();
+		return qnaService.findById(id);
 	}
 
 }
