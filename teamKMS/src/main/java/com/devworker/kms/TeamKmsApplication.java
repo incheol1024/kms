@@ -22,6 +22,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Objects;
+
 @EnableAsync
 @EnableCaching
 @EnableSwagger2
@@ -58,7 +60,7 @@ public class TeamKmsApplication {
 
     @Bean
     public CacheManager getCache() {
-        return new EhCacheCacheManager(ehCacheManagerFactoryBean().getObject());
+        return new EhCacheCacheManager(Objects.requireNonNull(ehCacheManagerFactoryBean().getObject()));
     }
 
     @Bean

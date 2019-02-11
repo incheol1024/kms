@@ -2,21 +2,21 @@
     <v-layout>
         <v-flex>
             <v-card>
-                <v-card-title class="title">Acl List</v-card-title>
-                <v-layout>
-                    <v-list>
-                        <v-list-tile @click="">
-                            <v-list-tile-action>
-                                <v-checkbox v-model="notifications"></v-checkbox>
-                            </v-list-tile-action>
-
-                            <v-list-tile-content @click="notifications = !notifications">
-                                <v-list-tile-title>Notifications</v-list-tile-title>
-                                <v-list-tile-sub-title>Allow notifications</v-list-tile-sub-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                    </v-list>
-                </v-layout>
+                <v-card-title>
+                    <div>
+                        <h3 class="headline mb-0">Acl List</h3>
+                        <v-list two-line>
+                            <template v-for="data in listData" :key="i">
+                                <v-list-tile @click="">
+                                    <v-list-tile-content>
+                                        <v-list-tile-title>{{data.aclId}}</v-list-tile-title>
+                                        <v-list-tile-sub-title>{{data.aclName}}</v-list-tile-sub-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            </template>
+                        </v-list>
+                    </div>
+                </v-card-title>
                 <v-card-actions>
                     <v-btn color="primary" @click="newAcl">New</v-btn>
                 </v-card-actions>
@@ -66,14 +66,24 @@
 <script>
     module.exports = {
         data: () => ({
+            showlist: true,
+            showform: true,
+            listData: [],
             header: [
                 {text: 'name', value: 'name'},
                 {text: 'type', value: 'type'}
             ],
-            showlist: true,
-            showform: true,
-            selected :[]
+
+            selected: []
         }),
+        created: function created() {
+            let _this = this;
+            axios.get("acl", getJavaMaxPage())
+                .then(res => {
+                    _this.listData = res.data.content;
+                })
+                .catch(reason => catchPromise(reason));
+        },
         methods: {
             ugpage: function aclpage(page) {
                 return new Promise(page);

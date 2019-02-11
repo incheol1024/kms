@@ -2,6 +2,8 @@ package com.devworker.kms;
 
 import com.devworker.kms.dic.UserType;
 import com.devworker.kms.dto.*;
+import com.devworker.kms.dto.acl.AceDto;
+import com.devworker.kms.dto.acl.AclDto;
 import com.devworker.kms.dto.base.BasePageReqDto;
 import com.devworker.kms.dto.base.BasePageResDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -59,11 +61,14 @@ public class JsonModelTest {
 	}
 
 	@Test
-	public void test()  {
-		Map<String,String> map = new HashMap<>();
-		Map<String, String> collect = map.entrySet().stream().filter(entry -> "12".equals(entry.getKey().substring(0, 2))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-		Map<String, String> collect1 = map.entrySet().stream().filter(entry -> "22".equals(entry.getKey().substring(0, 2))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-		Map<String, String> collect2 =map.entrySet().stream().filter(entry -> "32".equals(entry.getKey().substring(0, 2))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+	public void makeAclModel() throws JsonProcessingException {
+		AclDto dto = new AclDto();
+		System.out.println(mapper.writeValueAsString(dto));
+	}
 
+	@Test
+	public void makeAceModel() throws JsonProcessingException {
+		AceDto dto = new AceDto();
+		System.out.println(mapper.writeValueAsString(dto));
 	}
 }

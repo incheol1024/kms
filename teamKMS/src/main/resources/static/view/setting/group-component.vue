@@ -117,7 +117,7 @@
                         .then(_this.$refs.tree.updateNode(_this.newname))
                         .catch(reason => catchPromise(reason));
                 } else {
-                    let temp = JSON.parse(JSON.stringify(GroupModel));
+                    let temp = Object.assign({},GroupModel);
                     temp.parentId = _this.$refs.tree.active.items.id;
                     temp.name = this.newname;
                     axios.put("group", temp).then(value => {
@@ -139,7 +139,7 @@
             },
             Move: function Move() {
                 let _this = this;
-                let temp = JSON.parse(JSON.stringify(GroupModel));
+                let temp = Object.assign({},GroupModel);
                 temp.id = _this.$refs.tree.active.items.id;
                 temp.parentId = _this.$refs.subtree.active.items.id;
                 temp.name = _this.$refs.tree.active.items.name;

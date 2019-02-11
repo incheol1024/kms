@@ -7,7 +7,7 @@
                     <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     <v-btn color="primary" dark class="mb-2" @click="addItem">New User</v-btn>
                 </v-card-title>
-                <v-data-table :headers="headers" :items="items" :pagination.sync="pagination" :total-items="total" :loading="loading" :search="search" class="elevation-1">
+                <v-data-table must-sort :headers="headers" :items="items" :pagination.sync="pagination" :total-items="total" :loading="loading" :search="search" class="elevation-1">
                     <template slot="items" slot-scope="props">
                         <td>{{ props.item.id }}</td>
                         <td>{{ props.item.name }}</td>
@@ -75,7 +75,7 @@
                 {text: "actions", value: "actions", sortable: false}
             ],
             items: [],
-            curitem: JSON.parse(JSON.stringify(UserModel)),
+            curitem: Object.assign({},UserModel),
             stage: 3,
             updateMode: false,
             hideInput: false,
@@ -116,7 +116,7 @@
             },
             addItem() {
                 this.updateMode = false;
-                this.curitem = JSON.parse(JSON.stringify(UserModel));
+                this.curitem = Object.assign({},UserModel);
                 this.stage = 1;
                 this.hideInput = true;
             },

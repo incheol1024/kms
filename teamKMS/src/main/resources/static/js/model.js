@@ -3,4 +3,7 @@ const GroupModel = {"id":0,"name":"Root","parentId":-1,"children":[]};
 const BASEPAGERESMODEL ={"list":[""],"total":30};
 const BASEPAGEMODEL = {"size": 5, "page": 0, "direction": "ASC", "name": ""};
 const BASEPAGEREQMODEL = {"data": {},"pageable": BASEPAGEMODEL};
+const ACLMODEL = {"aclId": "", "aclName": "", "hasPermission": ""};
+const ACEMODEL = {"aclId": "", "aceId": ""};
+
 

@@ -101,7 +101,7 @@
         methods: {
             aadd: function aadd() {
                 console.log(this.activesub);
-                var model = JSON.parse(JSON.stringify(GroupModel))
+				var model = Object.assign({},GroupModel);
                 model.name = this.text;
                 this.$refs.tree.addNode(model);
             },
