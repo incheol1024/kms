@@ -1,5 +1,5 @@
 <template>
-    <v-data-table :headers="header" :items="dataset" :pagination.sync="pagination" :search="search"
+    <v-data-table :headers="propheader" :items="dataset" :pagination.sync="pagination" :search="search"
                   :total-items="total" :loading="loading" must-sort class="elevation-1">
         <template slot="items" slot-scope="props">
             <tr>
@@ -27,7 +27,8 @@
             pagination: {},
             loading: false,
             dataset: [],
-            total: 0
+            total: 0,
+            propheader : header
         }),
         watch: {
             pagination: {
@@ -41,8 +42,10 @@
                         for (var i = 0; i < max; i++) {
                             _this.dataset.push(value.data.content[i]);
                         }
-                    }).catch(reason => catchPromise(reason));
-                    this.loading = false
+                    }).catch(reason => catchPromise(reason))
+                    .finally(
+                        this.loading = false
+                    );]
                 }
             }
         },

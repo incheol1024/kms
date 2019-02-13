@@ -12,14 +12,14 @@
         <v-container>
 			<v-card>
 				<v-list two-line>
-					<template v-for="(item, index) in pacthitmes">
-						<v-list-tile :key="index" avatar ripple>
+					<template v-for="(item) in pacthitmes" >
+						<v-list-tile  :key="item.title" avatar ripple>
 							<v-list-tile-content>
 								<v-list-tile-title>{{ item.title }}</v-list-tile-title>
 								<v-list-tile-sub-title class="text--primary">{{ item.headline }}</v-list-tile-sub-title>
 							</v-list-tile-content>				
 						</v-list-tile>
-            			<v-divider :key="index"></v-divider>
+            			<v-divider></v-divider>
 					</template>
 				</v-list>
 			</v-card>

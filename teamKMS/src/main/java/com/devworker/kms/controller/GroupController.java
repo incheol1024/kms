@@ -76,4 +76,13 @@ public class GroupController {
 		groupNUserDto.setUserList(userService.getGroupedUser(groupId, pageable));
 		return groupNUserDto;
 	}
+
+	@ApiOperation(value = "모든 그룹 및 유저 페이징으로 가져오기")
+	@GetMapping("/child")
+	public GroupNUserDto getAllList(Pageable pageable) {
+		GroupNUserDto groupNUserDto = new GroupNUserDto();
+		groupNUserDto.setGroupList(groupService.getAllGroupList(pageable));
+		groupNUserDto.setUserList(userService.getUserList(pageable));
+		return groupNUserDto;
+	}
 }
