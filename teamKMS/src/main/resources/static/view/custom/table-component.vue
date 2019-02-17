@@ -1,8 +1,11 @@
 <template>
-    <v-data-table :headers="propheader" :items="dataset" :pagination.sync="pagination" :search="search"
-                  :total-items="total" :loading="loading" must-sort class="elevation-1">
+    <v-data-table :headers="header" :items="dataset" :pagination.sync="pagination" :search="search" select-all
+                  :total-items="total" :loading="loading" must-sort class="elevation-1" v-model="selected">
         <template slot="items" slot-scope="props">
             <tr>
+                <td>
+                    <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
+                </td>
                 <td v-if="mappingheader(prop)" v-for="(value,prop) in props.item">{{ value }}</td>
                 <td v-if="deletefunction != null || editfunction != null">
                     <v-icon v-if="editfunction" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
@@ -14,8 +17,8 @@
 </template>
 
 <script>
-    module.exports = {
-        props: {
+    exports = {
+        props : {
             header: [],
             pagefunction: Function,
             search: "",
@@ -28,7 +31,7 @@
             loading: false,
             dataset: [],
             total: 0,
-            propheader : header
+            selected: []
         }),
         watch: {
             pagination: {
@@ -39,13 +42,11 @@
                     this.pagefunction(this.getSpringType(this.pagination)).then(value => {
                         _this.total = value.data.totalElements;
                         let max = value.data.content.length;
-                        for (var i = 0; i < max; i++) {
+                        for (let i = 0; i < max; i++) {
                             _this.dataset.push(value.data.content[i]);
                         }
                     }).catch(reason => catchPromise(reason))
-                    .finally(
-                        this.loading = false
-                    );]
+                    .finally( this.loading = false);
                 }
             }
         },

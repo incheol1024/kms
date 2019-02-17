@@ -34,15 +34,15 @@
                             <v-card-title class="title">
                                 <v-layout wrap row>
                                     <v-form>
-                                        <v-text-field label="Acl Id" v-model="curitem.aclId"></v-text-field>
-                                        <v-text-field label="Acl Name" v-model="curitem.aclName"></v-text-field>
+                                        <v-text-field label="Acl Id" v-model="curacl.aclId"></v-text-field>
+                                        <v-text-field label="Acl Name" v-model="curacl.aclName"></v-text-field>
                                         <v-layout v-for="i in 3" :key="i">
-                                            <v-checkbox v-model="curitem.hasPermission" label="User" :value="i"></v-checkbox>
-                                            <v-checkbox v-model="curitem.hasPermission" label="Group" :value="i+3"></v-checkbox>
-                                            <v-checkbox v-model="curitem.hasPermission" label="Permission" :value="i+6"></v-checkbox>
-                                            <v-checkbox v-model="curitem.hasPermission" label="Qna" :value="i+9"></v-checkbox>
-                                            <v-checkbox v-model="curitem.hasPermission" label="SOL" :value="i+12"></v-checkbox>
-                                            <v-checkbox v-model="curitem.hasPermission" label="SITE" :value="i+15"></v-checkbox>
+                                            <v-checkbox v-model="curacl.hasPermission" label="User" :value="i"></v-checkbox>
+                                            <v-checkbox v-model="curacl.hasPermission" label="Group" :value="i+3"></v-checkbox>
+                                            <v-checkbox v-model="curacl.hasPermission" label="Permission" :value="i+6"></v-checkbox>
+                                            <v-checkbox v-model="curacl.hasPermission" label="Qna" :value="i+9"></v-checkbox>
+                                            <v-checkbox v-model="curacl.hasPermission" label="SOL" :value="i+12"></v-checkbox>
+                                            <v-checkbox v-model="curacl.hasPermission" label="SITE" :value="i+15"></v-checkbox>
                                         </v-layout>
                                     </v-form>
                                 </v-layout>
@@ -58,9 +58,7 @@
                                         <v-spacer></v-spacer>
                                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                                     </v-layout>
-                                    <table-component :header="header" :pagefunction="ugpage" :addfunction=null
-                                                     :deletefunction=null :editfunction=null
-                                                     :search="search"></table-component>
+                                    <table-component header="header" pagefunction="ugpage" addfunction="confirmAcl" search="search"></table-component>
                                 </v-layout>
                             </v-card-title>
                             <v-card-actions>
@@ -82,9 +80,9 @@
                 {text: 'name', value: 'name'},
                 {text: 'type', value: 'type'}
             ],
-            selected: [],
             aclText: "Make",
-            curitem : Object.assign({}, ACLMODEL),
+            curacl : Object.assign({}, ACLMODEL),
+            curace : Object.assign({},ACEMODEL),
             search : "",
         }),
         created: function created() {
@@ -99,21 +97,19 @@
             ugpage: function aclpage(page) {
                 return axios.get("group/child",page)
             },
-            confirmAcl: function confirmAcl(item) {
-
+            confirmAcl: function confirmAcl() {
+                return axios.put("acl",this.curAcl)
             },
             setACE: function setList(item) {
                 let _this = this;
-                axios.put("acl", item).then(
-                    _this.listData.push(item)
-                ).catch(reason => catchPromise(reason));
+                axios.put("ace", item).then().catch(reason => catchPromise(reason));
             },
             newAcl: function newAcl() {
-                this.curitem = Object.assign({}, ACLMODEL);
+                this.curacl = Object.assign({}, ACLMODEL);
                 this.aclText = "Make";
             },
             setItem : function setItem(item){
-                this.curitem = item;
+                this.curacl = item;
                 this.aclText = "Update";
             }
 

@@ -33,11 +33,11 @@
                 <v-stepper-items>
                     <v-stepper-content step="1">
                         <v-card class="mb-5" color="lighten-1">
-                            <v-text-field :disabled="updateMode" v-model="curitem.id" label="ID"></v-text-field>
-                            <v-text-field v-model="curitem.name" label="NAME"></v-text-field>
-                            <v-text-field v-model="curitem.password" label="PASSWORD" type="password"></v-text-field>
+                            <v-text-field :disabled="updateMode" v-model="curAcl.id" label="ID"></v-text-field>
+                            <v-text-field v-model="curAcl.name" label="NAME"></v-text-field>
+                            <v-text-field v-model="curAcl.password" label="PASSWORD" type="password"></v-text-field>
                             <v-text-field v-model="samepass" label="PASSWORD CHECK" type="password"></v-text-field>
-                            <v-text-field v-model="curitem.groupName" label="Group Name" disabled></v-text-field>
+                            <v-text-field v-model="curAcl.groupName" label="Group Name" disabled></v-text-field>
                             <v-select :items="usertype" label="Type" solo></v-select>
                         </v-card>
                         <v-btn color="primary" @click="stage = 2">Continue</v-btn>
@@ -75,7 +75,7 @@
                 {text: "actions", value: "actions", sortable: false}
             ],
             items: [],
-            curitem: Object.assign({},UserModel),
+            curAcl: Object.assign({},UserModel),
             stage: 3,
             updateMode: false,
             hideInput: false,
@@ -136,9 +136,9 @@
             },
             send() {
                 let _this = this;
-                this.curitem.groupId = this.selectedTreeId();
-                let promise = axios.put("user", _this.curitem);
-                if (this.updateMode) promise = axios.post("user", _this.curitem)
+                this.curAcl.groupId = this.selectedTreeId();
+                let promise = axios.put("user", _this.curAcl);
+                if (this.updateMode) promise = axios.post("user", _this.curAcl)
                 promise.then(value => { if (!_this.updateMode) _this.items.push(value.data[0]) })
                     .catch(reason => catchPromise(reason));
                 this.stage = 3;
