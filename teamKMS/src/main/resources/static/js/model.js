@@ -6,4 +6,36 @@ const BASEPAGEREQMODEL = {"data": {},"pageable": BASEPAGEMODEL};
 const ACLMODEL = {"aclId": "", "aclName": "", "hasPermission": ""};
 const ACEMODEL = {"aclId": "", "aceId": ""};
 
+const TABLEOPTIONS = {
+    header : [],
+    search : "",
+    page : {
+        req : function (page){
+            return new Promise(function (resolve, reject) {})
+        },
+        res : function (value,component) {
+            component.total = value.data.totalElements;
+            let max = value.data.content.length;
+            for (let i = 0; i < max; i++) {
+                component.dataset.push(value.data.content[i]);
+            }
+        }
+    },
+    deleted : {
+        allow : false,
+        func : function (item){
+            return new Promise(function (resolve, reject) {})
+        }
+    },
+    edited : {
+        allow : false,
+        func : function (item){
+            return new Promise(function (resolve, reject) {})
+        }
+    },
+    select : {
+        allow : false,
+        selected : []
+    }
 
+};
