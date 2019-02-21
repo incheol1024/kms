@@ -30,7 +30,7 @@ const TABLEOPTIONS = {
     edited : {
         allow : false,
         func : function (item){
-            return new Promise(function (resolve, reject) {})
+
         }
     },
     select : {

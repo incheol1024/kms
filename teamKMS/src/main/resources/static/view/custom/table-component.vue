@@ -36,7 +36,7 @@
                     this.options.page.req(jsTojavaPage(this.pagination)).then(value => {
                         this.options.page.res(value,_this);
                     }).catch(reason => catchPromise(reason))
-                    .finally( this.loading = false);
+                    .finally(this.loading = false);
                 }
             }
         },
@@ -44,9 +44,8 @@
             addItem: function addItem(item) {
                 this.dataset.push(item);
             },
-            //쫌 더 고민
             editItem: function editItem(item) {
-                this.editfunction(item).catch(reason => catchPromise(reason));
+                this.options.edited.func(item);
             },
             deleteItem: function deleteItem(item) {
                 let _this = this;

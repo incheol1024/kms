@@ -28,7 +28,7 @@
 
 		<span>
 			Table Test
-		<table-component :header="header" :pagefunction="page" :addfunction=null :deletefunction=null :editfunction=null :search=null></table-component>
+		<table-component ref="table1" :options="option"></table-component>
 		</span>
 </v-app>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -53,6 +53,9 @@
         data: function data() {
             return {
             	//table
+				option : {
+
+				}
 				header :  [
 					{text: 'Dessert (100g serving)', value: 'name'},
 					{ text: 'Calories', value: 'calories' },
@@ -137,15 +140,6 @@
 						}
 					})
 				})
-			},
-			addp : function addp(){
-
-			},
-			delp : function delp(item){
-
-			},
-			editp : function editp(item){
-
 			},
 			getItem : function getItem () {
 				return [
