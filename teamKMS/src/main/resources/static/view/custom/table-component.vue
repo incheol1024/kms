@@ -1,4 +1,4 @@
-<template> //TODO:: USER REF
+<template>
     <v-data-table :headers="options.header" :items="dataset" :pagination.sync="pagination" :search="search" select-all
                   :total-items="total" :loading="loading" must-sort class="elevation-1" v-model="options.select.selected">
         <template slot="items" slot-scope="props">
@@ -18,9 +18,7 @@
 
 <script>
     exports = {
-        props : {
-            options : Object.assign({},TABLEOPTIONS)
-        },
+        props : ["options"],
         data: () => ({
             pagination: {},
             loading: false,

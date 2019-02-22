@@ -55,7 +55,7 @@ public class AclDao {
         dto.setAclId(aclId);
         dto.setAclName(aclName);
         String[] split = hasPermission.split(",");
-        dto.setHasPermission(Arrays.stream(split).map(s -> PermissionType.valueOf(s)).collect(Collectors.toList()));
+        dto.setHasPermission(Arrays.stream(split).map(PermissionType::valueOf).collect(Collectors.toList()));
         return dto;
     }
 }

@@ -27,11 +27,12 @@
 		</span>
 
 		<span>
-			Table Test
 		<table-component ref="table1" :options="option"></table-component>
+			<button @click="addtable"> </button>
 		</span>
 </v-app>
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<script src="/js/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
 
 <script type="text/javascript">
@@ -53,18 +54,7 @@
         data: function data() {
             return {
             	//table
-				option : {
-
-				}
-				header :  [
-					{text: 'Dessert (100g serving)', value: 'name'},
-					{ text: 'Calories', value: 'calories' },
-					{ text: 'Fat (g)', value: 'fat' },
-					{ text: 'Carbs (g)', value: 'carbs' },
-					{ text: 'Protein (g)', value: 'protein' },
-					{ text: 'Iron (%)', value: 'iron' },
-					{ text: 'aa', value : 'bb'}
-				],
+				option : Object.assign({},TABLEOPTIONS),
 				//tree
                 text: "",
                 datas: {
@@ -140,6 +130,9 @@
 						}
 					})
 				})
+			},
+			addtable : function addtable(item){
+            	this.$ref.table1.addItem(item);
 			},
 			getItem : function getItem () {
 				return [
