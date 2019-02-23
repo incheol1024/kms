@@ -2,24 +2,32 @@
 <v-content>
 <v-container fluid grid-list-md>
 <v-layout wrap>		
-
 	<v-flex d-flex xs12 lg6 md6>
 	<v-card>
 		<v-card-title class="purple">
 			<v-icon dark size="30" class="mr-3">mdi-magnify</v-icon>
-			<h2 class="display-1 white--text font-weight-light">New Patch Arrived</h2>
+			<h2 class="display-1 white--text font-weight-light">Patch Document</h2>
         </v-card-title>
         <v-container>
 			<v-card>
 				<v-list two-line>
-					<template v-for="(item) in pacthitmes" >
-						<v-list-tile  :key="item.title" avatar ripple>
-							<v-list-tile-content>
-								<v-list-tile-title>{{ item.title }}</v-list-tile-title>
-								<v-list-tile-sub-title class="text--primary">{{ item.headline }}</v-list-tile-sub-title>
-							</v-list-tile-content>				
-						</v-list-tile>
-            			<v-divider></v-divider>
+                    <template v-for="(item) in pacthitmes">
+                        <v-list-tile :key="item.title" avatar ripple>                       
+                            <v-btn icon>
+                                <v-icon large :style="{color: item.iconColor}">{{ item.icon }}</v-icon>
+                            </v-btn>
+                            <v-list-tile-content>                           
+                                <v-list-tile-sub-title class="text--primary">{{ item.headline }}</v-list-tile-sub-title>
+                                <v-list-tile-sub-title>{{ item.title }}</v-list-tile-sub-title>
+                            </v-list-tile-content>	  
+                            <v-btn icon>
+                                <v-icon large :style="{color: item.stIconColor}">{{ item.stIcon }}</v-icon>
+                            </v-btn>                          
+                            <v-btn icon>
+                                <v-icon color="material-icons">zoom_in</v-icon>
+                            </v-btn>        
+                        </v-list-tile>
+                        <v-divider :key="item.title"></v-divider>                         
 					</template>
 				</v-list>
 			</v-card>
@@ -94,7 +102,9 @@ module.exports = {
     ],
 	items: [],
 	pacthitmes : [
-		{ headline: 'EDM 4.1', title: 'EDM Bug Patch'}
+        { headline: 'ECM 1.0', title: 'ECM Bug Patch', iconColor: 'grey', icon: 'folder', stIconColor: 'blue', stIcon: 'fiber_new' },
+        { headline: 'EDM 2.0', title: 'EDM Bug Patch', iconColor: 'green', icon: 'assignment', stIconColor: 'orange', stIcon: 'warning' },
+        { headline: 'CPS 3.0', title: 'CPS Bug Patch', iconColor: 'blue', icon: 'update', stIconColor:'red', stIcon: 'error' }
 	]
   }),
   methods: {}
