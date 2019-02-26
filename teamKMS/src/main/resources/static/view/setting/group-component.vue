@@ -1,3 +1,4 @@
+.
 <template>
     <v-layout column>
 
@@ -9,7 +10,8 @@
                             <h4 class="headline mb-0">Current Group</h4>
                         </div>
                     </v-card-title>
-                    <tree-component ref="tree" :items="items" :busname="'tree'" :cachekey="'id'" @nodeevent="actived"></tree-component>
+                    <tree-component ref="tree" :items="items" :busname="'tree'" :cachekey="'id'"
+                                    @nodeevent="actived"></tree-component>
                     <v-btn color="primary" @click="NewItem">New</v-btn>
                     <v-btn color="primary" @click="EditName">EditName</v-btn>
                     <v-btn color="primary" @click="DeleteItem">Delete</v-btn>
@@ -38,13 +40,7 @@
                     <v-text-field v-model="search" append-icon="search" label="Search" single-line
                                   hide-details></v-text-field>
                 </v-card-title>
-                <v-data-table :headers="headers" :items="childitems" :loading="loading" :search="search"
-                              class="elevation-1">
-                    <template slot="items" slot-scope="props">
-                        <td>{{ props.item.name }}</td>
-                        <td>{{ props.item.type }}</td>
-                    </template>
-                </v-data-table>
+                <table-component ref="table" :headers="headers" :search="search"></table-component>
             </v-card>
         </v-flex>
 
@@ -79,35 +75,36 @@
         },
         data: () => ({
             items: {},
-            childitems: [],
             newname: "",
             search: "",
-            loading: false,
-            headers: [{text: "name", value: "name"},
-                {text: "type", value: "type"},
+            headers: [
+                {text: "name", value: "name", sortable : false},
+                {text: "type", value: "type", sortable : false},
             ],
             dialog: false,
             updateMode: false
         }),
         methods: {
-            actived: function actived() {
+            actived: function actived(page) {
                 let _this = this;
-                this.loading = true;
+                _this.$refs.table.clear();
                 if (_this.$refs.tree.active.items) {
-                    _this.childitems = [];
-                    axios.get("group/child/" + _this.$refs.tree.active.items.id)
-                        .then(response => {
-                            for (let i = 0; i < response.data.groupList.content.length; i++) {
-                                response.data.groupList.content[i].type = "Group";
-                                _this.childitems.push(response.data.groupList.content[i]);
-                            }
-                            for (let i = 0; i < response.data.userList.content.length; i++) {
-                                response.data.userList.content[i].type = "User";
-                                _this.childitems.push(response.data.userList.content[i]);
-                            }
-                        }).catch(reason => catchPromise(reason));
+                    axios.get("group/child/" + _this.$refs.tree.active.items.id, {
+                        params : page
+                    }).then(response => {
+                        let groupList = response.data.groupList.content;
+                        let userList = response.data.userList.content;
+                        _this.$refs.table.total = groupList.length + userList.length;
+                        for (let i = 0; i < groupList.length; i++) {
+                            groupList[i].type = "Group";
+                            _this.$refs.table.addFunction(groupList[i]);
+                        }
+                        for (let i = 0; i < userList.length; i++) {
+                            userList[i].type = "User";
+                            _this.$refs.table.addFunction(userList[i]);
+                        }
+                    }).catch(reason => catchPromise(reason));
                 }
-                _this.loading = false;
             },
             confirm: function confirm() {
                 let _this = this;
@@ -117,13 +114,13 @@
                         .then(_this.$refs.tree.updateNode(_this.newname))
                         .catch(reason => catchPromise(reason));
                 } else {
-                    let temp = Object.assign({},GroupModel);
+                    let temp = Object.assign({}, GroupModel);
                     temp.parentId = _this.$refs.tree.active.items.id;
                     temp.name = this.newname;
                     axios.put("group", temp).then(value => {
-                            temp.id = value.data;
-                            _this.$refs.tree.addNode(temp)
-                        }).catch(reason => catchPromise(reason));
+                        temp.id = value.data;
+                        _this.$refs.tree.addNode(temp)
+                    }).catch(reason => catchPromise(reason));
                 }
                 this.dialog = false;
             },
@@ -139,7 +136,7 @@
             },
             Move: function Move() {
                 let _this = this;
-                let temp = Object.assign({},GroupModel);
+                let temp = Object.assign({}, GroupModel);
                 temp.id = _this.$refs.tree.active.items.id;
                 temp.parentId = _this.$refs.subtree.active.items.id;
                 temp.name = _this.$refs.tree.active.items.name;

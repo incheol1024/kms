@@ -28,8 +28,7 @@
                     return new Promise(function (resolve, reject) {
                     })
                 },
-                type: Function,
-                required : true
+                type: Function
             },
             pageRes: {
                 default: function (value, _this) {
@@ -74,6 +73,10 @@
             selection: {
                 default: [],
                 type: Array
+            },
+            search : {
+                default : "",
+                type : String
             }
         },
         data: () => ({
@@ -88,10 +91,18 @@
                     this.loading = true;
                     this.items = [];
                     let _this = this;
-                    this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
-                        this.pageRes(value, _this);
-                    }).catch(reason => catchPromise(reason))
-                        .finally(_this.loading = false);
+                    try{
+                        this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
+                            _this.pageRes(value, _this);
+                        }).catch(reason => catchPromise(reason))
+
+                    }
+                    catch (e) {
+
+                    }
+                    finally {
+                        _this.loading = false
+                    }
                 }
             }
         },
@@ -114,6 +125,9 @@
             },
             updateSelection: function updateSelection() {
                 this.$emit("update:selection", this.selection)
+            },
+            clear : function () {
+                this.items = [];
             }
         }
     }
