@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <script src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.0/src/httpVueLoader.js"></script>
-	<script src="/js/model.js"></script>
-	<script src="/js/util.js"></script>
-	<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
+    <script src="/js/model.js"></script>
+    <script src="/js/util.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
     <title>KMS Test Page</title>
 </head>
 
@@ -18,11 +18,11 @@
 <v-app id='test'>
 		<span>
 		<table-component ref="table" :headers="tableHeader" :allow-select="true" :selection.sync="selection"
-			:page-req="page"
-		>
+           :page-req="page" :page-res="pageRes" :allow-delete="true" :allow-edit="true" :edit-function="edit" :delete-function="deleted"
+        >
 		</table-component>
 		</span>
-		<v-btn @click="addtable">ADD BUTTON</v-btn>
+    <v-btn @click="addtable">ADD BUTTON</v-btn>
 </v-app>
 
 <script src="/js/vue.js"></script>
@@ -30,66 +30,82 @@
 
 <script type="text/javascript">
     console.log("test");
-	Vue.use(Vuetify);
-	httpVueLoader.register(Vue, 'view/custom/table-component.vue');
-	Vue.component('table-component');
+    Vue.use(Vuetify);
+    httpVueLoader.register(Vue, 'view/custom/table-component.vue');
+    Vue.component('table-component');
 
     var main = new Vue({
         data: function data() {
             return {
-            	//table
-				tableHeader : [
-					{text: "id", value: "id"},
-					{text: "name", value: "name"}
-				],
-				selection : []
+                //table
+                tableHeader : [
+                    {text: "id", value: "id"},
+                    {text: "name", value: "name"},
+                    {text: "actions", value: "actions"}
+                ],
+                selection : []
             }
         },
         methods: {
-			//table function
-			page : function page(item) {
-				console.log(JSON.stringify(item));
-				var _this = this;
-				return new Promise(function (resolve, reject) {
-					var items = _this.getItem();
-					var total = items.length;
-					if (item.page > 0 && item.size > 0) {
-						items = items.slice((item.page - 1) * item.size, item.page * item.size);
-					}
-					resolve(new function(){
-						return {
-							data : {
-								content : items,
-								totalElements : total
-							}
-						}
-					})
-				})
-			},
-			addtable : function addtable(item){
-				console.log("add Test");
-				let aaa = { selected : false , id : "123123" , name : "asdfasdfasdfasdfd"};
-            	this.$refs.table.addFunction(aaa);
-			},
-			getItem : function getItem () {
-				return [
-					{
-						selected : false,
-						id: "asdfdf",
-						name: 'Frozen Yogurt'
-					},
-					{
-						selected : false,
-						id: "1111",
-						name: 'Froasdfasdfzen Yogurt'
-					},
-					{
-						selected : true,
-						id: "124124",
-						name: 'Frozen Yogufffffrt'
-					}
-				]
-			}
+            //table function
+            page : function page(item) {
+                console.log(JSON.stringify(item));
+                var _this = this;
+                return new Promise(function (resolve, reject) {
+                    var items = _this.getItem();
+                    var total = items.length;
+                    if (item.page > 0 && item.size > 0) {
+                        items = items.slice((item.page - 1) * item.size, item.page * item.size);
+                    }
+                    resolve(new function(){
+                        return {
+                            data : {
+                                content : items,
+                                totalElements : total
+                            }
+                        }
+                    })
+                })
+            },
+            pageRes: function pageRes(res, _this) {
+                console.log(res);
+                _this.total = res.data.totalElements;
+                let max = res.data.content.length;
+                for (let i = 0; i < max; i++) {
+                    _this.items.push(res.data.content[i]);
+                }
+            },
+            addtable : function addtable(item){
+                console.log("add Test");
+                let aaa = { selected : false , id : "123123" , name : "asdfasdfasdfasdfd"};
+                this.$refs.table.addFunction(aaa);
+            },
+            edit: function edit(item) {
+                alert(item);
+            },
+            deleted: function (item) {
+                alert(item);
+                return new Promise(function (resolve, reject) {})
+            },
+            getItem : function getItem () {
+                return [
+                    {
+                        selected : false,
+                        id: "asdfdf",
+                        name: 'Frozen Yogurt'
+                    },
+                    {
+                        selected : false,
+                        id: "1111",
+                        name: 'Froasdfasdfzen Yogurt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    }
+                ]
+            }
         }
     }).$mount('#test');
 </script>

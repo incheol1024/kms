@@ -20,14 +20,16 @@
         props: {
             headers: {
                 default: [],
-                type: Array
+                type: Array,
+                required : true
             },
             pageReq: {
                 default: function (page) {
                     return new Promise(function (resolve, reject) {
                     })
                 },
-                type: Function
+                type: Function,
+                required : true
             },
             pageRes: {
                 default: function (value, _this) {
