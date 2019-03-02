@@ -1,61 +1,133 @@
-<template>
-    <v-data-table :headers="options.header" :items="dataset" :pagination.sync="pagination" :search="search" select-all
-                  :total-items="total" :loading="loading" must-sort class="elevation-1" v-model="options.select.selected">
+<template inline-template>
+    <v-data-table :headers="headers" :items="items" :pagination.sync="pagination"
+                  :select-all="allowSelect ? true : false" v-model="selection"
+                  :total-items="total" :loading="loading" must-sort class="elevation-1">
         <template slot="items" slot-scope="props">
-            <tr>
-                <td v-if="options.select.allow">
-                    <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
+                <td v-if="allowSelect">
+                    <v-checkbox v-model="props.selected" primary hide-details @change="updateSelection"></v-checkbox>
                 </td>
-                <td v-if="mappingheader(prop)" v-for="(value,prop) in props.item">{{ value }}</td>
-                <td v-if="options.deleted.allow || options.edited.allow">
-                    <v-icon v-if="options.edited.allow" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-                    <v-icon v-if="options.deleted.allow" small @click="deleteItem(props.item)">delete</v-icon>
+                <td v-if="mappingHeader(prop)" v-for="(value,prop) in props.item">{{ value }}</td>
+                <td v-if="allowDelete || allowEdit">
+                    <v-icon v-if="allowEdit" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
+                    <v-icon v-if="allowDelete" small @click="deleteItem(props.item)">delete</v-icon>
                 </td>
-            </tr>
         </template>
     </v-data-table>
 </template>
 
 <script>
-    exports = {
-        props : ["options"],
+    module.exports = {
+        props: {
+            headers: {
+                default: [],
+                type: Array,
+                required : true
+            },
+            pageReq: {
+                default: function (page) {
+                    return new Promise(function (resolve, reject) {
+                    })
+                },
+                type: Function
+            },
+            pageRes: {
+                default: function (value, _this) {
+                    _this.total = value.data.totalElements;
+                    let max = value.data.content.length;
+                    for (let i = 0; i < max; i++) {
+                        _this.items.push(value.data.content[i]);
+                    }
+                },
+                type: Function
+            },
+            allowEdit: {
+                default: false,
+                type: Boolean
+            },
+            allowDelete: {
+                default: false,
+                type: Boolean
+            },
+            allowSelect: {
+                default: false,
+                type: Boolean
+            },
+            addFunction: {
+                default: function (item) {
+                    this.items.push(item);
+                },
+                type: Function
+            },
+            editFunction: {
+                default: function (item) {
+                },
+                type: Function
+            },
+            deleteFunction: {
+                default: function (item) {
+                    return new Promise(function (resolve, reject) {
+                    })
+                },
+                type: Function
+            },
+            selection: {
+                default: [],
+                type: Array
+            },
+            search : {
+                default : "",
+                type : String
+            }
+        },
         data: () => ({
+            items: [],
             pagination: {},
             loading: false,
-            dataset: [],
             total: 0
         }),
         watch: {
             pagination: {
                 handler() {
                     this.loading = true;
-                    this.dataset = [];
+                    this.items = [];
                     let _this = this;
-                    this.options.page.req(jsTojavaPage(this.pagination)).then(value => {
-                        this.options.page.res(value,_this);
-                    }).catch(reason => catchPromise(reason))
-                    .finally(this.loading = false);
+                    try{
+                        this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
+                            _this.pageRes(value, _this);
+                        }).catch(reason => catchPromise(reason))
+
+                    }
+                    catch (e) {
+
+                    }
+                    finally {
+                        _this.loading = false
+                    }
                 }
             }
         },
         methods: {
-            addItem: function addItem(item) {
-                this.dataset.push(item);
-            },
             editItem: function editItem(item) {
-                this.options.edited.func(item);
+                this.editFunction(item);
             },
             deleteItem: function deleteItem(item) {
                 let _this = this;
-                this.options.deleted.func(item).then(_this.dataset.splice(_this.dataset.indexOf(item), 1)).catch(reason => catchPromise(reason));
+                this.deleteFunction(item).then(_this.items.splice(_this.items.indexOf(item), 1))
+                    .catch(reason => catchPromise(reason));
             },
-            mappingheader : function mappingheader(prop) {
-                let max = this.header.length;
+            mappingHeader: function mappingHeader(prop) {
+                let max = this.headers.length;
                 for (let i = 0; i < max; i++) {
-                    if(this.header[i].value === prop)
-                    return true;
+                    if (this.headers[i].value === prop)
+                        return true;
                 }
                 return false;
+            },
+            updateSelection: function updateSelection() {
+                this.$emit("update:selection", this.selection)
+            },
+            clear : function () {
+                this.items = [];
             }
         }
     }

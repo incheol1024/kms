@@ -2,7 +2,7 @@
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="false">
     <diskStore path="java.io.tmpdir" />
 
-    <cache name="userCount"
+    <cache name="userCache"
            maxEntriesLocalHeap="1000"
            maxEntriesLocalDisk="10000"
            diskSpoolBufferSizeMB="20"
