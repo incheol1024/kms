@@ -2,8 +2,8 @@
 <li class="tree-node">
   <button v-if="items.children && items.children.length" @click="toggle"><i class="material-icons" >{{iconName}}</i></button>
   <span @click="activeChange" v-bind:class="{ active : activeNow }">{{ items.name }}</span>
-  <ul v-if="items.children && items.children.length">
-    <treenode-component v-if="showChild" v-for="(child,i) in items.children" :key="i" :items="child" :busname="busname" :parentnode="getParent()"></treenode-component>
+  <ul v-if="items.children && items.children.length && showChild">
+    <treenode-component v-for="(child,i) in items.children" :key="i" :items="child" :busname="busname" :parentnode="getParent()"></treenode-component>
   </ul>
 </li>
 </template>

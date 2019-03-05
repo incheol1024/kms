@@ -6,7 +6,7 @@
                 <td v-if="allowSelect">
                     <v-checkbox v-model="props.selected" primary hide-details @change="updateSelection"></v-checkbox>
                 </td>
-                <td v-if="mappingHeader(prop)" v-for="(value,prop) in props.item">{{ value }}</td>
+                <td :key="value" v-for="(value,prop) in mappedItemValue(props.item)">{{ value }}</td>
                 <td v-if="allowDelete || allowEdit">
                     <v-icon v-if="allowEdit" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
                     <v-icon v-if="allowDelete" small @click="deleteItem(props.item)">delete</v-icon>
@@ -103,6 +103,15 @@
                     finally {
                         _this.loading = false
                     }
+                }
+            }
+        },
+        computed : {
+            mappedItemValue : function(item){
+                
+
+                return {
+        
                 }
             }
         },

@@ -42,7 +42,7 @@
 		   <v-list two-line>	    
 		   <v-list-tile avatar>  
 		    <v-list-tile-content class="headline font-weight-bold">"Test1"</v-list-tile-content>
-		    </v-list-tile avatar>
+		    </v-list-tile>
 		    <v-card-actions>		     
 	        <v-list-tile-avatar>
 	          <v-icon large color="material-icons">account_box</v-icon>
