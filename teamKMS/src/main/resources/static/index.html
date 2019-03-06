@@ -3,33 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    <script src="js/es6-promise.auto.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.0/src/httpVueLoader.js"></script>
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/vue-ckeditor2"></script>
 
-    <script src="/webjars/vue-ckeditor2/2.0.4/dist/vue-ckeditor2.js"></script>
-    <script src="/webjars/ckeditor/4.10.1/standard/ckeditor.js"></script>
-    <link rel="stylesheet" href="/webjars/ckeditor/4.10.1/standard/contents.css">
 
-    <script src="/webjars/codemirror/5.43.0/lib/codemirror.js"></script>
-    <script src="/webjars/github-com-surmon-china-vue-codemirror/4.0.5/vue-codemirror.js"></script>
-    <link rel="stylesheet" href="/webjars/codemirror/5.43.0/lib/codemirror.css">
-    <script src="/webjars/codemirror/5.43.0/addon/merge/merge.js"></script>
-    <link rel="stylesheet" href="/webjars/codemirror/5.43.0/addon/merge/merge.css">
-    <script src="/webjars/codemirror/5.43.0/mode/javascript/javascript.js"></script>
-    <script src="/webjars/codemirror/5.43.0/mode/clike/clike.js"></script>
-    <script src="/webjars/codemirror/5.43.0/mode/python/python.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-codemirror@4.0.0/dist/vue-codemirror.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/merge/merge.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/clike/clike.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/python/python.js"></script>
 
-    <!--https://github.com/hchstera/vue-charts-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="js/es6-promise.auto.min.js"></script>
     <script src="js/vue-charts.min.js"></script>
+    <script src="js/model.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/apiUrl.js"></script>
 
-    <script src="/js/model.js"></script>
-    <script src="/js/util.js"></script>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/merge/merge.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" >
     <title>Team KMS</title>
 </head>
 <body>
@@ -82,7 +80,7 @@
     </v-dialog>
 
 </v-app>
-<script src="/js/vue.js"></script>
+<script src="js/vue.js"></script>
 <!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
 <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
 <script src="index.js"></script>

@@ -13,7 +13,7 @@ new Vue({
 			axios.post('/login', bodyFormData).then(function (response) {
 					window.location.replace("/");
 				}).catch(function (error) {
-					alert("로그인 실패!!! 관리자에게 문의하세요." + error.response.data);
+				alert("로그인 실패!!! 관리자에게 문의하세요." + JSON.stringify(error.response.data));
 				})
 		}
 	}

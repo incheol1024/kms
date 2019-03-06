@@ -13,9 +13,4 @@ public class ViewConfig implements WebMvcConfigurer{
 		registry.addViewController("").setViewName("index.html");
 		registry.addViewController("/login").setViewName("login.html");
 	}
-
-	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**");
-	}
 }
