@@ -6,7 +6,7 @@
                 <td v-if="allowSelect">
                     <v-checkbox v-model="props.selected" primary hide-details @change="updateSelection"></v-checkbox>
                 </td>
-                <td :key="value" v-for="(value,prop) in mappedItemValue(props.item)">{{ value }}</td>
+                <td v-for="value in mappingHeader(props.item)">{{ value }}</td>
                 <td v-if="allowDelete || allowEdit">
                     <v-icon v-if="allowEdit" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
                     <v-icon v-if="allowDelete" small @click="deleteItem(props.item)">delete</v-icon>
@@ -95,23 +95,10 @@
                         this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
                             _this.pageRes(value, _this);
                         }).catch(reason => catchPromise(reason))
-
-                    }
-                    catch (e) {
-
                     }
                     finally {
                         _this.loading = false
                     }
-                }
-            }
-        },
-        computed : {
-            mappedItemValue : function(item){
-                
-
-                return {
-        
                 }
             }
         },
@@ -124,13 +111,13 @@
                 this.deleteFunction(item).then(_this.items.splice(_this.items.indexOf(item), 1))
                     .catch(reason => catchPromise(reason));
             },
-            mappingHeader: function mappingHeader(prop) {
-                let max = this.headers.length;
-                for (let i = 0; i < max; i++) {
-                    if (this.headers[i].value === prop)
-                        return true;
-                }
-                return false;
+            mappingHeader: function mappingHeader(item) {
+                let arr = [];
+                this.headers.forEach(it => {
+                    if("undefined" !== typeof item[it.value])
+                        arr.push(item[it.value]);
+                });
+                return arr
             },
             updateSelection: function updateSelection() {
                 this.$emit("update:selection", this.selection)

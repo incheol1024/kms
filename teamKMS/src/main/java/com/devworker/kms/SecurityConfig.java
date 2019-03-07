@@ -21,13 +21,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
+
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/error").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
                 .requestMatchers(CorsUtils::isCorsRequest).permitAll()
                 .antMatchers("/**").authenticated();
-
-        http.cors();
 
         http.httpBasic().and().formLogin()
                 .loginPage("/login")
@@ -37,6 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login");
+
+        http.csrf().disable();
     }
 
     @Autowired
