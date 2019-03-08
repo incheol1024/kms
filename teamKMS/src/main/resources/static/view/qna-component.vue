@@ -59,17 +59,17 @@ module.exports = {
     questions: []
   }),
   created: function() {
-    var _this = this;
-    this.getQnaList(_this);
+    this.getQnaList();
   },
 
   methods: {
-    getQnaList: function(_this) {
+    getQnaList: function() {
+      var that = this;
       axios.get("/qna/" + this.id)
         .then(
           function(response) {
             for (var i = 0; i < response.data.length; i++) {
-              _this.questions.push(response.data[i]);
+              that.questions.push(response.data[i]);
             }
           }
         )
@@ -84,7 +84,9 @@ module.exports = {
       router.push("/qna/write/" + this.name + "/" + this.id);
     },
     moveToSpecificPage: function (question) {
-      router.push("/qna/answer/" + _this.name + "/" + _this.id + "/"+ response.data.boardId);
+      var that = this;
+      console.log('qna-component: moveToSpecificPage() router.push url /qna/answer/'+ this.name + "/" + this.id + "/"+ question.boardId);
+      router.push("/qna/answer/" + this.name + "/" + this.id + "/"+ question.boardId);
     }
   }
 };

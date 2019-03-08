@@ -2,38 +2,8 @@
   <v-content>
 
     <v-container grid-list-xs align-content-center>
-      <v-layout row wrap mb-5>
-        <v-flex xs12>
-          <v-card>
-            <v-card-title>
-              <div>
-                <h1 class="headline mb-0">Q.{{ title }}</h1>
-              </div>
-            </v-card-title>
-            <v-divider inset light></v-divider>
-            <v-card-text>
-              <div>
-                <h2>{{ content }}</h2>
-              </div>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn icon>
-                <v-icon>favorite</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon>bookmark</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon>share</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-flex>
-      </v-layout>
-
       <template v-for="(answer, index) in answers">
-        <v-layout justify-center row mb-4>
+        <v-layout justify-center row mb-4 :key="index">
 
           <v-flex xs10>
             <v-card>
@@ -91,19 +61,18 @@
         <button> send </button>
       </form>
   -->
+
       <form @submit.prevent="addComment">
-        <input type="text" name="boardId" value="1" v-model="boardId" />
+        <input type="text" name="boardId" :value="qid" />
         <input type="text" name="cmtContents" value="content test" v-model="cmtContents" />
         <input type="submit" value="댓글 등록 테스트" />
       </form>
-
+ 
       <form @submit.prevent="addFile">
         <input type="file" id="files" ref="files" multiple @change="handleFileUpload()" />
         <!-- <input type="submit" value="파일 등록 테스트" /> -->
         <v-btn @click="addFile"> 파일등록테스트</v-btn>
       </form>
-
-
     </v-form>
 
   </v-content>
@@ -111,14 +80,11 @@
 
   <script>
   module.exports = {
-    props: ['id', 'name'],
+    props: ['id', 'name', 'qid'],
     data() {
-      return {
-        title: "title binding",
-        content: 'content binding',
-        boardId: 1,
+      return {        
         cmtId: 1,
-        cmtContents: "답변 내용을 입력하세요.",
+        cmtContents: "default comment",
         cmtUserId: "",
         cmtDate: "",
         multiPartFile: [],
@@ -134,9 +100,7 @@
       console.log("id = " + this.$route.params.id);
       console.log("name = " + this.$route.params.name);
       console.log("qid = " + this.$route.params.qid);
-      var _this = this;
-      this.getQuestionById(_this);
-      this.getCommentById(_this);
+      this.getCommentById();
       //this.getDocById(_this);
     },
 
@@ -158,28 +122,15 @@
         }
 
       },
-      getQuestionById: function(_this) {
-        console.log("_this.id" + _this.qid);
-        axios.get("qna/answer/" + this.$route.params.qid)
-          .then(
-            function(response) {
-              _this.title = response.data.subject;
-              _this.content = response.data.contents;
-            }
-          )
-          .catch(function(error) {
-            console.log(error)
-          })
-      },
-      getCommentById: function(_this) {
-
-        console.log("getCommentById URL : comment/list/" + _this.$route.params.qid );
-        axios.get("comment/list/" + _this.$route.params.qid)
+      getCommentById: function() {
+        var that = this;
+        console.log("getCommentById URL : /comment/list/" + this.qid );
+        axios.get("/comment/list/" + this.qid)
           .then(
             function(response) {
               for (var i = 0; i < response.data.length; i++) {
                 console.log(response.data[i]);
-                _this.answers.push(response.data[i]);
+                that.answers.push(response.data[i]);
               }
             }
           )
@@ -187,13 +138,14 @@
             console.log(error)
           })
       },
-      getDocById: function(_this) {
-        axios.get("comment/" + _this.$route.params.qid)
+      getDocById: function() {
+        var that = this;
+        axios.get("/comment/" + this.qid)
           .then(
             function(response) {
               for (var i = 0; i < response.data.length; i++) {
                 console.log(response.data[i]);
-                _this.docs.push(response.data[i]);
+                that.docs.push(response.data[i]);
               }
             }
           )
@@ -202,14 +154,13 @@
           })
       },
       addComment: function() {
-
         if(this.fileTransactKey != null) {
           this.addCommentFile(this.fileTransactKey, this.fileCount);
           return;
         }
         
         console.log("addComment function is called");
-        var _this = this;
+        var that = this;
 
         axios.post('/comment/add', {
             boardId: Number(this.$route.params.qid),
@@ -218,7 +169,7 @@
           .then(
             function(response) {
               // router.push("/qna/answer/" + _this.name + "/" + _this.id + "/" + response.data.boardId );
-              _this.answers.push(response.data);
+              that.answers.push(response.data);
               console.log(response.data);
             }
           )
@@ -229,7 +180,7 @@
       addCommentFile: function(fileTransactKey, fileCount) {
         
         console.log("addComment function is called and fileTransactKey = " + fileTransactKey + " and fileCount = " + fileCount);
-        var _this = this;
+        var that = this;
 
         axios.post('/comment/add/files/' + this.$route.params.qid, {
           comFileDto: {
