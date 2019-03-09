@@ -61,7 +61,7 @@ public class CommentController {
 		return cmtId;
 	}
 
-	@PostMapping("/{cmtId}/like")
+	@PostMapping("/like/{cmtId}")
 	public CommentDao updateCommentLike(@PathVariable int cmtId) {
 		return commentService.updateCommentLike(cmtId);
 	}

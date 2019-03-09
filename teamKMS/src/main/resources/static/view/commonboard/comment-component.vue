@@ -9,13 +9,9 @@
             <v-card>
               <div>
                 <v-card-title>
-
                   <v-avatar color="grey lighten-4">
-
                   </v-avatar>
-
                   {{ answer.cmtUserId }} - {{ answer.cmtDate }}
-
                   <v-spacer></v-spacer>
                   <v-btn flat icon>
                     <v-icon>build</v-icon>
@@ -23,23 +19,37 @@
                   <v-btn flat icon @click="deleteComment(answer.cmtId, index)">
                     <v-icon>delete</v-icon>
                   </v-btn>
-
-                  <v-card-title>
+                </v-card-title>
               </div>
-              <v-divider inset light></v-divider>
+
+              <v-divider></v-divider>
+              
               <v-card-text>
                 <div>
                   <span>{{ answer.cmtContents}}</span>
-                </div>
-
+                </div>               
               </v-card-text>
+
+            <v-divider></v-divider>
               <v-card-actions>
-                <v-btn flat icon color="blue lighten-2">
-                  <v-icon>thumb_up</v-icon>
+                  <div> 
+                      파일 첨부
+                  </div>
+              </v-card-actions>
+
+              <v-card-actions>
+                <v-btn flat icon color="blue lighten-2" @click.prevent="updateLike(answer.cmtId, index)">
+                  <v-icon>thumb_up</v-icon>                  
                 </v-btn>
+                <span class="subheading mr-2">{{answer.cmtLike}}</span>
+                <v-btn icon>
+                <v-icon>share</v-icon>
+                </v-btn>
+<!-- 
                 <v-btn flat icon color="red lighten-2">
                   <v-icon>thumb_down</v-icon>
                 </v-btn>
+-->
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -277,12 +287,14 @@
             console.log(error)
           })
       },
-      updateLike: function(cmtId) {
+      updateLike: function(cmtId, index) {
+        var that = this;
         console.log("updateLike function is called");
-        axios.post('/comment/like' + cmtId)
+        axios.post('/comment/like/' + cmtId)
           .then(
             function(response) {
-              _this.answers.push(response.data);
+              that.answers[index].cmtLike = response.data.cmtLike; 
+              //that.answers.push(response.data);
               console.log(response.data);
             }
           )
