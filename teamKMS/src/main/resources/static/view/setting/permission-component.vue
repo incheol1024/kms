@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-container fluid grid-list-lg>
         <v-layout>
             <v-flex align-space-around>
@@ -36,20 +36,27 @@
                                     <v-form>
                                         <v-text-field label="Acl Id" v-model="curAcl.aclId"></v-text-field>
                                         <v-text-field label="Acl Name" v-model="curAcl.aclName"></v-text-field>
-                                        <v-layout v-for="i in 3" :key="i">
-                                            <v-checkbox v-model="curAcl.hasPermission" label="User"
-                                                        :value="i"></v-checkbox>
-                                            <v-checkbox v-model="curAcl.hasPermission" label="Group"
-                                                        :value="i+3"></v-checkbox>
-                                            <v-checkbox v-model="curAcl.hasPermission" label="Permission"
-                                                        :value="i+6"></v-checkbox>
-                                            <v-checkbox v-model="curAcl.hasPermission" label="Qna"
-                                                        :value="i+9"></v-checkbox>
-                                            <v-checkbox v-model="curAcl.hasPermission" label="SOL"
-                                                        :value="i+12"></v-checkbox>
-                                            <v-checkbox v-model="curAcl.hasPermission" label="SITE"
-                                                        :value="i+15"></v-checkbox>
-                                        </v-layout>
+                                        <v-expansion-panel>
+                                            <v-expansion-panel-content v-for="(item,i) in Items" :key="i">
+                                                <template v-slot:header>
+                                                    <div>{{item}}</div>
+                                                </template>
+                                                <v-card>
+                                                    <v-checkbox v-model="curAcl.hasPermission" label="User"
+                                                                :value="i"></v-checkbox>
+                                                    <v-checkbox v-model="curAcl.hasPermission" label="Group"
+                                                                :value="i+3"></v-checkbox>
+                                                    <v-checkbox v-model="curAcl.hasPermission" label="Permission"
+                                                                :value="i+6"></v-checkbox>
+                                                    <v-checkbox v-model="curAcl.hasPermission" label="Qna"
+                                                                :value="i+9"></v-checkbox>
+                                                    <v-checkbox v-model="curAcl.hasPermission" label="SOL"
+                                                                :value="i+12"></v-checkbox>
+                                                    <v-checkbox v-model="curAcl.hasPermission" label="SITE"
+                                                                :value="i+15"></v-checkbox>
+                                                </v-card>
+                                            </v-expansion-panel-content>
+                                        </v-expansion-panel>
                                     </v-form>
                                 </v-layout>
                             </v-card-title>
@@ -60,13 +67,20 @@
                         <v-tab-item>
                             <v-card-title class="title">
                                 <v-layout wrap column>
-                                    <v-layout>
-                                        <v-spacer></v-spacer>
-                                        <v-text-field v-model="search" append-icon="search" label="Search" single-line
-                                                      hide-details></v-text-field>
-                                    </v-layout>
-                                    <table-component :headers="headers" :page-req="ugPage" :page-res="ugPageRes" :allow-select="true" :selection.sync="selection"
-                                                     :search="search"></table-component>
+                                    <v-flex>
+                                        <v-layout>
+                                            <v-spacer></v-spacer>
+                                            <v-text-field v-model="search" append-icon="search" label="Search"
+                                                          single-line
+                                                          hide-details></v-text-field>
+                                        </v-layout>
+                                        <table-component :headers="headers" :page-req="ugPage" :page-res="ugPageRes"
+                                                         :allow-select="true" :selection.sync="selection"
+                                                         :search="search"></table-component>
+                                    </v-flex>
+                                    <v-flex>
+                                        <v-chip v-for="(chip,i) in chipItem" :key="i" v-model="chip" close>{{chip.name}}</v-chip>
+                                    </v-flex>
                                 </v-layout>
                             </v-card-title>
                             <v-card-actions>
@@ -83,16 +97,17 @@
 <script>
     module.exports = {
         data: () => ({
+            Items: ["Create", "Delete", "Modify"],
             listData: [],
             headers: [
                 {text: 'name', value: 'name'},
                 {text: 'type', value: 'type', sortable: false}
             ],
             search: "",
-            selection : [],
+            selection: [],
             aclText: "Make",
             curAcl: Object.assign({}, ACLMODEL),
-            curAce: Object.assign({}, ACEMODEL)
+            chipItem : []
         }),
         created: function created() {
             let _this = this;
@@ -102,11 +117,11 @@
         },
         methods: {
             ugPage: function ugPage(page) {
-                return axios.get("group/child",  {
-                    params : page
+                return axios.get("group/child", {
+                    params: page
                 })
             },
-            ugPageRes : function ugPageRes(response, _this){
+            ugPageRes: function ugPageRes(response, _this) {
                 let groupList = response.data.groupList.content;
                 let userList = response.data.userList.content;
                 _this.total = groupList.length + userList.length;

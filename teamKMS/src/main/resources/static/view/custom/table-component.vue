@@ -3,6 +3,7 @@
                   :select-all="allowSelect ? true : false" v-model="selection"
                   :total-items="total" :loading="loading" must-sort class="elevation-1">
         <template slot="items" slot-scope="props">
+            <tr @click="clickRow(props.item)">
                 <td v-if="allowSelect">
                     <v-checkbox v-model="props.selected" primary hide-details @change="updateSelection"></v-checkbox>
                 </td>
@@ -11,6 +12,7 @@
                     <v-icon v-if="allowEdit" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
                     <v-icon v-if="allowDelete" small @click="deleteItem(props.item)">delete</v-icon>
                 </td>
+            </tr>
         </template>
     </v-data-table>
 </template>
@@ -77,6 +79,10 @@
             search : {
                 default : "",
                 type : String
+            },
+            clickRow : {
+                default : function (item){},
+                type : Function
             }
         },
         data: () => ({
@@ -130,4 +136,11 @@
 </script>
 
 <style scoped>
+    tr:hover {
+        cursor: pointer;
+    }
+
+    td:hover{
+        cursor: pointer;
+    }
 </style>
