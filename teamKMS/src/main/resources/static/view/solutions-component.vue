@@ -1,7 +1,7 @@
 <template>
 <v-content>
   <v-card-title>
-    <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage"> 글쓰기 </v-btn>
+    <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage(2)"> 글쓰기 </v-btn>
     <v-spacer></v-spacer>
     <v-text-field v-model="search" append-icon="search" label="검색" single-line hide-details></v-text-field>
   </v-card-title>
@@ -22,6 +22,8 @@
       <td class="text-xs-left">{{ props.item.userId }}</td>
       <td class="text-xs-left">{{ props.item.hits }}</td>
       <td class="text-xs-left">{{ props.item.regDate }}</td>
+      <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage(1)"> 편집 </v-btn>
+      <v-btn slot="activator" color="primary" dark class="mb-2" @click="delpage(props.item.boardId)"> 삭제 </v-btn>
     </template>
     <v-alert slot="no-results" :value="true" color="error" icon="warning">
       "{{ search }}"에 대한 결과를 찾을 수 없습니다.
@@ -64,11 +66,21 @@ module.exports = {
           console.log(error);
         })
     },
-    moveToWritePage: function() {
-      this.$router.push("/solutions/write/" + this.id);
+    moveToWritePage: function(fuc) {
+      this.$router.push("/solutions/write/" + fuc);
     },
-    writepage: function writepage() {
-      router.push("/solutions/write/" + this.id);
+    delpage: function (id){
+      var _this = this;
+      axios.delete('/solution/'+ id)
+      .then(
+        function(response){
+          _this.answers.push(response.data);
+          console.log(response.data);
+        }
+      )
+      .catch(function(error){
+        console.log("[ERR] : " + error)
+      })
     }
   }
 };

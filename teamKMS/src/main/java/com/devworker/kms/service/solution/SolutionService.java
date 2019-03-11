@@ -34,13 +34,28 @@ public class SolutionService {
 		boardDao.setUserId(CommonUtil.getCurrentUser());
 		boardDao.setRegDate(LocalDateTime.now());
 		boardDao.setUpdDate(LocalDateTime.now());
-		
 //		boardDao.setBoardId(boardId);
-		boardDao.setSubject("subject");
-		boardDao.setContents("contents");
-		
+//		boardDao.setSubject("subject");
+//		boardDao.setContents("contents");
 		boardDao.setHits(0);
+		
+		System.out.println("2 boardid : " + boardDao.getBoardId());
+		System.out.println("2 content : " + boardDao.getContents());
+		System.out.println("2 subject : " + boardDao.getSubject());
+		System.out.println("2 userid : " + boardDao.getUserId());
+		System.out.println("2 regdate : " + boardDao.getRegDate());
+		System.out.println("2 update : " + boardDao.getUpdDate());
+
 		return boardRepo.save(boardDao);
+	}
+	
+	public BoardDao editSolution(BoardDao boardDao) {
+		
+		return boardRepo.save(boardDao);
+	}
+
+	public void deleteSolution(int id) {
+		boardRepo.deleteById(id);
 	}
 
 	public Optional<BoardDao> findById(Integer id) {

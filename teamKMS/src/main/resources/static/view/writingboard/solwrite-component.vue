@@ -1,6 +1,6 @@
 <template>
     <v-content>
-        sol {{name}} {{id}} write page [ {{Solution}} / {{Site}} / {{selected}} ]test
+        sol / {{name}} / {{id}} / write page [ {{Solution}} / {{Site}} / {{selected}} ]test / {{fuc}} /
 
         <v-container id="solution_write" grid-list-xl>
             <v-layout row wrap>
@@ -8,6 +8,7 @@
                     <v-text-field
                             label="title"
                             placeholder="title"
+                            v-model="subject"
                     ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm4>
@@ -27,7 +28,7 @@
                     ></v-overflow-btn>
                 </v-flex>
                 <v-flex xs12 sm2>
-                    <select v-model="selected">
+                    <select v-model="selected.solution">
                         <option disabled value="">select</option>
                         <option>ECM</option>
                         <option>EDM</option>
@@ -35,7 +36,7 @@
                     </select>
                 </v-flex>
                 <v-flex xs12 sm2>
-                    <select v-model="selected2">
+                    <select v-model="selected.site">
                         <option disabled value="">select</option>
                         <option>st1</option>
                         <option>st2</option>
@@ -46,12 +47,15 @@
         </v-container>
 
         <div class="text-xs-center">
-            <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+            <ckeditor :editor="editor" v-model="contents" :config="editorConfig"></ckeditor>
         </div>
 
-        <div class="text-xs-center">
-            <v-btn color="success" @click="try_write">글쓰기</v-btn>
-            <v-btn color="error" @click="cancel_write">취소</v-btn>
+        <div class="text-xs-center" v-if="id === '2'">
+            <v-btn color="success" @click="try_write">등록</v-btn>
+        </div>
+
+        <div class="text-xs-center" v-else>
+            <v-btn color="success" @click="edit_write">편집</v-btn>
         </div>
 
     </v-content>
@@ -65,10 +69,12 @@
         data: () => ({
             Solution: ['ECM', 'EDM', 'ETC'],
             Site: ['site1', 'site2', 'site3'],
+            subject:'',
+            contents:'',
             selected: '',
             selected2: '',
             editor: ClassicEditor,
-            editorData: '<p>Content of the editor.</p>',
+            editorData: '',
             editorConfig: {
                 // The configuration of the editor.
             }
@@ -78,9 +84,22 @@
             var _this = this;
         },
         methods: {
-            try_write: function () {
-                //this.$router.push("/solutions/" + this.id);
-                axios.post('/solution/register', {})
+            try_write: function try_write() {
+              let obj1 = {subject:this.subject,contents:this.contents};
+              let obj2 = Object.assign({},obj1)
+                axios.post('/solution/register', obj2)
+                    .then(
+                        function (response) {
+                            _this.answers.push(response.data);
+                            console.log(response.data);
+                        }
+                    )
+                    .catch(function (error) {
+                        console.log("[ERR] : " + error)
+                    })
+            },
+            edit_write: function edit_write() {
+                axios.post('/solution/edit', {})
                     .then(
                         function (response) {
                             _this.answers.push(response.data);
