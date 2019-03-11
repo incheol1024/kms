@@ -6,6 +6,7 @@ import com.devworker.kms.dto.acl.AceDto;
 import com.devworker.kms.dto.acl.AclDto;
 import com.devworker.kms.dto.base.BasePageReqDto;
 import com.devworker.kms.dto.base.BasePageResDto;
+import com.devworker.kms.entity.acl.AclDao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -62,8 +63,8 @@ public class JsonModelTest {
 
 	@Test
 	public void makeAclModel() throws JsonProcessingException {
-		AclDto dto = new AclDto();
-		System.out.println(mapper.writeValueAsString(dto));
+		AclDto d = new AclDto();
+		System.out.println(mapper.writeValueAsString(d));
 	}
 
 	@Test

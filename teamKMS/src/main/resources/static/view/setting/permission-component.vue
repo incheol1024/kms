@@ -36,27 +36,9 @@
                                     <v-form>
                                         <v-text-field label="Acl Id" v-model="curAcl.aclId"></v-text-field>
                                         <v-text-field label="Acl Name" v-model="curAcl.aclName"></v-text-field>
-                                        <v-expansion-panel>
-                                            <v-expansion-panel-content v-for="(item,i) in Items" :key="i">
-                                                <template v-slot:header>
-                                                    <div>{{item}}</div>
-                                                </template>
-                                                <v-card>
-                                                    <v-checkbox v-model="curAcl.hasPermission" label="User"
-                                                                :value="i"></v-checkbox>
-                                                    <v-checkbox v-model="curAcl.hasPermission" label="Group"
-                                                                :value="i+3"></v-checkbox>
-                                                    <v-checkbox v-model="curAcl.hasPermission" label="Permission"
-                                                                :value="i+6"></v-checkbox>
-                                                    <v-checkbox v-model="curAcl.hasPermission" label="Qna"
-                                                                :value="i+9"></v-checkbox>
-                                                    <v-checkbox v-model="curAcl.hasPermission" label="SOL"
-                                                                :value="i+12"></v-checkbox>
-                                                    <v-checkbox v-model="curAcl.hasPermission" label="SITE"
-                                                                :value="i+15"></v-checkbox>
-                                                </v-card>
-                                            </v-expansion-panel-content>
-                                        </v-expansion-panel>
+                                        <v-checkbox v-for="value in curAcl.hasPermission" :key="value.value"
+                                                    v-model="value" :value="value.has">{{value.name}}
+                                        </v-checkbox>
                                     </v-form>
                                 </v-layout>
                             </v-card-title>
@@ -79,7 +61,9 @@
                                                          :search="search"></table-component>
                                     </v-flex>
                                     <v-flex>
-                                        <v-chip v-for="(chip,i) in chipItem" :key="i" v-model="chip" close>{{chip.name}}</v-chip>
+                                        <v-chip v-for="(chip,i) in chipItem" :key="i" v-model="chip" close>
+                                            {{chip.name}}
+                                        </v-chip>
                                     </v-flex>
                                 </v-layout>
                             </v-card-title>
@@ -97,7 +81,6 @@
 <script>
     module.exports = {
         data: () => ({
-            Items: ["Create", "Delete", "Modify"],
             listData: [],
             headers: [
                 {text: 'name', value: 'name'},
@@ -107,7 +90,7 @@
             selection: [],
             aclText: "Make",
             curAcl: Object.assign({}, ACLMODEL),
-            chipItem : []
+            chipItem: []
         }),
         created: function created() {
             let _this = this;

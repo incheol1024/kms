@@ -1,14 +1,16 @@
 package com.devworker.kms.dto.acl;
 
-import com.devworker.kms.entity.acl.AclDao;
 import com.devworker.kms.dic.PermissionType;
+import com.devworker.kms.entity.acl.AclDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AclDto {
     @NotBlank
@@ -19,7 +21,7 @@ public class AclDto {
     private String aclName;
     @ApiModelProperty(notes = "이 권한이 같은 허용 기능들의 종류",required = true)
     @NotNull
-    private List<PermissionType> hasPermission;
+    private List<PermissionType> hasPermission = new ArrayList<>();
 
     public String getAclId() {
         return aclId;
@@ -45,12 +47,17 @@ public class AclDto {
         this.hasPermission = hasPermission;
     }
 
+    public AclDto(){
+        hasPermission.addAll(PermissionType.DEFAULTLIST);
+    }
+
     @JsonIgnore
     public AclDao getDao(){
         AclDao dao = new AclDao();
         dao.setAclId(aclId);
         dao.setAclName(aclName);
-        dao.setHasPermission(hasPermission.stream().map(PermissionType::getName).collect(Collectors.joining(",")));
+        dao.setHasPermission(hasPermission.stream().filter(PermissionType::isHas).map(PermissionType::getValue)
+                .map(Object::toString).collect(Collectors.joining(",")));
         return dao;
     }
 }

@@ -3,13 +3,12 @@ package com.devworker.kms.entity.acl;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.acl.AclDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "KMS_ACL")
@@ -36,7 +35,6 @@ public class AclDao {
         return aclName;
     }
 
-
     public void setAclName(String aclName) {
         this.aclName = aclName;
     }
@@ -54,8 +52,11 @@ public class AclDao {
         AclDto dto = new AclDto();
         dto.setAclId(aclId);
         dto.setAclName(aclName);
+        dto.getHasPermission().addAll(PermissionType.DEFAULTLIST);
+        if(StringUtils.isEmpty(hasPermission)) return dto;
         String[] split = hasPermission.split(",");
-        dto.setHasPermission(Arrays.stream(split).map(PermissionType::valueOf).collect(Collectors.toList()));
+        for(String s : split)
+            dto.getHasPermission().get(Integer.parseInt(s) - 1).setHas(true);
         return dto;
     }
 }
