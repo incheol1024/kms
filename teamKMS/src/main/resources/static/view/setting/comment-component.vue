@@ -33,7 +33,11 @@
             <v-divider></v-divider>
               <v-card-actions>
                   <div> 
-                      파일 첨부
+                    <!-- <template v-for="(doc, index) in docs"> -->
+                      <v-chip close color="orange" label outline :key="index" @click="fileDownload(doc.docId)">
+                        파일 이름
+                      </v-chip>
+                    <!-- </template>                                             -->
                   </div>
               </v-card-actions>
 
@@ -319,6 +323,27 @@
           .catch(function(error) {
             console.log(error)
           })
+      },
+
+      fileDownload: function (docId) {
+        console.log("updateUnLike function is called");
+        axios.post('/comment/unlike', {
+            cmtId: this.cmtId
+          })
+          .then(
+            function(response) {
+              // router.push("/qna/answer/" + _this.name + "/" + _this.id + "/" + response.data.boardId );
+
+              _this.answers.push(response.data);
+
+              console.log(response.data);
+            }
+          )
+          .catch(function(error) {
+            console.log(error)
+          })
+        
+        
       }
     }
   }

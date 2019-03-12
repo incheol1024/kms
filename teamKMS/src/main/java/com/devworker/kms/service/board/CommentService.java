@@ -98,8 +98,8 @@ public class CommentService {
 		 * 메소드 호출한다.
 		 */
 
-		List<Integer> fileList = FileTransactionUtil.getFileList(fileTransactKey);
-		for (Integer docId : fileList) {
+		List<Long> fileList = FileTransactionUtil.getFileList(fileTransactKey);
+		for (Long docId : fileList) {
 			if(docRepo.save(new DocDao(docId, savedCommentDao)) == null )
 				docService.rollbackFileTransaction(fileTransactKey);
 		}

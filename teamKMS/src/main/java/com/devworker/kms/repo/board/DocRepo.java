@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.devworker.kms.entity.board.BoardDao;
 import com.devworker.kms.entity.board.DocDao;
 
-public interface DocRepo extends JpaRepository<DocDao, Integer> {
+public interface DocRepo extends JpaRepository<DocDao, Long> {
 
 	List<DocDao> findByBoardId(BoardDao boardDao);
 

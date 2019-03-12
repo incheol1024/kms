@@ -76,9 +76,9 @@ public class DocController {
 	 * @return ResponseEntity 로 리턴하고있지만.. 다른 방식으로 리턴하는게 좋아보임 아직은 모름.
 	 * @throws IOException
 	 */
-	@GetMapping("/download")
-	public ResponseEntity<Resource> download(@RequestParam(name = "filekey") String filekey) throws IOException {
-		File file = docService.downDoc(filekey.trim());
+	@GetMapping("/download/{docId}")
+	public ResponseEntity<Resource> download(@PathVariable long docId) throws IOException {
+		File file = docService.downDoc(docId);
 		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 		return ResponseEntity.ok().headers(new HttpHeaders()).contentLength(file.length())
 				.contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);

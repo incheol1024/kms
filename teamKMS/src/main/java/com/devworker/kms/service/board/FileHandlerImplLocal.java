@@ -41,8 +41,7 @@ public class FileHandlerImplLocal implements FileHandler {
 
 	@Override
 	public File downloadFile(String fileKey) {
-		// TODO Auto-generated method stub
-		return null;
+		return new File(FILE_PATH + fileKey);
 	}
 
 	@Override
@@ -71,13 +70,13 @@ public class FileHandlerImplLocal implements FileHandler {
 
 	@Override
 	public FileDto processUploadFile(int boardId, int CommentId, MultipartFile file) throws Exception {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void deleteFile(int docId) throws Exception {
+	public void deleteFile(long docId) throws Exception {
 		
 	}
+
 
 }

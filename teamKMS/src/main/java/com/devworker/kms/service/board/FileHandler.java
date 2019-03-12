@@ -18,7 +18,7 @@ public interface FileHandler {
 	String uploadFile(File file);
 
 	File downloadFile(String fileKey);
-
+	
 	List<DocDao> processUploadFile(int boardId, List<MultipartFile> file) throws Exception;
 
 	List<DocDao> processUploadFile(BoardDao boardId, int CommentId, List<MultipartFile> file) throws Exception;
@@ -27,5 +27,5 @@ public interface FileHandler {
 
 	FileDto processUploadFile(MultipartFile file) throws Exception;
 
-	void deleteFile(int docId) throws Exception;
+	void deleteFile(long docId) throws Exception;
 }

@@ -160,7 +160,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 	}
 
 	@Override
-	public void deleteFile(int docId) throws Exception {
+	public void deleteFile(long docId) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

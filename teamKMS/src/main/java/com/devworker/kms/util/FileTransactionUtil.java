@@ -21,7 +21,7 @@ public class FileTransactionUtil {
 	 * HashMap field is storing fileData and UUID key which converted to String
 	 * Object
 	 */
-	private static final Map<String, List<Integer>> fileData = new HashMap<String, List<Integer>>();
+	private static final Map<String, List<Long>> fileData = new HashMap<String, List<Long>>();
 
 	/**
 	 * FileTransactionUtil class do not allow create object, because it is UTIL
@@ -38,16 +38,16 @@ public class FileTransactionUtil {
 	 * @param docId value, is considered File Id
 	 * @return
 	 */
-	public static String putFileInfo(String key, int docId) {
+	public static String putFileInfo(String key, long docId) {
 
 		if (key != null && fileData.containsKey(key)) {
-			List<Integer> fileList = fileData.get(key);
+			List<Long> fileList = fileData.get(key);
 			fileList.add(docId);
 			return key;
 		}
 
 		String newKey = UUID.randomUUID().toString();
-		List<Integer> fileList = new ArrayList<Integer>();
+		List<Long> fileList = new ArrayList<Long>();
 		fileList.add(docId);
 		fileData.put(newKey, fileList);
 		return newKey;
@@ -68,7 +68,7 @@ public class FileTransactionUtil {
 	 * @param String key We use java.util.UUID for HashMap key, so parameter should
 	 *               be converted to String
 	 */
-	public static List<Integer> getFileList(String key) {
+	public static List<Long> getFileList(String key) {
 		return fileData.get(key);
 	}
 
@@ -98,7 +98,7 @@ public class FileTransactionUtil {
 		if (!fileData.containsKey(key))
 			throw new FileMemoryNotContainsKeyException();
 
-		List<Integer> returnFileData = fileData.remove(key);
+		List<Long> returnFileData = fileData.remove(key);
 		if (returnFileData != null) {
 			returnFileData.clear();
 			boolean isClear = returnFileData.isEmpty();

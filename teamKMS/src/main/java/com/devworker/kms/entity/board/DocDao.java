@@ -16,7 +16,7 @@ public class DocDao {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "doc_id")
-	int docId;
+	long docId;
 
 	@ManyToOne
 	@JoinColumn(name = "board_id")
@@ -38,7 +38,7 @@ public class DocDao {
 	public DocDao() {
 	}
 
-	public DocDao(Integer docId, CommentDao cmtId) {
+	public DocDao(Long docId, CommentDao cmtId) {
 		this.docId = docId;
 		this.cmtId = cmtId;
 	}
@@ -51,11 +51,11 @@ public class DocDao {
 		this.boardId = boardId;
 	}
 
-	public int getDocId() {
+	public long getDocId() {
 		return docId;
 	}
 
-	public void setDocId(int docId) {
+	public void setDocId(long docId) {
 		this.docId = docId;
 	}
 

@@ -131,7 +131,7 @@ public class DocService {
 		return key;
 	}
 
-	public void deleteDoc(int docId) throws Exception {
+	public void deleteDoc(long docId) throws Exception {
 		Optional<DocDao> opDocDao = docRepo.findById(docId);
 		if (!opDocDao.isPresent())
 			throw new RuntimeException("Doc is not found");  
@@ -141,14 +141,16 @@ public class DocService {
 		docRepo.delete(docDao);
 	}
 
-	public File downDoc(String trim) {
-		// TODO Auto-generated method stub
-		return null;
+	public File downDoc(long docId) {
+		Optional<DocDao> optionalDocDao = docRepo.findById(docId);
+		DocDao docDao = optionalDocDao.orElseThrow(() ->  new RuntimeException("docId is not Exist") );
+		String fileKey = docDao.getDocPath();
+		return fileHandler.downloadFile(fileKey);
 	}
 
 	public void rollbackFileTransaction(String fileTransactKey) throws Exception {
-		List<Integer> fileList = FileTransactionUtil.getFileList(fileTransactKey);
-		for (Integer fList : fileList) {
+		List<Long> fileList = FileTransactionUtil.getFileList(fileTransactKey);
+		for (Long fList : fileList) {
 			deleteDoc(fList);
 		}
 

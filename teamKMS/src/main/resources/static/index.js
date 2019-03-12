@@ -26,9 +26,9 @@ httpVueLoader.register(Vue, 'view/writingboard/siteswrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/solwrite-component.vue');
 httpVueLoader.register(Vue, 'view/setting-component.vue');
 
-httpVueLoader.register(Vue, 'view/commonboard/comment-component.vue');
-httpVueLoader.register(Vue, 'view/commonboard/question-component.vue');
-httpVueLoader.register(Vue, 'view/commonposts/qnapost-component.vue');
+httpVueLoader.register(Vue, 'view/setting/comment-component.vue');
+httpVueLoader.register(Vue, 'view/setting/question-component.vue');
+httpVueLoader.register(Vue, 'view/board/qnapost-component.vue');
 
 httpVueLoader.register(Vue, 'view/setting/user-component.vue');
 httpVueLoader.register(Vue, 'view/setting/group-component.vue');
