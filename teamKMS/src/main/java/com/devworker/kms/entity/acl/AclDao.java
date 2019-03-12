@@ -52,7 +52,6 @@ public class AclDao {
         AclDto dto = new AclDto();
         dto.setAclId(aclId);
         dto.setAclName(aclName);
-        dto.getHasPermission().addAll(PermissionType.DEFAULTLIST);
         if(StringUtils.isEmpty(hasPermission)) return dto;
         String[] split = hasPermission.split(",");
         for(String s : split)

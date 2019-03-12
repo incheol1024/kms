@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class AclDto {
     @NotBlank
@@ -48,7 +47,8 @@ public class AclDto {
     }
 
     public AclDto(){
-        hasPermission.addAll(PermissionType.DEFAULTLIST);
+        for(PermissionType type : PermissionType.DEFAULTLIST)
+            hasPermission.add(type.copy());
     }
 
     @JsonIgnore

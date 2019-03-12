@@ -135,4 +135,8 @@ public class PermissionType {
     public int hashCode() {
         return value;
     }
+
+    public PermissionType copy() {
+        return new PermissionType(name,value,has);
+    }
 }

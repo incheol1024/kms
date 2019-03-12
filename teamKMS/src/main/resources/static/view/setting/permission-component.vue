@@ -1,4 +1,4 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<template>
     <v-container fluid grid-list-lg>
         <v-layout>
             <v-flex align-space-around>
@@ -36,9 +36,10 @@
                                     <v-form>
                                         <v-text-field label="Acl Id" v-model="curAcl.aclId"></v-text-field>
                                         <v-text-field label="Acl Name" v-model="curAcl.aclName"></v-text-field>
-                                        <v-checkbox v-for="value in curAcl.hasPermission" :key="value.value"
-                                                    v-model="value" :value="value.has">{{value.name}}
-                                        </v-checkbox>
+                                        <h6>Has Permission</h6>
+                                        <v-chip v-for="value in curAcl.hasPermission" :key="value.value" v-if="value.has" close v-model="value.has" @input="deleteRule(value)">{{value.name}}</v-chip>
+                                        <h6>Add NewRule</h6>
+                                        <v-select :items="addPermission" outline item-text="name" @change="addRule"></v-select>
                                     </v-form>
                                 </v-layout>
                             </v-card-title>
@@ -59,11 +60,7 @@
                                         <table-component :headers="headers" :page-req="ugPage" :page-res="ugPageRes"
                                                          :allow-select="true" :selection.sync="selection"
                                                          :search="search"></table-component>
-                                    </v-flex>
-                                    <v-flex>
-                                        <v-chip v-for="(chip,i) in chipItem" :key="i" v-model="chip" close>
-                                            {{chip.name}}
-                                        </v-chip>
+                                        asdfasdfsf   여기 아직 안됨
                                     </v-flex>
                                 </v-layout>
                             </v-card-title>
@@ -89,14 +86,18 @@
             search: "",
             selection: [],
             aclText: "Make",
-            curAcl: Object.assign({}, ACLMODEL),
-            chipItem: []
+            curAcl: Object.assign({}, ACLMODEL)
         }),
         created: function created() {
             let _this = this;
             axios.get("acl", getJavaMaxPage()).then(res => {
                 _this.listData = res.data.content;
             }).catch(reason => catchPromise(reason));
+        },
+        computed : {
+            addPermission: function () {
+                return this.curAcl.hasPermission.filter(permission => !permission.has);
+            }
         },
         methods: {
             ugPage: function ugPage(page) {
@@ -120,10 +121,6 @@
             confirmAcl: function confirmAcl() {
                 return axios.put("acl", this.curAcl)
             },
-            setACE: function setList(item) {
-                //let _this = this;
-                //axios.put("ace", item).then().catch(reason => catchPromise(reason));
-            },
             newAcl: function newAcl() {
                 this.curAcl = Object.assign({}, ACLMODEL);
                 this.aclText = "Make";
@@ -131,8 +128,13 @@
             setItem: function setItem(item) {
                 this.curAcl = item;
                 this.aclText = "Update";
+            },
+            addRule : function addRule(item) {
+                this.curAcl.hasPermission.filter(it => it.value === item)[0].has = "true";
+            },
+            deleteRule : function deleteRule(item) {
+                item.has = false;
             }
-
         }
     }
 </script>

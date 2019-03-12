@@ -13,58 +13,63 @@ import com.devworker.kms.service.acl.AclService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AclUtil {
-    private AclUtil(){}
+    private AclUtil() {
+    }
+
     private static AclService aclService;
     private static AceService aceService;
     private static UserService userService;
     private static GroupService groupService;
 
     @Autowired
-    public void setAclService(AclService acl){
+    public void setAclService(AclService acl) {
         aclService = acl;
     }
 
     @Autowired
-    public void setUserService(UserService user){
+    public void setUserService(UserService user) {
         userService = user;
     }
 
     @Autowired
-    public void setGroupService(GroupService group){
+    public void setGroupService(GroupService group) {
         groupService = group;
     }
 
     @Autowired
-    public void setAceService(AceService ace){
+    public void setAceService(AceService ace) {
         aceService = ace;
     }
 
-    public static void checkPermission(String ownerId, PermissionType type){
+    public static void checkPermission(String ownerId, PermissionType type) {
         String current = CommonUtil.getCurrentUser();
-        if(current.equals(ownerId)) return;
-        if(checkInner(current,type)) return;
+        if (current.equals(ownerId)) return;
+        if (checkInner(current, type)) return;
+
         UserDto user = userService.getUser(current);
         GroupDto group = groupService.getGroup(user.getGroupId());
-        while(group != null && group.getParentId() != -1) {
-            if(checkInner(String.valueOf(group.getId()),type)) return;
+        while (group != null && group.getParentId() != -1) {
+            if (checkInner(String.valueOf(group.getId()), type)) return;
             group = groupService.getGroup(group.getParentId());
         }
-        throw new NotAllowException("You Have Not Permission.");
+        throw new NotAllowException("You Have Not Any Permission.");
     }
 
-    public static void checkPermission(PermissionType type){ checkPermission("",type);}
+    public static void checkPermission(PermissionType type) {
+        checkPermission("", type);
+    }
 
-    private static boolean checkInner(String aceId, PermissionType type){
-        List<AceDto> aceList;
-        if((aceList = aceService.getAceByAceId(aceId)) != null){
-            for(AceDto sub : aceList){
-                AclDto acl = aclService.getAcl(sub.getAclId());
-                if(acl.getHasPermission().contains(type)) return true;
-            }
+    private static boolean checkInner(String aceId, PermissionType type) {
+        List<AceDto> aceList = Optional.ofNullable(aceService.getAceByAceId(aceId)).orElse(new ArrayList<>());
+        for (AceDto sub : aceList) {
+            AclDto acl = aclService.getAcl(sub.getAclId());
+            if (acl.getHasPermission().contains(type)) return true;
         }
         return false;
     }
