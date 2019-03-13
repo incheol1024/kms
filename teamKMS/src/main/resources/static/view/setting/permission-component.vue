@@ -20,7 +20,8 @@
                         </v-layout>
                     </v-card-title>
                     <v-card-actions>
-                        <v-btn color="primary" @click="newAcl">New</v-btn>
+                        <v-btn color="primary" @click="newAcl">NewAcl</v-btn>
+                        <v-btn color="primary" @click="deleteAcl">Delete</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-flex>
@@ -51,21 +52,12 @@
                             <v-card-title class="title">
                                 <v-layout wrap column>
                                     <v-flex>
-                                        <v-layout>
-                                            <v-spacer></v-spacer>
-                                            <v-text-field v-model="search" append-icon="search" label="Search"
-                                                          single-line
-                                                          hide-details></v-text-field>
-                                        </v-layout>
-                                        <table-component :headers="headers" :page-req="ugPage" :page-res="ugPageRes"
-                                                         :allow-select="true" :selection.sync="selection"
-                                                         :search="search"></table-component>
-                                        asdfasdfsf   여기 아직 안됨
+                                        <table-component ref="table" :headers="headers" :page-res="ugPageRes"></table-component>
                                     </v-flex>
                                 </v-layout>
                             </v-card-title>
                             <v-card-actions>
-                                <v-btn color="primary" @click="setACE">Set</v-btn>
+                                <v-btn color="primary">Set</v-btn>
                             </v-card-actions>
                         </v-tab-item>
                     </v-tabs>
@@ -78,15 +70,14 @@
 <script>
     module.exports = {
         data: () => ({
+            curAcl: Object.assign({}, ACLMODEL),
             listData: [],
+            updateMode : false,
+            aclText : "Make",
             headers: [
                 {text: 'name', value: 'name'},
                 {text: 'type', value: 'type', sortable: false}
-            ],
-            search: "",
-            selection: [],
-            aclText: "Make",
-            curAcl: Object.assign({}, ACLMODEL)
+            ]
         }),
         created: function created() {
             let _this = this;
@@ -100,10 +91,35 @@
             }
         },
         methods: {
-            ugPage: function ugPage(page) {
-                return axios.get("group/child", {
-                    params: page
-                })
+            confirmAcl: function confirmAcl() {
+                let _this = this;
+                if(this.updateMode)
+                    axios.post("acl", _this.curAcl).catch(reason => openError(reason));
+                else
+                    axios.put("acl", _this.curAcl).then(_this.listData.push(_this.curAcl)).catch(reason => openError(reason));
+                this.updateMode = false;
+                this.curAcl = Object.assign({}, ACLMODEL);
+            },
+            deleteAcl : function deleteAcl(){
+                let _this = this;
+                axios.delete("acl/" + _this.curAcl.aclId).then(_this.listData.splice(_this.listData.indexOf(_this.curAcl),1)).catch(reason => openError(reason));
+                this.newAcl();
+            },
+            newAcl: function newAcl() {
+                this.updateMode = false;
+                this.curAcl = Object.assign({}, ACLMODEL);
+                this.aclText = "Make";
+            },
+            setItem: function setItem(item) {
+                this.curAcl = item;
+                this.aclText = "Update";
+                this.updateMode = true;
+            },
+            addRule : function addRule(item) {
+                this.curAcl.hasPermission.filter(it => it.value === item)[0].has = true;
+            },
+            deleteRule : function deleteRule(item) {
+                item.has = false;
             },
             ugPageRes: function ugPageRes(response, _this) {
                 let groupList = response.data.groupList.content;
@@ -117,23 +133,6 @@
                     userList[i].type = "User";
                     _this.addFunction(userList[i]);
                 }
-            },
-            confirmAcl: function confirmAcl() {
-                return axios.put("acl", this.curAcl)
-            },
-            newAcl: function newAcl() {
-                this.curAcl = Object.assign({}, ACLMODEL);
-                this.aclText = "Make";
-            },
-            setItem: function setItem(item) {
-                this.curAcl = item;
-                this.aclText = "Update";
-            },
-            addRule : function addRule(item) {
-                this.curAcl.hasPermission.filter(it => it.value === item)[0].has = "true";
-            },
-            deleteRule : function deleteRule(item) {
-                item.has = false;
             }
         }
     }

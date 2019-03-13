@@ -95,7 +95,7 @@
 					var items = _this.getItem()
 					var total = items.length
 					if (item.page > 0 && item.size > 0) {
-						items = items.slice((item.page - 1) * item.size, item.page * item.size)
+						items = items.splice((item.page - 1) * item.size, item.page * item.size)
 						console.log(items)
 					}
 					resolve(new function(){
