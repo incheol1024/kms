@@ -2,9 +2,12 @@
   <v-content>
 
     <v-container grid-list-xs align-content-center>
+
+      <commentwrite-component :id="id" :name="name" :qid="qid"
+      @emitcomment="renderComment"></commentwrite-component>
+
       <template v-for="(answer, index) in answers">
         <v-layout justify-center row mb-4 :key="index">
-
           <v-flex xs10>
             <v-card>
               <div>
@@ -324,7 +327,6 @@
             console.log(error)
           })
       },
-
       fileDownload: function (docId) {
         console.log("updateUnLike function is called");
         axios.post('/comment/unlike', {
@@ -342,8 +344,9 @@
           .catch(function(error) {
             console.log(error)
           })
-        
-        
+      },
+      renderComment: function (data) {
+        this.answers.push(data);
       }
     }
   }
