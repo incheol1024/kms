@@ -85,11 +85,7 @@
         <input type="submit" value="댓글 등록 테스트" />
       </form>
  
-      <form @submit.prevent="addFile">
-        <input type="file" id="files" ref="files" multiple @change="handleFileUpload()" />
-        <!-- <input type="submit" value="파일 등록 테스트" /> -->
-        <v-btn @click="addFile"> 파일등록테스트</v-btn>
-      </form>
+
     </v-form>
 
   </v-content>
@@ -122,23 +118,7 @@
     },
 
     methods: {
-      handleFileUpload: function() {
-        console.log("handleFileUpload is called : ");
-        //this.multiPartFile = this.$refs.files.files;
 
-        let uploadedFiles = this.$refs.files.files;
-        for (var i = 0; i < uploadedFiles.length; i++) {
-          this.multiPartFile.push(uploadedFiles[i]);
-          console.log("uploadedFiles : " + uploadedFiles[i]);
-          console.log("multiPartFile : " + this.multiPartFile[i]);
-        }
-        console.log("this.multiPartFile length: " + this.multiPartFile.length);
-
-        for (var i = 0; i < this.multiPartFile.length; i++) {
-          console.log(this.multiPartFile[i]);
-        }
-
-      },
       getCommentById: function() {
         var that = this;
         console.log("getCommentById URL : /comment/list/" + this.qid );

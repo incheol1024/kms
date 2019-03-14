@@ -1,5 +1,8 @@
 <template>
 <div>
+    
+<v-content>
+	<v-container fluid>
   <codemirror ref="myCm"
               :value="cmtContents" 
               v-model="cmtContents"
@@ -8,7 +11,28 @@
               @focus="onCmFocus"
               @input="onCmCodeChange">
   </codemirror> 
-  <v-btn color="info" @click.prevent="addComment">댓글 등록</v-btn>
+<!--   
+  <form @submit.prevent="addFile">
+        <input type="file" id="files" ref="files" multiple @change="handleFileUpload()" />
+        <input type="submit" value="파일 등록 테스트" />
+        <v-btn @click="addFile"> 파일등록테스트</v-btn>
+  </form> 
+-->
+				<v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
+					<img :src="imageUrl" height="100" v-if="imageUrl"/>
+					<v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file'></v-text-field>
+					<input
+						type="file"
+						style="display: none"
+						ref="image"
+						accept="image/*"
+						@change="onFilePicked"
+                        multiple
+					>
+				</v-flex>
+			</v-container>
+            <v-btn color="info" @click.prevent="addComment">댓글 등록</v-btn>
+		</v-content>
 </div>
 </template>
 
@@ -26,8 +50,13 @@ data () {
         line: true,
         styleActiveLine: true,
         lineWrapping: true,
-        lineSeparator:"CRLF"
-      }
+        lineSeparator:"\n"
+      },
+      title: "Image Upload",
+        dialog: false,
+		imageName: '',
+		imageUrl: '',
+		imageFile: ''
     }
   },
   methods: {
@@ -68,7 +97,46 @@ data () {
     },
     emitComment: function(data) {
         this.$emit('emitcomment', data, '');
-    }
+    },
+    handleFileUpload: function() {
+        console.log("handleFileUpload is called : ");
+        //this.multiPartFile = this.$refs.files.files;
+
+        let uploadedFiles = this.$refs.files.files;
+        for (var i = 0; i < uploadedFiles.length; i++) {
+          this.multiPartFile.push(uploadedFiles[i]);
+          console.log("uploadedFiles : " + uploadedFiles[i]);
+          console.log("multiPartFile : " + this.multiPartFile[i]);
+        }
+        console.log("this.multiPartFile length: " + this.multiPartFile.length);
+
+        for (var i = 0; i < this.multiPartFile.length; i++) {
+          console.log(this.multiPartFile[i]);
+        }
+      },
+       pickFile () {
+            this.$refs.image.click ()
+        },
+		
+		onFilePicked (e) {
+			const files = e.target.files
+			if(files[0] !== undefined) {
+				this.imageName = files[0].name
+				if(this.imageName.lastIndexOf('.') <= 0) {
+					return
+				}
+				const fr = new FileReader ()
+				fr.readAsDataURL(files[0])
+				fr.addEventListener('load', () => {
+					this.imageUrl = fr.result
+                    this.imageFile = files[0] // this is an image file that can be sent to server...
+				})
+			} else {
+				this.imageName = ''
+				this.imageFile = ''
+				this.imageUrl = ''
+			}
+		}
   },
   computed: {
     codemirror() {
