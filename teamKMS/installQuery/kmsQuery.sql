@@ -68,7 +68,8 @@ create table KMS.KMS_ACE(
 AclId varchar(36) not null,
 AceId varchar(32) not null,
 Type varchar(5) not null,
-CONSTRAINT FK_ACLID foreign key(AclId) REFERENCES KMS_ACL(AclId)
+CONSTRAINT FK_ACLID foreign key(AclId) REFERENCES KMS_ACL(AclId),
+CONSTRAINT PK_ACEID primary key (AclId, AceId)
 );
 
 CREATE INDEX IDX_ACLID ON KMS_ACE(AclId);

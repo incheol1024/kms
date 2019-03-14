@@ -94,21 +94,24 @@
         watch: {
             pagination: {
                 handler() {
-                    this.loading = true;
-                    this.items = [];
-                    let _this = this;
-                    try{
-                        this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
-                            _this.pageRes(value, _this);
-                        }).catch(reason => catchPromise(reason))
-                    }
-                    finally {
-                        _this.loading = false
-                    }
+                    this.sync();
                 }
             }
         },
         methods: {
+            sync : function sync(){
+                this.loading = true;
+                this.items = [];
+                let _this = this;
+                try{
+                    this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
+                        _this.pageRes(value, _this);
+                    }).catch(reason => catchPromise(reason))
+                }
+                finally {
+                    _this.loading = false
+                }
+            },
             editItem: function editItem(item) {
                 this.editFunction(item);
             },

@@ -38,9 +38,13 @@
                                         <v-text-field label="Acl Id" v-model="curAcl.aclId"></v-text-field>
                                         <v-text-field label="Acl Name" v-model="curAcl.aclName"></v-text-field>
                                         <h6>Has Permission</h6>
-                                        <v-chip v-for="value in curAcl.hasPermission" :key="value.value" v-if="value.has" close v-model="value.has" @input="deleteRule(value)">{{value.name}}</v-chip>
+                                        <v-chip v-for="value in curAcl.hasPermission" :key="value.value"
+                                                v-if="value.has" close v-model="value.has" @input="deleteRule(value)">
+                                            {{value.name}}
+                                        </v-chip>
                                         <h6>Add NewRule</h6>
-                                        <v-select :items="addPermission" outline item-text="name" @change="addRule"></v-select>
+                                        <v-select :items="addPermission" outline item-text="name"
+                                                  @change="addRule"></v-select>
                                     </v-form>
                                 </v-layout>
                             </v-card-title>
@@ -51,13 +55,14 @@
                         <v-tab-item>
                             <v-card-title class="title">
                                 <v-layout wrap column>
-                                    <v-flex>
-                                        <table-component ref="table" :headers="headers" :page-res="ugPageRes"></table-component>
-                                    </v-flex>
+                                    <table-component ref="table" :headers="headers" :page-req="aceReq"
+                                                     :allow-delete="true" :delete-function="deleteAce"></table-component>
                                 </v-layout>
                             </v-card-title>
                             <v-card-actions>
-                                <v-btn color="primary">Set</v-btn>
+                                <v-spacer></v-spacer>
+                                <v-text-field class="mr2" label="Ace(Gropp/User) Id" v-model="aceText"></v-text-field>
+                                <v-btn color="primary" @click="addAce">AddAce</v-btn>
                             </v-card-actions>
                         </v-tab-item>
                     </v-tabs>
@@ -72,11 +77,14 @@
         data: () => ({
             curAcl: Object.assign({}, ACLMODEL),
             listData: [],
-            updateMode : false,
-            aclText : "Make",
+            updateMode: false,
+            aclText: "Make",
+
+            curAce : Object.assign({},ACEMODEL),
+            aceText : "",
             headers: [
-                {text: 'name', value: 'name'},
-                {text: 'type', value: 'type', sortable: false}
+                {text: 'aceId', value: 'aceId'},
+                {text: 'action', value: 'action', sortable: false}
             ]
         }),
         created: function created() {
@@ -85,7 +93,7 @@
                 _this.listData = res.data.content;
             }).catch(reason => catchPromise(reason));
         },
-        computed : {
+        computed: {
             addPermission: function () {
                 return this.curAcl.hasPermission.filter(permission => !permission.has);
             }
@@ -93,16 +101,16 @@
         methods: {
             confirmAcl: function confirmAcl() {
                 let _this = this;
-                if(this.updateMode)
+                if (this.updateMode)
                     axios.post("acl", _this.curAcl).catch(reason => openError(reason));
                 else
                     axios.put("acl", _this.curAcl).then(_this.listData.push(_this.curAcl)).catch(reason => openError(reason));
                 this.updateMode = false;
                 this.curAcl = Object.assign({}, ACLMODEL);
             },
-            deleteAcl : function deleteAcl(){
+            deleteAcl: function deleteAcl() {
                 let _this = this;
-                axios.delete("acl/" + _this.curAcl.aclId).then(_this.listData.splice(_this.listData.indexOf(_this.curAcl),1)).catch(reason => openError(reason));
+                axios.delete("acl/" + _this.curAcl.aclId).then(_this.listData.splice(_this.listData.indexOf(_this.curAcl), 1)).catch(reason => openError(reason));
                 this.newAcl();
             },
             newAcl: function newAcl() {
@@ -114,24 +122,29 @@
                 this.curAcl = item;
                 this.aclText = "Update";
                 this.updateMode = true;
+                this.$refs.table.sync();
             },
-            addRule : function addRule(item) {
+            addRule: function addRule(item) {
                 this.curAcl.hasPermission.filter(it => it.value === item)[0].has = true;
             },
-            deleteRule : function deleteRule(item) {
+            deleteRule: function deleteRule(item) {
                 item.has = false;
             },
-            ugPageRes: function ugPageRes(response, _this) {
-                let groupList = response.data.groupList.content;
-                let userList = response.data.userList.content;
-                _this.total = groupList.length + userList.length;
-                for (let i = 0; i < groupList.length; i++) {
-                    groupList[i].type = "Group";
-                    _this.addFunction(groupList[i]);
+            aceReq: function aceReq(page) {
+                if (this.curAcl.aclId !== "") {
+                    return axios.get("ace/" + this.curAcl.aclId, {
+                        params: page
+                    })
                 }
-                for (let i = 0; i < userList.length; i++) {
-                    userList[i].type = "User";
-                    _this.addFunction(userList[i]);
+            },
+            deleteAce : function deleteAce(item) {
+                return axios.delete("ace/" + item.aclId + "/" + item.aceId);
+            },
+            addAce : function addAce(){
+                if (this.curAcl.aclId !== "") {
+                    _this = this;
+                    let ace = {"aclId": _this.curAcl.aclId, "aceId": _this.aceText};
+                    axios.put("ace", ace).then(_this.$refs.table.addFunction(ace)).catch(reason => openError(reason));
                 }
             }
         }
