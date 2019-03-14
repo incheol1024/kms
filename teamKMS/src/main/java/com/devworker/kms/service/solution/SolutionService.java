@@ -39,18 +39,16 @@ public class SolutionService {
 //		boardDao.setContents("contents");
 		boardDao.setHits(0);
 		
-		System.out.println("2 boardid : " + boardDao.getBoardId());
-		System.out.println("2 content : " + boardDao.getContents());
-		System.out.println("2 subject : " + boardDao.getSubject());
-		System.out.println("2 userid : " + boardDao.getUserId());
-		System.out.println("2 regdate : " + boardDao.getRegDate());
-		System.out.println("2 update : " + boardDao.getUpdDate());
-
 		return boardRepo.save(boardDao);
 	}
 	
 	public BoardDao editSolution(BoardDao boardDao) {
-		
+		boardRepo.findById(boardDao.getBoardId());
+
+		boardDao.setUserId(CommonUtil.getCurrentUser());
+		boardDao.setRegDate(LocalDateTime.now()); //수정
+		boardDao.setUpdDate(LocalDateTime.now());
+		boardDao.setHits(1); //수정
 		return boardRepo.save(boardDao);
 	}
 

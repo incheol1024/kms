@@ -2,12 +2,12 @@
     <v-content>
         sol / {{name}} / {{id}} / write page [ {{Solution}} / {{Site}} / {{selected}} ]test / {{fuc}} /
 
-        <v-container id="solution_write" grid-list-xl>
+        <v-container id="solution_write" :items="solution_write" grid-list-xl>
             <v-layout row wrap>
                 <v-flex xs12 sm6 md3>
                     <v-text-field
                             label="title"
-                            placeholder="title"
+                            placeholder="{{props.items.subject}}"
                             v-model="subject"
                     ></v-text-field>
                 </v-flex>
@@ -50,7 +50,7 @@
             <ckeditor :editor="editor" v-model="contents" :config="editorConfig"></ckeditor>
         </div>
 
-        <div class="text-xs-center" v-if="id === '2'">
+        <div class="text-xs-center" v-if="id === '0'">
             <v-btn color="success" @click="try_write">등록</v-btn>
         </div>
 
@@ -58,32 +58,53 @@
             <v-btn color="success" @click="edit_write">편집</v-btn>
         </div>
 
-    </v-content>
+        <v-data-table :items="solution_write">
+            <template slot="items" slot-scope="props">
+            <td class="text-xs-left">{{ props.item.boardId }}</td>
+            <td class="text-xs-left">{{ props.item.subject }}</td>
+            <td class="text-xs-left">{{ props.item.userId }}</td>
+            <td class="text-xs-left">{{ props.item.hits }}</td>
+            <td class="text-xs-left">{{ props.item.regDate }}</td>
+            </template>
+        </v-data-table>
 
+    </v-content>
+    
 </template>
 
 <script>
     module.exports = {
         name: 'solution_write',
-        props: ["id"],
+        props: ['id', 'name'],
         data: () => ({
             Solution: ['ECM', 'EDM', 'ETC'],
             Site: ['site1', 'site2', 'site3'],
+            boardId: '',
             subject:'',
             contents:'',
             selected: '',
             selected2: '',
             editor: ClassicEditor,
-            editorData: '',
-            editorConfig: {
-                // The configuration of the editor.
-            }
+            solution_write: []
         }),
-        created: function () {
+        created: function (response) {
             console.log("id = " + this.$route.params.id);
             var _this = this;
+            this.getSolution(_this);
         },
         methods: {
+            getSolution: function(_this) {
+                axios.get("/answer/"+ id)
+                .then(
+                function(response) {
+                    for (var i = 0; i < response.data.length; i++) {
+                        _this.solution_write.push(response.data[i]);
+                    }
+                })
+                .catch(function(error) {
+                console.log(error);
+                })
+            },
             try_write: function try_write() {
               let obj1 = {subject:this.subject,contents:this.contents};
               let obj2 = Object.assign({},obj1)
@@ -99,7 +120,9 @@
                     })
             },
             edit_write: function edit_write() {
-                axios.post('/solution/edit', {})
+              let obj1 = {boardId:this.id,subject:this.subject,contents:this.contents};
+              let obj2 = Object.assign({},obj1)
+                axios.post('/solution/edit', obj2)
                     .then(
                         function (response) {
                             _this.answers.push(response.data);
@@ -107,7 +130,7 @@
                         }
                     )
                     .catch(function (error) {
-                        console.log("[ERR] : " + error)
+                         console.log("[ERR] : " + error)
                     })
             },
             cancel_write: function () {

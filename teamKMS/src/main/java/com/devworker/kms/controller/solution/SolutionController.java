@@ -35,19 +35,12 @@ public class SolutionController {
 	
 	@PostMapping("/register")
 	public BoardDao solutionRegiser(@Valid @RequestBody BoardDao boardDao) {
-		System.out.println("1 boardid : " + boardDao.getBoardId());
-		System.out.println("1 content : " + boardDao.getContents());
-		System.out.println("1 subject : " + boardDao.getSubject());
-		System.out.println("1 userid : " + boardDao.getUserId());
-		System.out.println("1 regdate : " + boardDao.getRegDate());
-		System.out.println("1 update : " + boardDao.getUpdDate());
 		return solutionService.registerSolution(boardDao);
 	}
 	
 	@PostMapping("/edit")
-	public void solutionEdit(@RequestBody BoardDao boardDao) {
-		System.out.println(" --test-- : " + boardDao.getBoardId());
-//		solutionService.editSolution(boardDao);
+	public void solutionEdit(@Valid @RequestBody BoardDao boardDao) {
+		solutionService.editSolution(boardDao);
 	}
 	
 	@DeleteMapping("/{boardId}")
@@ -57,6 +50,7 @@ public class SolutionController {
 	
 	@GetMapping("/answer/{id}")
 	public BoardDao getSolutionById(@PathVariable Integer id) {
+		System.out.println(" -- answerid : " + id);
 		return solutionService.findById(id).get();
 	}
 }

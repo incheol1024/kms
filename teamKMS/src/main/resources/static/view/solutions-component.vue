@@ -1,7 +1,7 @@
 <template>
 <v-content>
   <v-card-title>
-    <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage(2)"> 글쓰기 </v-btn>
+    <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage(0)"> 글쓰기 </v-btn>
     <v-spacer></v-spacer>
     <v-text-field v-model="search" append-icon="search" label="검색" single-line hide-details></v-text-field>
   </v-card-title>
@@ -22,7 +22,7 @@
       <td class="text-xs-left">{{ props.item.userId }}</td>
       <td class="text-xs-left">{{ props.item.hits }}</td>
       <td class="text-xs-left">{{ props.item.regDate }}</td>
-      <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage(1)"> 편집 </v-btn>
+      <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage(props.item.boardId)"> 편집 </v-btn>
       <v-btn slot="activator" color="primary" dark class="mb-2" @click="delpage(props.item.boardId)"> 삭제 </v-btn>
     </template>
     <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -42,7 +42,7 @@ module.exports = {
 		{ text: '번호', value: 'id' },
 	    { text: '제목', value: 'title' },
 	    { text: '작성자', value: 'userName' },
-	    { text: '답변수', value: 'replyCount' },
+	    { text: '조회수', value: 'hits' },
 	    { text: '등록일자', value: 'regDate' }
     ],
     solution: []
