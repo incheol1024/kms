@@ -52,6 +52,9 @@ public class AceController {
     @GetMapping("/{aclId}")
     public Page<AceDto> getAceListByAclId(@PathVariable String aclId, Pageable pageable) {
         return aceService.getAceListByAclId(aclId,pageable);
+        //TODO:: 이부분을 수정해야 함
     }
+
+
 
 }
