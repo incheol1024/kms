@@ -1,5 +1,4 @@
 <template>
-<v-content>
 	<v-card flat>
       <router-view></router-view>
       <v-bottom-nav :active.sync="bottomNav" :value="true" shift :color="color">
@@ -21,7 +20,6 @@
 
       </v-bottom-nav>
     </v-card>
-</v-content>
 </template>
 
 <script>

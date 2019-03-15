@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.0/src/httpVueLoader.js"></script>
@@ -21,7 +21,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/mode/python/python.js"></script>
 
 
-
     <script src="js/es6-promise.auto.min.js"></script>
     <script src="js/vue-charts.min.js"></script>
     <script src="js/model.js"></script>
@@ -31,7 +30,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/merge/merge.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" >
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
     <title>Team KMS</title>
 </head>
 <body>
@@ -42,7 +41,7 @@
             <span style="cursor: pointer;" class="hidden-sm-and-down" @click="gotitle">KMS</span>
         </v-toolbar-title>
         <v-text-field flat solo-inverted hide-details prepend-inner-icon="search" label="Search"
-                      class="hidden-sm-and-down" @keyup.enter="submit" placeholder="Press Enter"></v-text-field>
+                      @keyup.enter="submit" placeholder="Press Enter"></v-text-field>
         <v-spacer></v-spacer>
         <v-btn icon @click="setting">
             <v-icon>settings</v-icon>
@@ -70,7 +69,11 @@
         </v-expansion-panel>
     </v-navigation-drawer>
 
-    <router-view></router-view>
+    <v-content>
+        <v-container fluid grid-list-md>
+            <router-view></router-view>
+        </v-container>
+    </v-content>
 
     <v-dialog v-model="dialog" width="500">
         <v-card>

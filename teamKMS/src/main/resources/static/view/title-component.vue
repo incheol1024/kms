@@ -1,6 +1,4 @@
 <template>
-<v-content>
-<v-container fluid grid-list-md>
 <v-layout wrap>		
 	<v-flex d-flex xs12 lg6 md6>
 	<v-card>
@@ -93,10 +91,7 @@
         </v-container>
 	</v-card>
 	</v-flex>
-	
 </v-layout>
-</v-container>
-</v-content>
 </template>
 
 <script>
