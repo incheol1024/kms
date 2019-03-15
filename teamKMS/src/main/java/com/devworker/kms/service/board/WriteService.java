@@ -1,6 +1,7 @@
-package com.devworker.kms.service.write;
+package com.devworker.kms.service.board;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.devworker.kms.entity.board.BoardDao;
 import com.devworker.kms.entity.solution.SolutionDao;
 import com.devworker.kms.repo.board.BoardRepo;
-import com.devworker.kms.repo.write.WriteRepo;
 import com.devworker.kms.util.CommonUtil;
 
 @Service
@@ -18,28 +18,31 @@ public class WriteService {
 	@Autowired
 	BoardRepo boardRepo;
 	
-	@Autowired
-	WriteRepo writeRepo;
+	public List<BoardDao> getFirstPageList() {
+		return (List<BoardDao>) boardRepo.findAll();
+	}
 	
 	public BoardDao register(BoardDao boardDao) {
 		boardDao.setUserId(CommonUtil.getCurrentUser());
 		boardDao.setRegDate(LocalDateTime.now());
 		boardDao.setUpdDate(LocalDateTime.now());
-		
-//		boardDao.setBoardId(boardId);
-		boardDao.setSubject("subject");
-		boardDao.setContents("contents");
-		
 		boardDao.setHits(0);
+		
 		return boardRepo.save(boardDao);
 	}
 
 	public BoardDao edit(BoardDao boardDao) {
+		boardRepo.findById(boardDao.getBoardId());
+
+		boardDao.setUserId(CommonUtil.getCurrentUser());
+		boardDao.setRegDate(LocalDateTime.now()); //수정
+		boardDao.setUpdDate(LocalDateTime.now());
+		boardDao.setHits(1); //수정
 		return boardRepo.save(boardDao);
 	}
 	
-	public BoardDao delete(BoardDao boardDao) {
-		return boardRepo.save(boardDao);
+	public void delete(int id) {
+		boardRepo.deleteById(id);
 	}
 	
 	public Optional<BoardDao> findById(Integer id) {

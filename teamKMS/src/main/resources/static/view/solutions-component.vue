@@ -43,7 +43,8 @@ module.exports = {
 	    { text: '제목', value: 'title' },
 	    { text: '작성자', value: 'userName' },
 	    { text: '조회수', value: 'hits' },
-	    { text: '등록일자', value: 'regDate' }
+	    { text: '등록일자', value: 'regDate' },
+	    { text: '', value: '' }
     ],
     solution: []
   }),
@@ -81,6 +82,7 @@ module.exports = {
       .catch(function(error){
         console.log("[ERR] : " + error)
       })
+      router.push("/solutions/" + this.id);
     }
   }
 };

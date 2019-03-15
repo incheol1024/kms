@@ -57,17 +57,6 @@
         <div class="text-xs-center" v-else>
             <v-btn color="success" @click="edit_write">편집</v-btn>
         </div>
-
-        <v-data-table :items="solution_write">
-            <template slot="items" slot-scope="props">
-            <td class="text-xs-left">{{ props.item.boardId }}</td>
-            <td class="text-xs-left">{{ props.item.subject }}</td>
-            <td class="text-xs-left">{{ props.item.userId }}</td>
-            <td class="text-xs-left">{{ props.item.hits }}</td>
-            <td class="text-xs-left">{{ props.item.regDate }}</td>
-            </template>
-        </v-data-table>
-
     </v-content>
     
 </template>
@@ -118,6 +107,7 @@
                     .catch(function (error) {
                         console.log("[ERR] : " + error)
                     })
+              this.$router.push("/solutions/" + this.id);
             },
             edit_write: function edit_write() {
               let obj1 = {boardId:this.id,subject:this.subject,contents:this.contents};
@@ -132,6 +122,7 @@
                     .catch(function (error) {
                          console.log("[ERR] : " + error)
                     })
+              this.$router.push("/solutions/" + this.id);
             },
             cancel_write: function () {
                 router.push("/solutions/" + this.id);

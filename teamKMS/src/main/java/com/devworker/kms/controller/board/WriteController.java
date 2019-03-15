@@ -1,13 +1,17 @@
-package com.devworker.kms.controller.write;
+package com.devworker.kms.controller.board;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.entity.board.BoardDao;
-import com.devworker.kms.service.write.WriteService;
+import com.devworker.kms.service.board.WriteService;
 
 
 @RestController
@@ -22,12 +26,12 @@ public class WriteController {
 	}
 	
 	@PostMapping("/edit")
-	public BoardDao edit(@RequestBody BoardDao boardDao) {
-		return writeService.edit(boardDao);
+	public void edit(@Valid @RequestBody BoardDao boardDao) {
+		writeService.edit(boardDao);
 	}
 	
-	@PostMapping("/delete")
-	public BoardDao delete(@RequestBody BoardDao boardDao) {
-		return writeService.delete(boardDao);
+	@DeleteMapping("/{boardId}")
+	public void delete(@PathVariable String boardId) {
+		writeService.delete(Integer.parseInt(boardId));
 	}
 }

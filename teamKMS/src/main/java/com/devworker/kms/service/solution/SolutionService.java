@@ -34,9 +34,6 @@ public class SolutionService {
 		boardDao.setUserId(CommonUtil.getCurrentUser());
 		boardDao.setRegDate(LocalDateTime.now());
 		boardDao.setUpdDate(LocalDateTime.now());
-//		boardDao.setBoardId(boardId);
-//		boardDao.setSubject("subject");
-//		boardDao.setContents("contents");
 		boardDao.setHits(0);
 		
 		return boardRepo.save(boardDao);
