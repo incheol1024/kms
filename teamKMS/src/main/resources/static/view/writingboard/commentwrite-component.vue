@@ -1,8 +1,10 @@
 <template>
 <div>
     
-<v-content>
-	<v-container fluid>
+  <v-container grid-list-md text-xs-center>
+    <v-layout row wrap>
+      <v-flex xs12>    
+	
   <codemirror ref="myCm"
               :value="cmtContents" 
               v-model="cmtContents"
@@ -18,7 +20,7 @@
         <v-btn @click="addFile"> 파일등록테스트</v-btn>
   </form> 
 -->
-				<v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
+			<v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
 					<img :src="imageUrl" height="100" v-if="imageUrl"/>
 					<v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file'></v-text-field>
 					<input
@@ -29,10 +31,14 @@
 						@change="onFilePicked"
                         multiple
 					>
-				</v-flex>
-			</v-container>
+				</v-flex>k
             <v-btn color="info" @click.prevent="addComment">댓글 등록</v-btn>
-		</v-content>
+
+
+      </v-flex>
+    </v-layout>
+  </v-container>
+  
 </div>
 </template>
 

@@ -20,7 +20,7 @@ import com.devworker.kms.entity.board.BoardDao;
 import com.devworker.kms.service.solution.SolutionService;
 
 @RestController
-@RequestMapping("/solution")
+@RequestMapping("/solutiRon")
 public class SolutionController {
 	private Logger logger = LoggerFactory.getLogger(SolutionController.class);
 	
@@ -39,8 +39,8 @@ public class SolutionController {
 	}
 	
 	@PostMapping("/edit")
-	public void solutionEdit(@Valid @RequestBody BoardDao boardDao) {
-		solutionService.editSolution(boardDao);
+	public BoardDao solutionEdit(@Valid @RequestBody BoardDao boardDao) {
+		return solutionService.editSolution(boardDao);
 	}
 	
 	@DeleteMapping("/{boardId}")
