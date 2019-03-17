@@ -1,5 +1,4 @@
   <template>
-  <v-content>
 
     <v-container grid-list-xs align-content-center>
 
@@ -62,7 +61,7 @@
           </v-flex>
         </v-layout>
       </template>
-    </v-container>
+
 
 
     <v-form>
@@ -87,8 +86,7 @@
  
 
     </v-form>
-
-  </v-content>
+    </v-container>
   </template>
 
   <script>
@@ -103,8 +101,6 @@
         multiPartFile: [],
         answers: [],
         docs: [],
-        fileTransactKey: null,
-        fileCount:0,
         _this: this
       }
     },
@@ -167,33 +163,6 @@
             function(response) {
               // router.push("/qna/answer/" + _this.name + "/" + _this.id + "/" + response.data.boardId );
               that.answers.push(response.data);
-              console.log(response.data);
-            }
-          )
-          .catch(function(error) {
-            console.log(error)
-          })
-      },
-      addCommentFile: function(fileTransactKey, fileCount) {
-        
-        console.log("addComment function is called and fileTransactKey = " + fileTransactKey + " and fileCount = " + fileCount);
-        var that = this;
-
-        axios.post('/comment/add/files/' + this.$route.params.qid, {
-          comFileDto: {
-            "commentDto": {
-              "cmtContents": this.cmtContents
-            },
-            "fileTranscationDto": {
-              "fileTransactKey": fileTransactKey,
-              "fileCount": fileCount
-            }
-            }
-                    })
-          .then(
-            function(response) {
-              // router.push("/qna/answer/" + _this.name + "/" + _this.id + "/" + response.data.boardId );
-              //_this.answers.push(response.data);
               console.log(response.data);
             }
           )
