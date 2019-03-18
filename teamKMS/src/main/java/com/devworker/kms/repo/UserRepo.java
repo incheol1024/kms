@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserRepo extends PagingAndSortingRepository<UserDao, String>{
 	@Query("select t from UserDao t where t.groupId = :user_group")
-	Page<UserDao> getGroupedUser(@Param("user_group") int groupId, Pageable s);
+	Page<UserDao> getGroupedUser(@Param("user_group") int groupId, Pageable pageable);
 	
 	@Query("select t from UserDao t where t.id like :searchText or t.name like :searchText")
 	Page<UserDao> searchUser(@Param("searchText") String text, Pageable pageable);

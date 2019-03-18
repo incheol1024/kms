@@ -3,10 +3,7 @@ package com.devworker.kms.entity.site;
 import com.devworker.kms.dto.site.ProjectDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -16,6 +13,7 @@ public class ProjectDao {
     private int siteId;
 
     @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(name = "PROJECT_ID")
     private int projectId;
 

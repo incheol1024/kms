@@ -6,6 +6,8 @@ import com.devworker.kms.dto.acl.AceDto;
 import com.devworker.kms.dto.acl.AclDto;
 import com.devworker.kms.dto.base.BasePageReqDto;
 import com.devworker.kms.dto.base.BasePageResDto;
+import com.devworker.kms.dto.site.ProjectDto;
+import com.devworker.kms.dto.site.SiteDto;
 import com.devworker.kms.entity.acl.AclDao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,6 +72,18 @@ public class JsonModelTest {
 	@Test
 	public void makeAceModel() throws JsonProcessingException {
 		AceDto dto = new AceDto();
+		System.out.println(mapper.writeValueAsString(dto));
+	}
+
+	@Test
+	public void makeProjectModel() throws JsonProcessingException {
+		ProjectDto dto = new ProjectDto();
+		System.out.println(mapper.writeValueAsString(dto));
+	}
+
+	@Test
+	public void makeSiteModel() throws JsonProcessingException{
+		SiteDto dto = new SiteDto();
 		System.out.println(mapper.writeValueAsString(dto));
 	}
 }

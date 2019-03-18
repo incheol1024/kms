@@ -4,10 +4,7 @@ import com.devworker.kms.dto.site.SiteDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "KMS_SITE")
@@ -16,6 +13,7 @@ public class SiteDao {
     private int menuId;
 
     @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(name = "SITE_ID")
     private int siteId;
 
