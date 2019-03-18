@@ -83,7 +83,7 @@
         },
         methods: {
             getSolution: function(_this) {
-                axios.get("/answer/"+ id)
+                axios.get("/solution/answer/"+ id)
                 .then(
                 function(response) {
                     for (var i = 0; i < response.data.length; i++) {

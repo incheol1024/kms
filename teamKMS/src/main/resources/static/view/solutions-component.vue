@@ -17,16 +17,17 @@
                 </v-tooltip>
             </template>
             <template slot="items" slot-scope="props">
-                <td class="text-xs-left">{{ props.item.boardId }}</td>
-                <td class="text-xs-left">{{ props.item.subject }}</td>
-                <td class="text-xs-left">{{ props.item.userId }}</td>
-                <td class="text-xs-left">{{ props.item.hits }}</td>
-                <td class="text-xs-left">{{ props.item.regDate }}</td>
-                <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage(props.item.boardId)">
-                    편집
-                </v-btn>
-                <v-btn slot="activator" color="primary" dark class="mb-2" @click="delpage(props.item.boardId)"> 삭제
-                </v-btn>
+                <tr @click="moveToDetailPage(props.item.boardId)">
+                    <td class="text-xs-left">{{ props.item.boardId }}</td>
+                    <td class="text-xs-left">{{ props.item.subject }}</td>
+                    <td class="text-xs-left">{{ props.item.userId }}</td>
+                    <td class="text-xs-left">{{ props.item.hits }}</td>
+                    <td class="text-xs-left">{{ props.item.regDate }}</td>
+                    <td>
+                    <v-btn slot="activator" color="primary" dark class="mb-2" @click="delpage(props.item.boardId)"> 삭제
+                    </v-btn>
+                    </td>
+                </tr>
             </template>
             <v-alert slot="no-results" :value="true" color="error" icon="warning">
                 "{{ search }}"에 대한 결과를 찾을 수 없습니다.
@@ -72,6 +73,9 @@
             },
             moveToWritePage: function (fuc) {
                 this.$router.push("/solutions/write/" + fuc);
+            },
+            moveToDetailPage: function (fuc) {
+                this.$router.push("/write/" + fuc);
             },
             delpage: function (id) {
                 var _this = this;

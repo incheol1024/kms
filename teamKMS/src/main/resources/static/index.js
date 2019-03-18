@@ -24,6 +24,7 @@ httpVueLoader.register(Vue, 'view/help-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/qnawrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/siteswrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/solwrite-component.vue');
+httpVueLoader.register(Vue, 'view/writingboard/write-component.vue');
 httpVueLoader.register(Vue, 'view/setting-component.vue');
 
 httpVueLoader.register(Vue, 'view/custom/comment-component.vue');
@@ -55,6 +56,7 @@ router = new VueRouter({
         { path: '/help', component: Vue.component('help-component') },
         { path: '/sites/write/:id', component: Vue.component('siteswrite-component'), props: true },
         { path: '/solutions/write/:id', component: Vue.component('solwrite-component'), props: true },
+        { path: '/write/:id', component: Vue.component('write-component'), props: true },
         { path: '/qna/write/:name/:id', component: Vue.component('qnawrite-component'), props: true },
         { path: '/qna/answer/:name/:id/:qid', component: Vue.component('qnapost-component'), props: true },
         {

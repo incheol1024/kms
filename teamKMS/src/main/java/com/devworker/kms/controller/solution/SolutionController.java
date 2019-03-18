@@ -20,7 +20,7 @@ import com.devworker.kms.entity.board.BoardDao;
 import com.devworker.kms.service.solution.SolutionService;
 
 @RestController
-@RequestMapping("/solutiRon")
+@RequestMapping("/solution")
 public class SolutionController {
 	private Logger logger = LoggerFactory.getLogger(SolutionController.class);
 	
