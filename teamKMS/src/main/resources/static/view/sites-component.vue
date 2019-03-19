@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-layout>
         <v-flex>
             <h3>Site List</h3>
@@ -21,7 +21,7 @@
         </v-flex>
         <v-flex>
             <h3>Site : {{curSite.name}}</h3>
-            <table-component :headers="header" :page-req="getProjects" :allow-delete="true"
+            <table-component ref="table" :headers="header" :page-req="getProjects" :allow-delete="true"
                              :delete-function="deleteProject"></table-component>
             <v-btn color="primary" @click="dialog = true">Add Project</v-btn>
         </v-flex>
@@ -32,22 +32,38 @@
                     ADD NEW PROJECT
                 </v-card-title>
                 <v-card-text>
-                    <v-container grid-list-md>
-                        <v-layout wrap>
-                            <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="curProject.name" label="Name"></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="curProject.startDate" label="Start Date"></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="curProject.endDate" label="End Date"></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6 md4>
-                                <v-text-field v-model="curProject.manager" label="Manager"></v-text-field>
-                            </v-flex>
-                        </v-layout>
-                    </v-container>
+                    <v-layout column>
+                        <v-flex xs12 sm6 md4>
+                            <v-text-field v-model="curProject.name" label="Name"></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 sm6 md4>
+                            <v-menu v-model="startDialog" :close-on-content-click="false" :nudge-right="40" lazy
+                                    transition="scale-transition" offset-y full-width min-width="290px">
+                                <template v-slot:activator="{ on }">
+                                    <v-text-field v-model="curProject.startDate" label="Start Date"
+                                                  prepend-icon="event"
+                                                  readonly v-on="on">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker v-model="curProject.startDate"
+                                               @input="startDialog = false"></v-date-picker>
+                            </v-menu>
+                        </v-flex>
+                        <v-flex xs12 sm6 md4>
+                            <v-menu v-model="endDialog" :close-on-content-click="false" :nudge-right="40" lazy
+                                    transition="scale-transition" offset-y full-width min-width="290px">
+                                <template v-slot:activator="{ on }">
+                                    <v-text-field v-model="curProject.endDate" label="End Date"
+                                                  prepend-icon="event" readonly v-on="on">
+                                    </v-text-field>
+                                </template>
+                                <v-date-picker v-model="curProject.endDate" @input="endDialog = false"></v-date-picker>
+                            </v-menu>
+                        </v-flex>
+                        <v-flex xs12 sm6 md4>
+                            <v-text-field v-model="curProject.manager" label="Manager"></v-text-field>
+                        </v-flex>
+                    </v-layout>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -67,17 +83,16 @@
         watch: {
             id: function (id) {
                 this.getSiteList(id);
-            },
-            dialog:  function (dialog) {
-                if(!dialog) this.curProject = Object.assign({}, PROJECTMODEL);
             }
         },
         data: () => ({
             siteData: [],
-            curSite: Object.assign({}, SITEMODEL),
+            curSite: copyObject(SITEMODEL),
             siteName: "",
-            curProject: Object.assign({}, PROJECTMODEL),
+            curProject: copyObject(PROJECTMODEL),
             dialog: false,
+            startDialog: false,
+            endDialog: false,
             header: [
                 {text: "name", value: "name"},
                 {text: "startDate", value: "startDate"},
@@ -97,7 +112,12 @@
                 }).catch(reason => openError(reason))
             },
             setSite: function (site) {
+                let _this = this;
                 this.curSite = site;
+                this.getProjects().then(res => {
+                    for (const key in res.data.content)
+                        _this.$refs.table.addFunction(res.data.content[key])
+                }).catch(reason => openError(reason));
             },
             getProjects: function (page) {
                 if (this.curSite.siteId === 0) return;
@@ -107,10 +127,9 @@
             },
             addSite: function () {
                 let _this = this;
-                let site = Object.assign({}, SITEMODEL);
+                let site = copyObject(SITEMODEL);
                 site.menuId = this.id;
                 site.name = this.siteName;
-                console.log(site);
                 axios.put(`site`, site).then(res => {
                     site.siteId = res.data;
                     _this.siteData.push(site);
@@ -118,15 +137,21 @@
             },
             deleteSite: function (site) {
                 let _this = this;
-                axios.delete(`site/${site.siteId}`).then(
+                axios.delete(`site/${site.siteId}`).then(res => {
                     _this.siteData.splice(_this.siteData.indexOf(site), 1)
-                ).catch(reason => openError(reason));
+                }).catch(reason => openError(reason));
             },
             addProject: function () {
-
+                let _this = this;
+                _this.curProject.siteId = _this.curSite.siteId;
+                axios.put(`site/${_this.curSite.siteId}`, _this.curProject).then(res => {
+                    _this.curProject.projectId = res.data;
+                    _this.$refs.table.addFunction(_this.curProject);
+                }).catch(reason => openError(reason));
+                this.dialog = false;
             },
             deleteProject: function (item) {
-
+                return axios.delete(`site/${item.siteId}/${item.projectId}`)
             }
         }
     };

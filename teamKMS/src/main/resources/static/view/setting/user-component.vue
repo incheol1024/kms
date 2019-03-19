@@ -62,7 +62,7 @@
                 {text: "groupName", value: "groupName", sortable: false},
                 {text: "actions", value: "actions", sortable: false}
             ],
-            curItem: Object.assign({},UserModel),
+            curItem: copyObject(UserModel),
             stage: 3,
             updateMode: false,
             hideInput: false,
@@ -74,7 +74,7 @@
         created: function () {
             let _this = this;
             axios.get("group")
-                .then(value => _this.groupItem.push(value.data))
+                .then(value => {_this.groupItem.push(value.data)})
                 .catch(reason => catchPromise(reason));
         },
         methods: {
@@ -89,7 +89,7 @@
             },
             addItem() {
                 this.updateMode = false;
-                this.curItem = Object.assign({},UserModel);
+                this.curItem = copyObject(UserModel);
                 this.stage = 1;
                 this.hideInput = true;
             },
@@ -110,7 +110,6 @@
                 let promise = axios.put("user", _this.curItem);
                 if (this.updateMode) promise = axios.post("user", _this.curItem)
                 promise.then(value => {
-                    console.log(value);
                     if (!_this.updateMode)
                     _this.$refs.table.addFunction(_this.curItem)
                 }).catch(reason => catchPromise(reason));

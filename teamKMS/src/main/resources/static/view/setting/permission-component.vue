@@ -75,12 +75,12 @@
 <script>
     module.exports = {
         data: () => ({
-            curAcl: Object.assign({}, ACLMODEL),
+            curAcl: copyObject( ACLMODEL),
             listData: [],
             updateMode: false,
             aclText: "Make",
 
-            curAce : Object.assign({},ACEMODEL),
+            curAce : copyObject( ACEMODEL),
             aceText : "",
             headers: [
                 {text: 'aceId', value: 'aceId'},
@@ -104,18 +104,22 @@
                 if (this.updateMode)
                     axios.post("acl", _this.curAcl).catch(reason => openError(reason));
                 else
-                    axios.put("acl", _this.curAcl).then(_this.listData.push(_this.curAcl)).catch(reason => openError(reason));
+                    axios.put("acl", _this.curAcl).then(res => {
+                        _this.listData.push(_this.curAcl)
+                    }).catch(reason => openError(reason));
                 this.updateMode = false;
-                this.curAcl = Object.assign({}, ACLMODEL);
+                this.curAcl = copyObject( ACLMODEL);
             },
             deleteAcl: function deleteAcl() {
                 let _this = this;
-                axios.delete("acl/" + _this.curAcl.aclId).then(_this.listData.splice(_this.listData.indexOf(_this.curAcl), 1)).catch(reason => openError(reason));
+                axios.delete("acl/" + _this.curAcl.aclId).then(res => {
+                    _this.listData.splice(_this.listData.indexOf(_this.curAcl), 1)
+                }).catch(reason => openError(reason));
                 this.newAcl();
             },
             newAcl: function newAcl() {
                 this.updateMode = false;
-                this.curAcl = Object.assign({}, ACLMODEL);
+                this.curAcl = copyObject( ACLMODEL);
                 this.aclText = "Make";
             },
             setItem: function setItem(item) {
@@ -144,7 +148,7 @@
                 if (this.curAcl.aclId !== "") {
                     _this = this;
                     let ace = {"aclId": _this.curAcl.aclId, "aceId": _this.aceText};
-                    axios.put("ace", ace).then(_this.$refs.table.addFunction(ace)).catch(reason => openError(reason));
+                    axios.put("ace", ace).then(res => {_this.$refs.table.addFunction(ace)}).catch(reason => openError(reason));
                 }
             }
         }

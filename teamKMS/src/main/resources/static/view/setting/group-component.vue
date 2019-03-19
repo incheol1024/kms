@@ -111,10 +111,10 @@
                 if (this.updateMode) {
                     _this.$refs.tree.active.items.name = _this.newname;
                     axios.post("group", _this.$refs.tree.active.items)
-                        .then(_this.$refs.tree.updateNode(_this.newname))
+                        .then(res => {_this.$refs.tree.updateNode(_this.newname)})
                         .catch(reason => catchPromise(reason));
                 } else {
-                    let temp = Object.assign({}, GroupModel);
+                    let temp = copyObject( GroupModel);
                     temp.parentId = _this.$refs.tree.active.items.id;
                     temp.name = this.newname;
                     axios.put("group", temp).then(value => {
@@ -136,18 +136,18 @@
             },
             Move: function Move() {
                 let _this = this;
-                let temp = Object.assign({}, GroupModel);
+                let temp = copyObject(GroupModel);
                 temp.id = _this.$refs.tree.active.items.id;
                 temp.parentId = _this.$refs.subtree.active.items.id;
                 temp.name = _this.$refs.tree.active.items.name;
                 axios.post("group", temp)
-                    .then(_this.$refs.tree.moveNode(_this.$refs.subtree.active.items.id))
+                    .then(res => {_this.$refs.tree.moveNode(_this.$refs.subtree.active.items.id)})
                     .catch(reason => catchPromise(reason));
             },
             DeleteItem: function DeleteItem() {
                 let _this = this;
                 axios.delete("group/" + _this.$refs.tree.active.items.id)
-                    .then(_this.$refs.tree.deleteNode())
+                    .then(res => {_this.$refs.tree.deleteNode()})
                     .catch(reason => catchPromise(reason));
             }
         }

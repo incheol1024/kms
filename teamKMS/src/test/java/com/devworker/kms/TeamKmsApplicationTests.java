@@ -28,7 +28,7 @@ import com.devworker.kms.entity.MenuDao;
 import com.devworker.kms.dic.MenuType;
 import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.dto.UserDto;
-import com.devworker.kms.ftsdao.PostFTSDao;
+import com.devworker.kms.fts.FTSDao;
 import com.devworker.kms.service.FTSService;
 import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.MenuService;
@@ -144,19 +144,19 @@ public class TeamKmsApplicationTests {
 	@Test
 	public void ftsgetCountTest() {
 		System.out.println(ftsService.getCount());
-		PostFTSDao dto = new PostFTSDao();
+		FTSDao dto = new FTSDao();
 		dto.setId(1);
 		dto.setCategory(1);
 		dto.setName("aaa");
 		dto.setUser("bbb");
 		ftsService.save(dto);
-		List<PostFTSDao> findbyuser = ftsService.findbyuser("bbb");
+		List<FTSDao> findbyuser = ftsService.findbyuser("bbb");
 		System.out.println(findbyuser);
 	}
 
 	@Test
 	public void ftsSaveTest() {
-		PostFTSDao dto = new PostFTSDao();
+		FTSDao dto = new FTSDao();
 		dto.setId(1);
 		dto.setCategory(1);
 		dto.setName("aaa");
@@ -166,7 +166,7 @@ public class TeamKmsApplicationTests {
 
 	@Test
 	public void ftsSearchTest() {
-		List<PostFTSDao> findbyuser = ftsService.findbyuser("bbb");
+		List<FTSDao> findbyuser = ftsService.findbyuser("bbb");
 		assertThat(findbyuser, not(findbyuser.isEmpty()));
 	}
 }

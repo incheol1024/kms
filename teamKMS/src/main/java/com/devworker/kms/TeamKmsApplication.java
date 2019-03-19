@@ -9,9 +9,8 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,8 +30,8 @@ import java.util.Objects;
 @EnableAsync
 @EnableCaching
 @EnableSwagger2
+@EnableElasticsearchRepositories (basePackages = "com.devworker.kms.fts")
 @SpringBootApplication
-@EnableAspectJAutoProxy
 public class TeamKmsApplication {
     public static void main(String[] args) {
         SpringApplication.run(TeamKmsApplication.class, args);

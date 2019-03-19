@@ -78,7 +78,7 @@
         },
         methods: {
             aadd: function aadd() {
-				var model = Object.assign({},GroupModel);
+				var model = copyObject(GroupModel);
                 model.name = this.text;
                 this.$refs.tree.addNode(model);
             },

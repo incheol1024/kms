@@ -17,6 +17,10 @@ const catchPromise = function (error) {
         openError(error.response);
 };
 
+const copyObject = function (source) {
+    return JSON.parse(JSON.stringify(source));
+};
+
 if (!Array.prototype.find) {
     Object.defineProperty(Array.prototype, 'find', {
         value: function (predicate) {

@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.devworker.kms.ftsdao.PostFTSDao;
-import com.devworker.kms.repo.FTSRepo;
+import com.devworker.kms.fts.FTSDao;
+import com.devworker.kms.fts.FTSRepo;
 
 @Service
 public class FTSService {
@@ -17,11 +17,11 @@ public class FTSService {
 		return repo.count();
 	}
 	
-	public void save(PostFTSDao dto) {
+	public void save(FTSDao dto) {
 		repo.save(dto);
 	}
 	
-	public List<PostFTSDao> findbyuser(String name) {
+	public List<FTSDao> findbyuser(String name) {
 		return repo.findByName(name);
 	}
 }

@@ -56,7 +56,7 @@
             },
             addFunction: {
                 default: function (item) {
-                    this.items.push(item);
+                    this.items.push(copyObject(item));
                 },
                 type: Function
             },
@@ -117,8 +117,9 @@
             },
             deleteItem: function deleteItem(item) {
                 let _this = this;
-                this.deleteFunction(item).then(_this.items.splice(_this.items.indexOf(item), 1))
-                    .catch(reason => catchPromise(reason));
+                this.deleteFunction(item).then(res => {
+                    _this.items.splice(_this.items.indexOf(item), 1)
+                }).catch(reason => catchPromise(reason));
             },
             mappingHeader: function mappingHeader(item) {
                 let arr = [];

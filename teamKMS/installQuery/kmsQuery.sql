@@ -87,7 +87,8 @@ create table KMS.KMS_ACL
   AclId         varchar(36) PRIMARY KEY,
   AclName       varchar(36)  not null unique,
   HasPermission VARCHAR(255) not null
-);
+)  default character set utf8
+   collate utf8_general_ci;
 
 create table KMS.KMS_ACE
 (
@@ -96,7 +97,8 @@ create table KMS.KMS_ACE
   Type  varchar(5)  not null,
   CONSTRAINT FK_ACLID foreign key (AclId) REFERENCES KMS_ACL (AclId),
   CONSTRAINT PK_ACEID primary key (AclId, AceId)
-);
+)  default character set utf8
+   collate utf8_general_ci;
 
 CREATE INDEX IDX_ACLID ON KMS_ACE (AclId);
 CREATE INDEX IDX_ACEID ON KMS.KMS_ACE (AceId);
@@ -118,7 +120,8 @@ create table KMS_SITE
   SITE_ID INT(11) unsigned auto_increment PRIMARY KEY,
   SITE_NAME VARCHAR(32),
   FOREIGN KEY (MENU_ID) REFERENCES KMS.KMS_Menu (menu_id) ON UPDATE CASCADE
-);
+)  default character set utf8
+   collate utf8_general_ci;
 
 CREATE INDEX IDX_SITE ON KMS_SITE (MENU_ID);
 
@@ -131,7 +134,8 @@ create table KMS_PROJECT
   END_DATE     date             not null,
   MANAGER      varchar(32)      not null,
   FOREIGN KEY (SITE_ID) REFERENCES KMS.KMS_SITE (SITE_ID) ON UPDATE CASCADE
-);
+)  default character set utf8
+   collate utf8_general_ci;
 
 CREATE INDEX IDX_PROJECT_SITEID ON KMS_PROJECT (SITE_ID);
 CREATE INDEX IDX_PROJECT_NAME ON KMS_PROJECT (PROJECT_NAME);
@@ -142,7 +146,8 @@ create table KMS_PROJECT_BOARD
   BOARD_ID int(255) unsigned unique,
   FOREIGN KEY (BOARD_ID) REFERENCES KMS.KMS_BOARD (board_id) ON UPDATE CASCADE,
   FOREIGN KEY (PROJECT_ID) REFERENCES KMS.KMS_PROJECT (PROJECT_ID) ON UPDATE CASCADE
-);
+)  default character set utf8
+   collate utf8_general_ci;
 
 CREATE INDEX IDX_PROJECT_BOARD_PROJECTKEY ON KMS_PROJECT_BOARD (PROJECT_ID);
 CREATE INDEX IDX_PROJECT_BOARD_BOARDKEY ON KMS_PROJECT_BOARD (BOARD_ID);
