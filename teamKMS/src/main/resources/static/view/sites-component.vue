@@ -1,29 +1,50 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-layout>
+        <v-item-group v-model="window" class="shrink mr-4" mandatory tag="v-flex">
+            <v-item v-for="n in 3" :key="n">
+                <div slot-scope="{ active, toggle }">
+                    <v-btn :input-value="active" icon @click="toggle">
+                        <v-icon>fiber_manual_record</v-icon>
+                    </v-btn>
+                </div>
+            </v-item>
+        </v-item-group>
+
         <v-flex>
-            <h3>Site List</h3>
-            <v-card>
-                <v-list>
-                    <v-list-tile v-for="site in siteData" :key="site.siteId" @click="setSite(site)">
-                        <v-list-tile-content>
-                            <v-list-tile-title v-html="site.name"></v-list-tile-title>
-                        </v-list-tile-content>
-                        <v-list-tile-action>
-                            <v-btn icon ripple>
-                                <v-icon color="grey lighten-1" @click="deleteSite(site)">close</v-icon>
-                            </v-btn>
-                        </v-list-tile-action>
-                    </v-list-tile>
-                </v-list>
-                <v-text-field v-model="siteName" label="SiteName" single-line hide-details></v-text-field>
-                <v-btn color="primary" @click="addSite">Add Site</v-btn>
-            </v-card>
-        </v-flex>
-        <v-flex>
-            <h3>Site : {{curSite.name}}</h3>
-            <table-component ref="table" :headers="header" :page-req="getProjects" :allow-delete="true"
-                             :delete-function="deleteProject"></table-component>
-            <v-btn color="primary" @click="dialog = true">Add Project</v-btn>
+            <v-window v-model="window" class="elevation-1" vertical>
+                <v-window-item>
+                    <h3>Site List</h3>
+                    <v-card>
+                        <v-list>
+                            <v-list-tile v-for="site in siteData" :key="site.siteId" @click="setSite(site)">
+                                <v-list-tile-content>
+                                    <v-list-tile-title v-html="site.name"></v-list-tile-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                    <v-btn icon ripple>
+                                        <v-icon color="grey lighten-1" @click="deleteSite(site)">close</v-icon>
+                                    </v-btn>
+                                </v-list-tile-action>
+                            </v-list-tile>
+                        </v-list>
+                        <v-text-field v-model="siteName" label="SiteName" single-line hide-details></v-text-field>
+                        <v-btn color="primary" @click="addSite">Add Site</v-btn>
+                    </v-card>
+                </v-window-item>
+
+                <v-window-item>
+                    <h3>Site : {{curSite.name}}</h3>
+                    <table-component ref="table" :headers="siteHeader" :page-req="getProjects" :allow-delete="true"
+                                     :delete-function="deleteProject" :click-row="getBoard"></table-component>
+                    <v-btn color="primary" @click="dialog = true">Add Project</v-btn>
+                </v-window-item>
+
+                <v-window-item>
+                    <h3>Project : {{curProject.name}}</h3>
+                    <table-component ref="table" :headers="boardHeader"></table-component>
+                    <v-btn color="primary" @click="addBoard">Add Board</v-btn>
+                </v-window-item>
+            </v-window>
         </v-flex>
 
         <v-dialog v-model="dialog" width="500">
@@ -86,19 +107,25 @@
             }
         },
         data: () => ({
+            window: 0,
             siteData: [],
             curSite: copyObject(SITEMODEL),
             siteName: "",
+
             curProject: copyObject(PROJECTMODEL),
             dialog: false,
             startDialog: false,
             endDialog: false,
-            header: [
+            siteHeader: [
                 {text: "name", value: "name"},
                 {text: "startDate", value: "startDate"},
                 {text: "endDate", value: "endDate"},
                 {text: "mangerName", value: "mangerName", sortable: false},
                 {text: "action", value: "action", sortable: false}
+            ],
+
+            boardHeader : [
+
             ]
         }),
         methods: {
@@ -118,6 +145,7 @@
                     for (const key in res.data.content)
                         _this.$refs.table.addFunction(res.data.content[key])
                 }).catch(reason => openError(reason));
+                this.window = 1;
             },
             getProjects: function (page) {
                 if (this.curSite.siteId === 0) return;
@@ -152,6 +180,10 @@
             },
             deleteProject: function (item) {
                 return axios.delete(`site/${item.siteId}/${item.projectId}`)
+            },
+            getBoard : function (item) {
+                this.curProject = item;
+                this.window = 2;
             }
         }
     };
