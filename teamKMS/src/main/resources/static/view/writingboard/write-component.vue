@@ -1,7 +1,7 @@
 <template>
     <v-content>
         solution Detail Page
-        <v-container id="solution_write" :items="solution_write" grid-list-xl>
+        <v-container id="write" :items="write" grid-list-xl>
             <v-layout row wrap>
                 <v-flex xs12 sm6 md3>
                     <v-text-field
@@ -26,18 +26,14 @@
 
 <script>
     module.exports = {
-        name: 'solution_write',
+        name: 'write',
         props: ['id', 'name'],
         data: () => ({
-            Solution: ['ECM', 'EDM', 'ETC'],
-            Site: ['site1', 'site2', 'site3'],
             boardId: '',
             subject:'',
             contents:'',
-            selected: '',
-            selected2: '',
             editor: ClassicEditor,
-            solution_write: []
+            write: []
         }),
         created: function (response) {
             console.log("id = " + this.$route.params.id);
@@ -50,7 +46,7 @@
                 .then(
                 function(response) {
                     for (var i = 0; i < response.data.length; i++) {
-                        _this.solution_write.push(response.data[i]);
+                        _this.write.push(response.data[i]);
                     }
                 })
                 .catch(function(error) {

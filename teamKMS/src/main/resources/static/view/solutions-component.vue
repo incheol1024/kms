@@ -6,23 +6,24 @@
             <v-text-field v-model="search" append-icon="search" label="검색" single-line hide-details></v-text-field>
         </v-card-title>
         <v-data-table :headers="headers" :items="solution" :search="search">
+            
             <template slot="headerCell" slot-scope="props">
                 <v-tooltip bottom>
-        <span slot="activator">
-          {{ props.header.text }}
-        </span>
+                    <span slot="activator">
+                    {{ props.header.text }}
+                    </span>
                     <span>
-          {{ props.header.text }}
-        </span>
+                    {{ props.header.text }}
+                    </span>
                 </v-tooltip>
             </template>
             <template slot="items" slot-scope="props">
-                <tr @click="moveToDetailPage(props.item.boardId)">
-                    <td class="text-xs-left">{{ props.item.boardId }}</td>
-                    <td class="text-xs-left">{{ props.item.subject }}</td>
-                    <td class="text-xs-left">{{ props.item.userId }}</td>
-                    <td class="text-xs-left">{{ props.item.hits }}</td>
-                    <td class="text-xs-left">{{ props.item.regDate }}</td>
+                <tr>
+                    <td class="text-xs-left" @click="moveToDetailPage(props.item.boardId)">{{ props.item.boardId }}</td>
+                    <td class="text-xs-left" @click="moveToDetailPage(props.item.boardId)">{{ props.item.subject }}</td>
+                    <td class="text-xs-left" @click="moveToDetailPage(props.item.boardId)">{{ props.item.userId }}</td>
+                    <td class="text-xs-left" @click="moveToDetailPage(props.item.boardId)">{{ props.item.hits }}</td>
+                    <td class="text-xs-left" @click="moveToDetailPage(props.item.boardId)">{{ props.item.regDate }}</td>
                     <td>
                     <v-btn slot="activator" color="primary" dark class="mb-2" @click="delpage(props.item.boardId)"> 삭제
                     </v-btn>
@@ -78,18 +79,18 @@
                 this.$router.push("/write/" + fuc);
             },
             delpage: function (id) {
-                var _this = this;
-                axios.delete('/solution/' + id)
-                    .then(
-                        function (response) {
-                            _this.answers.push(response.data);
-                            console.log(response.data);
-                        }
-                    )
-                    .catch(function (error) {
-                        console.log("[ERR] : " + error)
-                    })
-                router.push("/solutions/" + this.id);
+                if (confirm("삭제하시겠습니까?")) {
+                    axios.delete('/solution/' + id)
+                        .then(
+                            function (response) {
+                                console.log(response.data);
+                            }
+                        )
+                        .catch(function (error) {
+                            console.log("[ERR] : " + error)
+                        })
+                }
+                this.$router.push("/solutions/" + this.id);
             }
         }
     };

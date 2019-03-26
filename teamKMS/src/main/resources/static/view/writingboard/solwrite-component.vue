@@ -100,7 +100,6 @@
                 axios.post('/solution/register', obj2)
                     .then(
                         function (response) {
-                            _this.answers.push(response.data);
                             console.log(response.data);
                         }
                     )
@@ -115,7 +114,6 @@
                 axios.post('/solution/edit', obj2)
                     .then(
                         function (response) {
-                            _this.answers.push(response.data);
                             console.log(response.data);
                         }
                     )

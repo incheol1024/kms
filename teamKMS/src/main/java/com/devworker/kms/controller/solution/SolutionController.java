@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.service.board.WriteService;
 import com.devworker.kms.service.solution.SolutionService;
 
 @RestController
@@ -26,6 +27,9 @@ public class SolutionController {
 	
 	@Autowired
 	SolutionService solutionService;
+
+	@Autowired
+	WriteService writeService;
 	
 	@GetMapping("")
 	public List<BoardDao> solutionHome(){
@@ -35,17 +39,17 @@ public class SolutionController {
 	
 	@PostMapping("/register")
 	public BoardDao solutionRegiser(@Valid @RequestBody BoardDao boardDao) {
-		return solutionService.registerSolution(boardDao);
+		return writeService.register(boardDao);
 	}
 	
 	@PostMapping("/edit")
 	public BoardDao solutionEdit(@Valid @RequestBody BoardDao boardDao) {
-		return solutionService.editSolution(boardDao);
+		return writeService.edit(boardDao);
 	}
 	
 	@DeleteMapping("/{boardId}")
 	public void solutionDelete(@PathVariable String boardId) {
-		solutionService.deleteSolution(Integer.parseInt(boardId));
+		writeService.delete(Integer.parseInt(boardId));
 	}
 	
 	@GetMapping("/answer/{id}")

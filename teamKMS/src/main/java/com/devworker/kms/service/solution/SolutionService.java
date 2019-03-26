@@ -40,12 +40,12 @@ public class SolutionService {
 	}
 	
 	public BoardDao editSolution(BoardDao boardDao) {
-		boardRepo.findById(boardDao.getBoardId());
-
+		Optional<BoardDao> bd2 = boardRepo.findById(boardDao.getBoardId());	
+		BoardDao bd = bd2.get();
 		boardDao.setUserId(CommonUtil.getCurrentUser());
-		boardDao.setRegDate(LocalDateTime.now()); //수정
+		boardDao.setRegDate(bd.getRegDate()); 
 		boardDao.setUpdDate(LocalDateTime.now());
-		boardDao.setHits(1); //수정
+		boardDao.setHits(bd.getHits()); 
 		return boardRepo.save(boardDao);
 	}
 
