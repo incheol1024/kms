@@ -20,21 +20,19 @@
   </form> 
 -->
 	<v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
-        <template v-for="(doc, index) in docs" >
-					<img :src="doc.imageName" height="100" v-if="index" :key="index"/>
-					<v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file' :key="index"></v-text-field>
+        <template v-for="doc in docs" >
+					<img :src="doc.fileUrl" height="100" v-if="doc.fileName" :key="doc.fileName" />
+        </template>
+					<v-text-field label="Select Image" @click.stop='pickFile' v-model='imageName' prepend-icon='attach_file' ></v-text-field>
 					<input
 						type="file"
 						style="display: none"
 						ref="image"
 						accept="image/*"
 						@change="onFilePickedCustom"
-                        multiple
-                        :key="index"
-					>
-        </template>
-				</v-flex>
-            <v-btn color="	info" @click.prevent="addComment">댓글 등록</v-btn>
+					>        
+  </v-flex>
+  <v-btn color="info" @click.prevent="addComment">댓글 등록</v-btn>
       </v-flex>
     </v-layout>
   
@@ -59,14 +57,12 @@ data () {
         },
         title: "Image Upload",
         dialog: false,
-		imageName: '',
-		imageUrl: '',
+		    imageName: '',
+		    imageUrl: '',
         imageFile: '',
         fileTransactKey: null,
         fileCount:0,
-        docs: [
-            {fileName: '', fileUrl: '', fileData: ''}
-        ]  
+        docs: []  
     }
   },
   methods: {
@@ -99,10 +95,10 @@ data () {
           console.log(this.multiPartFile[i]);
         }
       },
-    pickFile () {
+    pickFile: function() {
             this.$refs.image.click();
         },	
-	onFilePicked (e) {
+	  onFilePicked: function(e) {
 			const files = e.target.files
 			if(files[0] !== undefined) {
 				this.imageName = files[0].name
@@ -112,8 +108,8 @@ data () {
 				const fr = new FileReader ()
 				fr.readAsDataURL(files[0])
 				fr.addEventListener('load', () => {
-					this.imageUrl = fr.result
-                    this.imageFile = files[0] // this is an image file that can be sent to server...
+          this.imageUrl = fr.result
+          this.imageFile = files[0] // this is an image file that can be sent to server...
 				})
 			} else {
 				this.imageName = ''
@@ -121,19 +117,39 @@ data () {
 				this.imageUrl = ''
 			}
     },
-    onFilePickedCustom (e) {
+    onFilePickedCustom: function(e) {
 		const files = e.target.files
         if(files[0] !== undefined) {
-            var i = 0;
-            for( i = 0; i < files.length; i++) {
-
-                const fr = new FileReader();
-                fr.readAsDataURL(files[i]);
+                //const fr = new FileReader();
+                var i = 0;
+              for(i = 0; i < files.length; i++) {
+                var fr = [];
+                fr.push(new FileReader());
+                fr[i].readAsDataURL(files[i]);
                 
-                this.docs[i].fileName = files[i].name;
-                this.docs[i].fileUrl = fr.result;
-                this.docs[i].fileData = files[i];
-            };
+                
+                fr[i].addEventListener('load', () => {
+                  
+                  console.log("i = " , i);
+                  console.log(files[0]);
+
+                  var fileName = files[i].name;
+                  fr.readAsDataURL(files[i]);
+                  var fileUrl = fr[i].result;
+                  console.log(fileUrl);
+  
+
+                  var fileData = files[i];
+                  var file = {
+                    fileName: fileName,
+                    fileUrl: fileUrl,
+                    fileData: fileData
+                  }
+                  this.docs.push(file);
+                 
+                });
+              }
+            
         } else {
             this.docs = [];
         }
