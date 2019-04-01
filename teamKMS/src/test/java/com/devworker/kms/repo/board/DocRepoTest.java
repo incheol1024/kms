@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,9 @@ public class DocRepoTest {
 
 	@Autowired
 	DocRepo docRepo;
+	
+	@Autowired
+	CommentRepo commentRepo;
 
 	@Test
 	public void _beanNotNulltest() {
@@ -42,17 +46,23 @@ public class DocRepoTest {
 
 	@Test
 	public void boardId_commentId_객체연관관계_테스트() {
-
+/*
 		BoardDao board = new BoardDao();
 		board.setBoardId(1);
 
 		CommentDao comment = new CommentDao();
 		comment.setBoardId(board);
-		comment.setCmtId(157);
+		comment.setCmtId(232);
+		
+*/
+		
+		Optional<CommentDao> opComment = commentRepo.findById(237);
+		CommentDao commentDao = opComment.get();
 
 		DocDao doc = new DocDao();
-		doc.setBoardId(board);
+		//doc.setBoardId(board);
 		//doc.setCommentId(comment);
+		doc.setCmtId(commentDao);
 		doc.setDocPath("testPath");
 		doc.setDocSize(5);
 		doc.setDocUserId("USER");

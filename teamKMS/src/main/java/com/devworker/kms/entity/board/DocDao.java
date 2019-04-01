@@ -91,4 +91,15 @@ public class DocDao {
 		this.cmtId = cmtId;
 	}
 
+	@Override
+	public String toString() {
+		return "DocDao [docId=" + docId + ", boardId=" + boardId + ", cmtId=" + cmtId + ", docPath=" + docPath
+				+ ", docUserId=" + docUserId + ", docSize=" + docSize + ", getBoardId()=" + getBoardId()
+				+ ", getDocId()=" + getDocId() + ", getDocPath()=" + getDocPath() + ", getDocUserId()=" + getDocUserId()
+				+ ", getDocSize()=" + getDocSize() + ", getCmtId()=" + getCmtId() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+	}
+	
+	
+
 }

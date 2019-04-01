@@ -100,8 +100,14 @@ public class CommentService {
 
 		List<Long> fileList = FileTransactionUtil.getFileList(fileTransactKey);
 		for (Long docId : fileList) {
-			if(docRepo.save(new DocDao(docId, savedCommentDao)) == null )
+			Optional<DocDao> docDao = docRepo.findById(docId.longValue());
+			DocDao savedDoc = docDao.get();
+			savedDoc.setCmtId(savedCommentDao);
+			DocDao tmpDoc = null;
+			if((tmpDoc = docRepo.save(savedDoc)) == null )
 				docService.rollbackFileTransaction(fileTransactKey);
+			
+			System.out.println(tmpDoc.toString());
 		}
 
 		FileTransactionUtil.removeFileInfoMemory(fileTransactKey);
