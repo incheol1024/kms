@@ -69,7 +69,7 @@ public class CommentService {
 	 * @return 트랜잭션이 정상 처리 되면 등록된 CommentDao 객체를 리턴합니다.
 	 * @throws Exception 여러가지 예외를 던질 수 있습니다. 호출하는 컨트롤러에서 예외를 구분하여 처리해야 합니다.
 	 */
-	public CommentDao addComment(int boardId, String cmtContents, String fileTransactKey, int fileCount)
+	public CommentDao addComment(long boardId, String cmtContents, String fileTransactKey, int fileCount)
 			throws Exception {
 		String userId = CommonUtil.getCurrentUser();
 		Optional<UserDao> optionalUserDao = userRepo.findById(userId);

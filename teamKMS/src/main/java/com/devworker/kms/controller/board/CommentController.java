@@ -24,7 +24,7 @@ import com.devworker.kms.service.board.CommentService;
 public class CommentController {
 
 	private Logger logger = LoggerFactory.getLogger(CommentController.class);
-	
+
 	@Autowired
 	CommentService commentService;
 
@@ -33,16 +33,21 @@ public class CommentController {
 		return commentService.addComment(commentDao);
 	}
 
-	@PostMapping("/add/files/{boardId}")
-	public CommentDao addComment(@PathVariable int boardId, @RequestBody CommentAndFileTransactionDto comFileDto) throws Exception {
+	@PostMapping("/add/files")
+	public CommentDao addComment(@RequestBody CommentAndFileTransactionDto comFileDto) throws Exception {
 
 		logger.debug("RequestBody Test = {}", comFileDto);
-/*		logger.debug("PathVaiable boardId = {}", boardId);
-		logger.debug("RequestBody CommentDao = {}", commentDao);
-		logger.debug("FileTranctionDto = {}", fileTransactionDto);
-*/		
+		/*
+		 * logger.debug("PathVaiable boardId = {}", boardId);
+		 * logger.debug("RequestBody CommentDao = {}", commentDao);
+		 * logger.debug("FileTranctionDto = {}", fileTransactionDto);
+		 */
+
+		commentService.addComment(comFileDto.getBoardId(), comFileDto.getCmtContents(), comFileDto.getFileTransactKey(),
+				comFileDto.getFileCount());
 		return null;
-		//return commentService.addComment(boardId, cmtContents, fileTransactKey, fileCount);
+		// return commentService.addComment(boardId, cmtContents, fileTransactKey,
+		// fileCount);
 	}
 
 	@GetMapping("/list/{boardId}")

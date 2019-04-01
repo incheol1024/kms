@@ -41,15 +41,15 @@ public class WriteService {
 		return boardRepo.save(boardDao);
 	}
 	
-	public void delete(int id) {
+	public void delete(long id) {
 		boardRepo.deleteById(id);
 	}
 	
-	public Optional<BoardDao> findById(Integer id) {
+	public Optional<BoardDao> findById(Long id) {
 		return boardRepo.findById(id);
 	}
 
-	public SolutionDao findPostById(Integer id) {
+	public SolutionDao findPostById(Long id) {
 		Optional<BoardDao> opBoardDao = boardRepo.findById(id);
 		try {
 			BoardDao boardDao = opBoardDao.get();

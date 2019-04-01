@@ -53,7 +53,7 @@ public class SolutionController {
 	}
 	
 	@GetMapping("/answer/{id}")
-	public BoardDao getSolutionById(@PathVariable Integer id) {
+	public BoardDao getSolutionById(@PathVariable Long id) {
 		System.out.println(" -- answerid : " + id);
 		return solutionService.findById(id).get();
 	}

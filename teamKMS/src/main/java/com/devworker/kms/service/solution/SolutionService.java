@@ -49,15 +49,15 @@ public class SolutionService {
 		return boardRepo.save(boardDao);
 	}
 
-	public void deleteSolution(int id) {
+	public void deleteSolution(long id) {
 		boardRepo.deleteById(id);
 	}
 
-	public Optional<BoardDao> findById(Integer id) {
+	public Optional<BoardDao> findById(Long id) {
 		return boardRepo.findById(id);
 	}
 
-	public SolutionDao findPostById(Integer id) {
+	public SolutionDao findPostById(Long id) {
 		Optional<BoardDao> opBoardDao = boardRepo.findById(id);
 		try {
 			BoardDao boardDao = opBoardDao.get();

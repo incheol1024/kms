@@ -16,7 +16,7 @@ public class BoardDao {
 	@Id
 	@Column( name = "board_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int boardId;
+	long boardId;
 
 	@Column(name = "subject")
 	String subject;
@@ -38,15 +38,15 @@ public class BoardDao {
 
 	public BoardDao() {
 	}
-	public BoardDao(int boardId) {
+	public BoardDao(long boardId) {
 		this.boardId = boardId;
 	}
 
-	public int getBoardId() {
+	public long getBoardId() {
 		return boardId;
 	}
 
-	public void setBoardId(int boardId) {
+	public void setBoardId(long boardId) {
 		this.boardId = boardId;
 	}
 

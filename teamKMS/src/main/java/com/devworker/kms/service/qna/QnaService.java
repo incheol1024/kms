@@ -87,13 +87,13 @@ public class QnaService {
 		return savedBoardDao;
 	}
 
-	public BoardDao findById(Integer id) {
+	public BoardDao findById(Long id) {
 		BoardDao boardDao = boardRepo.findById(id).get();
 		boardDao.setHits(1);
 		return boardRepo.save(boardDao);
 	}
 
-	public QnaDao findPostById(Integer id) {
+	public QnaDao findPostById(Long id) {
 
 		Optional<BoardDao> opBoardDao = boardRepo.findById(id);
 			BoardDao boardDao = opBoardDao.get();

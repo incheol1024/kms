@@ -23,17 +23,18 @@
         <template v-for="doc in docs" >
 					<img :src="doc.fileUrl" height="100" v-if="doc.fileName" :key="doc.fileName" />
         </template>
-					<v-text-field label="Select Image" @click.stop='pickFile' v-model='imageName' prepend-icon='attach_file' ></v-text-field>
+					<v-text-field label="Select Image" @click='pickFile' v-model='imageName' prepend-icon='attach_file' ></v-text-field>
 					<input
 						type="file"
 						style="display: none"
 						ref="image"
 						accept="image/*"
 						@change="onFilePickedCustom"
+            multiple
 					>        
   </v-flex>
   <v-btn color="info" @click.prevent="addComment">댓글 등록</v-btn>
-      </v-flex>
+    </v-flex>
     </v-layout>
   
 </div>
@@ -118,36 +119,48 @@ data () {
 			}
     },
     onFilePickedCustom: function(e) {
-		const files = e.target.files
-        if(files[0] !== undefined) {
+    const files = e.target.files
+    
+        if(files.length > 0) {
                 //const fr = new FileReader();
-                var i = 0;
-              for(i = 0; i < files.length; i++) {
-                var fr = [];
-                fr.push(new FileReader());
-                fr[i].readAsDataURL(files[i]);
+              for(var i = 0; i < files.length; i++) {
+                var frArr = [];
+                var fr = new FileReader();
                 
-                
-                fr[i].addEventListener('load', () => {
-                  
-                  console.log("i = " , i);
-                  console.log(files[0]);
+                fr.readAsDataURL(files[i]);
+                var fileName = files[i].name;
+                var fileUrl = fr.result;
 
-                  var fileName = files[i].name;
-                  fr.readAsDataURL(files[i]);
-                  var fileUrl = fr[i].result;
-                  console.log(fileUrl);
+                var doc = {
+                  fileName: fileName,
+                  fileUrl: fileUrl,
+                  fileData: files[i]
+                };
+
+                console.dir(doc);
+                this.docs.push(doc);
+
+                // fr.addEventListener('load', function(){
+                  
+                //   console.log("i = " , i);
+                //   console.log(files[0]);
+
+                //   var fileName = files[i].name;
+                //   fr.readAsDataURL(files[i]);
+                //   var fileUrl = fr[i].result;
+                //   console.log(fileUrl);
   
 
-                  var fileData = files[i];
-                  var file = {
-                    fileName: fileName,
-                    fileUrl: fileUrl,
-                    fileData: fileData
-                  }
-                  this.docs.push(file);
+                //   var fileData = files[i];
+                //   var file = {
+                //     fileName: fileName,
+                //     fileUrl: fileUrl,
+                //     fileData: fileData
+                //   }
+                //   this.docs.push(file);
                  
-                });
+                // });
+
               }
             
         } else {
@@ -156,17 +169,28 @@ data () {
         
     },
     addComment: function() {
-        if(this.fileTransactKey != null) {
-          this.addCommentFile(this.fileTransactKey, this.fileCount);
-          return;
+        // if(this.fileTransactKey != null) {
+        //   this.addCommentFile(this.fileTransactKey, this.fileCount);
+        //   return;
+        // }
+        console.log("addComment function is called");
+
+        if(this.docs.length > 0 ){
+          this.addFile();
         }
         
-        console.log("addComment function is called");
         var that = this;
 
-        axios.post('/comment/add', {
+        var url = "/comment/add";
+        if(this.fileTransactKey !== undefined && this.fileCount > 0) {
+          url = "/comment/add/files"
+        }
+
+        axios.post(url, {
             boardId: Number(this.qid),
-            cmtContents: this.cmtContents
+            cmtContents: this.cmtContents,
+            fileTransactKey: this.fileTransactKey,
+            fileCount: this.fileCount
           })
           .then(
             function(response) {
@@ -181,13 +205,17 @@ data () {
           })
     },
     addFile: function() {
+
+        if(this.docs.length < 1) 
+          return;
+
         var that = this;
         let formData = new FormData(); 
 
-        formData.append('boardId', this.boardId);
+        formData.append('boardId', this.qid);
         //formData.append('cmtId', this.cmtId);
-        for (var i = 0; i < this.multiPartFile.length; i++) {
-          let file = this.multiPartFile[i];
+        for (var i = 0; i < this.docs.length; i++) {
+          let file = this.docs[i].fileData;
           formData.append('multiPartFile', file);
         }
         axios.post('/file/upload/comment',
@@ -202,8 +230,8 @@ data () {
               //            _this.answers.push(response.data);
               console.log(response.data.fileTransactKey);
               console.log(response.data.fileCount);
-              _this.fileTransactKey = response.data.fileTransactKey;
-              _this.fileCount = response.data.fileCount;
+              that.fileTransactKey = response.data.fileTransactKey;
+              that.fileCount = response.data.fileCount;
             }
           )
           .catch(function(error) {
@@ -223,7 +251,7 @@ data () {
               fileTransactKey: this.fileTransactKey,
               fileCount: fileCount
             }
-            }
+          }
                     })
           .then(
             function(response) {
