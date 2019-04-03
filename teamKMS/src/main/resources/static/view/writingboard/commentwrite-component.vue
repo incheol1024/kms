@@ -176,6 +176,7 @@ data () {
         console.log("addComment function is called");
 
         if(this.docs.length > 0 ){
+          console.log('docs length > 0');
           this.addFile();
         }
         
@@ -185,7 +186,8 @@ data () {
         if(this.fileTransactKey !== undefined && this.fileCount > 0) {
           url = "/comment/add/files"
         }
-
+        
+        console.log('defined url ' + url);
         axios.post(url, {
             boardId: Number(this.qid),
             cmtContents: this.cmtContents,

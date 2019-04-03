@@ -100,6 +100,7 @@ public class CommentService {
 
 		List<Long> fileList = FileTransactionUtil.getFileList(fileTransactKey);
 		for (Long docId : fileList) {
+			System.out.println("======================docId======" + docId);
 			Optional<DocDao> docDao = docRepo.findById(docId.longValue());
 			DocDao savedDoc = docDao.get();
 			savedDoc.setCmtId(savedCommentDao);
