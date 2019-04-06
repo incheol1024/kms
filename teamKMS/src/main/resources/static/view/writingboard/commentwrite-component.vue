@@ -261,7 +261,7 @@ data () {
               //_this.answers.push(response.data);
               console.log(response.data);
             }
-          )
+          )+
           .catch(function(error) {
             console.log(error)
           })

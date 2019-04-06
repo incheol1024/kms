@@ -31,7 +31,7 @@ public class QnaCodeRepoTest {
 	MenuRepo menuRepo;
 
 	static QnaCodeDao qnaCodeDao;
-	static int boardId = 1;
+	static long boardId = 1;
 	static int menuId = 4;
 
 	@Before

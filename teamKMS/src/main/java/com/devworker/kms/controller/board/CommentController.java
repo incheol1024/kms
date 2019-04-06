@@ -43,9 +43,9 @@ public class CommentController {
 		 * logger.debug("FileTranctionDto = {}", fileTransactionDto);
 		 */
 
-		commentService.addComment(comFileDto.getBoardId(), comFileDto.getCmtContents(), comFileDto.getFileTransactKey(),
+		return commentService.addComment(comFileDto.getBoardId(), comFileDto.getCmtContents(), comFileDto.getFileTransactKey(),
 				comFileDto.getFileCount());
-		return null;
+		
 		// return commentService.addComment(boardId, cmtContents, fileTransactKey,
 		// fileCount);
 	}

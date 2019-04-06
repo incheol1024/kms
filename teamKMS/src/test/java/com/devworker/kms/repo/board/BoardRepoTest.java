@@ -19,7 +19,7 @@ public class BoardRepoTest {
 	
 	@Test
 	public void findByIdTest() {
-		assertThat(boardRepo.findById(5).get()).isNotNull();
+		assertThat(boardRepo.findById(5L).get()).isNotNull();
 	}
 
 }
