@@ -2,6 +2,7 @@ package com.devworker.kms.service.board;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,6 +14,7 @@ import com.devworker.kms.entity.board.CommentDao;
 import com.devworker.kms.entity.board.DocDao;
 import com.devworker.kms.dic.LikeType;
 import com.devworker.kms.exception.NotExistException;
+import com.devworker.kms.exception.board.CommentNotFoundException;
 import com.devworker.kms.exception.board.FileTransactionException;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.CommentRepo;
@@ -77,7 +79,7 @@ public class CommentService {
 		CommentDao commentDao = new CommentDao(new BoardDao(boardId), cmtContents);
 		commentDao.setCmtUserId(optionalUserDao.get().getName());
 		CommentDao savedCommentDao = commentRepo.save(commentDao);
-		
+
 		if (!FileTransactionUtil.isSameTransaction(fileTransactKey, fileCount)) {
 
 			/*
@@ -105,9 +107,9 @@ public class CommentService {
 			DocDao savedDoc = docDao.get();
 			savedDoc.setCmtId(savedCommentDao);
 			DocDao tmpDoc = null;
-			if((tmpDoc = docRepo.save(savedDoc)) == null )
+			if ((tmpDoc = docRepo.save(savedDoc)) == null)
 				docService.rollbackFileTransaction(fileTransactKey);
-			
+
 			System.out.println(tmpDoc.toString());
 		}
 
@@ -148,9 +150,18 @@ public class CommentService {
 	 * Comment(댓글) 삭제 시 호출되는 메소드입니다.
 	 * 
 	 * @param cmtId must not be {@literal null}. Comment ID 값이 되야 합니다.
+	 * @throws Exception 
 	 * 
 	 */
-	public void deleteComment(Integer cmtId) {
+	public void deleteComment(Integer cmtId) throws Exception {
+		Optional<CommentDao> opComment = commentRepo.findById(cmtId);
+		CommentDao commentDao = opComment
+				.orElseThrow(() -> new CommentNotFoundException("comment is not found cmtid = " + cmtId));
+		List<DocDao> docs = docRepo.findByCmtId(commentDao);
+		
+		for(DocDao doc : docs) {
+			docService.deleteDoc(doc.getDocId());
+		}
 		commentRepo.deleteById(cmtId);
 	}
 

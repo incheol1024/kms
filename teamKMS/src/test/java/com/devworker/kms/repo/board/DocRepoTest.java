@@ -22,7 +22,7 @@ public class DocRepoTest {
 
 	@Autowired
 	DocRepo docRepo;
-	
+
 	@Autowired
 	CommentRepo commentRepo;
 
@@ -46,22 +46,20 @@ public class DocRepoTest {
 
 	@Test
 	public void boardId_commentId_객체연관관계_테스트() {
-/*
-		BoardDao board = new BoardDao();
-		board.setBoardId(1);
+		/*
+		 * BoardDao board = new BoardDao(); board.setBoardId(1);
+		 * 
+		 * CommentDao comment = new CommentDao(); comment.setBoardId(board);
+		 * comment.setCmtId(232);
+		 * 
+		 */
 
-		CommentDao comment = new CommentDao();
-		comment.setBoardId(board);
-		comment.setCmtId(232);
-		
-*/
-		
 		Optional<CommentDao> opComment = commentRepo.findById(237);
 		CommentDao commentDao = opComment.get();
 
 		DocDao doc = new DocDao();
-		//doc.setBoardId(board);
-		//doc.setCommentId(comment);
+		// doc.setBoardId(board);
+		// doc.setCommentId(comment);
 		doc.setCmtId(commentDao);
 		doc.setDocPath("testPath");
 		doc.setDocSize(5);
@@ -70,5 +68,20 @@ public class DocRepoTest {
 		assertThat(docRepo.save(doc)).isNotNull().isEqualTo(doc);
 
 	}
-	
+
+	@Test
+	public void findByCmtId_쿼리메소드_테스트() {
+		
+		CommentDao commentDao = null;
+		
+		Optional<CommentDao> opCommentDao = commentRepo.findById(293);
+		commentDao = opCommentDao.get();
+		
+		List<DocDao> docs = docRepo.findByCmtId(commentDao);
+		
+		for(DocDao doc : docs) {
+			System.out.println(doc.getDocId() + doc.getDocPath());
+		}
+	}
+
 }

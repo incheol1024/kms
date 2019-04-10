@@ -2,6 +2,7 @@ package com.devworker.kms.service.board;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,7 +76,14 @@ public class FileHandlerImplLocal implements FileHandler {
 
 	@Override
 	public void deleteFile(long docId) throws Exception {
+		Optional<DocDao> opDoc = docRepo.findById(docId);
+		DocDao doc = opDoc.get();
+		String docPath = doc.getDocPath();
 		
+		File file = new File(docPath);
+		if(file.exists()) {
+			file.delete();
+		}
 	}
 
 

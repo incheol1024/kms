@@ -46,8 +46,6 @@ public class CommentController {
 		return commentService.addComment(comFileDto.getBoardId(), comFileDto.getCmtContents(), comFileDto.getFileTransactKey(),
 				comFileDto.getFileCount());
 		
-		// return commentService.addComment(boardId, cmtContents, fileTransactKey,
-		// fileCount);
 	}
 
 	@GetMapping("/list/{boardId}")
@@ -61,7 +59,7 @@ public class CommentController {
 	}
 
 	@DeleteMapping("/delete")
-	public Integer deleteComment(@RequestParam Integer cmtId) {
+	public Integer deleteComment(@RequestParam Integer cmtId) throws Exception {
 		commentService.deleteComment(cmtId);
 		return cmtId;
 	}

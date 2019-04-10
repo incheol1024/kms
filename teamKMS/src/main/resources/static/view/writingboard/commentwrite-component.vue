@@ -33,9 +33,10 @@
             multiple
 					>        
   </v-flex>
-  <v-btn color="info" @click.prevent="addComment">댓글 등록</v-btn>
+  <v-btn color="info" @click.prevent="addCommentAndFile">댓글 등록</v-btn>
     </v-flex>
     </v-layout>
+  
   
 </div>
 </template>
@@ -175,10 +176,10 @@ data () {
         // }
         console.log("addComment function is called");
 
-        if(this.docs.length > 0 ){
-          console.log('docs length > 0');
-          this.addFile();
-        }
+        // if(this.docs.length > 0 ){
+        //   console.log('docs length > 0');
+        //   this.addFile();
+        // }
         
         var that = this;
 
@@ -206,10 +207,12 @@ data () {
             console.log(error)
           })
     },
-    addFile: function() {
+    addCommentAndFile: function() {
 
-        if(this.docs.length < 1) 
+        if(this.docs.length < 1) {
+          this.addComment();
           return;
+        }
 
         var that = this;
         let formData = new FormData(); 
@@ -229,16 +232,28 @@ data () {
           )
           .then(
             function(response) {
-              //            _this.answers.push(response.data);
-              console.log(response.data.fileTransactKey);
-              console.log(response.data.fileCount);
-              that.fileTransactKey = response.data.fileTransactKey;
-              that.fileCount = response.data.fileCount;
+            //            _this.answers.push(response.data);
+            //   console.log(response.data.fileTransactKey);
+            //   console.log(response.data.fileCount);
+               that.fileTransactKey = response.data.fileTransactKey;
+               that.fileCount = response.data.fileCount;
+               console.log("that.fileTransactKey = " + that.fileTransactKey);
+               console.log("that.fileCount = " + that.fileCount);
+            // 
+            //this.fileCallBack(reresponse);
             }
           )
+          .then(res => {
+               that.addComment();
+          })
           .catch(function(error) {
             console.log(error)
           })
+    },
+    fileCallBack: function(response) {
+      this.fileTransactKey = response.data.fileTransactKey;
+      this.fileCount = response.data.fileCount;
+
     },
     addCommentFile: function(fileTransactKey, fileCount) {
         console.log("addComment function is called and fileTransactKey = " + fileTransactKey + " and fileCount = " + fileCount);
@@ -261,7 +276,7 @@ data () {
               //_this.answers.push(response.data);
               console.log(response.data);
             }
-          )+
+          )
           .catch(function(error) {
             console.log(error)
           })
