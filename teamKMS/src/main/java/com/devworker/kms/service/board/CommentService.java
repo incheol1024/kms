@@ -13,8 +13,10 @@ import com.devworker.kms.entity.board.BoardDao;
 import com.devworker.kms.entity.board.CommentDao;
 import com.devworker.kms.entity.board.DocDao;
 import com.devworker.kms.dic.LikeType;
+import com.devworker.kms.dto.board.CommentDto;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.exception.board.CommentNotFoundException;
+import com.devworker.kms.exception.board.DocNotFoundException;
 import com.devworker.kms.exception.board.FileTransactionException;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.board.CommentRepo;
@@ -71,14 +73,14 @@ public class CommentService {
 	 * @return 트랜잭션이 정상 처리 되면 등록된 CommentDao 객체를 리턴합니다.
 	 * @throws Exception 여러가지 예외를 던질 수 있습니다. 호출하는 컨트롤러에서 예외를 구분하여 처리해야 합니다.
 	 */
-	public CommentDao addComment(long boardId, String cmtContents, String fileTransactKey, int fileCount)
+	public CommentDto addComment(long boardId, String cmtContents, String fileTransactKey, int fileCount)
 			throws Exception {
 		String userId = CommonUtil.getCurrentUser();
 		Optional<UserDao> optionalUserDao = userRepo.findById(userId);
 
 		CommentDao commentDao = new CommentDao(new BoardDao(boardId), cmtContents);
 		commentDao.setCmtUserId(optionalUserDao.get().getName());
-		CommentDao savedCommentDao = commentRepo.save(commentDao);
+		CommentDao savedComment = commentRepo.save(commentDao);
 
 		if (!FileTransactionUtil.isSameTransaction(fileTransactKey, fileCount)) {
 
@@ -101,16 +103,15 @@ public class CommentService {
 		 */
 
 		List<Long> fileList = FileTransactionUtil.getFileList(fileTransactKey);
+		
+		DocDao savedDoc = null;
 		for (Long docId : fileList) {
-			System.out.println("======================docId======" + docId);
 			Optional<DocDao> docDao = docRepo.findById(docId.longValue());
-			DocDao savedDoc = docDao.get();
-			savedDoc.setCmtId(savedCommentDao);
+			savedDoc = docDao.orElseThrow(() -> new DocNotFoundException());
+			savedDoc.setCmtId(savedComment);
 			DocDao tmpDoc = null;
 			if ((tmpDoc = docRepo.save(savedDoc)) == null)
 				docService.rollbackFileTransaction(fileTransactKey);
-
-			System.out.println(tmpDoc.toString());
 		}
 
 		FileTransactionUtil.removeFileInfoMemory(fileTransactKey);
@@ -119,7 +120,8 @@ public class CommentService {
 		// 조건2. 파일 등록처리가 완료 되면 메모리를 해제해야 한다.
 		// 조건3. 파일 등록 처리를 하다가 예외가 발생하면 메모리를 해제해야한다.
 
-		return savedCommentDao;
+		return new CommentDto(savedComment, savedDoc);
+		//return savedCommentDao;
 	}
 
 	public List<CommentDao> findByBoardId(BoardDao boardId) throws Exception {

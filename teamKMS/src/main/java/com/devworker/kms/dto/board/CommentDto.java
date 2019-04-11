@@ -1,17 +1,12 @@
 package com.devworker.kms.dto.board;
 
+import java.io.File;
 import java.time.LocalDateTime;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import com.devworker.kms.entity.board.BoardDao;
 import com.devworker.kms.entity.board.CommentDao;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.devworker.kms.entity.board.DocDao;
 
 public class CommentDto {
-
-	private BoardDao boardId;
 
 	private int cmtId;
 
@@ -21,29 +16,31 @@ public class CommentDto {
 
 	private LocalDateTime cmtDate;
 
-	@JsonIgnore
-	private MultipartFile multiPartFile;
+	private int cmtLike;
 
-	@JsonProperty("file")
-	private String fileName;
+	private long docId;
 
-	private String bucketName;
+	private String docName;
 
-	private String filePath;
-
-	public CommentDto(CommentDao commentDao) {
-		this.setBoardId(commentDao.getBoardId());
-		this.setCmtContents(commentDao.getCmtContents());
-		this.setCmtDate(commentDao.getCmtDate());
-		this.setCmtId(commentDao.getCmtId());
+	public CommentDto() {
 	}
 
-	public BoardDao getBoardId() {
-		return boardId;
+	public CommentDto(CommentDao comment, DocDao doc) {
+		this.cmtId = comment.getCmtId();
+		this.cmtContents = comment.getCmtContents();
+		this.cmtUserId = comment.getCmtUserId();
+		this.cmtDate = comment.getCmtDate();
+		this.cmtLike = comment.getCmtLike();
+		this.docId = doc.getDocId();
+		this.docName = bringDocName(doc.getDocPath());
 	}
 
-	public void setBoardId(BoardDao boardDao) {
-		this.boardId = boardDao;
+	private String bringDocName(String docPath) {
+		int lastIndex = docPath.lastIndexOf(File.separator);
+
+		if (lastIndex == -1)
+			return docPath;
+		return docPath.substring(lastIndex + 1);
 	}
 
 	public int getCmtId() {
@@ -78,35 +75,28 @@ public class CommentDto {
 		this.cmtDate = cmtDate;
 	}
 
-	public MultipartFile getMultiPartFile() {
-		return multiPartFile;
+	public int getCmtLike() {
+		return cmtLike;
 	}
 
-	public void setMultiPartFile(MultipartFile multiPartFile) {
-		this.multiPartFile = multiPartFile;
+	public void setCmtLike(int cmtLike) {
+		this.cmtLike = cmtLike;
 	}
 
-	public String getFileName() {
-		return fileName;
+	public long getDocId() {
+		return docId;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setDocId(long docId) {
+		this.docId = docId;
 	}
 
-	public String getBucketName() {
-		return bucketName;
+	public String getDocName() {
+		return docName;
 	}
 
-	public void setBucketName(String bucketName) {
-		this.bucketName = bucketName;
+	public void setDocName(String docName) {
+		this.docName = docName;
 	}
 
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
 }

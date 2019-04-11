@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devworker.kms.entity.board.BoardDao;
 import com.devworker.kms.entity.board.CommentDao;
 import com.devworker.kms.dto.board.CommentAndFileTransactionDto;
+import com.devworker.kms.dto.board.CommentDto;
 import com.devworker.kms.service.board.CommentService;
 
 @RestController
@@ -32,20 +33,29 @@ public class CommentController {
 	public CommentDao addComment(@RequestBody CommentDao commentDao) throws Exception {
 		return commentService.addComment(commentDao);
 	}
+	/*
+	 * @PostMapping("/add/files") public CommentDao addComment(@RequestBody
+	 * CommentAndFileTransactionDto comFileDto) throws Exception {
+	 * 
+	 * logger.debug("RequestBody Test = {}", comFileDto);
+	 * 
+	 * logger.debug("PathVaiable boardId = {}", boardId);
+	 * logger.debug("RequestBody CommentDao = {}", commentDao);
+	 * logger.debug("FileTranctionDto = {}", fileTransactionDto);
+	 * 
+	 * 
+	 * return commentService.addComment(comFileDto.getBoardId(),
+	 * comFileDto.getCmtContents(), comFileDto.getFileTransactKey(),
+	 * comFileDto.getFileCount());
+	 * 
+	 * }
+	 * 
+	 */
 
 	@PostMapping("/add/files")
-	public CommentDao addComment(@RequestBody CommentAndFileTransactionDto comFileDto) throws Exception {
-
-		logger.debug("RequestBody Test = {}", comFileDto);
-		/*
-		 * logger.debug("PathVaiable boardId = {}", boardId);
-		 * logger.debug("RequestBody CommentDao = {}", commentDao);
-		 * logger.debug("FileTranctionDto = {}", fileTransactionDto);
-		 */
-
-		return commentService.addComment(comFileDto.getBoardId(), comFileDto.getCmtContents(), comFileDto.getFileTransactKey(),
-				comFileDto.getFileCount());
-		
+	public CommentDto addComment(@RequestBody CommentAndFileTransactionDto comFileDto) throws Exception {
+		return commentService.addComment(comFileDto.getBoardId(), comFileDto.getCmtContents(),
+				comFileDto.getFileTransactKey(), comFileDto.getFileCount());
 	}
 
 	@GetMapping("/list/{boardId}")

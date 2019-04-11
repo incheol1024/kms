@@ -33,11 +33,11 @@
               </v-card-text>
 
             <v-divider></v-divider>
-              <v-card-actions>
+              <v-card-actions v-if="answer.docId != undefined && answer.docId != null">
                   <div> 
                     <!-- <template v-for="(doc, index) in docs"> -->
-                      <v-chip close color="orange" label outline :key="index" @click="fileDownload(doc.docId)">
-                        파일 이름
+                      <v-chip close color="orange" label outline :key="index" @click="fileDownload(answer.docId, answer.docName)">
+                        {{answer.docName}}
                       </v-chip>
                     <!-- </template>                                             -->
                   </div>
@@ -51,11 +51,6 @@
                 <v-btn icon>
                 <v-icon>share</v-icon>
                 </v-btn>
-<!-- 
-                <v-btn flat icon color="red lighten-2">
-                  <v-icon>thumb_down</v-icon>
-                </v-btn>
--->
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -146,30 +141,6 @@
             console.log(error)
           })
       },
-      addComment: function() {
-        if(this.fileTransactKey != null) {
-          this.addCommentFile(this.fileTransactKey, this.fileCount);
-          return;
-        }
-        
-        console.log("addComment function is called");
-        var that = this;
-
-        axios.post('/comment/add', {
-            boardId: Number(this.$route.params.qid),
-            cmtContents: this.cmtContents
-          })
-          .then(
-            function(response) {
-              // router.push("/qna/answer/" + _this.name + "/" + _this.id + "/" + response.data.boardId );
-              that.answers.push(response.data);
-              console.log(response.data);
-            }
-          )
-          .catch(function(error) {
-            console.log(error)
-          })
-      },
       updateComment: function() {
         console.log("updateComment function is called");
         axios.post('/comment/update', {
@@ -212,37 +183,6 @@
           // Do nothing!
         }
       },
-      addFile: function() {
-        console.log("file submit button click" + "boarId: " + this.boardId + ", cmtId: " + this.cmtId + " , multipartFile: " + this.multiPartFile);
-        var _this = this;
-        let formData = new FormData(); 
-
-        formData.append('boardId', this.boardId);
-        //formData.append('cmtId', this.cmtId);
-        for (var i = 0; i < this.multiPartFile.length; i++) {
-          let file = this.multiPartFile[i];
-          formData.append('multiPartFile', file);
-        }
-        axios.post('/file/upload/comment',
-            formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            }
-          )
-          .then(
-            function(response) {
-              //            _this.answers.push(response.data);
-              console.log(response.data.fileTransactKey);
-              console.log(response.data.fileCount);
-              _this.fileTransactKey = response.data.fileTransactKey;
-              _this.fileCount = response.data.fileCount;
-            }
-          )
-          .catch(function(error) {
-            console.log(error)
-          })
-      },
       updateLike: function(cmtId, index) {
         var that = this;
         console.log("updateLike function is called");
@@ -276,18 +216,26 @@
             console.log(error)
           })
       },
-      fileDownload: function (docId) {
-        console.log("updateUnLike function is called");
-        axios.post('/comment/unlike', {
-            cmtId: this.cmtId
+      fileDownload: function (docId, docName) {
+        console.log("fileDownload function is called");
+        console.log("file download url" + " file/download/" + docId);
+        axios.get('/file/download/' + docId, 
+          {
+            docId: docId
+          },  
+          {
+            headers: {
+               responseType: 'blob'
+            }
           })
           .then(
             function(response) {
-              // router.push("/qna/answer/" + _this.name + "/" + _this.id + "/" + response.data.boardId );
-
-              _this.answers.push(response.data);
-
-              console.log(response.data);
+                 const url = window.URL.createObjectURL(new Blob([response.data]));
+                 const link = document.createElement('a');
+                 link.href = url;
+                 link.setAttribute('download', docName); //or any other extension
+                 document.body.appendChild(link);
+                 link.click();
             }
           )
           .catch(function(error) {

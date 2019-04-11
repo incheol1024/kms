@@ -42,7 +42,9 @@ public class FileHandlerImplLocal implements FileHandler {
 
 	@Override
 	public File downloadFile(String fileKey) {
-		return new File(FILE_PATH + fileKey);
+		//return new File(FILE_PATH + fileKey);
+		return new File(fileKey);
+		
 	}
 
 	@Override
