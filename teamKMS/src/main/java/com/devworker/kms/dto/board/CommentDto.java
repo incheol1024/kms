@@ -26,13 +26,25 @@ public class CommentDto {
 	}
 
 	public CommentDto(CommentDao comment, DocDao doc) {
+		setComment(comment);
+		setDoc(doc);
+	}
+
+	public CommentDto(CommentDao comment) {
+		setComment(comment);
+	}
+
+	private void setDoc(DocDao doc) {
+		this.docId = doc.getDocId();
+		this.docName = bringDocName(doc.getDocPath());
+	}
+
+	private void setComment(CommentDao comment) {
 		this.cmtId = comment.getCmtId();
 		this.cmtContents = comment.getCmtContents();
 		this.cmtUserId = comment.getCmtUserId();
 		this.cmtDate = comment.getCmtDate();
 		this.cmtLike = comment.getCmtLike();
-		this.docId = doc.getDocId();
-		this.docName = bringDocName(doc.getDocPath());
 	}
 
 	private String bringDocName(String docPath) {
@@ -99,4 +111,15 @@ public class CommentDto {
 		this.docName = docName;
 	}
 
+	@Override
+	public String toString() {
+		return "CommentDto [cmtId=" + cmtId + ", cmtContents=" + cmtContents + ", cmtUserId=" + cmtUserId + ", cmtDate="
+				+ cmtDate + ", cmtLike=" + cmtLike + ", docId=" + docId + ", docName=" + docName + ", getCmtId()="
+				+ getCmtId() + ", getCmtContents()=" + getCmtContents() + ", getCmtUserId()=" + getCmtUserId()
+				+ ", getCmtDate()=" + getCmtDate() + ", getCmtLike()=" + getCmtLike() + ", getDocId()=" + getDocId()
+				+ ", getDocName()=" + getDocName() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+				+ ", toString()=" + super.toString() + "]";
+	}
+
+	
 }

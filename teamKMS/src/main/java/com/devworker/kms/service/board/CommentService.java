@@ -1,5 +1,6 @@
 package com.devworker.kms.service.board;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -103,7 +104,7 @@ public class CommentService {
 		 */
 
 		List<Long> fileList = FileTransactionUtil.getFileList(fileTransactKey);
-		
+
 		DocDao savedDoc = null;
 		for (Long docId : fileList) {
 			Optional<DocDao> docDao = docRepo.findById(docId.longValue());
@@ -121,11 +122,29 @@ public class CommentService {
 		// 조건3. 파일 등록 처리를 하다가 예외가 발생하면 메모리를 해제해야한다.
 
 		return new CommentDto(savedComment, savedDoc);
-		//return savedCommentDao;
+		// return savedCommentDao;
 	}
 
-	public List<CommentDao> findByBoardId(BoardDao boardId) throws Exception {
-		return commentRepo.findByBoardId(boardId);
+	public List<CommentDto> findByBoardId(BoardDao boardId) throws Exception {
+		List<CommentDao> comments = commentRepo.findByBoardId(boardId);
+		List<CommentDto> resultComments = new ArrayList<CommentDto>();
+		CommentDto commentDto = null;
+		List<DocDao> docs = null;
+		
+		for (CommentDao comment : comments) {
+			docs = docRepo.findByCmtId(comment);
+			if (docs.isEmpty()) {
+				commentDto = new CommentDto(comment);
+				resultComments.add(commentDto);
+				continue;
+			}
+			// 여러개의 파일들을 처리할 수 있도록 수정 필요.
+			DocDao doc = docs.get(0);
+			commentDto = new CommentDto(comment, doc);
+			resultComments.add(commentDto);
+		}
+
+		return resultComments;
 	}
 
 	/**
@@ -152,7 +171,7 @@ public class CommentService {
 	 * Comment(댓글) 삭제 시 호출되는 메소드입니다.
 	 * 
 	 * @param cmtId must not be {@literal null}. Comment ID 값이 되야 합니다.
-	 * @throws Exception 
+	 * @throws Exception
 	 * 
 	 */
 	public void deleteComment(Integer cmtId) throws Exception {
@@ -160,8 +179,8 @@ public class CommentService {
 		CommentDao commentDao = opComment
 				.orElseThrow(() -> new CommentNotFoundException("comment is not found cmtid = " + cmtId));
 		List<DocDao> docs = docRepo.findByCmtId(commentDao);
-		
-		for(DocDao doc : docs) {
+
+		for (DocDao doc : docs) {
 			docService.deleteDoc(doc.getDocId());
 		}
 		commentRepo.deleteById(cmtId);

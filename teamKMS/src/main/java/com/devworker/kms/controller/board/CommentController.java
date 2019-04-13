@@ -59,7 +59,9 @@ public class CommentController {
 	}
 
 	@GetMapping("/list/{boardId}")
-	public List<CommentDao> listComment(@PathVariable @RequestBody BoardDao boardId) throws Exception {
+	public List<CommentDto> listComment(@PathVariable @RequestBody BoardDao boardId) throws Exception {
+		
+		logger.debug("CommentDto {}", commentService.findByBoardId(boardId));
 		return commentService.findByBoardId(boardId);
 	}
 

@@ -28,13 +28,20 @@
               
               <v-card-text>
                 <div>
-                  <span>{{ answer.cmtContents}}</span>
+                <!--  <span>{{ answer.cmtContents}}</span> -->
+                <codemirror ref="myCm"
+                :value="answer.cmtContents" 
+                :options="cmOptions"
+                @ready="onCmReady"
+                @focus="onCmFocus"
+                @input="onCmCodeChange">
+                </codemirror> 
                 </div>               
               </v-card-text>
 
             <v-divider></v-divider>
-              <v-card-actions v-if="answer.docId != undefined && answer.docId != null">
-                  <div> 
+              <v-card-actions v-if="isExistDoc(answer.docId)">
+                  <div>   	
                     <!-- <template v-for="(doc, index) in docs"> -->
                       <v-chip close color="orange" label outline :key="index" @click="fileDownload(answer.docId, answer.docName)">
                         {{answer.docName}}
@@ -91,6 +98,16 @@
       return {        
         cmtId: 1,
         cmtContents: "default comment",
+        cmOptions: {
+          tabSize: 4,
+          mode: 'text/javascript',
+          theme: 'default',
+          lineNumbers: true,
+          line: true,
+          styleActiveLine: true,
+          lineWrapping: true,
+          lineSeparator:"</br>"
+        },
         cmtUserId: "",
         cmtDate: "",
         multiPartFile: [],
@@ -117,7 +134,7 @@
           .then(
             function(response) {
               for (var i = 0; i < response.data.length; i++) {
-                console.log(response.data[i]);
+                console.log(response. data[i]);
                 that.answers.push(response.data[i]);
               }
             }
@@ -244,6 +261,23 @@
       },
       renderComment: function (data) {
         this.answers.push(data);
+      },
+      isExistDoc: function(docId) {
+        if(docId === undefined || docId === null || docId === '0' || 0 === Number(docId)) {
+          return false;
+        }
+        else {
+          return true;
+        }
+        
+      }
+    }
+  }
+  </script>
+null || docId === '0' )
+         return false;
+        
+        return true;
       }
     }
   }
