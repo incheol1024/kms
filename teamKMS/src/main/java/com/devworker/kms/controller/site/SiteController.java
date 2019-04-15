@@ -3,7 +3,7 @@ package com.devworker.kms.controller.site;
 import com.devworker.kms.dto.site.ProjectBoardDto;
 import com.devworker.kms.dto.site.ProjectDto;
 import com.devworker.kms.dto.site.SiteDto;
-import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.service.site.SiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -1,36 +1,28 @@
-package com.devworker.kms.service.solution;
-
-import com.devworker.kms.entity.common.BoardDao;
-import com.devworker.kms.entity.solution.SolutionDao;
-import com.devworker.kms.repo.common.BoardRepo;
-import com.devworker.kms.repo.solution.SolutionRepo;
-import com.devworker.kms.util.CommonUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+package com.devworker.kms.component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.devworker.kms.entity.common.BoardDao;
+import com.devworker.kms.entity.solution.SolutionDao;
+import com.devworker.kms.repo.common.BoardRepo;
+import com.devworker.kms.util.CommonUtil;
+
 @Service
-public class SolutionService {
- 
-	private Logger logger = LoggerFactory.getLogger(SolutionService.class);
-	
-	@Autowired
-	SolutionRepo solutionRepo;
-	
+public class WriteComponent {
 	@Autowired
 	BoardRepo boardRepo;
 	
 	public List<BoardDao> getFirstPageList() {
 		return (List<BoardDao>) boardRepo.findAll();
 	}
-
-	public BoardDao registerSolution(BoardDao boardDao) {
+	
+	public BoardDao register(BoardDao boardDao) {
 		boardDao.setUserId(CommonUtil.getCurrentUser());
 		boardDao.setRegDate(LocalDateTime.now());
 		boardDao.setUpdDate(LocalDateTime.now());
@@ -38,21 +30,21 @@ public class SolutionService {
 		
 		return boardRepo.save(boardDao);
 	}
-	
-	public BoardDao editSolution(BoardDao boardDao) {
+
+	public BoardDao edit(BoardDao boardDao) {
 		Optional<BoardDao> bd2 = boardRepo.findById(boardDao.getBoardId());	
 		BoardDao bd = bd2.get();
 		boardDao.setUserId(CommonUtil.getCurrentUser());
-		boardDao.setRegDate(bd.getRegDate()); 
+		boardDao.setRegDate(bd.getRegDate()); //수정
 		boardDao.setUpdDate(LocalDateTime.now());
-		boardDao.setHits(bd.getHits()); 
+		boardDao.setHits(bd.getHits()); //수정
 		return boardRepo.save(boardDao);
 	}
-
-	public void deleteSolution(long id) {
+	
+	public void delete(long id) {
 		boardRepo.deleteById(id);
 	}
-
+	
 	public Optional<BoardDao> findById(Long id) {
 		return boardRepo.findById(id);
 	}

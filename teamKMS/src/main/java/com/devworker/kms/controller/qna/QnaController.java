@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.service.qna.QnaService;
 
 @RestController

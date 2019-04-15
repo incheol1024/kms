@@ -2,6 +2,7 @@ package com.devworker.kms.entity.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.devworker.kms.entity.qna.QnaCodeDaoId;
 import org.junit.Before;
 import org.junit.Test;
 

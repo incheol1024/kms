@@ -3,14 +3,14 @@ package com.devworker.kms.service.site;
 import com.devworker.kms.dto.site.ProjectBoardDto;
 import com.devworker.kms.dto.site.ProjectDto;
 import com.devworker.kms.dto.site.SiteDto;
-import com.devworker.kms.entity.board.BoardDao;
+import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.site.ProjectBoardDao;
 import com.devworker.kms.entity.site.ProjectDao;
 import com.devworker.kms.entity.site.SiteDao;
 import com.devworker.kms.repo.site.ProjectBoardRepo;
 import com.devworker.kms.repo.site.ProjectRepo;
 import com.devworker.kms.repo.site.SiteRepo;
-import com.devworker.kms.service.board.WriteService;
+import com.devworker.kms.component.WriteComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +28,7 @@ public class SiteService {
     @Autowired
     ProjectBoardRepo projectBoardRepo;
     @Autowired
-    WriteService writeService;
+    WriteComponent writeService;
 
     public List<SiteDto> getAllSite(int menuId) {
         return siteRepo.getAllSite(menuId).stream().map(SiteDao::getDto).collect(Collectors.toList());
@@ -37,9 +37,11 @@ public class SiteService {
     public int addSite(SiteDto dto) {
         return siteRepo.save(dto.getDao()).getSiteId();
     }
+
     public void deleteSite(int siteId) {
         siteRepo.deleteById(siteId);
     }
+
     public Page<ProjectDto> getSiteProjects(int menuId, int siteId, Pageable pageable) {
         return projectRepo.getSiteProjects(siteId, pageable).map(ProjectDao::getDto);
     }

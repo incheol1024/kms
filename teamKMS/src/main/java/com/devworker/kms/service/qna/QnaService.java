@@ -14,15 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.entity.MenuDao;
-import com.devworker.kms.entity.board.BoardDao;
-import com.devworker.kms.entity.board.CommentDao;
-import com.devworker.kms.entity.board.QnaCodeDao;
+import com.devworker.kms.entity.common.BoardDao;
+import com.devworker.kms.entity.common.CommentDao;
+import com.devworker.kms.entity.qna.QnaCodeDao;
 import com.devworker.kms.entity.qna.QnaDao;
 import com.devworker.kms.repo.MenuRepo;
-import com.devworker.kms.repo.board.BoardRepo;
-import com.devworker.kms.repo.board.CommentRepo;
-import com.devworker.kms.repo.board.DocRepo;
-import com.devworker.kms.repo.board.QnaCodeRepo;
+import com.devworker.kms.repo.common.BoardRepo;
+import com.devworker.kms.repo.common.CommentRepo;
+import com.devworker.kms.repo.common.DocRepo;
+import com.devworker.kms.repo.qna.QnaCodeRepo;
 import com.devworker.kms.repo.qna.QnaRepo;
 import com.devworker.kms.util.CommonUtil;
 

@@ -14,12 +14,12 @@ import org.springframework.stereotype.Component;
 
 import com.devworker.kms.entity.UserDao;
 import com.devworker.kms.dto.UserDto;
-import com.devworker.kms.service.AuthService;
+import com.devworker.kms.component.AuthComponent;
 
 @Component
 public class SecurityProvider implements AuthenticationProvider {
 	@Autowired
-	AuthService service;
+	AuthComponent service;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) {

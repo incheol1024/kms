@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.devworker.kms.entity.board.BoardDao;
-import com.devworker.kms.service.board.WriteService;
+import com.devworker.kms.entity.common.BoardDao;
+import com.devworker.kms.component.WriteComponent;
 import com.devworker.kms.service.solution.SolutionService;
 
 @RestController
@@ -29,7 +28,7 @@ public class SolutionController {
 	SolutionService solutionService;
 
 	@Autowired
-	WriteService writeService;
+	WriteComponent writeService;
 	
 	@GetMapping("")
 	public List<BoardDao> solutionHome(){

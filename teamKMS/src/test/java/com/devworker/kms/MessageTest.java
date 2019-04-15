@@ -2,7 +2,7 @@ package com.devworker.kms;
 
 import com.devworker.kms.dto.MessageDetailDto;
 import com.devworker.kms.dto.MessageDto;
-import com.devworker.kms.service.MessageService;
+import com.devworker.kms.component.MessageComponent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 @SpringBootTest
 public class MessageTest {
 	@Autowired
-	MessageService messageService;
+	MessageComponent messageService;
 	
 	@Test
 	public void sendMessageTest() throws JsonProcessingException, InterruptedException, ExecutionException {

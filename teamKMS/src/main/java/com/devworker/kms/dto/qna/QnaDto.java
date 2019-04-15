@@ -1,6 +1,6 @@
 package com.devworker.kms.dto.qna;
 
-import com.devworker.kms.dto.board.CommentDto;
+import com.devworker.kms.dto.common.CommentDto;
 
 public class QnaDto {
 
