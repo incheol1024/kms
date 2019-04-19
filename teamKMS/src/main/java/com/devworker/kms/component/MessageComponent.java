@@ -6,13 +6,15 @@ import java.util.concurrent.Future;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.dto.MessageDto;
 import com.devworker.kms.util.MessageClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-@Service
+@Component
+
 public class MessageComponent {
 	@Value("${message.hook.url}")
 	String url;

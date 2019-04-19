@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import com.devworker.kms.service.FileHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +30,7 @@ import com.devworker.kms.util.FileTransactionUtil;
  * @author Incheol
  *
  */
-@Service
+@Component
 public class DocComponent {
 
 	@Autowired

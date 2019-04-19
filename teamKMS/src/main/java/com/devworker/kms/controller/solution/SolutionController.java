@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.devworker.kms.dto.common.BoardDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.entity.common.BoardDao;
-import com.devworker.kms.component.WriteComponent;
+import com.devworker.kms.component.BoardComponent;
 import com.devworker.kms.service.solution.SolutionService;
 
 @RestController
@@ -28,7 +29,7 @@ public class SolutionController {
 	SolutionService solutionService;
 
 	@Autowired
-	WriteComponent writeService;
+	BoardComponent boardComponent;
 	
 	@GetMapping("")
 	public List<BoardDao> solutionHome(){
@@ -37,18 +38,18 @@ public class SolutionController {
 	}
 	
 	@PostMapping("/register")
-	public BoardDao solutionRegiser(@Valid @RequestBody BoardDao boardDao) {
-		return writeService.register(boardDao);
+	public BoardDao solutionRegiser(@Valid @RequestBody BoardDto boardDao) {
+		return boardComponent.register(boardDao);
 	}
 	
 	@PostMapping("/edit")
-	public BoardDao solutionEdit(@Valid @RequestBody BoardDao boardDao) {
-		return writeService.edit(boardDao);
+	public BoardDao solutionEdit(@Valid @RequestBody BoardDto boardDao) {
+		return boardComponent.edit(boardDao);
 	}
 	
 	@DeleteMapping("/{boardId}")
 	public void solutionDelete(@PathVariable String boardId) {
-		writeService.delete(Integer.parseInt(boardId));
+		boardComponent.delete(Integer.parseInt(boardId));
 	}
 	
 	@GetMapping("/answer/{id}")
