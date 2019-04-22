@@ -1,7 +1,7 @@
 <template>
     <v-layout column>
         <v-card-title>
-            <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage(0)"> 글쓰기</v-btn>
+            <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToPage(0)"> 글쓰기</v-btn>
             <v-spacer></v-spacer>
             <v-text-field v-model="search" append-icon="search" label="검색" single-line hide-details></v-text-field>
         </v-card-title>
@@ -19,11 +19,11 @@
             </template>
             <template slot="items" slot-scope="props">
                 <tr>
-                    <td class="text-xs-left" @click="moveToDetailPage(props.item.boardId)">{{ props.item.boardId }}</td>
-                    <td class="text-xs-left" @click="moveToDetailPage(props.item.boardId)">{{ props.item.subject }}</td>
-                    <td class="text-xs-left" @click="moveToDetailPage(props.item.boardId)">{{ props.item.userId }}</td>
-                    <td class="text-xs-left" @click="moveToDetailPage(props.item.boardId)">{{ props.item.hits }}</td>
-                    <td class="text-xs-left" @click="moveToDetailPage(props.item.boardId)">{{ props.item.regDate }}</td>
+                    <td class="text-xs-left" @click="moveToPage(props.item.boardId)">{{ props.item.boardId }}</td>
+                    <td class="text-xs-left" @click="moveToPage(props.item.boardId)">{{ props.item.subject }}</td>
+                    <td class="text-xs-left" @click="moveToPage(props.item.boardId)">{{ props.item.userId }}</td>
+                    <td class="text-xs-left" @click="moveToPage(props.item.boardId)">{{ props.item.hits }}</td>
+                    <td class="text-xs-left" @click="moveToPage(props.item.boardId)">{{ props.item.regDate }}</td>
                     <td>
                     <v-btn slot="activator" color="primary" dark class="mb-2" @click="delpage(props.item.boardId)"> 삭제
                     </v-btn>
@@ -72,11 +72,8 @@
                         console.log(error);
                     })
             },
-            moveToWritePage: function (fuc) {
+            moveToPage: function (fuc) {
                 this.$router.push("/solutions/write/" + fuc);
-            },
-            moveToDetailPage: function (fuc) {
-                this.$router.push("/write/" + fuc);
             },
             delpage: function (id) {
                 if (confirm("삭제하시겠습니까?")) {

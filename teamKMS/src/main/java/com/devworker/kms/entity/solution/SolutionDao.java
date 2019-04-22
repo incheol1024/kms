@@ -14,7 +14,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SolutionDao {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "board_id")
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long board_id;
 	
 	@Column(name = "solution")

@@ -40,13 +40,16 @@ public class SolutionController {
 	}
 	
 	@PostMapping("/register")
-	public BoardDao solutionRegiser(@Valid @RequestBody BoardDto boardDao, SolutionDto solutionDao) {
+	public BoardDao solutionRegiser(@Valid @RequestBody BoardDto boardDao, @Valid @RequestBody SolutionDto solutionDao) {
+		BoardDao BD = boardComponent.register(boardDao);
+		solutionDao.setBoardId(BD.getBoardId());
 		solutionService.registerSolution(solutionDao);
-		return boardComponent.register(boardDao);
+		return BD;
 	}
 	
 	@PostMapping("/edit")
-	public BoardDao solutionEdit(@Valid @RequestBody BoardDto boardDao) {
+	public BoardDao solutionEdit(@Valid @RequestBody BoardDto boardDao, @Valid @RequestBody SolutionDto solutionDao) {
+		solutionService.editSolution(solutionDao);
 		return boardComponent.edit(boardDao);
 	}
 	

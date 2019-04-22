@@ -90,9 +90,10 @@
               this.$router.push("/solutions/" + this.id);
             },
             edit_write: function edit_write() {
-              let obj1 = {boardId:this.id,subject:this.subject,contents:this.contents};
-              let obj2 = Object.assign({},obj1)
-                axios.post('/solution/edit', obj2)
+              let obj_b = {boardId:this.id,subject:this.subject,contents:this.contents};           
+              let obj_s = {site:this.site,solution:this.solution};
+              let obj = Object.assign({},obj_b,obj_s)
+                axios.post('/solution/edit', obj)
                     .then(
                         function (response) {
                             console.log(response.data);

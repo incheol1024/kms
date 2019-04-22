@@ -3,6 +3,7 @@ package com.devworker.kms.service.solution;
 import com.devworker.kms.dto.solution.SolutionDto;
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.solution.SolutionDao;
+import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.common.BoardRepo;
 import com.devworker.kms.repo.solution.SolutionRepo;
 import com.devworker.kms.util.CommonUtil;
@@ -34,19 +35,15 @@ public class SolutionService {
 	public SolutionDao registerSolution(SolutionDto dto) {
 		return solutionRepo.save(dto.toDao());
 	}
-	
-	public BoardDao editSolution(BoardDao boardDao) {
-		Optional<BoardDao> bd2 = boardRepo.findById(boardDao.getBoardId());	
-		BoardDao bd = bd2.get();
-		boardDao.setUserId(CommonUtil.getCurrentUser());
-		boardDao.setRegDate(bd.getRegDate()); 
-		boardDao.setUpdDate(LocalDateTime.now());
-		boardDao.setHits(bd.getHits()); 
-		return boardRepo.save(boardDao);
+		
+	public SolutionDao editSolution(SolutionDto dto) {
+		Optional<SolutionDao> dao = solutionRepo.findById(dto.getBoardId());
+		dao.orElseThrow(() -> new NotExistException("Board Not Found"));
+		return solutionRepo.save(dto.toDao());
 	}
 
 	public void deleteSolution(long id) {
-		boardRepo.deleteById(id);
+		solutionRepo.deleteById(id);
 	}
 
 	public Optional<BoardDao> findById(Long id) {
