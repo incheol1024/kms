@@ -4,10 +4,10 @@
       <v-layout row wrap>
         <v-flex xs12>    
     
-    <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
+    <ckeditor :editor="editor" v-model="cmtContents" :config="editorConfig"></ckeditor>
     <codemirror ref="myCm"
-                :value="cmtContents" 
-                v-model="cmtContents"
+                :value="cmtCode" 
+                v-model="cmtCode"
                 :options="cmOptions"
                 @ready="onCmReady"
                 @focus="onCmFocus"
@@ -42,11 +42,11 @@
   data () {
       return {
           editor: ClassicEditor,
-          editorData: '<p>Content of the editor.</p>',
+          cmtContents: '<p>댓글을 입력하세요~^^..!!</p>',
           editorConfig: {
           
           },
-          cmtContents: 'const a = 10',
+          cmtCode: 'const a = 10',
           cmOptions: {
           tabSize: 4,
           mode: 'text/javascript',
@@ -226,6 +226,7 @@
           axios.post(url, {
               boardId: Number(this.qid),
               cmtContents: this.cmtContents,
+              cmtCode: this.cmtCode,
               fileTransactKey: this.fileTransactKey,
               fileCount: this.fileCount
             })

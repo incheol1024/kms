@@ -8,15 +8,19 @@ import com.devworker.kms.entity.common.DocDao;
 
 public class CommentDto {
 
-	private int cmtId;
+	private long boardId;
+
+	private long cmtId;
 
 	private String cmtContents;
+
+	private String cmtCode;
 
 	private String cmtUserId;
 
 	private LocalDateTime cmtDate;
 
-	private int cmtLike;
+	private long cmtLike;
 
 	private long docId;
 
@@ -55,11 +59,19 @@ public class CommentDto {
 		return docPath.substring(lastIndex + 1);
 	}
 
-	public int getCmtId() {
+	public long getBoardId() {
+		return boardId;
+	}
+
+	public void setBoardId(long boardId) {
+		this.boardId = boardId;
+	}
+
+	public long getCmtId() {
 		return cmtId;
 	}
 
-	public void setCmtId(int cmtId) {
+	public void setCmtId(long cmtId) {
 		this.cmtId = cmtId;
 	}
 
@@ -69,6 +81,14 @@ public class CommentDto {
 
 	public void setCmtContents(String cmtContents) {
 		this.cmtContents = cmtContents;
+	}
+
+	public String getCmtCode() {
+		return cmtCode;
+	}
+
+	public void setCmtCode(String cmtCode) {
+		this.cmtCode = cmtCode;
 	}
 
 	public String getCmtUserId() {
@@ -87,11 +107,11 @@ public class CommentDto {
 		this.cmtDate = cmtDate;
 	}
 
-	public int getCmtLike() {
+	public long getCmtLike() {
 		return cmtLike;
 	}
 
-	public void setCmtLike(int cmtLike) {
+	public void setCmtLike(long cmtLike) {
 		this.cmtLike = cmtLike;
 	}
 
@@ -113,13 +133,10 @@ public class CommentDto {
 
 	@Override
 	public String toString() {
-		return "CommentDto [cmtId=" + cmtId + ", cmtContents=" + cmtContents + ", cmtUserId=" + cmtUserId + ", cmtDate="
-				+ cmtDate + ", cmtLike=" + cmtLike + ", docId=" + docId + ", docName=" + docName + ", getCmtId()="
-				+ getCmtId() + ", getCmtContents()=" + getCmtContents() + ", getCmtUserId()=" + getCmtUserId()
-				+ ", getCmtDate()=" + getCmtDate() + ", getCmtLike()=" + getCmtLike() + ", getDocId()=" + getDocId()
-				+ ", getDocName()=" + getDocName() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
-				+ ", toString()=" + super.toString() + "]";
+		return "CommentDto [boardId=" + boardId + ", cmtId=" + cmtId + ", cmtContents=" + cmtContents + ", cmtCode="
+				+ cmtCode + ", cmtUserId=" + cmtUserId + ", cmtDate=" + cmtDate + ", cmtLike=" + cmtLike + ", docId="
+				+ docId + ", docName=" + docName + "]";
 	}
 
-	
+
 }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.common.CommentDao;
 
-public interface CommentRepo extends JpaRepository<CommentDao, Integer> {
+public interface CommentRepo extends JpaRepository<CommentDao, Long> {
 
 	List<CommentDao> findByBoardId(BoardDao boardObj);
 }

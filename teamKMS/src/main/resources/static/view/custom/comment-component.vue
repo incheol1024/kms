@@ -28,19 +28,22 @@
               
               <v-card-text>
                 <div>
-                <!--  <span>{{ answer.cmtContents}}</span> -->
+                <div>
+                <span>{{ answer.cmtContents}}</span>
+                </div>
+                <div>
                 <codemirror ref="myCm"
-                :value="answer.cmtContents" 
+                :value="answer.cmtCode" 
                 :options="cmOptions"
-                @ready="onCmReady"
-                @focus="onCmFocus"
-                @input="onCmCodeChange">
+                v-if="isExistData(answer.cmtCode)"
+                >
                 </codemirror> 
+                </div>
                 </div>               
               </v-card-text>
 
             <v-divider></v-divider>
-              <v-card-actions v-if="isExistDoc(answer.docId)">
+              <v-card-actions v-if="isExistData(answer.docId)">
                   <div>   	
                     <!-- <template v-for="(doc, index) in docs"> -->
                       <v-chip close color="orange" label outline :key="index" @click="fileDownload(answer.docId, answer.docName)">
@@ -263,15 +266,26 @@
       renderComment: function (data) {
         this.answers.push(data);
       },
-      isExistDoc: function(docId) {
-        if(docId === undefined || docId === null || docId === '0' || 0 === Number(docId)) {
+      isExistData: function(data) {
+        if(data === undefined || data === null || data === '0' || 0 === Number(data)) {
           return false;
         }
         else {
           return true;
         }
         
+      },
+      onCmReady(cm) {
+        console.log('the editor is readied!', cm)
+      },
+      onCmFocus(cm) {
+        console.log('the editor is focus!', cm)
+      },
+      onCmCodeChange(newCode) {
+        console.log('this is new code', newCode)
+        this.code = newCode
       }
+       
     }
   }
   </script>

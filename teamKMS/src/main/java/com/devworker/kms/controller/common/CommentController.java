@@ -30,8 +30,10 @@ public class CommentController {
 	CommentComponent commentService;
 
 	@PostMapping("/add")
-	public CommentDao addComment(@RequestBody CommentDao commentDao) throws Exception {
-		return commentService.addComment(commentDao);
+	public CommentDao addComment(@RequestBody CommentDto commentDto) throws Exception {
+		
+		logger.debug("{}", commentDto);
+		return commentService.addComment(commentDto);
 	}
 	/*
 	 * @PostMapping("/add/files") public CommentDao addComment(@RequestBody

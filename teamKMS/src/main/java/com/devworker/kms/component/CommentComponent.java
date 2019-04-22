@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.devworker.kms.service.FileHandler;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -21,6 +24,7 @@ import com.devworker.kms.exception.board.CommentNotFoundException;
 import com.devworker.kms.exception.board.DocNotFoundException;
 import com.devworker.kms.exception.board.FileTransactionException;
 import com.devworker.kms.repo.UserRepo;
+import com.devworker.kms.repo.common.BoardRepo;
 import com.devworker.kms.repo.common.CommentRepo;
 import com.devworker.kms.repo.common.DocRepo;
 import com.devworker.kms.util.CommonUtil;
@@ -35,6 +39,8 @@ import com.devworker.kms.util.FileTransactionUtil;
 @Component
 public class CommentComponent {
 
+	Logger logger = LoggerFactory.getLogger(CommentComponent.class);
+	
 	@Autowired
 	CommentRepo commentRepo;
 
@@ -58,14 +64,18 @@ public class CommentComponent {
 	 * @return
 	 * @throws Exception
 	 */
-	public CommentDao addComment(CommentDao commentDao) throws Exception {
+	public CommentDao addComment(CommentDto commentDto) throws Exception {
 		String userId = CommonUtil.getCurrentUser();
 		if (userId == null)
 			throw new NotExistException("userId");
 
 		Optional<UserDao> optionalUserDao = userRepo.findById(userId);
-		commentDao.setCmtUserId(optionalUserDao.get().getName());
-		return commentRepo.save(commentDao);
+		
+		CommentDao comment = new CommentDao();
+		comment.setUpEntity(commentDto);
+		comment.setCmtUserId(optionalUserDao.orElseThrow(() -> new NotExistException(userId)).getId());
+		logger.debug("{}", comment);
+		return commentRepo.save(comment);
 	}
 
 	/**
@@ -175,7 +185,7 @@ public class CommentComponent {
 	 * @throws Exception
 	 * 
 	 */
-	public void deleteComment(Integer cmtId) throws Exception {
+	public void deleteComment(long cmtId) throws Exception {
 		Optional<CommentDao> opComment = commentRepo.findById(cmtId);
 		CommentDao commentDao = opComment
 				.orElseThrow(() -> new CommentNotFoundException("comment is not found cmtid = " + cmtId));
@@ -193,7 +203,7 @@ public class CommentComponent {
 	 * @param commentDao must not be {@literal null}.
 	 * @return CommentDao
 	 */
-	public CommentDao updateCommentLike(int cmtId) {
+	public CommentDao updateCommentLike(long cmtId) {
 
 		Optional<CommentDao> opComment = commentRepo.findById(cmtId);
 
