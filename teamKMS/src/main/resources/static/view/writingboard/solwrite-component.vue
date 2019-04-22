@@ -7,41 +7,23 @@
                 <v-flex xs12 sm6 md3>
                     <v-text-field
                             label="title"
-                            placeholder="{{props.items.subject}}"
+                            placeholder="subject"
                             v-model="subject"
                     ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm4>
-                    <p>Solution</p>
-                    <v-overflow-btn
-                            :items="Solution"
-                            label="Solution"
-                            target="solution_write"
-                    ></v-overflow-btn>
+                    <v-text-field
+                            placeholder="solution"
+                            label="solution"
+                            v-model="solution"
+                    ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm4>
-                    <p>Site</p>
-                    <v-overflow-btn
-                            :items="Site"
-                            label="Site"
-                            target="solution_write"
-                    ></v-overflow-btn>
-                </v-flex>
-                <v-flex xs12 sm2>
-                    <select v-model="selected.solution">
-                        <option disabled value="">select</option>
-                        <option>ECM</option>
-                        <option>EDM</option>
-                        <option>ETC</option>
-                    </select>
-                </v-flex>
-                <v-flex xs12 sm2>
-                    <select v-model="selected.site">
-                        <option disabled value="">select</option>
-                        <option>st1</option>
-                        <option>st2</option>
-                        <option>st3</option>
-                    </select>
+                    <v-text-field
+                            placeholder="site"
+                            label="site"
+                            v-model="site"
+                    ></v-text-field>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -66,13 +48,11 @@
         name: 'solution_write',
         props: ['id', 'name'],
         data: () => ({
-            Solution: ['ECM', 'EDM', 'ETC'],
-            Site: ['site1', 'site2', 'site3'],
+            solution: '',
+            site: '',
             boardId: '',
             subject:'',
             contents:'',
-            selected: '',
-            selected2: '',
             editor: ClassicEditor,
             solution_write: []
         }),
@@ -95,9 +75,10 @@
                 })
             },
             try_write: function try_write() {
-              let obj1 = {subject:this.subject,contents:this.contents};
-              let obj2 = Object.assign({},obj1)
-                axios.post('/solution/register', obj2)
+              let obj_b = {subject:this.subject,contents:this.contents};
+              let obj_s = {site:this.site,solution:this.solution};
+              let obj = Object.assign({},obj_b,obj_s)
+                axios.post('/solution/register', obj)
                     .then(
                         function (response) {
                             console.log(response.data);
