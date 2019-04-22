@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.devworker.kms.service.FileHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.entity.UserDao;
@@ -31,7 +32,7 @@ import com.devworker.kms.util.FileTransactionUtil;
  * @author Hwang In Cheol
  */
 
-@Service
+@Component
 public class CommentComponent {
 
 	@Autowired

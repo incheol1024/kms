@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <script src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.0/src/httpVueLoader.js"></script>
+	<script src="/js/model.js"></script>
+	<script src="/js/util.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@12.0.0/build/ckeditor.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-vue@1.0.0-beta.1/dist/ckeditor.min.js"></script>
+
+	<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons">
+    <title>KMS Test Page</title>
+</head>
+
+<body>
+<div>KMS Test Page</div>
+
+<v-app id='test'>
+	<v-layout>
+		<write-component></write-component>
+	</v-layout>
+</v-app>
+<script src="js/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+
+<script type="text/javascript">
+    console.log("test");
+	Vue.use(Vuetify);
+	Vue.use(CKEditor);
+
+	httpVueLoader.register(Vue, 'view/custom/write-component.vue');
+	Vue.component('write-component')
+
+    var main = new Vue({
+        data: function data() {
+            return {
+
+            }
+        },
+        methods: {
+
+        }
+    }).$mount('#test');
+</script>
+</body>
+
+</html>

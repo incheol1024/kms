@@ -10,7 +10,7 @@ import com.devworker.kms.entity.site.SiteDao;
 import com.devworker.kms.repo.site.ProjectBoardRepo;
 import com.devworker.kms.repo.site.ProjectRepo;
 import com.devworker.kms.repo.site.SiteRepo;
-import com.devworker.kms.component.WriteComponent;
+import com.devworker.kms.component.BoardComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +28,7 @@ public class SiteService {
     @Autowired
     ProjectBoardRepo projectBoardRepo;
     @Autowired
-    WriteComponent writeService;
+    BoardComponent writeService;
 
     public List<SiteDto> getAllSite(int menuId) {
         return siteRepo.getAllSite(menuId).stream().map(SiteDao::getDto).collect(Collectors.toList());
