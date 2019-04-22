@@ -10,36 +10,26 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "KMSSolution")
+@Table(name = "KMS_Solution")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SolutionDao {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+	Long board_id;
 	
-	@Column(name = "title")
-	String title;
 	@Column(name = "solution")
 	String solution;
 	@Column(name = "site")
 	String site;
-	@Column(name = "replycount")
-	int replyCount;
+	@Column(name = "reply_count")
+	int reply_count;
 	
 	public Long getId() {
-		return id;
+		return board_id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	public void setId(Long board_id) {
+		this.board_id = board_id;
 	}
 
 	public String getSolution() {
@@ -59,11 +49,11 @@ public class SolutionDao {
 	}
 	
 	public int getReplyCount() {
-		return replyCount;
+		return reply_count;
 	}
 
-	public void setReplyCount(int replyCount) {
-		this.replyCount = replyCount;
+	public void setReplyCount(int reply_count) {
+		this.reply_count = reply_count;
 	}
 
 }

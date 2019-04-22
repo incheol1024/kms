@@ -1,5 +1,6 @@
 package com.devworker.kms.service.solution;
 
+import com.devworker.kms.dto.solution.SolutionDto;
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.solution.SolutionDao;
 import com.devworker.kms.repo.common.BoardRepo;
@@ -30,13 +31,8 @@ public class SolutionService {
 		return (List<BoardDao>) boardRepo.findAll();
 	}
 
-	public BoardDao registerSolution(BoardDao boardDao) {
-		boardDao.setUserId(CommonUtil.getCurrentUser());
-		boardDao.setRegDate(LocalDateTime.now());
-		boardDao.setUpdDate(LocalDateTime.now());
-		boardDao.setHits(0);
-		
-		return boardRepo.save(boardDao);
+	public SolutionDao registerSolution(SolutionDto dto) {
+		return solutionRepo.save(dto.toDao());
 	}
 	
 	public BoardDao editSolution(BoardDao boardDao) {
