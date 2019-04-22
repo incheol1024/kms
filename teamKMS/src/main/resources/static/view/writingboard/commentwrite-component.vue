@@ -4,6 +4,7 @@
       <v-layout row wrap>
         <v-flex xs12>    
     
+    <ckeditor :editor="editor" v-model="editorData" :config="editorConfig"></ckeditor>
     <codemirror ref="myCm"
                 :value="cmtContents" 
                 v-model="cmtContents"
@@ -40,11 +41,16 @@
   props: ['id', 'name', 'qid'],
   data () {
       return {
+          editor: ClassicEditor,
+          editorData: '<p>Content of the editor.</p>',
+          editorConfig: {
+          
+          },
           cmtContents: 'const a = 10',
           cmOptions: {
           tabSize: 4,
           mode: 'text/javascript',
-          theme: 'default',
+          theme: 'monokai',
           lineNumbers: true,
           line: true,
           styleActiveLine: true,
@@ -322,4 +328,9 @@
 
   }
   </script>
-  
+  <style>
+  .ck-editor__editable {
+    min-height: 300px;
+   }
+  </style>
+    

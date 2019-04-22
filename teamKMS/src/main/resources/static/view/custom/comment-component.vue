@@ -101,12 +101,13 @@
         cmOptions: {
           tabSize: 4,
           mode: 'text/javascript',
-          theme: 'default',
+          theme: 'monokai',
           lineNumbers: true,
           line: true,
           styleActiveLine: true,
           lineWrapping: true,
-          lineSeparator:"</br>"
+          lineSeparator:"</br>",
+          readOnly: 'nocursor'
         },
         cmtUserId: "",
         cmtDate: "",
@@ -270,14 +271,6 @@
           return true;
         }
         
-      }
-    }
-  }
-  </script>
-null || docId === '0' )
-         return false;
-        
-        return true;
       }
     }
   }

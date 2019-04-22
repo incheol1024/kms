@@ -82,7 +82,7 @@ public class CommentRepoTest {
 		assertThat(oriLikeNumber + 1).isEqualByComparingTo(savedComment.getCmtLike());
 		
 	}
-	
+/*	
 	@Test
 	public void CommentRepo_싫어요_테스트() {
 
@@ -96,6 +96,6 @@ public class CommentRepoTest {
 		assertThat(oriUnLikeNumber + 1).isEqualByComparingTo(savedComment.getCmtUnlike());
 	
 	}
-	
+*/	
 
 }

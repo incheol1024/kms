@@ -31,7 +31,7 @@ httpVueLoader.register(Vue, 'view/custom/comment-component.vue');
 httpVueLoader.register(Vue, 'view/custorm/fileupload-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/commentwrite-component.vue');
 httpVueLoader.register(Vue, 'view/custom/question-component.vue');
-httpVueLoader.register(Vue, 'view/common/qnapost-component.vue');
+httpVueLoader.register(Vue, 'view/board/qnapost-component.vue');
 
 httpVueLoader.register(Vue, 'view/setting/user-component.vue');
 httpVueLoader.register(Vue, 'view/setting/group-component.vue');

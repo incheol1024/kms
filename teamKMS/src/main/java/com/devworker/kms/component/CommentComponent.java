@@ -211,6 +211,7 @@ public class CommentComponent {
 	 * @param commentDao must not be {@literal null}.
 	 * @return CommentDao
 	 */
+/*	
 	public CommentDao updateCommentUnLike(CommentDao commentDao) {
 		Optional<CommentDao> opComment = commentRepo.findById(commentDao.getCmtId());
 
@@ -218,10 +219,10 @@ public class CommentComponent {
 			throw new RuntimeException();
 
 		CommentDao oldComment = opComment.get();
-		oldComment.setCmtUnlike(LikeType.UNLIKE.getLikeValue());
 
 		return commentRepo.save(oldComment);
 
 	}
 
-}
+*/
+	}

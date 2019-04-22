@@ -80,11 +80,11 @@ public class CommentController {
 	public CommentDao updateCommentLike(@PathVariable int cmtId) {
 		return commentService.updateCommentLike(cmtId);
 	}
-
+/*
 	@PostMapping("/unlike")
 	public CommentDao updateCommentUnlike(@RequestBody CommentDao commentDao) {
 		return commentService.updateCommentUnLike(commentDao);
 
 	}
-
+*/
 }

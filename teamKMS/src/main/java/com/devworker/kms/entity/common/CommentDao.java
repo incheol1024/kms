@@ -28,6 +28,9 @@ public class CommentDao {
 	@Column(name = "cmt_contents")
 	String cmtContents;
 
+	@Column(name = "cmt_code")
+	String cmtCode;
+
 	@Column(name = "cmt_user_id")
 	String cmtUserId;
 
@@ -36,9 +39,6 @@ public class CommentDao {
 
 	@Column(name = "cmt_like")
 	int cmtLike;
-
-	@Column(name = "cmt_unlike")
-	int cmtUnlike;
 
 	public CommentDao() {
 		this.cmtDate = LocalDateTime.now();
@@ -73,6 +73,14 @@ public class CommentDao {
 	public void setCmtContents(String cmtContents) {
 		this.cmtContents = cmtContents;
 	}
+	
+	public String getCmtCode() {
+		return cmtCode;
+	}
+	
+	public void setCmtCode(String cmtCode) {
+		this.cmtCode = cmtCode;
+	}
 
 	public String getCmtUserId() {
 		return cmtUserId;
@@ -98,22 +106,11 @@ public class CommentDao {
 		this.cmtLike += cmtLike;
 	}
 
-	public int getCmtUnlike() {
-		return cmtUnlike;
-	}
-
-	public void setCmtUnlike(int cmtUnlike) {
-		this.cmtUnlike += cmtUnlike;
-	}
-
 	@Override
 	public String toString() {
-		return "CommentDao [boardId=" + boardId + ", cmtId=" + cmtId + ", cmtContents=" + cmtContents + ", cmtUserId="
-				+ cmtUserId + ", cmtDate=" + cmtDate + ", cmtLike=" + cmtLike + ", cmtUnlike=" + cmtUnlike
-				+ ", getBoardId()=" + getBoardId() + ", getCmtId()=" + getCmtId() + ", getCmtContents()="
-				+ getCmtContents() + ", getCmtUserId()=" + getCmtUserId() + ", getCmtDate()=" + getCmtDate()
-				+ ", getCmtLike()=" + getCmtLike() + ", getCmtUnlike()=" + getCmtUnlike() + ", getClass()=" + getClass()
-				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+		return "CommentDao [boardId=" + boardId + ", cmtId=" + cmtId + ", cmtContents=" + cmtContents + ", cmtCode="
+				+ cmtCode + ", cmtUserId=" + cmtUserId + ", cmtDate=" + cmtDate + ", cmtLike=" + cmtLike + "]";
 	}
+
 
 }
