@@ -1,10 +1,16 @@
   <template>
   <div>
       
-      <v-layout row wrap>
-        <v-flex xs12>    
+<v-layout row wrap>
+  <v-flex xs12>    
     
-    <ckeditor :editor="editor" v-model="cmtContents" :config="editorConfig"></ckeditor>
+    <ckeditor :editor="editor" 
+              v-model="cmtContents" 
+              :config="editorConfig" 
+              @ready="onEditorReady"
+    ></ckeditor>
+  </v-flex>
+  <v-flex xs12>    
     <codemirror ref="myCm"
                 :value="cmtCode" 
                 v-model="cmtCode"
@@ -13,7 +19,7 @@
                 @focus="onCmFocus"
                 @input="onCmCodeChange">
     </codemirror> 
-
+  </v-flex>    
     <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
           <template v-for="doc in docs" >
             <img :src="doc.fileUrl" height="100" v-if="doc.fileName" :key="doc.fileName" />
@@ -29,8 +35,7 @@
             >        
     </v-flex>
     <v-btn color="info" @click.prevent="addCommentAndFile">댓글 등록</v-btn>
-      </v-flex>
-      </v-layout>
+</v-layout>
     
     
   </div>
@@ -44,7 +49,6 @@
           editor: ClassicEditor,
           cmtContents: '<p>댓글을 입력하세요~^^..!!</p>',
           editorConfig: {
-          
           },
           cmtCode: 'const a = 10',
           cmOptions: {
@@ -313,8 +317,11 @@
               }
             )
             .catch(function(error) {
-              console.log(error)
+              console.log(error);
             })
+      },
+      onEditorReady: function(editor) {
+        
       }
     },
     computed: {
@@ -330,8 +337,8 @@
   }
   </script>
   <style>
-  .ck-editor__editable {
+   .ck-editor__editable {
     min-height: 300px;
-   }
+   } 
   </style>
     

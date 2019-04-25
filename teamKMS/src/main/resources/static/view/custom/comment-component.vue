@@ -6,14 +6,15 @@
       @emitcomment="renderComment"></commentwrite-component>
 
       <template v-for="(answer, index) in answers">
-        <v-layout justify-center row mb-4 :key="index">
-          <v-flex xs10>
+        <!-- <v-layout justify-center row mb-4 :key="index"> -->
+            
+        <v-layout row wrap justify-space-around :key="index">
+          <v-flex xs12>
             <v-card>
-              <div>
                 <v-card-title>
                   <v-avatar color="grey lighten-4">
                   </v-avatar>
-                  {{ answer.cmtUserId }} - {{ answer.cmtDate }}
+                  {{ answer.cmtUserId }} - {{ answer.cmtDate }} 
                   <v-spacer></v-spacer>
                   <v-btn flat icon>
                     <v-icon>build</v-icon>
@@ -22,27 +23,32 @@
                     <v-icon>delete</v-icon>
                   </v-btn>
                 </v-card-title>
-              </div>
-
-              <v-divider></v-divider>
+                   
+             <v-divider></v-divider>
+    
+              <v-card-actions>
               
-              <v-card-text>
                 <div>
-                <div>
-                <span>{{ answer.cmtContents}}</span>
+                  <ckeditor :editor="editor" 
+                             v-model="answer.cmtContents" 
+                             :config="editorConfig" 
+                             :disabled="editorDisabled"
+                             @ready="onCkViewReady"
+                  ></ckeditor>
                 </div>
                 <div>
-                <codemirror ref="myCm"
-                :value="answer.cmtCode" 
-                :options="cmOptions"
-                v-if="isExistData(answer.cmtCode)"
-                >
-                </codemirror> 
+                 <codemirror ref="myCm"
+                 :value="answer.cmtCode" 
+                 :options="cmOptions"
+                 v-if="isExistData(answer.cmtCode)"
+                 >
+                 </codemirror> 
                 </div>
-                </div>               
-              </v-card-text>
-
+                             
+              </v-card-actions>
+  
             <v-divider></v-divider>
+
               <v-card-actions v-if="isExistData(answer.docId)">
                   <div>   	
                     <!-- <template v-for="(doc, index) in docs"> -->
@@ -52,7 +58,6 @@
                     <!-- </template>                                             -->
                   </div>
               </v-card-actions>
-
               <v-card-actions>
                 <v-btn flat icon color="blue lighten-2" @click.prevent="updateLike(answer.cmtId, index)">
                   <v-icon>thumb_up</v-icon>                  
@@ -61,10 +66,10 @@
                 <v-btn icon>
                 <v-icon>share</v-icon>
                 </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-        </v-layout>
+              </v-card-actions>   
+          </v-card>
+         </v-flex>
+       </v-layout>
       </template>
 
 
@@ -100,6 +105,10 @@
     data() {
       return {        
         cmtId: 1,
+        editor: ClassicEditor,
+        editorDisabled: false,
+        editorConfig: {
+        },
         cmtContents: "default comment",
         cmOptions: {
           tabSize: 4,
@@ -284,6 +293,9 @@
       onCmCodeChange(newCode) {
         console.log('this is new code', newCode)
         this.code = newCode
+      },
+      onCkViewReady(editor) {
+        console.log('this is ckeditor view ready');
       }
         
     }

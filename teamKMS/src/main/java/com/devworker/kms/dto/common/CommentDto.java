@@ -30,12 +30,12 @@ public class CommentDto {
 	}
 
 	public CommentDto(CommentDao comment, DocDao doc) {
-		setComment(comment);
+		setUpCommentDto(comment);
 		setDoc(doc);
 	}
 
 	public CommentDto(CommentDao comment) {
-		setComment(comment);
+		setUpCommentDto(comment);
 	}
 
 	private void setDoc(DocDao doc) {
@@ -43,9 +43,10 @@ public class CommentDto {
 		this.docName = bringDocName(doc.getDocPath());
 	}
 
-	private void setComment(CommentDao comment) {
+	private void setUpCommentDto(CommentDao comment) {
 		this.cmtId = comment.getCmtId();
 		this.cmtContents = comment.getCmtContents();
+		this.cmtCode = comment.getCmtCode();
 		this.cmtUserId = comment.getCmtUserId();
 		this.cmtDate = comment.getCmtDate();
 		this.cmtLike = comment.getCmtLike();
