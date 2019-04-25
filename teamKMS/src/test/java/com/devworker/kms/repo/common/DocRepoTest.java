@@ -54,7 +54,7 @@ public class DocRepoTest {
 		 * 
 		 */
 
-		Optional<CommentDao> opComment = commentRepo.findById(237);
+		/*Optional<CommentDao> opComment = commentRepo.findById(237);
 		CommentDao commentDao = opComment.get();
 
 		DocDao doc = new DocDao();
@@ -65,7 +65,7 @@ public class DocRepoTest {
 		doc.setDocSize(5);
 		doc.setDocUserId("USER");
 
-		assertThat(docRepo.save(doc)).isNotNull().isEqualTo(doc);
+		assertThat(docRepo.save(doc)).isNotNull().isEqualTo(doc);*/
 
 	}
 
@@ -74,7 +74,7 @@ public class DocRepoTest {
 		
 		CommentDao commentDao = null;
 		
-		Optional<CommentDao> opCommentDao = commentRepo.findById(293);
+		Optional<CommentDao> opCommentDao = commentRepo.findById(293L);
 		commentDao = opCommentDao.get();
 		
 		List<DocDao> docs = docRepo.findByCmtId(commentDao);
