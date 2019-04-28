@@ -1,15 +1,13 @@
 package com.devworker.kms.controller.solution;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.solution.SolutionDto;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +24,6 @@ import com.devworker.kms.service.solution.SolutionService;
 @RestController
 @RequestMapping("/solution")
 public class SolutionController {
-	private Logger logger = LoggerFactory.getLogger(SolutionController.class);
 	
 	@Autowired
 	SolutionService solutionService;
@@ -35,23 +32,24 @@ public class SolutionController {
 	BoardComponent boardComponent;
 	
 	@GetMapping("/{menuId}")
-	public List<BoardDao> solutionHome(@PathVariable String menuId){
-		List<BoardDao> list = solutionService.getFirstPageList(menuId);
+	public Page<BoardDto> solutionHome(@PathVariable String menuId, Pageable pageable){
+		Page<BoardDto> list = solutionService.getPageList(menuId, pageable);
 		return list;
 	}
 	
 	@PostMapping("/register")
-	public BoardDao solutionRegiser(@Valid @RequestBody BoardDto boardDao, @Valid @RequestBody SolutionDto solutionDao) {
-		BoardDao BD = boardComponent.register(boardDao);
-		solutionDao.setBoardId(BD.getBoardId());
-		solutionService.registerSolution(solutionDao);
-		return BD;
+	public BoardDao solutionRegiser(@Valid @RequestBody BoardDto boardDto, @Valid @RequestBody SolutionDto solutionDto) {
+		BoardDao boardDao = boardComponent.register(boardDto);
+		solutionDto.setBoardId(boardDao.getBoardId());
+		solutionService.registerSolution(solutionDto);
+		return boardDao;
 	}
 	
 	@PostMapping("/edit")
-	public BoardDao solutionEdit(@Valid @RequestBody BoardDto boardDao, @Valid @RequestBody SolutionDto solutionDao) {
-		solutionService.editSolution(solutionDao);
-		return boardComponent.edit(boardDao);
+	public BoardDao solutionEdit(@Valid @RequestBody BoardDto boardDto, @Valid @RequestBody SolutionDto solutionDto) {
+		solutionService.editSolution(solutionDto);
+		BoardDao boardDao = boardComponent.edit(boardDto);
+		return boardDao;
 	}
 	
 	@DeleteMapping("/{boardId}")
@@ -61,9 +59,10 @@ public class SolutionController {
 	
 	@GetMapping("/answer/{id}")
 	public SolutionDao getSolutionById(@PathVariable Long id) {
-		SolutionDao sd = null;
-		if(id != 0)
-			sd = solutionService.findById(id).get();		
-		return sd;
+		SolutionDao solutionDao = null;
+		if(id != 0) {
+			solutionDao = solutionService.findById(id).get();
+		}
+		return solutionDao;
 	}
 }

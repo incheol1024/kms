@@ -9,6 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.devworker.kms.dto.UserDto;
+import com.devworker.kms.dto.common.BoardDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "KMS_BOARD")
 public class BoardDao {
@@ -104,6 +108,18 @@ public class BoardDao {
 				+ ", regDate=" + regDate + ", updDate=" + updDate + ", hits=" + hits + "]";
 	}
 
-	
+	@JsonIgnore
+	public BoardDto getDto() {
+		BoardDto boardDto = new BoardDto();
+		boardDto.setBoardId(boardId);
+		boardDto.setContents(contents);
+		boardDto.setHits(hits);
+		boardDto.setRegDate(regDate);
+		boardDto.setSubject(subject);
+		boardDto.setUpdDate(updDate);
+		boardDto.setUserId(userId);
+
+		return boardDto;
+	}
 	
 }
