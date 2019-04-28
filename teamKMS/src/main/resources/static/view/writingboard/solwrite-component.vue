@@ -1,13 +1,11 @@
 <template>
     <v-content>
-        sol / {{name}} / {{id}} / write page [ {{Solution}} / {{Site}} / {{selected}} ]test / {{fuc}} /
-
         <v-container id="solution_write" :items="solution_write" grid-list-xl>
             <v-layout row wrap>
                 <v-flex xs12 sm6 md3>
                     <v-text-field
                             label="title"
-                            placeholder="subject"
+                            placeholder="{subject}"
                             v-model="subject"
                     ></v-text-field>
                 </v-flex>
@@ -63,15 +61,10 @@
         },
         methods: {
             getSolution: function(_this) {
-                axios.get("/solution/answer/"+ id)
-                .then(
-                function(response) {
-                    for (var i = 0; i < response.data.length; i++) {
-                        _this.solution_write.push(response.data[i]);
-                    }
-                })
+                axios.get("/solution/answer/"+ this.id)
+                .then( value => {_this.solution_write.push(value.data)})
                 .catch(function(error) {
-                console.log(error);
+                    console.log(error);
                 })
             },
             try_write: function try_write() {

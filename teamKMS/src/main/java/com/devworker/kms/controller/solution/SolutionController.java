@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.entity.common.BoardDao;
+import com.devworker.kms.entity.solution.SolutionDao;
 import com.devworker.kms.component.BoardComponent;
 import com.devworker.kms.service.solution.SolutionService;
 
@@ -33,9 +34,9 @@ public class SolutionController {
 	@Autowired
 	BoardComponent boardComponent;
 	
-	@GetMapping("")
-	public List<BoardDao> solutionHome(){
-		List<BoardDao> list = solutionService.getFirstPageList();
+	@GetMapping("/{menuId}")
+	public List<BoardDao> solutionHome(@PathVariable String menuId){
+		List<BoardDao> list = solutionService.getFirstPageList(menuId);
 		return list;
 	}
 	
@@ -59,8 +60,10 @@ public class SolutionController {
 	}
 	
 	@GetMapping("/answer/{id}")
-	public BoardDao getSolutionById(@PathVariable Long id) {
-		System.out.println(" -- answerid : " + id);
-		return solutionService.findById(id).get();
+	public SolutionDao getSolutionById(@PathVariable Long id) {
+		SolutionDao sd = null;
+		if(id != 0)
+			sd = solutionService.findById(id).get();		
+		return sd;
 	}
 }

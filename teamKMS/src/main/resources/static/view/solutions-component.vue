@@ -1,5 +1,6 @@
 <template>
     <v-layout column>
+        {{id}}
         <v-card-title>
             <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToPage(0)"> 글쓰기</v-btn>
             <v-spacer></v-spacer>
@@ -60,7 +61,7 @@
 
         methods: {
             getSolutionList: function (_this) {
-                axios.get("/solution")
+                axios.get("/solution/" + this.id)
                     .then(
                         function (response) {
                             for (var i = 0; i < response.data.length; i++) {
