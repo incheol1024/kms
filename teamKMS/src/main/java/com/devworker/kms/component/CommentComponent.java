@@ -11,6 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -142,7 +145,11 @@ public class CommentComponent {
 	}
 
 	public List<CommentDto> findByBoardId(BoardDao boardId) throws Exception {
-		List<CommentDao> comments = commentRepo.findByBoardId(boardId);
+		//List<CommentDao> comments = commentRepo.findByBoardId(boardId);
+		
+		Pageable cmtPage = PageRequest.of(0, 3);
+		Page<CommentDao> pageComment = commentRepo.findAll(cmtPage);
+		List<CommentDao> comments = pageComment.getContent();
 		List<CommentDto> resultComments = new ArrayList<CommentDto>();
 		CommentDto commentDto = null;
 		List<DocDao> docs = null;

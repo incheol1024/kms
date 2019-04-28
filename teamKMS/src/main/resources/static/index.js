@@ -26,6 +26,8 @@ httpVueLoader.register(Vue, 'view/writingboard/qnawrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/siteswrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/solwrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/commentwrite-component.vue');
+httpVueLoader.register(Vue, 'view/custom/commentpage-component.vue');
+
 
 httpVueLoader.register(Vue, 'view/board/qnapost-component.vue');
 
@@ -41,7 +43,9 @@ httpVueLoader.register(Vue, 'view/custom/table-component.vue');
 httpVueLoader.register(Vue, 'view/custom/question-component.vue');
 httpVueLoader.register(Vue, 'view/custom/write-component.vue');
 
+
 Vue.component('comment-component');
+Vue.component('commentpage-component');
 Vue.component('fileupload-component');
 Vue.component('tree-component');
 Vue.component('treenode-component');

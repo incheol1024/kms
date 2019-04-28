@@ -75,28 +75,7 @@
 
 
 
-    <v-form>
-      <!--
-      <form enctype="multipart/form-data" method="post" action="/comment/add" @submit.prevent="registerFile">
-        <input type="text" name="boardId" value="1" v-model="boardId" />
-        <input type="text" name="cmtId" value="1" v-model="cmtId" />
-        <input type="text" name="cmtContents" value="content test" v-model="cmtContents" />
-        <input type="text" name="cmtUserId" v-model="cmtDate" />
-        <input type="text" name="cmtDate" v-model="cmtDate" />
-        <input type="file" name="multiPartFile" ref="file" v-on:change="handleFileUpload" /> </br>
-        <input type="submit" />
-        <button> send </button>
-      </form>
-  -->
-
-      <form @submit.prevent="addComment">
-        <input type="text" name="boardId" :value="qid" />
-        <input type="text" name="cmtContents" value="content test" v-model="cmtContents" />
-        <input type="submit" value="댓글 등록 테스트" />
-      </form>
- 
-
-    </v-form>
+      <commentpage-component> </commentpage-component>
     </v-container>
   </template>
 
