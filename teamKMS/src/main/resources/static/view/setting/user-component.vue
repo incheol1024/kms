@@ -108,7 +108,7 @@
                 let _this = this;
                 this.curItem.groupId = this.selectedTreeId();
                 let promise = axios.put("user", _this.curItem);
-                if (this.updateMode) promise = axios.post("user", _this.curItem)
+                if (this.updateMode) promise = axios.post("user", _this.curItem);
                 promise.then(value => {
                     if (!_this.updateMode)
                     _this.$refs.table.addFunction(_this.curItem)

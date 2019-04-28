@@ -30,8 +30,8 @@ public class CommentController {
 	CommentComponent commentService;
 
 	@PostMapping("/add")
-	public CommentDao addComment(@RequestBody CommentDto commentDto) throws Exception {
-		
+	public CommentDto addComment(@RequestBody CommentDto commentDto) throws Exception {
+
 		logger.debug("{}", commentDto);
 		return commentService.addComment(commentDto);
 	}
@@ -53,22 +53,29 @@ public class CommentController {
 	 * }
 	 * 
 	 */
+	/*
+	 * @PostMapping("/add/files") public CommentDto addComment(@RequestBody
+	 * CommentAndFileTransactionDto comFileDto) throws Exception {
+	 * 
+	 * return commentService.addComment(comFileDto.getBoardId(),
+	 * comFileDto.getCmtContents(), comFileDto.getFileTransactKey(),
+	 * comFileDto.getFileCount()); }
+	 */
 
 	@PostMapping("/add/files")
-	public CommentDto addComment(@RequestBody CommentAndFileTransactionDto comFileDto) throws Exception {
-		return commentService.addComment(comFileDto.getBoardId(), comFileDto.getCmtContents(),
-				comFileDto.getFileTransactKey(), comFileDto.getFileCount());
+	public CommentDto addCommentAndFile(@RequestBody CommentDto commentDto) throws Exception {
+		return commentService.addCommentAndFile(commentDto);
 	}
 
 	@GetMapping("/list/{boardId}")
 	public List<CommentDto> listComment(@PathVariable @RequestBody BoardDao boardId) throws Exception {
-		
+
 		logger.debug("CommentDto {}", commentService.findByBoardId(boardId));
 		return commentService.findByBoardId(boardId);
 	}
 
 	@PostMapping("/update")
-	public CommentDao updateComment(@RequestBody CommentDao commentDao) throws Exception {
+	public CommentDto updateComment(@RequestBody CommentDao commentDao) throws Exception {
 		return commentService.updateComment(commentDao);
 	}
 
@@ -82,11 +89,11 @@ public class CommentController {
 	public CommentDao updateCommentLike(@PathVariable int cmtId) {
 		return commentService.updateCommentLike(cmtId);
 	}
-/*
-	@PostMapping("/unlike")
-	public CommentDao updateCommentUnlike(@RequestBody CommentDao commentDao) {
-		return commentService.updateCommentUnLike(commentDao);
-
-	}
-*/
+	/*
+	 * @PostMapping("/unlike") public CommentDao updateCommentUnlike(@RequestBody
+	 * CommentDao commentDao) { return
+	 * commentService.updateCommentUnLike(commentDao);
+	 * 
+	 * }
+	 */
 }

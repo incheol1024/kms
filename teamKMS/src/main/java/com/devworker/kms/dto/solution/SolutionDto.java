@@ -1,20 +1,19 @@
 package com.devworker.kms.dto.solution;
 
-import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.solution.SolutionDao;
 
 public class SolutionDto {
-    long board_id;
+    long boardId;
     String site;
     String solution;
-    int reply_count = 0;
+    int replyCount = 0;
 
     public long getBoardId() {
-        return board_id;
+        return boardId;
     }
 
-    public void setBoardId(long board_id) {
-        this.board_id = board_id;
+    public void setBoardId(long boardId) {
+        this.boardId = boardId;
     }
 
     public String getSite() {
@@ -34,19 +33,19 @@ public class SolutionDto {
     }
     
     public int getReplyCount() {
-    	return reply_count;
+    	return replyCount;
     }
     
-    public void setReplyCount(int reply_count) {
-    	this.reply_count = reply_count;
+    public void setReplyCount(int replyCount) {
+    	this.replyCount = replyCount;
     }
     
     public SolutionDao toDao() {
-    	SolutionDao dao = new SolutionDao();
-        dao.setId(board_id);
-        dao.setSite(site);
-        dao.setSolution(solution);
-        dao.setReplyCount(reply_count);
-        return dao;
+    	SolutionDao solutionDao = new SolutionDao();
+    	solutionDao.setId(boardId);
+    	solutionDao.setSite(site);
+    	solutionDao.setSolution(solution);
+    	solutionDao.setReplyCount(replyCount);
+        return solutionDao;
     }
 }

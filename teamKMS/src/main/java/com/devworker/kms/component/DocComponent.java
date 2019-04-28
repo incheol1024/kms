@@ -8,6 +8,8 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import com.devworker.kms.service.FileHandler;
+import com.devworker.kms.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -37,7 +39,7 @@ public class DocComponent {
 	DocRepo docRepo;
 
 	@Autowired
-	UserRepo userRepo;
+	UserService userService;
 
 	@Autowired
 	@Qualifier(value = "fileHandlerImplLocal")
@@ -56,8 +58,7 @@ public class DocComponent {
 			//BoardDao boardId, 
 			//int cmtId,
 			List<MultipartFile> files) throws Exception {
-		Optional<UserDao> optionalUser = userRepo.findById(CommonUtil.getCurrentUser());
-		UserDao user = optionalUser.get();
+		String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
 		String fileTransactKey = "";
 		int fileCount = 0;
 		
@@ -70,7 +71,7 @@ public class DocComponent {
 			//docDao.setCmtId(null);
 			docDao.setDocPath(fileDto.getPath());
 			docDao.setDocSize(fileDto.getSize());
-			docDao.setDocUserId(user.getName());
+			docDao.setDocUserId(userName);
 
 			if (docRepo.save(docDao) == null)
 				throw new FileNotSavedException("File Not Saved Database");

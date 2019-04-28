@@ -9,7 +9,7 @@ public class BoardDto {
     long boardId;
     String subject;
     String contents;
-    String userId = CommonUtil.getCurrentUser();
+    String userId;
     LocalDateTime regDate = LocalDateTime.now();
     LocalDateTime updDate  = LocalDateTime.now();
     int hits = 0;

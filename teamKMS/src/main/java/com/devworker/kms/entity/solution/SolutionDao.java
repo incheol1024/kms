@@ -2,8 +2,6 @@ package com.devworker.kms.entity.solution;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -16,21 +14,21 @@ public class SolutionDao {
 	@Id
 	@Column(name = "board_id")
 //	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long board_id;
+	Long boardId;
 	
 	@Column(name = "solution")
 	String solution;
 	@Column(name = "site")
 	String site;
 	@Column(name = "reply_count")
-	int reply_count;
+	int replyCount;
 	
 	public Long getId() {
-		return board_id;
+		return boardId;
 	}
 
-	public void setId(Long board_id) {
-		this.board_id = board_id;
+	public void setId(Long boardId) {
+		this.boardId = boardId;
 	}
 
 	public String getSolution() {
@@ -50,11 +48,11 @@ public class SolutionDao {
 	}
 	
 	public int getReplyCount() {
-		return reply_count;
+		return replyCount;
 	}
 
-	public void setReplyCount(int reply_count) {
-		this.reply_count = reply_count;
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
 	}
 
 }

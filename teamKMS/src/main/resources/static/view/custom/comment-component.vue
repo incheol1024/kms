@@ -26,26 +26,30 @@
                    
              <v-divider></v-divider>
     
+
               <v-card-actions>
+                  <div v-html="answer.cmtContents"></div>
+              </v-card-actions>
               
-                <div>
+                
+<!-- 
                   <ckeditor :editor="editor" 
                              v-model="answer.cmtContents" 
                              :config="editorConfig" 
                              :disabled="editorDisabled"
                              @ready="onCkViewReady"
                   ></ckeditor>
-                </div>
-                <div>
+                   -->
+               
+                
                  <codemirror ref="myCm"
                  :value="answer.cmtCode" 
                  :options="cmOptions"
                  v-if="isExistData(answer.cmtCode)"
                  >
                  </codemirror> 
-                </div>
-                             
-              </v-card-actions>
+                
+
   
             <v-divider></v-divider>
 
@@ -63,9 +67,6 @@
                   <v-icon>thumb_up</v-icon>                  
                 </v-btn>
                 <span class="subheading mr-2">{{answer.cmtLike}}</span>
-                <v-btn icon>
-                <v-icon>share</v-icon>
-                </v-btn>
               </v-card-actions>   
           </v-card>
          </v-flex>
