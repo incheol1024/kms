@@ -60,9 +60,10 @@ public class QnaService {
 		
 		List<QnaCodeDao> qnaCodeList = qnaCodeRepo.findByMenuId(menuDao);
 	
-		List<BoardDao> boardList = new ArrayList<BoardDao>();
-		
-		logger.debug("boardDao.toString() {}" + qnaCodeList.get(0).toString()); 
+		List<BoardDao> boardList = new ArrayList<>();
+
+		if(!qnaCodeList.isEmpty())
+			logger.debug("boardDao.toString() {}" + qnaCodeList.get(0).toString());
 		for(QnaCodeDao qna : qnaCodeList) {
 			logger.debug("QnaCOdeDao 조회 BoardDao 리스트 {}", qna.getBoardId());
 			boardList.add(qna.getBoardId());

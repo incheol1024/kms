@@ -12,37 +12,34 @@
                 <v-text-field placeholder="site" label="site" v-model="site"></v-text-field>
             </v-flex>
         </v-layout>
-        <write-component></write-component>
+        <write-component :save-name="buttonName" :editor-data="contents" :save="tryWrite"></write-component>
+        <comment-component :qid="id"></comment-component>
     </v-layout>
 </template>
 
 <script>
     module.exports = {
-        props: ['id', 'name'],
+        props: ['id'],
         data: () => ({
+            subject: '',
             solution: '',
             site: '',
-            boardId: '',
-            subject: '',
-            contents: ''
+            contents: '',
+            buttonName : ""
         }),
+        watch : {
+            id : function (){
+                if(this.id === 0)
+                    this.buttonName = "New";
+                else
+                    this.buttonName = "Edit";
+            }
+        },
         methods: {
-            getSolution: function (_this) {
-                axios.get("/solution/answer/" + id)
-                    .then(
-                        function (response) {
-                            for (var i = 0; i < response.data.length; i++) {
-                                _this.solution_write.push(response.data[i]);
-                            }
-                        })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
-            },
-            try_write: function try_write() {
+            tryWrite: function tryWrite() {
                 let obj_b = {subject: this.subject, contents: this.contents};
                 let obj_s = {site: this.site, solution: this.solution};
-                let obj = Object.assign({}, obj_b, obj_s)
+                let obj = Object.assign({}, obj_b, obj_s);
                 axios.post('/solution/register', obj)
                     .then(
                         function (response) {
@@ -54,10 +51,10 @@
                     })
                 this.$router.push("/solutions/" + this.id);
             },
-            edit_write: function edit_write() {
+            editWrite: function editWrite() {
                 let obj_b = {boardId: this.id, subject: this.subject, contents: this.contents};
                 let obj_s = {site: this.site, solution: this.solution};
-                let obj = Object.assign({}, obj_b, obj_s)
+                let obj = Object.assign({}, obj_b, obj_s);
                 axios.post('/solution/edit', obj)
                     .then(
                         function (response) {
@@ -68,9 +65,6 @@
                         console.log("[ERR] : " + error)
                     })
                 this.$router.push("/solutions/" + this.id);
-            },
-            cancel_write: function () {
-                router.push("/solutions/" + this.id);
             }
         }
     };

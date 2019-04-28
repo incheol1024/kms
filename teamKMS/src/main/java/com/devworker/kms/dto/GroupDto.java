@@ -23,12 +23,15 @@ public class GroupDto {
 	@ApiModelProperty(notes = "그룹 아이디. 디비에서 Auto increase한다")
 	@Min(value = 0)
 	private int id;
+
 	@ApiModelProperty(notes = "그룹의 이름",required = true)
 	@NotBlank
 	private String name;
+
 	@ApiModelProperty(notes = "부모 그룹의 이름",required = true)
 	@Min(value = 0)
 	private int parentId;
+
 	@ApiModelProperty(notes = "자식 그룹의 리스트. 특정 함수에서만 데이터가 채워짐")
 	private List<GroupDto> children  = new ArrayList<>();
 	
