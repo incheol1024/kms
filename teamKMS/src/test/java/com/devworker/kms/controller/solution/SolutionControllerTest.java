@@ -1,3 +1,4 @@
+
 package com.devworker.kms.controller.solution;
 
 import static org.junit.Assert.assertNotNull;
@@ -19,14 +20,14 @@ public class SolutionControllerTest {
 	@Autowired
 	SolutionService solutionService;
 
-/*	@Test
+	@Test
 	public void Solution_getPageTest() {
 		/*List<BoardDao> list = solutionService.getFirstPageList();
 
 		System.out.println(list.size());
 
 		assertNotNull(list);*/
-	}*/
+	}
 
 	@Test
 	public void Solution_registerTest() {
@@ -35,4 +36,5 @@ public class SolutionControllerTest {
 //		solutionService.registerSolution(boardDao, res);
 
 	}
+
 }
