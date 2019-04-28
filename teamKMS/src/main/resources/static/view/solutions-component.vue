@@ -6,8 +6,9 @@
                 <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                 <v-btn color="primary" @click="moveToPage">글쓰기</v-btn>
             </v-card-title>
-            <table-component :headers="headers" :page-req="getSolutionList" :allow-delete="true" :allow-edit="true"
-                             edit-function="editSolution" delete-function="deleteSolution">
+            <table-component ref="table" :headers="headers" :search="search" :page-req="getSolutionList"
+                             :allow-delete="true" :allow-edit="true"
+                             :edit-function="editSolution" :delete-function="deleteSolution">
             </table-component>
         </v-card>
     </v-layout>
@@ -25,11 +26,18 @@
                 {text: '조회수', value: 'hits' ,sortable : false},
                 {text: '등록일자', value: 'regDate'},
                 {text: 'action', value: '' , sortable : false}
-            ]
+            ],
+            search : ""
         }),
+        watch : {
+            id : function(){
+                this.$refs.table.sync();
+            }
+        },
         methods: {
             getSolutionList: function (page) {
-                return axios.get("solution", {
+                let _this = this;
+                return axios.get("solution/" + _this.id, {
                     params : page
                 });
             },

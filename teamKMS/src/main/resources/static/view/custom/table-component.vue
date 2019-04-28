@@ -1,6 +1,6 @@
 <template inline-template>
     <v-data-table :headers="headers" :items="items" :pagination.sync="pagination"
-                  :select-all="allowSelect ? true : false" v-model="selection"
+                  :select-all="allowSelect ? true : false" v-model="selection" :search="search"
                   :total-items="total" :loading="loading" must-sort class="elevation-1">
         <template slot="items" slot-scope="props">
             <tr @click="clickRow(props.item)">
