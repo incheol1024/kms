@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.devworker.kms.service.FileHandler;
+import com.devworker.kms.service.UserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,13 +46,17 @@ public class CommentComponent {
 	CommentRepo commentRepo;
 
 	@Autowired
-	DocComponent docService;
+	DocComponent docComponent;
 
 	@Autowired
 	DocRepo docRepo;
 
 	@Autowired
-	UserRepo userRepo;
+	UserService userService;
+	
+	@Autowired
+	BoardComponent boardComponent;
+	
 
 	@Autowired
 	@Qualifier("fileHandlerImplLocal")
@@ -64,18 +69,13 @@ public class CommentComponent {
 	 * @return
 	 * @throws Exception
 	 */
-	public CommentDao addComment(CommentDto commentDto) throws Exception {
-		String userId = CommonUtil.getCurrentUser();
-		if (userId == null)
-			throw new NotExistException("userId");
-
-		Optional<UserDao> optionalUserDao = userRepo.findById(userId);
+	public CommentDto addComment(CommentDto commentDto) throws Exception {
 		
 		CommentDao comment = new CommentDao();
 		comment.setUpEntity(commentDto);
-		comment.setCmtUserId(optionalUserDao.orElseThrow(() -> new NotExistException(userId)).getId());
+		comment.setCmtUserId(getUserName());
 		logger.debug("{}", comment);
-		return commentRepo.save(comment);
+		return new CommentDto(commentRepo.save(comment));
 	}
 
 	/**
@@ -85,21 +85,26 @@ public class CommentComponent {
 	 * @return 트랜잭션이 정상 처리 되면 등록된 CommentDao 객체를 리턴합니다.
 	 * @throws Exception 여러가지 예외를 던질 수 있습니다. 호출하는 컨트롤러에서 예외를 구분하여 처리해야 합니다.
 	 */
-	public CommentDto addComment(long boardId, String cmtContents, String fileTransactKey, int fileCount)
+	
+	public CommentDto addCommentAndFile(CommentDto commentDto)
 			throws Exception {
-		String userId = CommonUtil.getCurrentUser();
-		Optional<UserDao> optionalUserDao = userRepo.findById(userId);
+		
+		long boardId = commentDto.getBoardId();
+		String cmtContents = commentDto.getCmtContents();
+		String fileTransactKey = commentDto.getFileTransactKey();
+		int fileCount = commentDto.getFileCount();
 
-		CommentDao commentDao = new CommentDao(new BoardDao(boardId), cmtContents);
-		commentDao.setCmtUserId(optionalUserDao.get().getName());
-		CommentDao savedComment = commentRepo.save(commentDao);
+		CommentDao comment = new CommentDao(new BoardDao(boardId), cmtContents);
+		comment.setCmtUserId(getUserName());
+		comment.setUpEntity(commentDto);
+		CommentDao savedComment = commentRepo.save(comment);
 
 		if (!FileTransactionUtil.isSameTransaction(fileTransactKey, fileCount)) {
 
 			/*
 			 * 파일 rollback 과정(파일에 대한 DB정보와 물리적파일 삭제)에서 예외가 발생할 수 있음. 어떻게 처리할 것인지 생각해봐야함.
 			 */
-			docService.rollbackFileTransaction(fileTransactKey);
+			docComponent.rollbackFileTransaction(fileTransactKey);
 
 			/*
 			 * FileTransactionException 예외 발생 checked Exception 이며, 최종적으로 컨트롤러에서 해당 예외를 처리
@@ -123,7 +128,7 @@ public class CommentComponent {
 			savedDoc.setCmtId(savedComment);
 			DocDao tmpDoc = null;
 			if ((tmpDoc = docRepo.save(savedDoc)) == null)
-				docService.rollbackFileTransaction(fileTransactKey);
+				docComponent.rollbackFileTransaction(fileTransactKey);
 		}
 
 		FileTransactionUtil.removeFileInfoMemory(fileTransactKey);
@@ -164,18 +169,12 @@ public class CommentComponent {
 	 * @param
 	 * @return CommentDao
 	 */
-	public CommentDao updateComment(CommentDao commentDao) throws Exception {
-
+	public CommentDto updateComment(CommentDao commentDao) throws Exception {
 		Optional<CommentDao> opComment = commentRepo.findById(commentDao.getCmtId());
-		CommentDao newComment = opComment.get();
-		newComment.setCmtContents(commentDao.getCmtContents());
-
-		CommentDao newCommentDao = commentRepo.save(newComment);
-
-		if (newCommentDao == null)
-			throw new RuntimeException();
-
-		return newCommentDao;
+		CommentDao Comment = opComment.get();
+		Comment.setCmtContents(commentDao.getCmtContents());
+		CommentDao newComment = commentRepo.save(Comment);
+		return new CommentDto(newComment);
 	}
 
 	/**
@@ -192,7 +191,7 @@ public class CommentComponent {
 		List<DocDao> docs = docRepo.findByCmtId(commentDao);
 
 		for (DocDao doc : docs) {
-			docService.deleteDoc(doc.getDocId());
+			docComponent.deleteDoc(doc.getDocId());
 		}
 		commentRepo.deleteById(cmtId);
 	}
@@ -215,6 +214,11 @@ public class CommentComponent {
 
 		return commentRepo.save(oldComment);
 	}
+	
+	private String getUserName() {
+		return userService.getUser(CommonUtil.getCurrentUser()).getName();
+	}
+
 
 	/**
 	 * 댓글의 싫어요 버튼 기능입니다.

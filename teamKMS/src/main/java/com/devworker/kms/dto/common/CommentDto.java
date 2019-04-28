@@ -26,6 +26,10 @@ public class CommentDto {
 
 	private String docName;
 
+	private String fileTransactKey;
+
+	private int fileCount;
+
 	public CommentDto() {
 	}
 
@@ -132,12 +136,30 @@ public class CommentDto {
 		this.docName = docName;
 	}
 
+	public String getFileTransactKey() {
+		return fileTransactKey;
+	}
+
+	public void setFileTransactKey(String fileTransactKey) {
+		this.fileTransactKey = fileTransactKey;
+	}
+
+	public int getFileCount() {
+		return fileCount;
+	}
+
+	public void setFileCount(int fileCount) {
+		this.fileCount = fileCount;
+	}
+
 	@Override
 	public String toString() {
 		return "CommentDto [boardId=" + boardId + ", cmtId=" + cmtId + ", cmtContents=" + cmtContents + ", cmtCode="
 				+ cmtCode + ", cmtUserId=" + cmtUserId + ", cmtDate=" + cmtDate + ", cmtLike=" + cmtLike + ", docId="
-				+ docId + ", docName=" + docName + "]";
+				+ docId + ", docName=" + docName + ", fileTransactKey=" + fileTransactKey + ", fileCount=" + fileCount
+				+ "]";
 	}
 
+	
 
 }
