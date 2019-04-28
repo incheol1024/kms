@@ -19,14 +19,14 @@ public class SolutionControllerTest {
 	@Autowired
 	SolutionService solutionService;
 
-	@Test
+/*	@Test
 	public void Solution_getPageTest() {
-		List<BoardDao> list = solutionService.getFirstPageList();
+		/*List<BoardDao> list = solutionService.getFirstPageList();
 
 		System.out.println(list.size());
 
-		assertNotNull(list);
-	}
+		assertNotNull(list);*/
+	}*/
 
 	@Test
 	public void Solution_registerTest() {
