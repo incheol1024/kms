@@ -12,7 +12,6 @@ public class ProjectBoardDao {
     private int projectId;
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_ID")
     private long boardId;
 

@@ -66,10 +66,10 @@ public class SiteService {
     	ProjectBoardDao projectBoardDao=new ProjectBoardDao();
     	
     	
-    	projectBoardDao.setBoardId(boardWriteService.register(dto).getBoardId());
-    	projectBoardDao.setProjectId(projectId);;
+    	projectBoardDao.setBoardId((boardWriteService.register(dto)).getBoardId());
+    	projectBoardDao.setProjectId(projectId);
     	
-       projectBoardRepo.save(projectBoardDao).getBoardId();
+       projectBoardRepo.save(projectBoardDao);
     }
 
     public void deleteBoard(int siteId, int projectId, int boardId) {
