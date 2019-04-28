@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ProjectBoardDto {
     private int projectId;
-    private int boardId;
+    private long boardId;
 
     public int getProjectId() {
         return projectId;
@@ -15,11 +15,11 @@ public class ProjectBoardDto {
         this.projectId = projectId;
     }
 
-    public int getBoardId() {
+    public long getBoardId() {
         return boardId;
     }
 
-    public void setBoardId(int boardId) {
+    public void setBoardId(long boardId) {
         this.boardId = boardId;
     }
 

@@ -1,5 +1,6 @@
 package com.devworker.kms.controller.site;
 
+import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.site.ProjectBoardDto;
 import com.devworker.kms.dto.site.ProjectDto;
 import com.devworker.kms.dto.site.SiteDto;
@@ -54,8 +55,8 @@ public class SiteController {
     }
 
     @PutMapping("/{siteId}/{projectId}")
-    public int addProjectBoards(@RequestBody BoardDao dao, @PathVariable int siteId, @PathVariable int projectId){
-        return siteService.addBoard(dao, siteId, projectId);
+    public void addProjectBoards(@RequestBody BoardDto boardDto, @PathVariable int siteId, @PathVariable int projectId){
+         siteService.addBoard(boardDto, siteId, projectId);
     }
 
     @DeleteMapping("/{siteId}/{projectId}/{boardId}")

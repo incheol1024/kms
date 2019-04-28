@@ -1,5 +1,6 @@
 package com.devworker.kms.service.site;
 
+import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.site.ProjectBoardDto;
 import com.devworker.kms.dto.site.ProjectDto;
 import com.devworker.kms.dto.site.SiteDto;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +30,7 @@ public class SiteService {
     @Autowired
     ProjectBoardRepo projectBoardRepo;
     @Autowired
-    BoardComponent writeService;
+    BoardComponent boardWriteService;
 
     public List<SiteDto> getAllSite(int menuId) {
         return siteRepo.getAllSite(menuId).stream().map(SiteDao::getDto).collect(Collectors.toList());
@@ -58,12 +60,20 @@ public class SiteService {
         projectRepo.deleteById(projectId);
     }
 
-    public int addBoard(BoardDao dao, int siteId, int projectId) {
+    public void addBoard(BoardDto dto, int siteId, int projectId) {
         //TODO::
-        return 0;
+    	
+    	ProjectBoardDao projectBoardDao=new ProjectBoardDao();
+    	
+    	
+    	projectBoardDao.setBoardId(boardWriteService.register(dto).getBoardId());
+    	projectBoardDao.setProjectId(projectId);;
+    	
+       projectBoardRepo.save(projectBoardDao).getBoardId();
     }
 
     public void deleteBoard(int siteId, int projectId, int boardId) {
         //TODO::
+    	projectBoardRepo.deleteById(boardId);
     }
 }

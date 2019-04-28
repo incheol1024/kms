@@ -14,7 +14,7 @@ public class ProjectBoardDao {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(name = "BOARD_ID")
-    private int boardId;
+    private long boardId;
 
     public int getProjectId() {
         return projectId;
@@ -24,11 +24,11 @@ public class ProjectBoardDao {
         this.projectId = projectId;
     }
 
-    public int getBoardId() {
+    public long getBoardId() {
         return boardId;
     }
 
-    public void setBoardId(int boardId) {
+    public void setBoardId(long boardId) {
         this.boardId = boardId;
     }
 
