@@ -29,6 +29,12 @@ public class DocDao {
 	@Column(name = "doc_path")
 	String docPath;
 
+	@Column(name = "doc_name")
+	String docName;
+
+	@Column(name = "doc_ext")
+	String docExt;
+
 	@Column(name = "doc_user_id")
 	String docUserId;
 
@@ -91,15 +97,27 @@ public class DocDao {
 		this.cmtId = cmtId;
 	}
 
+	public String getDocName() {
+		return docName;
+	}
+
+	public void setDocName(String docName) {
+		this.docName = docName;
+	}
+
+	public String getDocExt() {
+		return docExt;
+	}
+
+	public void setDocExt(String docExt) {
+		this.docExt = docExt;
+	}
+
 	@Override
 	public String toString() {
 		return "DocDao [docId=" + docId + ", boardId=" + boardId + ", cmtId=" + cmtId + ", docPath=" + docPath
-				+ ", docUserId=" + docUserId + ", docSize=" + docSize + ", getBoardId()=" + getBoardId()
-				+ ", getDocId()=" + getDocId() + ", getDocPath()=" + getDocPath() + ", getDocUserId()=" + getDocUserId()
-				+ ", getDocSize()=" + getDocSize() + ", getCmtId()=" + getCmtId() + ", getClass()=" + getClass()
-				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+				+ ", docName=" + docName + ", docExt=" + docExt + ", docUserId=" + docUserId + ", docSize=" + docSize
+				+ "]";
 	}
-	
-	
 
 }

@@ -56,9 +56,5 @@ public class QnaControllerTest {
 
 	}
 
-	@After(value = "")
-	public void tearDown() {
-
-	}
 
 }
