@@ -1,48 +1,41 @@
 package com.devworker.kms.service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.devworker.kms.entity.UserDao;
+import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.common.DocDao;
-import com.devworker.kms.dto.common.FileDto;
-import com.devworker.kms.repo.UserRepo;
-import com.devworker.kms.repo.common.DocRepo;
-import com.devworker.kms.util.CommonUtil;
+import com.devworker.kms.util.StringKeyUtil;
+
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 @Component
 public class FileHandlerImplAmazonS3 implements FileHandler {
 
-	private static final String BUCKET_NAME = "incheol1024";
-	private static final String ACCESS_KEY = "";
-	private static final String SECRET_KEY = "";
+	private S3Client s3Client;
 
-	private static final String TEMP_PATH = "D:/tmp/";
-	@Autowired
-	DocRepo docRepo;
+	@Value(value = "${amazon.s3.bucket}")
+	private static String bucket;
 
 	@Autowired
-	UserRepo userRepo;
+	public FileHandlerImplAmazonS3(S3Client s3Client) {
+		this.s3Client = s3Client;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString();
+	}
 
 	@Override
 	public String getFilePath(String fileKey) {
@@ -53,96 +46,34 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 	@Override
 	public String uploadFile(File file) {
 
-		AWSCredentials awsCredentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
-		AmazonS3 amazonS3 = new AmazonS3Client(awsCredentials);
+		String key = StringKeyUtil.generateUniqueKey();
+		PutObjectRequest putObjectRequest = PutObjectRequest.builder().key(key).bucket(bucket).build();
 
-		if (amazonS3 != null) {
-			PutObjectRequest putObjectRequest = null;
-
-			try {
-				putObjectRequest = new PutObjectRequest(BUCKET_NAME, file.getName(), file);
-
-				putObjectRequest.setCannedAcl(CannedAccessControlList.BucketOwnerFullControl);
-				amazonS3.putObject(putObjectRequest);
-
-				return putObjectRequest.getKey();
-
-			} catch (AmazonServiceException ase) {
-				ase.printStackTrace();
-			} finally {
-				amazonS3 = null;
-			}
+		boolean putSuccess = s3Client
+				.putObject(putObjectRequest, RequestBody.fromFile(file))
+				.sdkHttpResponse()
+				.isSuccessful();
+		
+		if (putSuccess) {
+			return key;
 		}
-		return null;
-
-	}
-
-	@Override
-	public List<DocDao> processUploadFile(BoardDao boardId, int CommentId, List<MultipartFile> files) throws Exception {
-
-		if (files.isEmpty())
-			throw new Exception();
-
-		Optional<UserDao> optionalUser = userRepo.findById(CommonUtil.getCurrentUser());
-		UserDao user = optionalUser.get();
-		List<DocDao> docList = new ArrayList<DocDao>();
-
-		for (int i = 0; i < files.size(); i++) {
-
-			File tmpFile = new File(TEMP_PATH + files.get(i).getOriginalFilename() + UUID.randomUUID());
-			files.get(i).transferTo(tmpFile);
-			String key = uploadFile(tmpFile);
-
-			DocDao docDao = new DocDao();
-			docDao.setBoardId(boardId);
-			docDao.setDocPath(key);
-			docDao.setDocSize((int) tmpFile.length());
-			docDao.setDocUserId(user.getName());
-			docList.add(docDao);
-
-			if (docRepo.save(docDao) == null) {
-				throw new Exception();
-			}
-		}
-		return docList;
+		throw new RuntimeException();
 	}
 
 	@Override
 	public File downloadFile(String fileKey) {
-
-		AWSCredentials awsCredentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
-		AmazonS3 s3 = new AmazonS3Client(awsCredentials);
-		S3Object o = null;
-		S3ObjectInputStream s3is = null;
-		File file = null;
-
-		try {
-			o = s3.getObject(BUCKET_NAME, fileKey);
-			s3is = o.getObjectContent();
-			file = new File("E:/app/download.png");
-			FileOutputStream fos = new FileOutputStream(file);
-
-			byte[] read_buf = new byte[1024];
-			int read_len = 0;
-			while ((read_len = s3is.read(read_buf)) > 0) {
-				fos.write(read_buf, 0, read_len);
-			}
-
-			s3is.close();
-			fos.close();
-		} catch (AmazonServiceException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return file;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public List<DocDao> processUploadFile(int boardId, List<MultipartFile> file) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<DocDao> processUploadFile(BoardDao boardId, int CommentId, List<MultipartFile> file) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -162,7 +93,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 	@Override
 	public void deleteFile(long docId) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
