@@ -41,14 +41,14 @@
                 });
             },
             newWrite: function() {
-                this.$router.push("/solutions/write/0");
+                this.$router.push("/solutions/write/0?readOnly=false");
             },
             deleteSolution: function (item) {
                 if (confirm("삭제하시겠습니까?"))
                     return axios.delete('/solution/' + item.boardId)
             },
             clickRow : function (item){
-                this.$router.push("/solutions/write/" + item.boardId);
+                this.$router.push("/solutions/write/" + item.boardId + "?readOnly=true");
             }
         }
     };

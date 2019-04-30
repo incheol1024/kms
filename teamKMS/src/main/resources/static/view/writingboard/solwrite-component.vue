@@ -11,20 +11,21 @@
                 <v-text-field placeholder="site" label="site" v-model="site"></v-text-field>
             </v-flex>
         </v-layout>
-        <write-component :editor-data="contents"></write-component>
-        <v-btn color="primary" @click="save">{{buttonName}}</v-btn>
-        <comment-component :qid="id"></comment-component>
+        <write-component :editor-data="contents" :read-only="readOnly"></write-component>
+        <v-btn v-if="!readOnly" color="primary" @click="save">{{buttonName}}</v-btn>
+        <comment-component v-if="buttonName=='New'" comment-component :qid="id"></comment-component>
     </v-layout>
 </template>
 
 <script>
     module.exports = {
-        props: ['id'],
+        props: ['id','readOnly'],
         data: () => ({
             subject: '',
             solution: '',
             site: '',
             contents: '',
+            mode : 0,
             buttonName: "New",
             url: "solution/register"
         }),

@@ -64,7 +64,14 @@ router = new VueRouter({
         {path: '/search', component: Vue.component('search-component')},
         {path: '/help', component: Vue.component('help-component')},
         {path: '/sites/write/:id', component: Vue.component('siteswrite-component'), props: true},
-        {path: '/solutions/write/:id', component: Vue.component('solwrite-component'), props: true},
+        {
+            path: '/solutions/write/:id', component: Vue.component('solwrite-component'), props: function props(route) {
+                return {
+                    id: route.path.id,
+                    readOnly: route.query.readOnly
+                };
+            }
+        },
         {path: '/write/:id', component: Vue.component('write-component'), props: true},
         {path: '/qna/write/:name/:id', component: Vue.component('qnawrite-component'), props: true},
         {path: '/qna/answer/:name/:id/:qid', component: Vue.component('qnapost-component'), props: true},
@@ -88,60 +95,53 @@ router = new VueRouter({
     ]
 });
 
+"use strict";
+
 var main = new Vue({
     router: router,
-    data: () => ({
-        drawer: null,
-        items: [{
-            text: 'Solutions',
-            children: [],
-            type: 'SOL'
-        },
-            {
+    data: function data() {
+        return {
+            drawer: null,
+            items: [{
+                text: 'Solutions',
+                children: [],
+                type: 'SOL'
+            }, {
                 text: 'Sites',
                 children: [],
                 type: 'SITE'
-            },
-            {
+            }, {
                 text: 'Dev QnA',
                 children: [],
                 type: 'QNA'
-            }
-        ],
-        errormsg: "",
-        dialog: false
-    }),
+            }],
+            errormsg: "",
+            dialog: false
+        };
+    },
     created: function created() {
-        this.items.forEach(item => {
+        this.items.forEach(function (item) {
             if (item.children.length < 1) {
-                axios.get("menu/" + item.type)
-                    .then(function (response) {
-                        for (var i = 0; i < response.data.length; i++) {
-                            item.children.push(response.data[i]);
-                        }
-                    }).catch(catchPromise);
+                axios.get("menu/" + item.type).then(function (response) {
+                    for (var i = 0; i < response.data.length; i++) {
+                        item.children.push(response.data[i]);
+                    }
+                }).catch(catchPromise);
             }
         });
     },
     methods: {
         logout: function logout() {
-            axios.post("logout").then(response => {
+            axios.post("logout").then(function (response) {
                 window.location.replace('login');
-            })
-                .catch(error => {
-                    window.location.replace('login');
-                })
+            }).catch(function (error) {
+                window.location.replace('login');
+            });
         },
         getChild: function getChild(item, event) {
-
         },
         route: function route(children) {
-            if (children.type === 'SOL')
-                router.push('/solutions/' + children.id);
-            else if (children.type === 'SITE')
-                router.push('/sites/' + children.id);
-            else if (children.type === 'QNA')
-                router.push('/qna/' + children.name + "/" + children.id);
+            if (children.type === 'SOL') router.push('/solutions/' + children.id); else if (children.type === 'SITE') router.push('/sites/' + children.id); else if (children.type === 'QNA') router.push('/qna/' + children.name + "/" + children.id);
         },
         gotitle: function gotitle() {
             router.push('/title');
