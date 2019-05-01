@@ -39,7 +39,7 @@ public class DocDao {
 	String docUserId;
 
 	@Column(name = "doc_size")
-	int docSize;
+	long docSize;
 
 	public DocDao() {
 	}
@@ -81,11 +81,11 @@ public class DocDao {
 		this.docUserId = docUserId;
 	}
 
-	public int getDocSize() {
+	public long getDocSize() {
 		return docSize;
 	}
 
-	public void setDocSize(int docSize) {
+	public void setDocSize(long docSize) {
 		this.docSize = docSize;
 	}
 

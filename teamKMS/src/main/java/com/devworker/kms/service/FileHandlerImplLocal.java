@@ -31,19 +31,7 @@ public class FileHandlerImplLocal implements FileHandler {
 	private String FILE_PATH;
 
 	@Override
-	public String getFilePath(String fileKey) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String uploadFile(File file) {
-		return null;
-	}
-
-	@Override
 	public File downloadFile(String fileKey) {
-		//return new File(FILE_PATH + fileKey);
 		return new File(fileKey);
 		
 	}
@@ -64,15 +52,14 @@ public class FileHandlerImplLocal implements FileHandler {
 	}
 
 	@Override
-	public void deleteFile(long docId) throws Exception {
-		Optional<DocDao> opDoc = docRepo.findById(docId);
-		DocDao doc = opDoc.get();
-		String docPath = doc.getDocPath();
+	public boolean deleteFile(String key) throws Exception {
 		
-		File file = new File(docPath);
+		File file = new File(key);
 		if(file.exists()) {
-			file.delete();
+			return file.delete();
 		}
+		
+		return false;
 	}
 
 

@@ -4,7 +4,7 @@ public class FileDto {
 
 	private final String key;
 
-	private final int fileSize;
+	private final long fileSize;
 
 	private final String fileName;
 
@@ -19,14 +19,13 @@ public class FileDto {
 		this.fileSize = fileDtoBuilder.getFileSize();
 		this.fileName = fileDtoBuilder.getFileName();
 		this.fileExt = fileDtoBuilder.getFileExt();
-
 	}
 
 	public String getKey() {
 		return key;
 	}
 
-	public int getFileSize() {
+	public long getFileSize() {
 		return fileSize;
 	}
 
@@ -42,7 +41,7 @@ public class FileDto {
 
 		private String key;
 
-		private int fileSize;
+		private long fileSize;
 
 		private String fileName;
 
@@ -65,11 +64,11 @@ public class FileDto {
 			return this;
 		}
 
-		public int getFileSize() {
+		public long getFileSize() {
 			return fileSize;
 		}
 
-		public FileDtoBuilder setFileSize(int fileSize) {
+		public FileDtoBuilder setFileSize(long fileSize) {
 			this.fileSize = fileSize;
 			return this;
 		}

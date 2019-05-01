@@ -10,13 +10,9 @@ import com.devworker.kms.dto.common.FileDto;
 @Service
 public interface FileHandler {
 
-	String getFilePath(String fileKey);
-
-	String uploadFile(File file);
-
-	File downloadFile(String fileKey);
+	File downloadFile(String key);
 	
-	FileDto processUploadFile(MultipartFile file) throws Exception;
+	FileDto processUploadFile(MultipartFile multipartFile) throws Exception;
 
-	void deleteFile(long docId) throws Exception;
+	boolean deleteFile(String key) throws Exception;
 }

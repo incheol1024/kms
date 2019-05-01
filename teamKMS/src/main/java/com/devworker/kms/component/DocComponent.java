@@ -141,7 +141,7 @@ public class DocComponent {
 			throw new RuntimeException("Doc is not found");  
 
 		DocDao docDao = opDocDao.get();
-		fileHandler.deleteFile(docId);
+		fileHandler.deleteFile(docDao.getDocPath());
 		docRepo.delete(docDao);
 	}
 
