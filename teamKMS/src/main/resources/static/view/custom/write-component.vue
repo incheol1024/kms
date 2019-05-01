@@ -5,15 +5,21 @@
 <script>
     module.exports = {
         props: {
-            editorData: '',
             readOnly:  {
-                 default: false,
-                type: Boolean
+                default: false,
+                type: Boolean,
+                required : true
             }
         },
         data: () => ({
+            editorData: '',
             editor: ClassicEditor,
             editorConfig: {}
-        })
+        }),
+        methods : {
+            getText : function () {
+                return this.editorData;
+            }
+        }
     };
 </script>

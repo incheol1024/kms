@@ -11,20 +11,18 @@
                 <v-text-field placeholder="site" label="site" v-model="site"></v-text-field>
             </v-flex>
         </v-layout>
-        <write-component :editor-data="contents" :read-only="readOnly"></write-component>
+        <write-component ref="editor" :read-only="readOnly"></write-component>
         <v-btn v-if="!readOnly" color="primary" @click="save">{{buttonName}}</v-btn>
-        <comment-component v-if="buttonName=='New'" comment-component :qid="id"></comment-component>
+        <comment-component v-if="mode === 1" comment-component :qid="$route.params.id"></comment-component>
     </v-layout>
 </template>
 
 <script>
     module.exports = {
-        props: ['id','readOnly'],
         data: () => ({
             subject: '',
             solution: '',
             site: '',
-            contents: '',
             mode : 0,
             buttonName: "New",
             url: "solution/register"
@@ -32,13 +30,14 @@
         watch : {
             '$route.params.id' : {
                 handler: function(id) {
-                    console.log(id);
                     if (id === "0") {
                         this.buttonName = "New";
                         this.url = "solution/register";
+                        this.mode = 0;
                     } else {
                         this.buttonName = "Edit";
                         this.url = "solution/edit";
+                        this.mode = 1;
                     }
                 },
                 deep: true,
@@ -46,7 +45,7 @@
             }
         },
         methods: {
-            save: function tryWrite() {
+            save: function save() {
                 let board = { subject: this.subject, contents: this.contents};
                 let solution = { site: this.site, solution: this.solution};
                 let data = Object.assign({}, board, solution);
