@@ -27,6 +27,7 @@ import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.common.DocRepo;
 import com.devworker.kms.util.CommonUtil;
 import com.devworker.kms.util.FileTransactionUtil;
+import com.devworker.kms.util.FileUtil;
 
 /**
  * @author Incheol
@@ -69,8 +70,8 @@ public class DocComponent {
 			//commentDao.setCmtId(cmtId);
 			//docDao.setBoardId(null);
 			//docDao.setCmtId(null);
-			docDao.setDocPath(fileDto.getPath());
-			docDao.setDocSize(fileDto.getSize());
+			docDao.setDocPath(fileDto.getKey());
+			docDao.setDocSize(fileDto.getFileSize());
 			docDao.setDocUserId(userName);
 
 			if (docRepo.save(docDao) == null)
@@ -122,8 +123,8 @@ public class DocComponent {
 		
 		for (MultipartFile file : multiPartFile) {
 			FileDto fileDto = fileHandler.processUploadFile(file);
-			docDao.setDocPath(fileDto.getPath());
-			docDao.setDocSize(fileDto.getSize());
+			docDao.setDocPath(fileDto.getKey());
+			docDao.setDocSize(fileDto.getFileSize());
 			docDao.setDocUserId(CommonUtil.getCurrentUser());
 			
 			if(docRepo.save(docDao) == null) 

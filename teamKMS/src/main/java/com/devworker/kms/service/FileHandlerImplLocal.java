@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -48,32 +49,18 @@ public class FileHandlerImplLocal implements FileHandler {
 	}
 
 	@Override
-	public List<DocDao> processUploadFile(int boardId, List<MultipartFile> file) throws Exception {
-		return null;
-
-	}
-
-	@Override
 	public FileDto processUploadFile(MultipartFile file) throws Exception {
 
 		File destFile = new File(FILE_PATH + file.getOriginalFilename());
 		file.transferTo(destFile);
-		FileDto fileDto = new FileDto();
-		fileDto.setPath(destFile.getAbsolutePath());
-		fileDto.setSize((int) destFile.length());
 		
+		FileDto fileDto =  new FileDto.FileDtoBuilder(destFile.getAbsolutePath())
+				.setFileName(destFile.getName())
+				.setFileSize((int)destFile.length())
+				.setFileExt(FilenameUtils.getExtension(destFile.getName()))
+				.build();
+				
 		return fileDto;
-	}
-
-	@Override
-	public List<DocDao> processUploadFile(BoardDao boardId, int CommentId, List<MultipartFile> file) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FileDto processUploadFile(int boardId, int CommentId, MultipartFile file) throws Exception {
-		return null;
 	}
 
 	@Override
