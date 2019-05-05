@@ -1,6 +1,8 @@
 package com.devworker.kms.service;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -13,13 +15,11 @@ import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.util.FileUtil;
 import com.devworker.kms.util.StringKeyUtil;
 
+import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Component
 public class FileHandlerImplAmazonS3 implements FileHandler {
@@ -43,35 +43,43 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 	private String uploadFile(File file) {
 
 		String key = StringKeyUtil.generateUniqueKey();
-		PutObjectRequest putObjectRequest = PutObjectRequest.builder().key(key).bucket(bucket).build();
-
-		boolean putSuccess = s3Client.putObject(putObjectRequest, RequestBody.fromFile(file)).sdkHttpResponse()
-				.isSuccessful();
+		boolean putSuccess = s3Client.putObject((putObjectRequestBuilder) -> {
+			putObjectRequestBuilder.bucket(bucket).key(key).build();
+		}, RequestBody.fromFile(file)).sdkHttpResponse().isSuccessful();
 
 		if (putSuccess) {
 			return key;
 		}
 		throw new RuntimeException();
+
 	}
 
 	@Override
 	public File downloadFile(String key) {
 
-		GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(bucket).key(key).build();
-
 		File getFile = new File(tmpDown + File.separator + key);
-		GetObjectResponse getObjectResponse = s3Client.getObject(getObjectRequest, ResponseTransformer.toFile(getFile));
-
-		boolean getSuccess = getObjectResponse.sdkHttpResponse().isSuccessful();
-
-		if (getSuccess)
-			return getFile;
-
-		throw new RuntimeException();
+		ResponseInputStream<GetObjectResponse> responseInputStream = s3Client.getObject((getObjectReqeustBuilder) -> {
+			getObjectReqeustBuilder.bucket(bucket).key(key).build();
+		});
+		
+		try(FileOutputStream fileOutputStream = new FileOutputStream(getFile)) {
+			long fileSize = responseInputStream.transferTo(fileOutputStream);
+			
+		} catch (IOException e) {
+			throw new  RuntimeException();
+		}
+		return getFile;
+	}
+	
+	@Override
+	public File processDownloadFile(String key) {
+		return null;
+		
 	}
 
 	@Override
 	public FileDto processUploadFile(MultipartFile multipartFile) throws Exception {
+		
 		File file = FileUtil.convertToFile(multipartFile, tmpUpload);
 		String key = uploadFile(file);
 

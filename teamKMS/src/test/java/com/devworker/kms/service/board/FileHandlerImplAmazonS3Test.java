@@ -42,7 +42,7 @@ public class FileHandlerImplAmazonS3Test {
 	public void setUp() throws FileNotFoundException, IOException {
 
 		testFile = new File("D:/app/test.png");
-		downloadKey = "155660208325552f7b0d8-dfda-4589-996e-199c13978d69";
+		downloadKey = "15566022162000d4894c1-5a1e-4afb-9d9f-266d91e75315";
 		multipartFile = new MockMultipartFile("test.png", new FileInputStream(testFile));
 	}
 
@@ -94,7 +94,7 @@ public class FileHandlerImplAmazonS3Test {
 		key = "asdfasdfasdfasdfasdfasdfsadf";
 		actual = fileHandler.deleteFile(key);
 		
-		assertThat(actual).isFalse();
+		assertThat(actual).isFalse(); // 무조건 False 이여야 하는데 True 가 나옴 아마존 sdk 에서 무조건 true로 줌.
 		
 	}
 

@@ -46,14 +46,14 @@ public class AmazonS3SdkTest {
 
 	@Autowired
 	S3Client s3ClientBean;
-	
+
 	static S3Client s3;
 	static Region region;
 	static List<String> myBuckets;
-	
+
 	static String bucket;
 	static String key;
-	
+
 	static File testFile;
 
 	@Before
@@ -63,10 +63,10 @@ public class AmazonS3SdkTest {
 		myBuckets = new ArrayList<String>();
 		myBuckets.add("incheol1024");
 		myBuckets.add("kmsst");
-		
+
 		bucket = "kmsst";
 		key = StringKeyUtil.generateUniqueKey();
-		
+
 		testFile = new File("D:/app/test.png");
 	}
 
@@ -74,7 +74,7 @@ public class AmazonS3SdkTest {
 	public void notNullBean() {
 		assertThat(s3ClientBean).isNotNull();
 	}
-	
+
 	@Test
 	public void listBucketRequestTest() {
 		synchronized (s3) {
@@ -94,56 +94,46 @@ public class AmazonS3SdkTest {
 
 		synchronized (s3) {
 			PutObjectResponse putObjectResponse = s3.putObject(
-					PutObjectRequest.builder().bucket(bucket).key(key).build(),
-					RequestBody.fromFile(testFile));
-			
+					PutObjectRequest.builder().bucket(bucket).key(key).build(), RequestBody.fromFile(testFile));
+
 			assertThat(putObjectResponse.sdkHttpResponse().statusCode()).isEqualTo(200);
 			assertThat(putObjectResponse.sdkHttpResponse().isSuccessful()).isTrue();
 		}
 
 	}
-	
+
 	@Test
 	public void b_getObjectTest() {
-		
+
 		synchronized (s3) {
-			GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-					.bucket(bucket)
-					.key(key)
-					.build();
-						
-			GetObjectResponse getObjectResponse = s3.getObject(
-					getObjectRequest, ResponseTransformer.toFile(new File("D:\\app\\" + key)));
-			
+			GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(bucket).key(key).build();
+
+			GetObjectResponse getObjectResponse = s3.getObject(getObjectRequest,
+					ResponseTransformer.toFile(new File("D:\\app\\" + key)));
+
 			assertThat(getObjectResponse.sdkHttpResponse().isSuccessful()).isTrue();
 			assertThat(getObjectResponse.sdkHttpResponse().statusCode()).isEqualTo(200);
 		}
 	}
-	
+
 	@Test
 	public void c_deleteObjectTest() {
-		
+
 		synchronized (s3) {
-			DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-					.bucket(bucket)
-					.key(key)
-					.build();
-			
+			DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder().bucket(bucket).key(key).build();
+
 			DeleteObjectResponse deleteObjectResponse = s3.deleteObject(deleteObjectRequest);
-			
+
 			assertThat(deleteObjectResponse.sdkHttpResponse().isSuccessful()).isTrue();
 			assertThat(deleteObjectResponse.sdkHttpResponse().statusCode()).isEqualTo(204);
 		}
 	}
-	
-	
 
 //	@Test
 	public void createBucketTest() {
 
 		synchronized (s3) {
-			CreateBucketRequest createBucketRequest = CreateBucketRequest.builder()
-					.bucket("incheolbuckettest")
+			CreateBucketRequest createBucketRequest = CreateBucketRequest.builder().bucket("incheolbuckettest")
 					.createBucketConfiguration(CreateBucketConfiguration.builder()
 							.locationConstraint(BucketLocationConstraint.AP_SOUTHEAST_1).build())
 					.build();
@@ -152,5 +142,27 @@ public class AmazonS3SdkTest {
 		}
 	}
 
+	@Test
+	public void deleteResponseTest() {
+
+		String deleteKey = "aaaabbbbcccc";
+		synchronized (s3) {
+
+			DeleteObjectResponse deleteObjectResponse = s3ClientBean.deleteObject((deleteObjectBuilder) -> {
+				deleteObjectBuilder.bucket(bucket).key(key).build();
+			});
+
+			System.out.println("deleteObjectResponse.sdkHttpResponse().statusCode() = "
+					+ deleteObjectResponse.sdkHttpResponse().statusCode());
+
+			System.out.println("deleteObjectResponse.sdkHttpResponse().statusText() = "
+					+ deleteObjectResponse.sdkHttpResponse().statusText());
+
+			System.out.println("deleteObjectResponse.sdkHttpResponse().isSuccessful() = "
+					+ deleteObjectResponse.sdkHttpResponse().isSuccessful());
+
+		}
+
+	}
 
 }

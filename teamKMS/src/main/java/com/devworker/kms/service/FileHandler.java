@@ -10,9 +10,12 @@ import com.devworker.kms.dto.common.FileDto;
 @Service
 public interface FileHandler {
 
-	File downloadFile(String key);
-	
 	FileDto processUploadFile(MultipartFile multipartFile) throws Exception;
+	
+	File processDownloadFile(String key);
+
+	File downloadFile(String key);
 
 	boolean deleteFile(String key) throws Exception;
+
 }
