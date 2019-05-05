@@ -62,5 +62,11 @@ public class FileHandlerImplLocal implements FileHandler {
 		return false;
 	}
 
+	@Override
+	public File processDownloadFile(String key) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }
