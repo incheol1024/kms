@@ -1,5 +1,5 @@
 <template>
-    <ckeditor :editor="editor" v-model="editorData" :config="editorConfig" :disabled="editorDisabled"></ckeditor>
+    <ckeditor :editor="editor" v-model="editorData" :config="editorConfig" :disabled="readOnly"></ckeditor>
 </template>
 
 <script>
@@ -11,19 +11,13 @@
                 required : true
             }
         },
-        watch : {
-            readOnly : function (value) {
-                console.log(value);
-            }
-        },
         data: () => ({
             editorData: '',
             editor: ClassicEditor,
-            editorConfig: {},
-            editorDisabled: false
+            editorConfig: {}
         }),
         methods : {
-            getText : function () {
+            getText() {
                 return this.editorData;
             }
         }

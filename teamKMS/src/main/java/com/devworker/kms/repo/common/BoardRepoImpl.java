@@ -1,15 +1,12 @@
 package com.devworker.kms.repo.common;
 
-import org.jooq.generated.kms.tables.KmsBoard;
-
-import java.util.List;
-
+import com.devworker.kms.entity.common.BoardDao;
 import org.jooq.DSLContext;
-import org.jooq.types.UInteger;
+import org.jooq.generated.kms.tables.KmsBoard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.devworker.kms.entity.common.BoardDao;
+import java.util.List;
 
 @Repository
 public class BoardRepoImpl {

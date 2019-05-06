@@ -112,6 +112,7 @@ public class PermissionType {
         this.has = has;
     }
 
+
     public boolean isHas() {
         return has;
     }

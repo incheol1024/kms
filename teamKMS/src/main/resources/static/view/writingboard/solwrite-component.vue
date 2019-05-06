@@ -11,14 +11,15 @@
                 <v-text-field placeholder="site" label="site" v-model="site"></v-text-field>
             </v-flex>
         </v-layout>
-        <write-component ref="editor" :read-only="readOnly"></write-component>
-        <v-btn v-if="!readOnly" color="primary" @click="save">{{buttonName}}</v-btn>
-        <comment-component v-if="mode === 1" comment-component :qid="$route.params.id"></comment-component>
+        <write-component ref="editor" v-bind:read-only="$route.query.readOnly"></write-component>
+        <v-btn v-if="!$route.query.readOnly" color="primary" @click="save">{{buttonName}}</v-btn>
+        <comment-component v-if="boardId !== 0" comment-component :qid="$route.params.id"></comment-component>
     </v-layout>
 </template>
 
 <script>
     module.exports = {
+        props : ["id"],
         data: () => ({
             subject: '',
             solution: '',
@@ -28,30 +29,26 @@
             boardId : 0
         }),
         watch : {
-            '$route.params.id' : {
-                handler: function(id) {
-                    if (id === "0") {
-                        this.buttonName = "New";
-                        this.url = "solution/register";
-                        this.boardId = 0;
-                    } else {
-                        this.buttonName = "Edit";
-                        this.url = "solution/edit";
-                        this.boardId = id;
-                    }
-                },
-                deep: true,
-                immediate: true
+            id(){
+                if (id === "0") {
+                    this.buttonName = "New";
+                    this.url = "solution/register";
+                    this.boardId = 0;
+                } else {
+                    this.buttonName = "Edit";
+                    this.url = "solution/edit";
+                    this.boardId = id;
+                }
             }
         },
         methods: {
             save: function save() {
                 let board = { subject: this.subject, contents: this.$refs.editor.getText(), boardId : this.boardId };
                 let solution = { site: this.site, solution: this.solution, boardId : this.boardId};
-                let data = Object.assign({}, board, solution);
-                axios.post(this.url, data).then(response => {})
+                let data = { board, solution};
+                this.$axios.post(this.url, data).then(response => {})
                     .catch(error => { catchPromise(error)});
-                this.$router.push("/solutions/" + this.id);
+                this.$router.push(`/solutions/${this.id}`);
             }
         }
     };
