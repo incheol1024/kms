@@ -1,6 +1,6 @@
 package com.devworker.kms.controller.common;
 
-import com.devworker.kms.service.FileHandlerImplLocal;
+import com.devworker.kms.component.FileHandlerImplLocal;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;

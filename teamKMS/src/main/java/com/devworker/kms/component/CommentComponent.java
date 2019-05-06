@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.devworker.kms.service.FileHandler;
 import com.devworker.kms.service.UserService;
 
 import org.slf4j.Logger;
