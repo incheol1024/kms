@@ -189,10 +189,6 @@
                                     <includes>.*</includes>
                                     <excludes/>
                                 </database>
-                                <target>
-                                    <packageName>jooq.generated</packageName>
-                                    <directory>${project.build.sourceDirectory}/src/main/java</directory>
-                                </target>
                             </generator>
                         </configuration>
                     </plugin>
