@@ -23,9 +23,9 @@
             subject: '',
             solution: '',
             site: '',
-            mode : 0,
             buttonName: "New",
-            url: "solution/register"
+            url: "solution/register",
+            boardId : 0
         }),
         watch : {
             '$route.params.id' : {
@@ -33,11 +33,11 @@
                     if (id === "0") {
                         this.buttonName = "New";
                         this.url = "solution/register";
-                        this.mode = 0;
+                        this.boardId = 0;
                     } else {
                         this.buttonName = "Edit";
                         this.url = "solution/edit";
-                        this.mode = 1;
+                        this.boardId = id;
                     }
                 },
                 deep: true,
@@ -46,8 +46,8 @@
         },
         methods: {
             save: function save() {
-                let board = { subject: this.subject, contents: this.contents};
-                let solution = { site: this.site, solution: this.solution};
+                let board = { subject: this.subject, contents: this.$refs.editor.getText(), boardId : this.boardId };
+                let solution = { site: this.site, solution: this.solution, boardId : this.boardId};
                 let data = Object.assign({}, board, solution);
                 axios.post(this.url, data).then(response => {})
                     .catch(error => { catchPromise(error)});
