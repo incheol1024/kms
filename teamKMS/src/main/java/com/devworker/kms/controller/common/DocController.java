@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.common.DocDao;
+import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.dto.common.FileTransactionDto;
 import com.devworker.kms.component.DocComponent;
 
@@ -78,9 +79,9 @@ public class DocController {
 	 */
 	@GetMapping("/download/{docId}")
 	public ResponseEntity<Resource> download(@PathVariable long docId) throws IOException {
-		File file = docService.downDoc(docId);
-		InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-		return ResponseEntity.ok().headers(new HttpHeaders()).contentLength(file.length())
+		FileDto fileDto = docService.downDoc(docId);
+		InputStreamResource resource = new InputStreamResource(new FileInputStream(fileDto.getFile()));
+		return ResponseEntity.ok().headers(new HttpHeaders()).contentLength(fileDto.getFileSize())
 				.contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
 	}
 

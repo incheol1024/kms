@@ -1,6 +1,10 @@
 package com.devworker.kms.dto.common;
 
+import java.io.File;
+
 public class FileDto {
+
+	private final File file;
 
 	private final String key;
 
@@ -15,10 +19,15 @@ public class FileDto {
 	}
 
 	private FileDto(FileDtoBuilder fileDtoBuilder) {
+		this.file = fileDtoBuilder.getFile();
 		this.key = fileDtoBuilder.getKey();
 		this.fileSize = fileDtoBuilder.getFileSize();
 		this.fileName = fileDtoBuilder.getFileName();
 		this.fileExt = fileDtoBuilder.getFileExt();
+	}
+
+	public File getFile() {
+		return file;
 	}
 
 	public String getKey() {
@@ -36,8 +45,14 @@ public class FileDto {
 	public String getFileExt() {
 		return fileExt;
 	}
+	
+	public static FileDtoBuilder builder() {
+		return new FileDto.FileDtoBuilder();
+	}
 
 	public static class FileDtoBuilder {
+
+		private File file;
 
 		private String key;
 
@@ -48,11 +63,16 @@ public class FileDto {
 		private String fileExt;
 
 		private FileDtoBuilder() {
-			throw new AssertionError();
+			//throw new AssertionError();
 		}
 
-		public FileDtoBuilder(String key) {
-			this.key = key;
+		public File getFile() {
+			return file;
+		}
+
+		public FileDtoBuilder setFile(File file) {
+			this.file = file;
+			return this;
 		}
 
 		public String getKey() {

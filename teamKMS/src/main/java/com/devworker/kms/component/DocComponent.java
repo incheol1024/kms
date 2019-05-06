@@ -7,11 +7,12 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import com.devworker.kms.service.FileHandler;
 import com.devworker.kms.service.UserService;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,17 +38,24 @@ import com.devworker.kms.util.FileUtil;
 public class DocComponent {
 
 	@Autowired
-	DocRepo docRepo;
+	private DocRepo docRepo;
 
 	@Autowired
-	UserService userService;
+	private UserService userService;
 
 	@Autowired
 	@Qualifier(value = "fileHandlerImplLocal")
-	FileHandler fileHandler;
+	private FileHandler fileHandler;
+
+	@Value("${file.upload.tmp}")
+	private String tmpUpload;
+	
+	@Value("${file.download.tmp}")
+	private String tmpDownload;
 
 	/**
 	 * 글 또는 댓글에 이미지 첨부 시 수행되는 메소드 입니다.
+	 * 
 	 * @param boardId
 	 * @param cmtId
 	 * @param files
@@ -56,31 +64,38 @@ public class DocComponent {
 	 */
 	@Transactional
 	public FileTransactionDto addDoc(
-			//BoardDao boardId, 
-			//int cmtId,
-			List<MultipartFile> files) throws Exception {
+		List<MultipartFile> files) throws Exception {
 		String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
 		String fileTransactKey = "";
 		int fileCount = 0;
-		
+
 		for (MultipartFile file : files) {
-			FileDto fileDto = fileHandler.processUploadFile(file);
+			File tmpFile = new File(tmpUpload + File.separator + file.getName());
+			file.transferTo(tmpFile);
+			FileDto fileDto = FileDto.builder()
+					.setFile(tmpFile)
+					.setFileExt(FilenameUtils.getExtension(file.getName()))
+					.setFileName(file.getName())
+					.setFileSize(file.getSize())
+					.build();
+
 			DocDao docDao = new DocDao();
-			//CommentDao commentDao = new CommentDao();
-			//commentDao.setCmtId(cmtId);
-			//docDao.setBoardId(null);
-			//docDao.setCmtId(null);
 			docDao.setDocPath(fileDto.getKey());
 			docDao.setDocSize(fileDto.getFileSize());
+			docDao.setDocName(fileDto.getFileName());
+			docDao.setDocSize(fileDto.getFileSize());
+			docDao.setDocExt(fileDto.getFileExt());
 			docDao.setDocUserId(userName);
 
+			fileDto = fileHandler.processUploadFile(fileDto);
+			docDao.setDocPath(fileDto.getKey());
 			if (docRepo.save(docDao) == null)
 				throw new FileNotSavedException("File Not Saved Database");
 
 			fileTransactKey = FileTransactionUtil.putFileInfo(fileTransactKey, docDao.getDocId());
-			fileCount += 1; 
+			fileCount += 1;
 		}
-		
+
 		FileTransactionDto fileTransactionDto = new FileTransactionDto();
 		fileTransactionDto.setFileTransactKey(fileTransactKey);
 		fileTransactionDto.setFileCount(fileCount);
@@ -99,6 +114,7 @@ public class DocComponent {
 
 	/**
 	 * 게시판글 또는 댓글의 이미지를 수정 시 수행되는 서비스 메소드 입니다.
+	 * 
 	 * @param boardId
 	 * @param cmtId
 	 * @param multiPartFile
@@ -114,23 +130,30 @@ public class DocComponent {
 		DocDao docDao = new DocDao();
 		docDao.setBoardId(boardDao);
 		docDao.setCmtId(commentDao);
-		/*
-		 * DocDao 객체를 생성하는데.. 업데이트 할 DocDao 객체만 가져온다.
-		 * DocDao 객체만 가져와서.
-		 * 
-		*/
-		String key="";
-		
+
+		String key = "";
+
 		for (MultipartFile file : multiPartFile) {
-			FileDto fileDto = fileHandler.processUploadFile(file);
+			File tmpFile = new File(tmpUpload + File.separator + file.getName());
+			file.transferTo(tmpFile);
+			
+			FileDto fileDto = FileDto.builder()
+					.setFile(tmpFile)
+					.setFileExt(FilenameUtils.getExtension(tmpFile.getName()))
+					.setFileName(tmpFile.getName())
+					.setFileSize(tmpFile.length())
+					.build();
+			
+			
+			fileDto = fileHandler.processUploadFile(fileDto);
 			docDao.setDocPath(fileDto.getKey());
 			docDao.setDocSize(fileDto.getFileSize());
 			docDao.setDocUserId(CommonUtil.getCurrentUser());
-			
-			if(docRepo.save(docDao) == null) 
+
+			if (docRepo.save(docDao) == null)
 				throw new FileNotFoundException("File Not Saved Database");
-			
-			key =  FileTransactionUtil.putFileInfo(key, docDao.getDocId());
+
+			key = FileTransactionUtil.putFileInfo(key, docDao.getDocId());
 		}
 		return key;
 	}
@@ -138,18 +161,28 @@ public class DocComponent {
 	public void deleteDoc(long docId) throws Exception {
 		Optional<DocDao> opDocDao = docRepo.findById(docId);
 		if (!opDocDao.isPresent())
-			throw new RuntimeException("Doc is not found");  
+			throw new RuntimeException("Doc is not found");
 
 		DocDao docDao = opDocDao.get();
 		fileHandler.deleteFile(docDao.getDocPath());
 		docRepo.delete(docDao);
 	}
 
-	public File downDoc(long docId) {
+	public FileDto downDoc(long docId) {
 		Optional<DocDao> optionalDocDao = docRepo.findById(docId);
-		DocDao docDao = optionalDocDao.orElseThrow(() ->  new RuntimeException("docId is not Exist") );
-		String fileKey = docDao.getDocPath();
-		return fileHandler.downloadFile(fileKey);
+		DocDao docDao = optionalDocDao.orElseThrow(() -> new RuntimeException("docId is not Exist"));
+		FileDto fileDto = fileHandler.processDownloadFile(
+				FileDto.builder()
+				.setKey(docDao.getDocPath())
+				.setFile(new File(tmpDownload + File.separator + docDao.getDocPath()))
+				.build()); 
+		
+		return FileDto.builder()
+					.setFile(fileDto.getFile())
+					.setFileExt(docDao.getDocExt())
+					.setFileName(docDao.getDocName())
+					.setFileSize(docDao.getDocSize())
+					.build();
 	}
 
 	public void rollbackFileTransaction(String fileTransactKey) throws Exception {
