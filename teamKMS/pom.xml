@@ -189,10 +189,6 @@
                                     <includes>.*</includes>
                                     <excludes/>
                                 </database>
-                                <target>
-                                    <packageName>com.devworker.kms</packageName>
-                                    <directory>target/main/java</directory>
-                                </target>
                             </generator>
                         </configuration>
                     </plugin>
