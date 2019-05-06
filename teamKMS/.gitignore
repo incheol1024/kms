@@ -24,3 +24,4 @@
 /nbdist/
 /.nb-gradle/
 /bin/
+/src/main/java/src/main/java/jooq/generated/
