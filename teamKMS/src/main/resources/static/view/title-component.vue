@@ -34,6 +34,7 @@
             <v-card>
                 <v-card-title class="red">
                     <v-icon dark size="30" class="mr-3">mdi-magnify</v-icon>
+
                     <h2 class="display-1 white--text font-weight-light">New Update</h2>
                 </v-card-title>
                 <v-container>
