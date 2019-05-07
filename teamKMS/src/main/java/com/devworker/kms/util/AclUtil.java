@@ -60,8 +60,8 @@ public class AclUtil {
         return false;
     }
 
-    public static void checkPermission(PermissionType type) {
-        checkPermission("", type);
+    public static boolean checkPermission(PermissionType type) {
+        return checkPermission("", type);
     }
 
     private static boolean checkInner(String aceId, PermissionType type) {

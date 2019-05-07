@@ -3,6 +3,7 @@ package com.devworker.kms.service;
 import com.devworker.kms.entity.UserDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.UserDto;
+import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.util.AclUtil;
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @CacheEvict(key = "'userCount'", value = "userCache")
     public UserDto addUser(UserDto dto) {
-        AclUtil.checkPermission(PermissionType.CREATEUSER);
+        if(!AclUtil.checkPermission(PermissionType.CREATEUSER))  throw new NotAllowException("Your Permission Not allowed");
         if (repo.existsById(dto.getId()))
             throw new DuplicateKeyException("User Id already Has in Server");
         dto.setPassword(encoder.encode(dto.getPassword()));
@@ -62,12 +63,12 @@ public class UserServiceImpl implements UserService {
 
     @CacheEvict(key = "'userCount'", value = "userCache")
     public void deleteUser(String id) {
-        AclUtil.checkPermission(PermissionType.DELETEUSER);
+        if(!AclUtil.checkPermission(PermissionType.DELETEUSER))  throw new NotAllowException("Your Permission Not allowed");
         repo.deleteById(id);
     }
 
     public void updateUser(UserDto dto) {
-        AclUtil.checkPermission(PermissionType.MODIFYUSER);
+        if(!AclUtil.checkPermission(PermissionType.MODIFYUSER))  throw new NotAllowException("Your Permission Not allowed");
         UserDto dbUser = getUser(dto.getId());
         if (!dto.getPassword().equals(dbUser.getPassword()) && !encoder.matches(dto.getPassword(), dbUser.getPassword()))
             dto.setPassword(encoder.encode(dto.getPassword()));

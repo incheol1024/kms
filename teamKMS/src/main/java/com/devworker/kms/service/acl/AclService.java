@@ -3,6 +3,7 @@ package com.devworker.kms.service.acl;
 import com.devworker.kms.entity.acl.AclDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.acl.AclDto;
+import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.acl.AclRepo;
 import com.devworker.kms.util.AclUtil;
@@ -23,13 +24,13 @@ public class AclService {
 
 
     public String addAcl(AclDto dto) {
-        AclUtil.checkPermission(PermissionType.CREATEPERMISSION);
+        if(!AclUtil.checkPermission(PermissionType.CREATEPERMISSION))  throw new NotAllowException("Your Permission Not allowed");
         aclRepo.save(dto.getDao());
         return dto.getAclId();
     }
 
     public void deleteAcl(String aclId) {
-        AclUtil.checkPermission(PermissionType.DELETEPERMISSION);
+        if (!AclUtil.checkPermission(PermissionType.DELETEPERMISSION))  throw new NotAllowException("Your Permission Not allowed");
         aclRepo.findById(aclId).orElseThrow(() -> new NotExistException("Acl Not Exist"));
         aclRepo.deleteById(aclId);
     }
@@ -43,7 +44,7 @@ public class AclService {
     }
 
     public void updateAcl(AclDto dto) {
-        AclUtil.checkPermission(PermissionType.MODIFYPERMISSION);
+        if(!AclUtil.checkPermission(PermissionType.MODIFYPERMISSION)) throw new NotAllowException("Your Permission Not allowed");
         aclRepo.findById(dto.getAclId()).orElseThrow(() -> new NotExistException("Acl Not Exist"));
         aclRepo.save(dto.getDao());
     }
