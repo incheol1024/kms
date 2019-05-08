@@ -12,24 +12,27 @@
             </v-flex>
         </v-layout>
         <write-component ref="editor" v-bind:read-only="$route.query.readOnly"></write-component>
-        <v-btn v-if="!$route.query.readOnly" color="primary" @click="save">{{buttonName}}</v-btn>
+        <v-btn v-if="!$route.query.readOnly" :loading="loading" :disabled="loading" color="primary" @click="save">
+            {{buttonName}}
+        </v-btn>
         <comment-component v-if="boardId !== 0" comment-component :qid="$route.params.id"></comment-component>
     </v-layout>
 </template>
 
 <script>
     module.exports = {
-        props : ["id"],
+        props: ["id"],
         data: () => ({
             subject: '',
             solution: '',
             site: '',
             buttonName: "New",
             url: "solution/register",
-            boardId : 0
+            boardId: 0,
+            loading: false
         }),
-        watch : {
-            id(){
+        watch: {
+            id() {
                 if (id === "0") {
                     this.buttonName = "New";
                     this.url = "solution/register";
@@ -43,11 +46,19 @@
         },
         methods: {
             save: function save() {
-                let board = { subject: this.subject, contents: this.$refs.editor.getText(), boardId : this.boardId };
-                let solution = { site: this.site, solution: this.solution, boardId : this.boardId};
-                let data = { board, solution};
-                this.$axios.post(this.url, data).then(response => {})
-                    .catch(error => { catchPromise(error)});
+                this.loading = true;
+                let board = {subject: this.subject, contents: this.$refs.editor.getText(), boardId: this.boardId};
+                let solution = {site: this.site, solution: this.solution, boardId: this.boardId};
+                let data = Object.assign({}, board, solution);
+                axios.post(this.url, data).then(response => {
+                    console.log("Asdfasdf");
+                })
+                    .catch(error =>
+                        catchPromise(error)
+                    )
+                    .finally(() => {
+                        this.loading = false;
+                    });
                 this.$router.push(`/solutions/${this.id}`);
             }
         }

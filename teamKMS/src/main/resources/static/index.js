@@ -16,8 +16,6 @@ httpVueLoader.httpRequest = function (url) {
         });
 };
 
-Vue.prototype.$axios = axios;
-
 httpVueLoader.register(Vue, 'view/title-component.vue');
 httpVueLoader.register(Vue, 'view/sites-component.vue');
 httpVueLoader.register(Vue, 'view/solutions-component.vue');
@@ -121,9 +119,9 @@ const main = new Vue({
                     for (let i = 0; i < response.data.length; i++) {
                         item.children.push(response.data[i]);
                     }
-                }).catch(err => {
+                }).catch(err =>
                     catchPromise(err)
-                });
+                );
             }
         });
     },

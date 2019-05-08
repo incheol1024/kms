@@ -35,7 +35,7 @@
         },
         methods: {
             getSolutionList: function (page) {
-                return this.$axios.get(`solution/${this.id}`, {
+                return axios.get(`solution/${this.id}`, {
                     params : page
                 });
             },
@@ -44,7 +44,7 @@
             },
             deleteSolution: function (item) {
                 if (confirm("삭제하시겠습니까?"))
-                    return this.$axios.delete(`/solution/${item.boardId}`)
+                    return axios.delete(`/solution/${item.boardId}`)
             },
             clickRow : function (item){
                 this.$router.replace({path: `/solutions/write/${item.boardId}`, query: {readOnly: true}});

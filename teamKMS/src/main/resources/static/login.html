@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.0/src/httpVueLoader.js"></script>
-   
+
     <script src="js/es6-promise.auto.min.js"></script>
     <script src="js/util.js"></script>
 
@@ -29,7 +29,7 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" @click="submit">Login</v-btn>
+                        <v-btn :loading="loading" :disabled="loading" color="primary" @click="submit">Login</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-form>

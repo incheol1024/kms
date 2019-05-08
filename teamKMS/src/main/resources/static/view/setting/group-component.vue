@@ -65,7 +65,7 @@
 <script>
     module.exports = {
         created: function () {
-            this.$axios.get("group").then(value => {
+            axios.get("group").then(value => {
                     this.items = value.data;
                     this.$refs.tree.recurCache(this.items);
                     this.$refs.subtree.recurCache(this.items);
