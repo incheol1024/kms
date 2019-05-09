@@ -18,7 +18,6 @@ import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.common.DocRepo;
 
 @Component
-@Primary
 public class FileHandlerImplLocal implements FileHandler {
 
 	@Autowired

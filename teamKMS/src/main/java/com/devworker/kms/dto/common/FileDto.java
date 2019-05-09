@@ -66,7 +66,7 @@ public class FileDto {
 			//throw new AssertionError();
 		}
 
-		public File getFile() {
+		private File getFile() {
 			return file;
 		}
 
@@ -75,7 +75,7 @@ public class FileDto {
 			return this;
 		}
 
-		public String getKey() {
+		private String getKey() {
 			return key;
 		}
 
@@ -84,7 +84,7 @@ public class FileDto {
 			return this;
 		}
 
-		public long getFileSize() {
+		private long getFileSize() {
 			return fileSize;
 		}
 
@@ -93,7 +93,7 @@ public class FileDto {
 			return this;
 		}
 
-		public String getFileName() {
+		private String getFileName() {
 			return fileName;
 		}
 
@@ -102,7 +102,7 @@ public class FileDto {
 			return this;
 		}
 
-		public String getFileExt() {
+		private String getFileExt() {
 			return fileExt;
 		}
 

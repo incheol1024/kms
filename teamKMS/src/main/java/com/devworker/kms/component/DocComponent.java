@@ -7,28 +7,23 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import com.devworker.kms.service.UserService;
-
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.devworker.kms.entity.UserDao;
+import com.devworker.kms.dto.common.FileDto;
+import com.devworker.kms.dto.common.FileTransactionDto;
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.common.CommentDao;
 import com.devworker.kms.entity.common.DocDao;
-import com.devworker.kms.dto.common.FileDto;
-import com.devworker.kms.dto.common.FileTransactionDto;
 import com.devworker.kms.exception.board.FileNotSavedException;
-import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.common.DocRepo;
+import com.devworker.kms.service.UserService;
 import com.devworker.kms.util.CommonUtil;
 import com.devworker.kms.util.FileTransactionUtil;
-import com.devworker.kms.util.FileUtil;
 
 /**
  * @author Incheol
@@ -44,7 +39,7 @@ public class DocComponent {
 	private UserService userService;
 
 	@Autowired
-	@Qualifier(value = "fileHandlerImplLocal")
+	@Qualifier(value = "amazonS3")
 	private FileHandler fileHandler;
 
 	@Value("${file.upload.tmp}")
@@ -52,6 +47,10 @@ public class DocComponent {
 	
 	@Value("${file.download.tmp}")
 	private String tmpDownload;
+	
+	public DocComponent(FileHandler fileHandler) {
+		this.fileHandler = fileHandler;
+	}
 
 	/**
 	 * 글 또는 댓글에 이미지 첨부 시 수행되는 메소드 입니다.
@@ -65,12 +64,13 @@ public class DocComponent {
 	@Transactional
 	public FileTransactionDto addDoc(
 		List<MultipartFile> files) throws Exception {
-		String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
+		//String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
 		String fileTransactKey = "";
 		int fileCount = 0;
 
 		for (MultipartFile file : files) {
-			File tmpFile = new File(tmpUpload + File.separator + file.getName());
+		//	File tmpFile = new File(tmpUpload + File.separator + file.getName());
+			File tmpFile = new File("D:" + File.separator + "app" + File.separator + file.getName());
 			file.transferTo(tmpFile);
 			FileDto fileDto = FileDto.builder()
 					.setFile(tmpFile)
@@ -80,13 +80,15 @@ public class DocComponent {
 					.build();
 
 			DocDao docDao = new DocDao();
-			docDao.setDocPath(fileDto.getKey());
-			docDao.setDocSize(fileDto.getFileSize());
-			docDao.setDocName(fileDto.getFileName());
-			docDao.setDocSize(fileDto.getFileSize());
-			docDao.setDocExt(fileDto.getFileExt());
-			docDao.setDocUserId(userName);
-
+			/*
+			 * docDao.setDocPath(fileDto.getKey());
+			 * docDao.setDocSize(fileDto.getFileSize());
+			 * docDao.setDocName(fileDto.getFileName());
+			 * docDao.setDocSize(fileDto.getFileSize());
+			 * docDao.setDocExt(fileDto.getFileExt()); docDao.setDocUserId(userName);
+			 */			 
+			docDao.setUpEntity(fileDto);
+			//docDao.setDocUserId(userName);
 			fileDto = fileHandler.processUploadFile(fileDto);
 			docDao.setDocPath(fileDto.getKey());
 			if (docRepo.save(docDao) == null)
@@ -101,6 +103,7 @@ public class DocComponent {
 		fileTransactionDto.setFileCount(fileCount);
 		return fileTransactionDto;
 	}
+	
 
 	/**
 	 * @param boardId

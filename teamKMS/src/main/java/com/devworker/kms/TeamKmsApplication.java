@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -97,8 +98,8 @@ public class TeamKmsApplication {
         return source;
     }
     
-    @Bean
-   // @Scope(scopeName = WebApplicationContext.SCOPE_REQUEST)
+   @Bean
+   @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public S3Client s3ClientBean() {
     	return S3Client.builder()
     			.region(Region.AP_NORTHEAST_2)

@@ -11,21 +11,32 @@ import java.lang.reflect.Method;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devworker.kms.component.FileHandler;
 import com.devworker.kms.component.FileHandlerImplAmazonS3;
 import com.devworker.kms.dto.common.FileDto;
 
-@SpringBootTest
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
+
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @RunWith(value = SpringJUnit4ClassRunner.class)
 public class FileHandlerImplAmazonS3Test {
 
@@ -37,6 +48,12 @@ public class FileHandlerImplAmazonS3Test {
 	String downloadKey;
 
 	MultipartFile multipartFile;
+
+	@Autowired
+	ApplicationContext applicationContext;
+
+	@Rule
+	public ExpectedException expectedException = ExpectedException.none();
 
 	@Before
 	public void setUp() throws FileNotFoundException, IOException {
@@ -82,22 +99,41 @@ public class FileHandlerImplAmazonS3Test {
 		FileDto fileDto = fileHandler.processUploadFile(expectedFileDto);
 		assertThat(fileDto).isInstanceOf(FileDto.class).isExactlyInstanceOf(FileDto.class);
 		assertThat(fileDto.getKey()).doesNotContainOnlyWhitespaces();
-		
+
 	}
 
 	@Test
 	public void deleteFileTest() throws Exception {
 		String key = "155660208325552f7b0d8-dfda-4589-996e-199c13978d69";
 		boolean actual = fileHandler.deleteFile(key);
-
 		assertThat(actual).isTrue();
-
 		key = "asdfasdfasdfasdfasdfasdfsadf";
 		actual = fileHandler.deleteFile(key);
 
 		// assertThat(actual).isFalse(); // 무조건 False 이여야 하는데 True 가 나옴 아마존 sdk 에서 무조건
 		// true로 줌.
 
+	}
+
+	@Test
+	public void shouldException() {
+		String wrongKey = "akakakakak";
+		FileDto wrongFileDto = FileDto.builder().setKey(wrongKey).build();
+		expectedException.expect(NoSuchKeyException.class);
+		expectedException.expectMessage(CoreMatchers.startsWith("The specified key"));
+		FileDto actualFileDto = fileHandler.processDownloadFile(wrongFileDto);
+		assertThat(actualFileDto).isNull();
+	}
+
+	@Test	
+	public void shouldBeS3ClientProto() {
+		assertThat(applicationContext).isNotNull();
+		FileHandler fileHandler = applicationContext.getBean(FileHandler.class);
+		assertThat(fileHandler).isInstanceOf(FileHandlerImplAmazonS3.class);
+		FileHandlerImplAmazonS3 amazonS3 = (FileHandlerImplAmazonS3) fileHandler;
+		S3Client s3Client = amazonS3.getS3Client();
+		assertThat(s3Client).isNotEqualTo(amazonS3.getS3Client()).isNotEqualTo(amazonS3.getS3Client());
+		
 	}
 
 }
