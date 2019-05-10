@@ -48,9 +48,10 @@ public class DocController {
 	 * @throws Exception
 	 */
 	@PostMapping("/upload/comment")
-	public FileTransactionDto uploadCommentFile(@RequestParam(name = "boardId") BoardDao boardId,
+	public FileTransactionDto uploadFile(@RequestParam(name = "boardId") BoardDao boardId,
 			//@RequestParam(name = "cmtId") int cmtId,
 			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
+		
 		return docService.addDoc(
 				//boardId, 
 				//cmtId, 
@@ -78,7 +79,7 @@ public class DocController {
 	 * @throws IOException
 	 */
 	@GetMapping("/download/{docId}")
-	public ResponseEntity<Resource> download(@PathVariable long docId) throws IOException {
+	public ResponseEntity<Resource> downloadFile(@PathVariable long docId) throws IOException {
 		FileDto fileDto = docService.downDoc(docId);
 		InputStreamResource resource = new InputStreamResource(new FileInputStream(fileDto.getFile()));
 		return ResponseEntity.ok().headers(new HttpHeaders()).contentLength(fileDto.getFileSize())

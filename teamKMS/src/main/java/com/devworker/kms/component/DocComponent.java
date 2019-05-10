@@ -64,13 +64,13 @@ public class DocComponent {
 	@Transactional
 	public FileTransactionDto addDoc(
 		List<MultipartFile> files) throws Exception {
-		//String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
+		String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
 		String fileTransactKey = "";
 		int fileCount = 0;
 
 		for (MultipartFile file : files) {
-		//	File tmpFile = new File(tmpUpload + File.separator + file.getName());
-			File tmpFile = new File("D:" + File.separator + "app" + File.separator + file.getName());
+			File tmpFile = new File(tmpUpload + File.separator + file.getName());
+		//	File tmpFile = new File("D:" + File.separator + "app" + File.separator + file.getName());
 			file.transferTo(tmpFile);
 			FileDto fileDto = FileDto.builder()
 					.setFile(tmpFile)
@@ -88,7 +88,7 @@ public class DocComponent {
 			 * docDao.setDocExt(fileDto.getFileExt()); docDao.setDocUserId(userName);
 			 */			 
 			docDao.setUpEntity(fileDto);
-			//docDao.setDocUserId(userName);
+			docDao.setDocUserId(userName);
 			fileDto = fileHandler.processUploadFile(fileDto);
 			docDao.setDocPath(fileDto.getKey());
 			if (docRepo.save(docDao) == null)
