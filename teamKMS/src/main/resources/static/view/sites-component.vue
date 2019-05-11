@@ -133,6 +133,7 @@
                 router.push("sites/write/" + this.id);
             },
             getSiteList: function (id) {
+                console.log("/getSiteList : "+id+" this"+this.data );
                 _this = this;
                 axios.get(`site/${id}`).then(res => {
                     _this.siteData = res.data;
@@ -184,6 +185,12 @@
             getBoard : function (item) {
                 this.curProject = item;
                 this.window = 2;
+                console.log("get Board call :"+item);
+                console.log(item);
+                if (this.curSite.siteId === 0) return;
+                return axios.get(`site/${item.siteId}/${item.projectId}`, {
+                    params: {page:0,size:5}
+                })
             }
         }
     };

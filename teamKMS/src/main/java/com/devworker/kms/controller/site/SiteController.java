@@ -9,6 +9,7 @@ import com.devworker.kms.service.site.SiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class SiteController {
     }
 
     @GetMapping("/{menuId}/{siteId}")
-    public Page<ProjectDto> getSiteProjects(@PathVariable int menuId, @PathVariable int siteId, Pageable pageable){
+    public Page<ProjectDto> getSiteProjects(@PathVariable int menuId, @PathVariable int siteId, @PageableDefault(page=0,size=5) Pageable pageable){
         return siteService.getSiteProjects(menuId, siteId,pageable);
     }
 
@@ -50,7 +51,7 @@ public class SiteController {
     }
 
     @GetMapping("/{menuId}/{siteId}/{projectId}")
-    public Page<ProjectBoardDto> getProjectBoards(@PathVariable int menuId, @PathVariable int siteId, @PathVariable int projectId, Pageable pageable){
+    public Page<ProjectBoardDto> getProjectBoards(@PathVariable int menuId, @PathVariable int siteId, @PathVariable int projectId, @PageableDefault(page=0,size=5)Pageable pageable){
         return siteService.getProjectBoards(menuId,siteId,projectId,pageable);
     }
 
