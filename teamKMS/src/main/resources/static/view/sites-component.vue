@@ -125,7 +125,8 @@
             ],
 
             boardHeader : [
-
+                {text: "projectId", value: "projectId"},
+                {text: "boardId", value: "boardId"}
             ]
         }),
         methods: {
@@ -188,9 +189,9 @@
                 console.log("get Board call :"+item);
                 console.log(item);
                 if (this.curSite.siteId === 0) return;
-                return axios.get(`site/${item.siteId}/${item.projectId}`, {
+                return axios.get(`site/${this.id}/${item.siteId}/${item.projectId}`, {
                     params: {page:0,size:5}
-                })
+                });
             }
         }
     };

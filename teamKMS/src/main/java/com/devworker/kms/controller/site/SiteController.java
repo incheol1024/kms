@@ -52,7 +52,7 @@ public class SiteController {
 
     @GetMapping("/{menuId}/{siteId}/{projectId}")
     public Page<ProjectBoardDto> getProjectBoards(@PathVariable int menuId, @PathVariable int siteId, @PathVariable int projectId, @PageableDefault(page=0,size=5)Pageable pageable){
-        return siteService.getProjectBoards(menuId,siteId,projectId,pageable);
+    	return siteService.getProjectBoards(menuId,siteId,projectId,pageable);
     }
 
     @PutMapping("/{siteId}/{projectId}")
