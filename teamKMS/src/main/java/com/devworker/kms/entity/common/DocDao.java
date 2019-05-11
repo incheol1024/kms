@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.devworker.kms.dto.common.FileDto;
+
 @Entity
 @Table(name = "KMS_DOC")
 public class DocDao {
@@ -118,6 +120,13 @@ public class DocDao {
 		return "DocDao [docId=" + docId + ", boardId=" + boardId + ", cmtId=" + cmtId + ", docPath=" + docPath
 				+ ", docName=" + docName + ", docExt=" + docExt + ", docUserId=" + docUserId + ", docSize=" + docSize
 				+ "]";
+	}
+	
+	public void setUpEntity(FileDto fileDto) {
+		this.docExt = fileDto.getFileExt();
+		this.docName = fileDto.getFileName();
+		this.docPath = fileDto.getKey();
+		this.docSize = fileDto.getFileSize();
 	}
 
 }

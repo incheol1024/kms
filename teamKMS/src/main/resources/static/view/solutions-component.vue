@@ -35,20 +35,19 @@
         },
         methods: {
             getSolutionList: function (page) {
-                let _this = this;
-                return axios.get("solution/" + _this.id, {
+                return axios.get(`solution/${this.id}`, {
                     params : page
                 });
             },
             newWrite: function() {
-                this.$router.push("/solutions/write/0?readOnly=false");
+                this.$router.replace({path: "/solutions/write/0", query: { readOnly: false}});
             },
             deleteSolution: function (item) {
                 if (confirm("삭제하시겠습니까?"))
-                    return axios.delete('/solution/' + item.boardId)
+                    return axios.delete(`/solution/${item.boardId}`)
             },
             clickRow : function (item){
-                this.$router.push("/solutions/write/" + item.boardId + "?readOnly=true");
+                this.$router.replace({path: `/solutions/write/${item.boardId}`, query: {readOnly: true}});
             }
         }
     };

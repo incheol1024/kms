@@ -65,12 +65,10 @@
 <script>
     module.exports = {
         created: function () {
-            var _this = this;
-            axios.get("group")
-                .then(value => {
-                    _this.items = value.data;
-                    _this.$refs.tree.recurCache(_this.items);
-                    _this.$refs.subtree.recurCache(_this.items);
+            axios.get("group").then(value => {
+                    this.items = value.data;
+                    this.$refs.tree.recurCache(this.items);
+                    this.$refs.subtree.recurCache(this.items);
                 }).catch(reason => catchPromise(reason));
         },
         data: () => ({

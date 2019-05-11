@@ -6,8 +6,13 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,9 +28,9 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 @Component
-public class FileHandlerImplAmazonS3 implements FileHandler {
-
-	private S3Client s3Client;
+@Qualifier(value = "amazonS3")
+@Primary
+public class FileHandlerImplAmazonS3 implements FileHandler, BeanFactoryAware {
 
 	@Value(value = "${amazon.s3.bucket}")
 	private String bucket;
@@ -35,16 +40,13 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 
 	@Value(value = "${file.upload.tmp}")
 	private String tmpUpload;
-
-	@Autowired
-	public FileHandlerImplAmazonS3(S3Client s3Client) {
-		this.s3Client = s3Client;
-	}
+	
+	private BeanFactory beanFactory;
 
 	private String uploadFile(File file) {
 
 		String key = StringKeyUtil.generateUniqueKey();
-		boolean putSuccess = s3Client.putObject((putObjectRequestBuilder) -> {
+		boolean putSuccess = getS3Client().putObject((putObjectRequestBuilder) -> {
 			putObjectRequestBuilder.bucket(bucket).key(key).build();
 		}, RequestBody.fromFile(file)).sdkHttpResponse().isSuccessful();
 
@@ -58,7 +60,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 	private GetObjectResponse downloadFile(String key, File file) {
 
 	//	File getFile = new File(tmpDown + File.separator + key);
-		ResponseInputStream<GetObjectResponse> responseInputStream = s3Client.getObject((getObjectReqeustBuilder) -> {
+		ResponseInputStream<GetObjectResponse> responseInputStream = getS3Client().getObject((getObjectReqeustBuilder) -> {
 			getObjectReqeustBuilder.bucket(bucket).key(key).build();
 		});
 
@@ -92,11 +94,20 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 	@Override
 	public boolean deleteFile(String key) throws Exception {
 
-		DeleteObjectResponse deleteObjectResponse = s3Client.deleteObject((deleteObjectlBuilder) -> {
+		DeleteObjectResponse deleteObjectResponse = getS3Client().deleteObject((deleteObjectlBuilder) -> {
 			deleteObjectlBuilder.bucket(bucket).key(key).build();
 		});
 
 		return deleteObjectResponse.sdkHttpResponse().isSuccessful();
+	}
+	
+	public S3Client getS3Client() {
+		return beanFactory.getBean(S3Client.class);
+	}
+
+	@Override
+	public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+		this.beanFactory = beanFactory;
 	}
 
 }

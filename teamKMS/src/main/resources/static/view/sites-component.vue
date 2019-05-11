@@ -137,7 +137,7 @@
                 _this = this;
                 axios.get(`site/${id}`).then(res => {
                     _this.siteData = res.data;
-                }).catch(reason => openError(reason))
+                }).catch(reason => catchPromise(reason))
             },
             setSite: function (site) {
                 let _this = this;
@@ -145,7 +145,7 @@
                 this.getProjects().then(res => {
                     for (const key in res.data.content)
                         _this.$refs.table.addFunction(res.data.content[key])
-                }).catch(reason => openError(reason));
+                }).catch(reason => catchPromise(reason));
                 this.window = 1;
             },
             getProjects: function (page) {
@@ -162,13 +162,13 @@
                 axios.put(`site`, site).then(res => {
                     site.siteId = res.data;
                     _this.siteData.push(site);
-                }).catch(reason => openError(reason))
+                }).catch(reason => catchPromise(reason))
             },
             deleteSite: function (site) {
                 let _this = this;
                 axios.delete(`site/${site.siteId}`).then(res => {
                     _this.siteData.splice(_this.siteData.indexOf(site), 1)
-                }).catch(reason => openError(reason));
+                }).catch(reason => catchPromise(reason));
             },
             addProject: function () {
                 let _this = this;
@@ -176,7 +176,7 @@
                 axios.put(`site/${_this.curSite.siteId}`, _this.curProject).then(res => {
                     _this.curProject.projectId = res.data;
                     _this.$refs.table.addFunction(_this.curProject);
-                }).catch(reason => openError(reason));
+                }).catch(reason => catchPromise(reason));
                 this.dialog = false;
             },
             deleteProject: function (item) {

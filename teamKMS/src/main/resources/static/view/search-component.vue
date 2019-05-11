@@ -33,8 +33,8 @@
             searchData: []
         }),
         methods: {
-            searchDoc: function searchDoc() {
-                alert("와우!!")
+            searchDoc() {
+                alert("와우!!");
             }
         }
     };

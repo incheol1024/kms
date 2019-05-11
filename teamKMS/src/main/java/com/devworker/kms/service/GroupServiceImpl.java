@@ -34,7 +34,7 @@ public class GroupServiceImpl implements GroupService{
 	@Override
 	public int addGroup(GroupDto dto) {
 		if(dto.getId() == dto.getParentId()) throw new NotAllowException("Parent Group and Current Group Same...");
-		AclUtil.checkPermission(PermissionType.CREATEGROUP);
+		if(!AclUtil.checkPermission(PermissionType.CREATEGROUP))  throw new NotAllowException("Your Permission Not allowed");
 		GroupDao save = repo.save(dto.getDao());
 		return save.getId();
 	}
@@ -42,7 +42,7 @@ public class GroupServiceImpl implements GroupService{
 	@Override
 	public void deleteGroup(int id) {
 		if(id == 0) throw  new NotAllowException("ROOT CAN'T Be Deleted");
-		AclUtil.checkPermission(PermissionType.DELETEGROUP);
+		if(!AclUtil.checkPermission(PermissionType.DELETEGROUP))  throw new NotAllowException("Your Permission Not allowed");
 		Page<UserDto> groupedUser = userService.getGroupedUser(id, CommonUtil.getPage(1));
 		if(groupedUser.hasContent()) throw new ChildFoundException("Group Has Child. You Must Delete First");
 		repo.deleteById(id);
@@ -54,7 +54,7 @@ public class GroupServiceImpl implements GroupService{
 	public void updateGroup(GroupDto dto) {
 		if(dto.getId() == dto.getParentId()) throw new NotAllowException("Parent Group and Current Group Same...");
 		if(dto.getId() == 0) throw  new NotAllowException("ROOT Can't be Modified");
-		AclUtil.checkPermission(PermissionType.MODIFYGROUP);
+		if(!AclUtil.checkPermission(PermissionType.MODIFYGROUP))  throw new NotAllowException("Your Permission Not allowed");
 		if(repo.existsById(dto.getId()))  repo.save(dto.getDao());
 		else throw new NotExistException("group not existed");
 	}

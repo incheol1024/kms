@@ -73,7 +73,9 @@
                 type: Function
             },
             selection: {
-                default: [],
+                default(){
+                    return [];
+                },
                 type: Array
             },
             search : {

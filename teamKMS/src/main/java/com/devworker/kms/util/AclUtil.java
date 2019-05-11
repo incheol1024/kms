@@ -5,7 +5,6 @@ import com.devworker.kms.dto.GroupDto;
 import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.dto.acl.AceDto;
 import com.devworker.kms.dto.acl.AclDto;
-import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.service.GroupService;
 import com.devworker.kms.service.UserService;
 import com.devworker.kms.service.acl.AceService;
@@ -47,22 +46,22 @@ public class AclUtil {
         aceService = ace;
     }
 
-    public static void checkPermission(String ownerId, PermissionType type) {
+    public static boolean checkPermission(String ownerId, PermissionType type) {
         String current = CommonUtil.getCurrentUser();
-        if (current.equals(ownerId)) return;
-        if (checkInner(current, type)) return;
+        if (current.equals(ownerId)) return true;
+        if (checkInner(current, type)) return true;
 
         UserDto user = userService.getUser(current);
         GroupDto group = groupService.getGroup(user.getGroupId());
         while (group != null && group.getParentId() != -1) {
-            if (checkInner(String.valueOf(group.getId()), type)) return;
+            if (checkInner(String.valueOf(group.getId()), type)) return true;
             group = groupService.getGroup(group.getParentId());
         }
-        throw new NotAllowException("You Have Not Any Permission.");
+        return false;
     }
 
-    public static void checkPermission(PermissionType type) {
-        checkPermission("", type);
+    public static boolean checkPermission(PermissionType type) {
+        return checkPermission("", type);
     }
 
     private static boolean checkInner(String aceId, PermissionType type) {

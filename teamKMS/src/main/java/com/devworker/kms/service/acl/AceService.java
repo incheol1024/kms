@@ -3,6 +3,7 @@ package com.devworker.kms.service.acl;
 import com.devworker.kms.entity.acl.AceDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.acl.AceDto;
+import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.repo.acl.AceRepo;
 
 import java.util.ArrayList;
@@ -29,19 +30,19 @@ public class AceService {
     }
 
     public String addAce(AceDto dto) {
-        AclUtil.checkPermission(PermissionType.CREATEPERMISSION);
+        if(!AclUtil.checkPermission(PermissionType.CREATEPERMISSION))  throw new NotAllowException("Your Permission Not allowed");
         aclService.getAcl(dto.getAclId());
         return aceRepo.save(dto.getDao()).getAceId();
     }
 
     public void updateAce(AceDto dto) {
-        AclUtil.checkPermission(PermissionType.MODIFYPERMISSION);
+        if(!AclUtil.checkPermission(PermissionType.MODIFYPERMISSION))  throw new NotAllowException("Your Permission Not allowed");
         aclService.getAcl(dto.getAclId());
         aceRepo.save(dto.getDao());
     }
 
     public void deleteAce(AceDto dto) {
-        AclUtil.checkPermission(PermissionType.DELETEPERMISSION);
+        if(!AclUtil.checkPermission(PermissionType.DELETEPERMISSION))  throw new NotAllowException("Your Permission Not allowed");
         aceRepo.delete(dto.getDao());
     }
 

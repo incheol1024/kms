@@ -25,7 +25,7 @@ public class PermissionType {
     public static final PermissionType DELETESITE = new PermissionType("DELETE-SITE",12,true);
 
     public static final PermissionType MODIFYUSER = new PermissionType("MODIFY-USER",13,true);
-    public static final PermissionType MODIFYGROUP = new PermissionType("MODIFYGROUP",14,true);
+    public static final PermissionType MODIFYGROUP = new PermissionType("MODIFY-GROUP",14,true);
     public static final PermissionType MODIFYPERMISSION = new PermissionType("MODIFY-PERMISSION",15,true);
     public static final PermissionType MODIFYQNA = new PermissionType("MODIFY-QNA",16,true);
     public static final PermissionType MODIFYSOL = new PermissionType("MODIFY-SOLUTION",17,true);
@@ -111,6 +111,7 @@ public class PermissionType {
         this.value = value;
         this.has = has;
     }
+
 
     public boolean isHas() {
         return has;
