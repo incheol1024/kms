@@ -14,6 +14,7 @@ import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -98,12 +99,4 @@ public class TeamKmsApplication {
         return source;
     }
     
-   @Bean
-   @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public S3Client s3ClientBean() {
-    	return S3Client.builder()
-    			.region(Region.AP_NORTHEAST_2)
-    			.build();
-    }
-
 }

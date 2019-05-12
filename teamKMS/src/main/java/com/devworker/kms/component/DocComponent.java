@@ -2,6 +2,7 @@ package com.devworker.kms.component;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,10 +45,10 @@ public class DocComponent {
 
 	@Value("${file.upload.tmp}")
 	private String tmpUpload;
-	
+
 	@Value("${file.download.tmp}")
 	private String tmpDownload;
-	
+
 	public DocComponent(FileHandler fileHandler) {
 		this.fileHandler = fileHandler;
 	}
@@ -62,16 +63,13 @@ public class DocComponent {
 	 * @throws Exception
 	 */
 	@Transactional
-	public FileTransactionDto addDoc(
-		List<MultipartFile> files) throws Exception {
+	public FileTransactionDto addDoc(List<MultipartFile> files) throws Exception {
 		String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
 		String fileTransactKey = "";
 		int fileCount = 0;
 
 		for (MultipartFile file : files) {
-			File tmpFile = new File(tmpUpload + File.separator + file.getName());
-		//	File tmpFile = new File("D:" + File.separator + "app" + File.separator + file.getName());
-			file.transferTo(tmpFile);
+			File tmpFile = makeTempFile(file);
 			FileDto fileDto = FileDto.builder()
 					.setFile(tmpFile)
 					.setFileExt(FilenameUtils.getExtension(file.getName()))
@@ -80,19 +78,12 @@ public class DocComponent {
 					.build();
 
 			DocDao docDao = new DocDao();
-			/*
-			 * docDao.setDocPath(fileDto.getKey());
-			 * docDao.setDocSize(fileDto.getFileSize());
-			 * docDao.setDocName(fileDto.getFileName());
-			 * docDao.setDocSize(fileDto.getFileSize());
-			 * docDao.setDocExt(fileDto.getFileExt()); docDao.setDocUserId(userName);
-			 */			 
 			docDao.setUpEntity(fileDto);
 			docDao.setDocUserId(userName);
 			fileDto = fileHandler.processUploadFile(fileDto);
 			docDao.setDocPath(fileDto.getKey());
-			if (docRepo.save(docDao) == null)
-				throw new FileNotSavedException("File Not Saved Database");
+			if (docRepo.save(docDao) == null) 
+				rollbackFileTransaction(fileTransactKey);
 
 			fileTransactKey = FileTransactionUtil.putFileInfo(fileTransactKey, docDao.getDocId());
 			fileCount += 1;
@@ -103,7 +94,6 @@ public class DocComponent {
 		fileTransactionDto.setFileCount(fileCount);
 		return fileTransactionDto;
 	}
-	
 
 	/**
 	 * @param boardId
@@ -134,31 +124,27 @@ public class DocComponent {
 		docDao.setBoardId(boardDao);
 		docDao.setCmtId(commentDao);
 
-		String key = "";
+		String fileTransactKey = "";
 
 		for (MultipartFile file : multiPartFile) {
 			File tmpFile = new File(tmpUpload + File.separator + file.getName());
 			file.transferTo(tmpFile);
-			
-			FileDto fileDto = FileDto.builder()
-					.setFile(tmpFile)
-					.setFileExt(FilenameUtils.getExtension(tmpFile.getName()))
-					.setFileName(tmpFile.getName())
-					.setFileSize(tmpFile.length())
-					.build();
-			
-			
+
+			FileDto fileDto = FileDto.builder().setFile(tmpFile)
+					.setFileExt(FilenameUtils.getExtension(tmpFile.getName())).setFileName(tmpFile.getName())
+					.setFileSize(tmpFile.length()).build();
+
 			fileDto = fileHandler.processUploadFile(fileDto);
 			docDao.setDocPath(fileDto.getKey());
 			docDao.setDocSize(fileDto.getFileSize());
 			docDao.setDocUserId(CommonUtil.getCurrentUser());
 
 			if (docRepo.save(docDao) == null)
-				throw new FileNotFoundException("File Not Saved Database");
+				rollbackFileTransaction(fileTransactKey);
 
-			key = FileTransactionUtil.putFileInfo(key, docDao.getDocId());
+			fileTransactKey = FileTransactionUtil.putFileInfo(fileTransactKey, docDao.getDocId());
 		}
-		return key;
+		return fileTransactKey;
 	}
 
 	public void deleteDoc(long docId) throws Exception {
@@ -174,18 +160,11 @@ public class DocComponent {
 	public FileDto downDoc(long docId) {
 		Optional<DocDao> optionalDocDao = docRepo.findById(docId);
 		DocDao docDao = optionalDocDao.orElseThrow(() -> new RuntimeException("docId is not Exist"));
-		FileDto fileDto = fileHandler.processDownloadFile(
-				FileDto.builder()
-				.setKey(docDao.getDocPath())
-				.setFile(new File(tmpDownload + File.separator + docDao.getDocPath()))
-				.build()); 
-		
-		return FileDto.builder()
-					.setFile(fileDto.getFile())
-					.setFileExt(docDao.getDocExt())
-					.setFileName(docDao.getDocName())
-					.setFileSize(docDao.getDocSize())
-					.build();
+		FileDto fileDto = fileHandler.processDownloadFile(FileDto.builder().setKey(docDao.getDocPath())
+				.setFile(new File(tmpDownload + File.separator + docDao.getDocPath())).build());
+
+		return FileDto.builder().setFile(fileDto.getFile()).setFileExt(docDao.getDocExt())
+				.setFileName(docDao.getDocName()).setFileSize(docDao.getDocSize()).build();
 	}
 
 	public void rollbackFileTransaction(String fileTransactKey) throws Exception {
@@ -193,7 +172,13 @@ public class DocComponent {
 		for (Long fList : fileList) {
 			deleteDoc(fList);
 		}
-
+		throw new FileNotSavedException("File Not Saved Database");
+	}
+	
+	public File makeTempFile(MultipartFile file) throws IllegalStateException, IOException {
+		File tmpFile = new File(tmpUpload + File.separator + file.getOriginalFilename());
+		file.transferTo(tmpFile);
+		return tmpFile;
 	}
 
 }

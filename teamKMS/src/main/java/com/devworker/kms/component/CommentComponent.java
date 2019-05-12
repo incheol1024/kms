@@ -148,6 +148,8 @@ public class CommentComponent {
 		
 		Pageable cmtPage = PageRequest.of(0, 3);
 		Page<CommentDao> pageComment = commentRepo.findAll(cmtPage);
+		
+		
 		List<CommentDao> comments = pageComment.getContent();
 		List<CommentDto> resultComments = new ArrayList<CommentDto>();
 		CommentDto commentDto = null;
@@ -167,6 +169,11 @@ public class CommentComponent {
 		}
 
 		return resultComments;
+	}
+	
+	
+	public Page<CommentDto> findPageByBoardId() {
+		return null;
 	}
 
 	/**

@@ -108,8 +108,7 @@ public class DocControllerTest {
 				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.jsonPath("fileTransactKey", Is.isA(String.class)))
-				.andExpect(MockMvcResultMatchers.jsonPath("fileCount", Is.is(0) ))
-				.andDo(MockMvcResultHandlers.print())
+				.andExpect(MockMvcResultMatchers.jsonPath("fileCount", Is.is(0))).andDo(MockMvcResultHandlers.print())
 				.andReturn();
 
 	}
@@ -137,14 +136,18 @@ public class DocControllerTest {
 
 	}
 
+	@WithMockUser(username = "USER")
 	@Test
 	public void c_downloadTest() throws Exception {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/file/download/256"))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-		.andDo(MockMvcResultHandlers.print());
-		
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+				.andExpect(
+						MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_OCTET_STREAM))
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_OCTET_STREAM))
+				.andDo(MockMvcResultHandlers.print());
+
 	}
 
 }

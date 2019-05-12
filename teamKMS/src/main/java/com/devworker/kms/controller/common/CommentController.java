@@ -5,6 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.common.CommentDao;
+import com.devworker.kms.repo.common.CommentRepo;
+import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.common.CommentAndFileTransactionDto;
 import com.devworker.kms.dto.common.CommentDto;
 import com.devworker.kms.component.CommentComponent;
@@ -28,6 +32,9 @@ public class CommentController {
 
 	@Autowired
 	CommentComponent commentService;
+	
+	@Autowired
+	CommentRepo commentRepo;
 
 	@PostMapping("/add")
 	public CommentDto addComment(@RequestBody CommentDto commentDto) throws Exception {
@@ -67,11 +74,19 @@ public class CommentController {
 		return commentService.addCommentAndFile(commentDto);
 	}
 
+	/*
+	 * @GetMapping("/list/{boardId}") public List<CommentDto>
+	 * listComment(@PathVariable @RequestBody BoardDao boardId) throws Exception {
+	 * 
+	 * logger.debug("CommentDto {}", commentService.findByBoardId(boardId)); return
+	 * commentService.findByBoardId(boardId); }
+	 */	
 	@GetMapping("/list/{boardId}")
-	public List<CommentDto> listComment(@PathVariable @RequestBody BoardDao boardId) throws Exception {
-
-		logger.debug("CommentDto {}", commentService.findByBoardId(boardId));
-		return commentService.findByBoardId(boardId);
+	public Page<CommentDao> listComment(@PathVariable BoardDao boardId, Pageable pageable) {
+		//return commentService.findByBoardId(boardId);
+		
+		return commentRepo.findAll(pageable);
+//		return null;
 	}
 
 	@PostMapping("/update")

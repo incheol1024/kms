@@ -338,7 +338,7 @@
   </script>
   <style>
    .ck-editor__editable {
-    min-height: 300px;
+    min-height: 50px;
    } 
   </style>
     

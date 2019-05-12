@@ -20,19 +20,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.dto.common.FileTransactionDto;
 
 @SpringBootTest
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class DocComponentTest {
-
-	/*
-	 * @Autowired DocComponent docComponent;
-	 */
 	
+	@Autowired
 	DocComponent docComponent;
 	
 	@Mock
@@ -101,7 +99,22 @@ public class DocComponentTest {
 		
 		MockMultipartFile mockMultipartFile = new MockMultipartFile("file1", new FileInputStream(testFile));
 		MultipartFile multiPartFile = mockMultipartFile;
+		
+		assertThat(multiPartFile.getOriginalFilename()).isEqualTo(testFile.getName());
 		multiPartFile.transferTo(new File("D:/app/multiPartTest.txt"));
+		
+	}
+	
+	@Test
+	@WithMockUser(username = "USER")
+	public void makeTempFile() throws IllegalStateException, IOException {
+		assertThat(testFile).isFile();
+		MockMultipartFile mockMultipartFile = new MockMultipartFile("file1", new FileInputStream(testFile));
+		DocComponent docComponent = new DocComponent(fileHandler);
+		File actual =docComponent.makeTempFile(mockMultipartFile);
+		
+		assertThat(actual).isFile();
+		System.out.println("file name ~~ " +actual.getName());
 		
 	}
 

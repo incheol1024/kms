@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -125,15 +126,21 @@ public class FileHandlerImplAmazonS3Test {
 		assertThat(actualFileDto).isNull();
 	}
 
-	@Test	
-	public void shouldBeS3ClientProto() {
-		assertThat(applicationContext).isNotNull();
-		FileHandler fileHandler = applicationContext.getBean(FileHandler.class);
-		assertThat(fileHandler).isInstanceOf(FileHandlerImplAmazonS3.class);
-		FileHandlerImplAmazonS3 amazonS3 = (FileHandlerImplAmazonS3) fileHandler;
-		S3Client s3Client = amazonS3.getS3Client();
-		assertThat(s3Client).isNotEqualTo(amazonS3.getS3Client()).isNotEqualTo(amazonS3.getS3Client());
+	/*
+	 * @Test public void shouldBeS3ClientProto() {
+	 * assertThat(applicationContext).isNotNull(); FileHandler fileHandler =
+	 * applicationContext.getBean(FileHandler.class);
+	 * assertThat(fileHandler).isInstanceOf(FileHandlerImplAmazonS3.class);
+	 * FileHandlerImplAmazonS3 amazonS3 = (FileHandlerImplAmazonS3) fileHandler;
+	 * S3Client s3Client = amazonS3.getS3Client();
+	 * assertThat(s3Client).isNotEqualTo(amazonS3.getS3Client()).isNotEqualTo(
+	 * amazonS3.getS3Client()); }
+	 */
+
+	@Test
+	public void shuoldBeProtoProxy() throws NoSuchFieldException, SecurityException {
+		
+		
 		
 	}
-
 }
