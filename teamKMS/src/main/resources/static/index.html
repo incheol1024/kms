@@ -27,13 +27,13 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" rel="stylesheet">
     <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
-	<link rel="stylesheet" href="http://codemirror.net/theme/base16-dark.css">
-	<link rel="stylesheet" href="http://codemirror.net/theme/base16-light.css">
-	<link rel="stylesheet" href="http://codemirror.net/theme/eclipse.css">
-	<link rel="stylesheet" href="http://codemirror.net/theme/elegant.css">
-	<link rel="stylesheet" href="http://codemirror.net/theme/midnight.css">
-	<link rel="stylesheet" href="http://codemirror.net/theme/monokai.css">
-	
+    <link rel="stylesheet" href="http://codemirror.net/theme/base16-dark.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/base16-light.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/eclipse.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/elegant.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/midnight.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/monokai.css">
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/addon/merge/merge.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
@@ -47,13 +47,7 @@
         </v-toolbar-title>
         <v-text-field flat solo-inverted hide-details prepend-inner-icon="search" label="Search"
                       @keyup.enter="submit" placeholder="Press Enter"></v-text-field>
-        <v-spacer></v-spacer>
-        <v-btn icon @click="setting">
-            <v-icon>settings</v-icon>
-        </v-btn>
-        <v-btn icon @click="help">
-            <v-icon>help</v-icon>
-        </v-btn>
+        <v-spacer class="hidden-sm-and-down"></v-spacer>
         <v-btn icon @click="logout">
             <v-icon>cancel</v-icon>
         </v-btn>
@@ -74,19 +68,36 @@
                         </v-list-tile>
                     </template>
 
-                    <v-list-tile  v-for="(children,k) in item.children" :key="k" @click="route(children)" avatar>
+                    <v-list-tile v-for="(children,k) in item.children" :key="k" @click="route(children)" avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>{{children.name}}</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
-
                 </v-list-group>
+
+                <v-list-tile avatar @click="setting">
+                    <v-list-tile-action>
+                        <v-icon>settings</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Setting</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
+                <v-list-tile avatar @click="help">
+                    <v-list-tile-action>
+                        <v-icon>help</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Help</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
             </v-list>
         </v-container>
     </v-navigation-drawer>
 
     <v-content>
-        <v-container fluid grid-list-md>
+        <v-container fluid grid-list-md fill-height>
             <router-view></router-view>
         </v-container>
     </v-content>

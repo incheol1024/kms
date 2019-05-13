@@ -36,6 +36,11 @@ httpVueLoader.register(Vue, 'view/setting/user-component.vue');
 httpVueLoader.register(Vue, 'view/setting/group-component.vue');
 httpVueLoader.register(Vue, 'view/setting/permission-component.vue');
 
+httpVueLoader.register(Vue, 'view/dashboard/chart-component.vue');
+httpVueLoader.register(Vue, 'view/dashboard/event-component.vue');
+httpVueLoader.register(Vue, 'view/dashboard/overview-component.vue');
+httpVueLoader.register(Vue, 'view/dashboard/recent-component.vue');
+
 httpVueLoader.register(Vue, 'view/custom/comment-component.vue');
 httpVueLoader.register(Vue, 'view/custom/commentpage-component.vue');
 httpVueLoader.register(Vue, 'view/custorm/fileupload-component.vue');
@@ -53,7 +58,11 @@ Vue.component('treenode-component');
 Vue.component('table-component');
 Vue.component('question-component');
 Vue.component('write-component');
-
+Vue.component('chart-component');
+Vue.component('event-component');
+Vue.component('overview-component');
+Vue.component('recent-component');
+//for tree
 const EventBus = new Vue();
 
 const router = new VueRouter({
