@@ -10,30 +10,32 @@
     <script src="js/util.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" >
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
     <title>Team KMS</title>
 </head>
 <body>
 <v-app id='login'>
     <v-content>
-        <v-layout align-center justify-center fill-height>
-            <v-form ref="form" @keyup.native.enter="submit">
-                <v-card class="elevation-12">
-                    <v-toolbar dark color="primary">
-                        <v-toolbar-title>Dev Kms</v-toolbar-title>
-                    </v-toolbar>
-                    <v-card-text>
-                        <v-text-field prepend-icon="person" v-model="name" label="Login" type="text"></v-text-field>
-                        <v-text-field prepend-icon="lock" v-model="password" label="Password"
-                                      type="password"></v-text-field>
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn :loading="loading" :disabled="loading" color="primary" @click="submit">Login</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-form>
-        </v-layout>
+        <v-img style="height: 100%" src="../assets/login.jpg">
+            <v-layout align-center justify-center fill-height>
+                <v-form ref="form" @keyup.native.enter="submit">
+                    <v-card class="elevation-12">
+                        <v-toolbar dark color="primary">
+                            <v-toolbar-title>TEAM KMS</v-toolbar-title>
+                        </v-toolbar>
+                        <v-card-text>
+                            <v-text-field prepend-icon="person" v-model="name" label="Login" type="text"></v-text-field>
+                            <v-text-field prepend-icon="lock" v-model="password" label="Password"
+                                          type="password"></v-text-field>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn :loading="loading" :disabled="loading" color="primary" @click="submit">Login</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-form>
+            </v-layout>
+        </v-img>
     </v-content>
 </v-app>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.8/vue.min.js"></script>
