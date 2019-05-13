@@ -44,7 +44,6 @@
     <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp" color="blue darken-3" dark app fixed>
         <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-            <span style="cursor: pointer;" class="hidden-sm-and-down" @click="gotitle">KMS</span>
         </v-toolbar-title>
         <v-text-field flat solo-inverted hide-details prepend-inner-icon="search" label="Search"
                       @keyup.enter="submit" placeholder="Press Enter"></v-text-field>
@@ -61,18 +60,29 @@
     </v-toolbar>
 
     <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="drawer" fixed app>
-        <v-expansion-panel focusable>
-            <v-expansion-panel-content v-for="(item,i) in items" :key="i">
-                <div slot="header">{{item.text}}</div>
-                <v-list>
-                    <v-list-tile v-for="(children,k) in item.children" :key="k" @click="route(children)">
+        <v-container align-center>
+            <h1 style="cursor: pointer" class=".display-4 mb-3" @click="gotitle">TEAM KMS</h1>
+            <v-img src="https://picsum.photos/350/165?random" height="125" class="grey darken-4 mb-4"></v-img>
+
+            <v-list>
+                <v-list-group v-for="(item,i) in items" :key="i" prepend-icon="local_activity" no-action>
+                    <template v-slot:activator>
+                        <v-list-tile>
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ item.text }}</v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                    </template>
+
+                    <v-list-tile  v-for="(children,k) in item.children" :key="k" @click="route(children)" avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>{{children.name}}</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
-                </v-list>
-            </v-expansion-panel-content>
-        </v-expansion-panel>
+
+                </v-list-group>
+            </v-list>
+        </v-container>
     </v-navigation-drawer>
 
     <v-content>
