@@ -20,6 +20,7 @@ import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.solution.SolutionDao;
 import com.devworker.kms.component.BoardComponent;
 import com.devworker.kms.service.solution.SolutionService;
+import com.devworker.kms.util.CommonUtil;
 
 @RestController
 @RequestMapping("/solution")
@@ -39,6 +40,7 @@ public class SolutionController {
 	
 	@PostMapping("/register")
 	public BoardDao solutionRegiser(@Valid @RequestBody BoardDto boardDto, @Valid @RequestBody SolutionDto solutionDto) {
+		boardDto.setUserId(CommonUtil.getCurrentUser());
 		BoardDao boardDao = boardComponent.register(boardDto);
 		solutionDto.setBoardId(boardDao.getBoardId());
 		solutionService.registerSolution(solutionDto);

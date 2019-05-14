@@ -7,12 +7,16 @@ import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.solution.SolutionDao;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.solution.SolutionRepo;
+import com.devworker.kms.repo.solution.SolutionRepoImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,25 +26,33 @@ public class SolutionService {
 	SolutionRepo solutionRepo;
 	
 	@Autowired
-	BoardComponent boardcomponenet;
+	SolutionRepoImpl solutionRepoImpl;
 	
+	@Autowired
+	BoardComponent boardcomponenet;
+
 	public Page<BoardDto> getPageList(String solution, Pageable pageable) {
 		Page<BoardDao> boardDao = null;
+		List<BoardDao> list = new ArrayList<BoardDao>();
+	    
 		if(solution.equals("1")) {
 			solution = "ECM";
-			boardDao = solutionRepo.getSolutionList(solution, pageable);
+			list.addAll(solutionRepoImpl.getSolutionList(solution, pageable));
+			boardDao = new PageImpl<BoardDao>(list, pageable, list.size());
 		}
 		else if(solution.equals("2")) {
 			solution = "EDM";
-			boardDao = solutionRepo.getSolutionList(solution, pageable);
+			list.addAll(solutionRepoImpl.getSolutionList(solution, pageable));
+			boardDao = new PageImpl<BoardDao>(list, pageable, list.size());
 		}
 		else {
-			boardDao = solutionRepo.getetcList(pageable);
+			list.addAll(solutionRepoImpl.getetcList(pageable));
+			boardDao = new PageImpl<BoardDao>(list, pageable, list.size());
 		}
 		Page<BoardDto> boardDto = BoardDtotoDao(boardDao);
 		return boardDto;
 	}
-
+	
 	public SolutionDao registerSolution(SolutionDto solutionDto) {
 		return solutionRepo.save(solutionDto.toDao());
 	}
@@ -84,6 +96,7 @@ public class SolutionService {
 	}
 	
 	private Page<BoardDto> BoardDtotoDao(Page<BoardDao> boardDao){
+		
 		return boardDao.map(BoardDao::getDto);
 	}
 }
