@@ -1,8 +1,9 @@
 "use strict";
 
+console.log(window);
 Vue.use(Vuetify);
 Vue.use(VueRouter);
-Vue.use(window.VueCodemirror);
+Vue.use(VueCodemirror);
 Vue.use(CKEditor);
 Vue.use(VueCharts);
 
@@ -62,6 +63,7 @@ Vue.component('chart-component');
 Vue.component('event-component');
 Vue.component('overview-component');
 Vue.component('recent-component');
+
 //for tree
 const EventBus = new Vue();
 
