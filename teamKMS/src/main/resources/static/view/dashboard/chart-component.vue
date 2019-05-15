@@ -1,13 +1,5 @@
 <template>
-    <v-card height="100%">
-        <v-card-title primary-title>
-            <v-layout>
-                <chartjs-horizontal-bar :option="option" :data="data"></chartjs-horizontal-bar>
-            </v-layout>
-        </v-card-title>
-        <v-card-actions>
-        </v-card-actions>
-    </v-card>
+    <chartjs-horizontal-bar :width="200" :height="100" :option="option" :data="data"></chartjs-horizontal-bar>
 </template>
 
 <script>
@@ -15,8 +7,14 @@
         data: () => ({
             data : [11],
             option: {
-                responsive: true,
-                maintainAspectRatio: true,
+                responsive: false,
+                maintainAspectRatio: false,
+                tooltips :{
+                    mode : 'point'
+                },
+                animation: {
+                    easing : "linear"
+                },
                 title: {
                     display: false
                 },

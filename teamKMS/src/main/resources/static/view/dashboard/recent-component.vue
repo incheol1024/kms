@@ -1,17 +1,22 @@
 <template>
-    <v-card height="100%">
-        <v-card-title primary-title>
-            요기는 최근 qa
-        </v-card-title>
-
-        <v-card-actions>
-        </v-card-actions>
-    </v-card>
+    <v-layout column>
+        <h2>Today Q&A</h2>
+        <table-component :headers="headers"></table-component>
+    </v-layout>
 </template>
 
 <script>
     module.exports = {
-        data: () => ({}),
+        data: () => ({
+            headers: [
+                {text: '번호', value: 'boardId'},
+                {text: '제목', value: 'subject'},
+                {text: '작성자', value: 'userId',sortable : false},
+                {text: '조회수', value: 'hits' ,sortable : false},
+                {text: '등록일자', value: 'regDate'},
+                {text: 'action', value: '' , sortable : false}
+            ]
+        }),
         methods: {}
     };
 </script>

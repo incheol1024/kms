@@ -3,7 +3,7 @@
         <v-flex d-flex xs9>
             <v-layout column>
                 <v-flex>
-                    <chart-component></chart-component>
+                    <project-component></project-component>
                 </v-flex>
                 <v-flex>
                     <event-component></event-component>

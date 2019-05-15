@@ -37,6 +37,7 @@ httpVueLoader.register(Vue, 'view/setting/user-component.vue');
 httpVueLoader.register(Vue, 'view/setting/group-component.vue');
 httpVueLoader.register(Vue, 'view/setting/permission-component.vue');
 
+httpVueLoader.register(Vue, 'view/dashboard/project-component.vue');
 httpVueLoader.register(Vue, 'view/dashboard/chart-component.vue');
 httpVueLoader.register(Vue, 'view/dashboard/event-component.vue');
 httpVueLoader.register(Vue, 'view/dashboard/overview-component.vue');
@@ -63,6 +64,7 @@ Vue.component('chart-component');
 Vue.component('event-component');
 Vue.component('overview-component');
 Vue.component('recent-component');
+Vue.component('project-component');
 
 //for tree
 const EventBus = new Vue();
