@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -66,8 +67,7 @@ public class CommentComponent {
 
 	/**
 	 * Comment(댓글) 등록 시 호출 되는 메소드입니다.
-	 * 
-	 * @param commentDao
+	 *
 	 * @return
 	 * @throws Exception
 	 */
@@ -81,9 +81,6 @@ public class CommentComponent {
 	}
 
 	/**
-	 * @param commentDao      commentDao 객체입니다.
-	 * @param fileTransactKey 파일 트랜잭션 처리를 위한 키 값입니다.
-	 * @param fileCount       트랜잭션 처리를 위해 파일 갯수를 비교하기 위한 값입니다.
 	 * @return 트랜잭션이 정상 처리 되면 등록된 CommentDao 객체를 리턴합니다.
 	 * @throws Exception 여러가지 예외를 던질 수 있습니다. 호출하는 컨트롤러에서 예외를 구분하여 처리해야 합니다.
 	 */
@@ -144,12 +141,9 @@ public class CommentComponent {
 	}
 
 	public List<CommentDto> findByBoardId(BoardDao boardId) throws Exception {
-		//List<CommentDao> comments = commentRepo.findByBoardId(boardId);
-		
 		Pageable cmtPage = PageRequest.of(0, 3);
 		Page<CommentDao> pageComment = commentRepo.findAll(cmtPage);
-		
-		
+
 		List<CommentDao> comments = pageComment.getContent();
 		List<CommentDto> resultComments = new ArrayList<CommentDto>();
 		CommentDto commentDto = null;
@@ -162,18 +156,29 @@ public class CommentComponent {
 				resultComments.add(commentDto);
 				continue;
 			}
-			// 여러개의 파일들을 처리할 수 있도록 수정 필요.
-			DocDao doc = docs.get(0);
-			commentDto = new CommentDto(comment, doc);
+			commentDto = new CommentDto(comment, docs);
 			resultComments.add(commentDto);
 		}
 
 		return resultComments;
 	}
-	
-	
-	public Page<CommentDto> findPageByBoardId() {
-		return null;
+
+
+	public Page<CommentDto> findPageByBoardId(BoardDao boardId, Pageable pageable) {
+
+		Page<CommentDao> commentDaoPage = commentRepo.findAll(pageable);
+		List<CommentDao> commentDaos = commentDaoPage.getContent();
+		List<CommentDto> commentDtos = new ArrayList<CommentDto>();
+
+		for(CommentDao commentDao : commentDaos) {
+			CommentDto commentDto = new CommentDto(commentDao, docRepo.findByCmtId(commentDao));
+			commentDtos.add(commentDto);
+		}
+
+		commentDaoPage.map( (CommentDao commentDao) -> {
+			return new CommentDto(commentDao, docRepo.findByCmtId(commentDao));
+		});
+			return null;
 	}
 
 	/**
@@ -212,7 +217,6 @@ public class CommentComponent {
 	/**
 	 * 댓글의 좋아요 버튼 기능입니다.
 	 * 
-	 * @param commentDao must not be {@literal null}.
 	 * @return CommentDao
 	 */
 	public CommentDao updateCommentLike(long cmtId) {

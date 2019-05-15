@@ -1,16 +1,11 @@
 package com.devworker.kms.entity.common;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,134 +16,151 @@ import com.devworker.kms.repo.common.BoardRepo;
 @Table(name = "KMS_COMMENT")
 public class CommentDao {
 
-	
-	@ManyToOne
-	@JoinColumn(name = "board_id")
-	// @Column(name = "board_id")
-	BoardDao boardId;
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private BoardDao boardId;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "cmt_id")
-	long cmtId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cmt_id")
+    private long cmtId;
 
-	@Column(name = "cmt_contents")
-	String cmtContents;
+    @Column(name = "cmt_contents")
+    private String cmtContents;
 
-	@Column(name = "cmt_code")
-	String cmtCode;
+    @Column(name = "cmt_code")
+    private String cmtCode;
 
-	@Column(name = "cmt_user_id")
-	String cmtUserId;
+    @Column(name = "cmt_user_id")
+    private String cmtUserId;
 
-	@Column(name = "cmt_date")
-	LocalDateTime cmtDate;
+    @Column(name = "cmt_date")
+    private LocalDateTime cmtDate;
 
-	@Column(name = "cmt_like")
-	long cmtLike;
+    @Column(name = "cmt_like")
+    private long cmtLike;
 
-	public CommentDao() {
-		this.cmtDate = LocalDateTime.now();
-	}
+    @OneToMany(mappedBy = "cmtId", fetch = FetchType.EAGER)
+    private List<DocDao> docDaos = new ArrayList<>();
 
-	public CommentDao(BoardDao boardId, String cmtContents) {
-		this.boardId = boardId;
-		this.cmtContents = cmtContents;
-		this.cmtDate = LocalDateTime.now();
-	}
+    public CommentDao() {
+        this.cmtDate = LocalDateTime.now();
+    }
 
-	public BoardDao getBoardId() {
-		return boardId;
-	}
+    public CommentDao(BoardDao boardId, String cmtContents) {
+        this.boardId = boardId;
+        this.cmtContents = cmtContents;
+        this.cmtDate = LocalDateTime.now();
+    }
 
-	public void setBoardId(BoardDao boardId) {
-		this.boardId = boardId;
-	}
+    public BoardDao getBoardId() {
+        return boardId;
+    }
 
-	public long getCmtId() {
-		return cmtId;
-	}
+    public void setBoardId(BoardDao boardId) {
+        this.boardId = boardId;
+    }
 
-	public void setCmtId(long cmtId) {
-		this.cmtId = cmtId;
-	}
+    public long getCmtId() {
+        return cmtId;
+    }
 
-	public String getCmtContents() {
-		return cmtContents;
-	}
+    public void setCmtId(long cmtId) {
+        this.cmtId = cmtId;
+    }
 
-	public void setCmtContents(String cmtContents) {
-		this.cmtContents = cmtContents;
-	}
+    public String getCmtContents() {
+        return cmtContents;
+    }
 
-	public String getCmtCode() {
-		return cmtCode;
-	}
+    public void setCmtContents(String cmtContents) {
+        this.cmtContents = cmtContents;
+    }
 
-	public void setCmtCode(String cmtCode) {
-		this.cmtCode = cmtCode;
-	}
+    public String getCmtCode() {
+        return cmtCode;
+    }
 
-	public String getCmtUserId() {
-		return cmtUserId;
-	}
+    public void setCmtCode(String cmtCode) {
+        this.cmtCode = cmtCode;
+    }
 
-	public void setCmtUserId(String cmtUserId) {
-		this.cmtUserId = cmtUserId;
-	}
+    public String getCmtUserId() {
+        return cmtUserId;
+    }
 
-	public LocalDateTime getCmtDate() {
-		return cmtDate;
-	}
+    public void setCmtUserId(String cmtUserId) {
+        this.cmtUserId = cmtUserId;
+    }
 
-	public void setCmtDate(LocalDateTime cmtDate) {
-		this.cmtDate = cmtDate;
-	}
+    public LocalDateTime getCmtDate() {
+        return cmtDate;
+    }
 
-	public long getCmtLike() {
-		return cmtLike;
-	}
+    public void setCmtDate(LocalDateTime cmtDate) {
+        this.cmtDate = cmtDate;
+    }
 
-	public void setCmtLike(long cmtLike) {
-		this.cmtLike += cmtLike;
-	}
+    public long getCmtLike() {
+        return cmtLike;
+    }
 
-	@Override
-	public String toString() {
-		return "CommentDao [boardId=" + boardId + ", cmtId=" + cmtId + ", cmtContents=" + cmtContents + ", cmtCode="
-				+ cmtCode + ", cmtUserId=" + cmtUserId + ", cmtDate=" + cmtDate + ", cmtLike=" + cmtLike + "]";
-	}
+    public void setCmtLike(long cmtLike) {
+        this.cmtLike += cmtLike;
+    }
 
-	public void setUpEntity(CommentDto commentDto) {
-		
-		if (!isNotEmpty(commentDto))
-			throw new RuntimeException();
+    public List<DocDao> getDocDaos() {
+        return docDaos;
+    }
 
-		if (isNotEmpty(commentDto.getBoardId()))
-			this.boardId =  new BoardDao(commentDto.getBoardId());
+    public void setDocDaos(List<DocDao> docDaos) {
+        this.docDaos = docDaos;
+    }
 
-		if (isNotEmpty(commentDto.getCmtContents()))
-			this.cmtContents = commentDto.getCmtContents();
+    @Override
+    public String toString() {
+        return "CommentDao{" +
+                "boardId=" + boardId +
+                ", cmtId=" + cmtId +
+                ", cmtContents='" + cmtContents + '\'' +
+                ", cmtCode='" + cmtCode + '\'' +
+                ", cmtUserId='" + cmtUserId + '\'' +
+                ", cmtDate=" + cmtDate +
+                ", cmtLike=" + cmtLike +
+                ", docDaos=" + docDaos +
+                '}';
+    }
 
-		if (isNotEmpty(commentDto.getCmtCode()))
-			this.cmtCode = commentDto.getCmtCode();
+    public void setUpEntity(CommentDto commentDto) {
 
-		if (isNotEmpty(commentDto.getCmtDate()))
-			this.cmtDate = commentDto.getCmtDate();
+        if (!isNotEmpty(commentDto))
+            throw new RuntimeException();
 
-		if (isNotEmpty(commentDto.getCmtId()))
-			this.cmtId = commentDto.getCmtId();
+        if (isNotEmpty(commentDto.getBoardId()))
+            this.boardId = new BoardDao(commentDto.getBoardId());
 
-		if (isNotEmpty(commentDto.getCmtLike()))
-			this.cmtLike = commentDto.getCmtLike();
+        if (isNotEmpty(commentDto.getCmtContents()))
+            this.cmtContents = commentDto.getCmtContents();
 
-		if (isNotEmpty(commentDto.getCmtUserId()))
-			this.cmtUserId = commentDto.getCmtUserId();
-	}
+        if (isNotEmpty(commentDto.getCmtCode()))
+            this.cmtCode = commentDto.getCmtCode();
 
-	public <T> boolean isNotEmpty(T type) {
-		Optional<T> optional = Optional.ofNullable(type);
-		return optional.isPresent();
-	}
+        if (isNotEmpty(commentDto.getCmtDate()))
+            this.cmtDate = commentDto.getCmtDate();
+
+        if (isNotEmpty(commentDto.getCmtId()))
+            this.cmtId = commentDto.getCmtId();
+
+        if (isNotEmpty(commentDto.getCmtLike()))
+            this.cmtLike = commentDto.getCmtLike();
+
+        if (isNotEmpty(commentDto.getCmtUserId()))
+            this.cmtUserId = commentDto.getCmtUserId();
+    }
+
+    public <T> boolean isNotEmpty(T type) {
+        Optional<T> optional = Optional.ofNullable(type);
+        return optional.isPresent();
+    }
 
 }

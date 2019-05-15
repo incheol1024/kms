@@ -7,6 +7,7 @@ import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.common.CommentDao;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,9 +26,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import springfox.documentation.spring.web.json.Json;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -59,12 +62,12 @@ public class CommentControllerTest {
 
     @Before
     public void setUp() {
-        commentDto = new CommentDto();
-        commentDto.setBoardId(40);
-        commentDto.setCmtContents("test contents");
-        commentDto.setCmtDate(LocalDateTime.now());
-
-        pagebleJsonString = "{page:}";
+//        commentDto = new CommentDto();
+//        commentDto.setBoardId(40);
+//        commentDto.setCmtContents("test contents");
+//        commentDto.setCmtDate(LocalDateTime.now());
+//
+//        pagebleJsonString = "{page:}";
 
     }
 
@@ -89,7 +92,7 @@ public class CommentControllerTest {
 
     @Test
     @WithMockUser(username = "USER")
-    public void pageReturnValueAssert() throws Exception {
+    public void assertPageReturnValue() throws Exception {
 
         MvcResult mvcResult = this.mvc.perform(MockMvcRequestBuilders
                 .get("/comment/list/40")
@@ -102,18 +105,6 @@ public class CommentControllerTest {
                 .andDo(MockMvcResultHandlers.log()).andReturn();
 
         assertThat(mvcResult.getResponse().getContentType()).isEqualToIgnoringCase(MediaType.APPLICATION_JSON_UTF8_VALUE);
-
-        String responseJson = mvcResult.getResponse().getContentAsString();
-
-        assertThat(objectMapper.readTree(responseJson)).isNotNull();
-
-        JsonNode jsonNode = objectMapper.readTree(responseJson);
-        jsonNode.fields();
-        Iterator<String> it = jsonNode.fieldNames();
-        while (it.hasNext()) {
-            System.out.println("json Field Name = " + it.next());
-        }
-
     }
 
     @Test
@@ -140,8 +131,35 @@ public class CommentControllerTest {
 
         BoardDao boardDao = new BoardDao();
         boardDao.setBoardId(40);
-        Page<CommentDao> page = commentController.listComment(boardDao, PageRequest.of(1,3));
+        Page<CommentDao> page = commentController.listComment(boardDao, PageRequest.of(1, 3));
         assertThat(page).isExactlyInstanceOf(PageImpl.class);
+    }
+
+    @Test
+    @WithMockUser(username = "USER")
+    public void assertPageImplJsonValue() throws Exception {
+
+        MvcResult mvcResult = this.mvc
+                .perform(MockMvcRequestBuilders.get("/comment/list/40")
+                        .param("page", "1")
+                        .param("size", "3")
+                        .param("sort", "cmtId,asc")
+                )
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+
+        assertThat(objectMapper).isNotNull();
+        String resopnseJsonString = mvcResult.getResponse().getContentAsString();
+        JsonNode jsonNode = objectMapper.readTree(resopnseJsonString);
+        Iterator<Map.Entry<String, JsonNode>> it = jsonNode.fields();
+
+        while(it.hasNext()) {
+            Map.Entry entry = it.next();
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
     }
 
 }

@@ -2,6 +2,8 @@ package com.devworker.kms.dto.common;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 import com.devworker.kms.entity.common.CommentDao;
 import com.devworker.kms.entity.common.DocDao;
@@ -26,16 +28,29 @@ public class CommentDto {
 
 	private String docName;
 
+	private Map<Long, String> docEntry;
+
 	private String fileTransactKey;
 
 	private int fileCount;
 
-	public CommentDto() {
+	public CommentDto(List<CommentDao> commentDaos) {
+	}
+
+	public CommentDto(CommentDao comment, List<DocDao> docs) {
+		setUpCommentDto(comment);
+		setDocs(docs);
 	}
 
 	public CommentDto(CommentDao comment, DocDao doc) {
 		setUpCommentDto(comment);
 		setDoc(doc);
+	}
+
+	private void setDocs(List<DocDao> docs) {
+		for(DocDao doc : docs) {
+			docEntry.put(doc.getDocId(), doc.getDocName());
+		}
 	}
 
 	public CommentDto(CommentDao comment) {
@@ -45,6 +60,8 @@ public class CommentDto {
 	private void setDoc(DocDao doc) {
 		this.docId = doc.getDocId();
 		this.docName = bringDocName(doc.getDocPath());
+
+
 	}
 
 	private void setUpCommentDto(CommentDao comment) {
@@ -120,7 +137,7 @@ public class CommentDto {
 		this.cmtLike = cmtLike;
 	}
 
-	public long getDocId() {
+/*	public long getDocId() {
 		return docId;
 	}
 
@@ -134,7 +151,7 @@ public class CommentDto {
 
 	public void setDocName(String docName) {
 		this.docName = docName;
-	}
+	}*/
 
 	public String getFileTransactKey() {
 		return fileTransactKey;
@@ -152,14 +169,20 @@ public class CommentDto {
 		this.fileCount = fileCount;
 	}
 
+
 	@Override
 	public String toString() {
-		return "CommentDto [boardId=" + boardId + ", cmtId=" + cmtId + ", cmtContents=" + cmtContents + ", cmtCode="
-				+ cmtCode + ", cmtUserId=" + cmtUserId + ", cmtDate=" + cmtDate + ", cmtLike=" + cmtLike + ", docId="
-				+ docId + ", docName=" + docName + ", fileTransactKey=" + fileTransactKey + ", fileCount=" + fileCount
-				+ "]";
+		return "CommentDto{" +
+				"boardId=" + boardId +
+				", cmtId=" + cmtId +
+				", cmtContents='" + cmtContents + '\'' +
+				", cmtCode='" + cmtCode + '\'' +
+				", cmtUserId='" + cmtUserId + '\'' +
+				", cmtDate=" + cmtDate +
+				", cmtLike=" + cmtLike +
+				", docEntry=" + docEntry +
+				", fileTransactKey='" + fileTransactKey + '\'' +
+				", fileCount=" + fileCount +
+				'}';
 	}
-
-	
-
 }
