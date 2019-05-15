@@ -52,7 +52,9 @@ httpVueLoader.register(Vue, 'view/custom/table-component.vue');
 httpVueLoader.register(Vue, 'view/custom/question-component.vue');
 httpVueLoader.register(Vue, 'view/custom/write-component.vue');
 httpVueLoader.register(Vue, 'view/custom/card-component.vue');
-httpVueLoader.register(Vue, 'view/custom/shortenCard-component.vue');
+httpVueLoader.register(Vue, 'view/custom/shortencard-component.vue');
+
+httpVueLoader.register(Vue, 'view/custom/helper/offset-helper.vue');
 
 Vue.component('comment-component');
 Vue.component('commentpage-component');
@@ -68,7 +70,8 @@ Vue.component('overview-component');
 Vue.component('recent-component');
 Vue.component('project-component');
 Vue.component('card-component');
-Vue.component('shortenCard-component');
+Vue.component('shortencard-component');
+Vue.component('offset-helper');
 //for tree
 const EventBus = new Vue();
 
