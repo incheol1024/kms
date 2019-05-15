@@ -2,6 +2,17 @@
     <v-data-table :headers="headers" :items="items" :pagination.sync="pagination"
                   :select-all="allowSelect ? true : false" v-model="selection"
                   :total-items="total" :loading="loading" must-sort class="elevation-1">
+        <template v-slot:headers="props">
+            <tr>
+               <th v-for="header in props.headers" :key="header.text"
+                    :class="['column sortable', pagination.descending ? 'desc' : 'asc',
+                     header.value === pagination.sortBy ? 'active' : '']"
+                    @click="changeSort(header.value)">
+                    <v-icon small>arrow_upward</v-icon>
+                    <span class="blue--text">{{ header.text }}</span>
+                </th>
+            </tr>
+        </template>
         <template slot="items" slot-scope="props">
             <tr @click="clickRow(props.item)">
                 <td v-if="allowSelect">
@@ -23,7 +34,7 @@
             headers: {
                 default: [],
                 type: Array,
-                required : true
+                required: true
             },
             pageReq: {
                 default: function (page) {
@@ -73,18 +84,19 @@
                 type: Function
             },
             selection: {
-                default(){
+                default() {
                     return [];
                 },
                 type: Array
             },
-            search : {
-                default : "",
-                type : String
+            search: {
+                default: "",
+                type: String
             },
-            clickRow : {
-                default : function (item){},
-                type : Function
+            clickRow: {
+                default: function (item) {
+                },
+                type: Function
             }
         },
         data: () => ({
@@ -101,16 +113,15 @@
             }
         },
         methods: {
-            sync : function sync(){
+            sync: function sync() {
                 this.loading = true;
                 this.items = [];
                 let _this = this;
-                try{
+                try {
                     this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
                         _this.pageRes(value, _this);
                     }).catch(reason => catchPromise(reason))
-                }
-                finally {
+                } finally {
                     _this.loading = false
                 }
             },
@@ -126,7 +137,7 @@
             mappingHeader: function mappingHeader(item) {
                 let arr = [];
                 this.headers.forEach(it => {
-                    if("undefined" !== typeof item[it.value])
+                    if ("undefined" !== typeof item[it.value])
                         arr.push(item[it.value]);
                 });
                 return arr
@@ -134,8 +145,16 @@
             updateSelection: function updateSelection() {
                 this.$emit("update:selection", this.selection)
             },
-            clear : function () {
+            clear: function () {
                 this.items = [];
+            },
+            changeSort (column) {
+                if (this.pagination.sortBy === column) {
+                    this.pagination.descending = !this.pagination.descending
+                } else {
+                    this.pagination.sortBy = column;
+                    this.pagination.descending = false
+                }
             }
         }
     }
@@ -146,7 +165,11 @@
         cursor: pointer;
     }
 
-    td:hover{
+    td:hover {
         cursor: pointer;
+    }
+
+    table thead tr th span{
+        font-size: 1.0625rem !important;
     }
 </style>

@@ -51,6 +51,8 @@ httpVueLoader.register(Vue, 'view/custom/treenode-component.vue');
 httpVueLoader.register(Vue, 'view/custom/table-component.vue');
 httpVueLoader.register(Vue, 'view/custom/question-component.vue');
 httpVueLoader.register(Vue, 'view/custom/write-component.vue');
+httpVueLoader.register(Vue, 'view/custom/card-component.vue');
+httpVueLoader.register(Vue, 'view/custom/shortenCard-component.vue');
 
 Vue.component('comment-component');
 Vue.component('commentpage-component');
@@ -65,7 +67,8 @@ Vue.component('event-component');
 Vue.component('overview-component');
 Vue.component('recent-component');
 Vue.component('project-component');
-
+Vue.component('card-component');
+Vue.component('shortenCard-component');
 //for tree
 const EventBus = new Vue();
 

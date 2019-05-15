@@ -25,7 +25,7 @@
     module.exports = {
         data: () => ({
             items: [
-                { header: 'Today Announce' },
+                { header: 'Today Announce(카드 컴포넌트로 대체)' },
                 {
                     avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
                     title: 'EDM Bug Patch 4.1.1',

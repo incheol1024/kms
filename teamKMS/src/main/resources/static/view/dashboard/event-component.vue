@@ -1,24 +1,8 @@
 <template>
     <v-layout column>
-        <h2>New Project Document</h2>
+        <h2>New Project Document(쇼트카드 컴포넌트 대체)</h2>
         <v-layout>
-            <v-card height="100%">
-                <v-card-title primary-title>
-                    요기는 이벤트
-                </v-card-title>
-            </v-card>
-
-            <v-card height="100%">
-                <v-card-title primary-title>
-                    요기는 이벤트
-                </v-card-title>
-            </v-card>
-
-            <v-card height="100%">
-                <v-card-title primary-title>
-                    요기는 이벤트
-                </v-card-title>
-            </v-card>
+            <card-component></card-component>
         </v-layout>
     </v-layout>
 </template>

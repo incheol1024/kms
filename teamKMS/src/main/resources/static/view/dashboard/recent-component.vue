@@ -1,7 +1,9 @@
 <template>
     <v-layout column>
         <h2>Today Q&A</h2>
-        <table-component :headers="headers"></table-component>
+        <table-component :headers="headers">
+
+        </table-component>
     </v-layout>
 </template>
 

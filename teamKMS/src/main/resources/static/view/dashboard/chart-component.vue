@@ -1,5 +1,5 @@
 <template>
-    <chartjs-horizontal-bar :width="200" :height="100" :option="option" :data="data"></chartjs-horizontal-bar>
+    <chartjs-horizontal-bar :width="200" :height="75" :option="option" :data="data"></chartjs-horizontal-bar>
 </template>
 
 <script>
