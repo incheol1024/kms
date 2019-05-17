@@ -2,17 +2,6 @@
     <v-data-table :headers="headers" :items="items" :pagination.sync="pagination"
                   :select-all="allowSelect ? true : false" v-model="selection"
                   :total-items="total" :loading="loading" must-sort class="elevation-1">
-        <template v-slot:headers="props">
-            <tr>
-               <th v-for="header in props.headers" :key="header.text"
-                    :class="['column sortable', pagination.descending ? 'desc' : 'asc',
-                     header.value === pagination.sortBy ? 'active' : '']"
-                    @click="changeSort(header.value)">
-                    <v-icon small>arrow_upward</v-icon>
-                    <span class="blue--text">{{ header.text }}</span>
-                </th>
-            </tr>
-        </template>
         <template slot="items" slot-scope="props">
             <tr @click="clickRow(props.item)">
                 <td v-if="allowSelect">
@@ -147,14 +136,6 @@
             },
             clear: function () {
                 this.items = [];
-            },
-            changeSort (column) {
-                if (this.pagination.sortBy === column) {
-                    this.pagination.descending = !this.pagination.descending
-                } else {
-                    this.pagination.sortBy = column;
-                    this.pagination.descending = false
-                }
             }
         }
     }

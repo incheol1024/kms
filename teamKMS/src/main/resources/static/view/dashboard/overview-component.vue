@@ -1,5 +1,5 @@
 <template>
-    <v-layout column>
+    <v-card>
         <v-list two-line class="mb-5">
             <template v-for="(item, index) in items">
                 <v-subheader v-if="item.header" :key="item.header">
@@ -20,20 +20,14 @@
                 </v-list-tile>
             </template>
         </v-list>
-
-        <card-component color="blue"
-                        title="새로운 프로젝트"
-                        text="배치코드 작성">
-            <v-layout>내용1</v-layout>
-        </card-component>
-    </v-layout>
+    </v-card>
 </template>
 
 <script>
     module.exports = {
         data: () => ({
             items: [
-                {header: 'Today Announce(카드 컴포넌트로 대체)'},
+                {header: 'Today Announce'},
                 {
                     avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
                     title: 'EDM Bug Patch 4.1.1',

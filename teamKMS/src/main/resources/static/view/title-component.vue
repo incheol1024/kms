@@ -1,8 +1,8 @@
 <template>
     <v-layout row wrap full-height>
         <v-flex d-flex xs9>
-            <v-layout column>
-                <v-flex>
+            <v-layout column mr-5>
+                <v-flex >
                     <project-component></project-component>
                 </v-flex>
                 <v-flex>

@@ -1,16 +1,17 @@
 <template>
-    <v-card height="100%">
-        <v-card-title primary-title>
-            <v-layout column>
-                <h1>Today Project Status</h1>
-                <chart-component></chart-component>
-                <chart-component></chart-component>
-                <chart-component></chart-component>
-                <chart-component></chart-component>
-                <chart-component></chart-component>
+    <v-layout column>
+        <card-component color="blue"
+                        title="프로젝트 현황"
+                        text="">
+            <v-layout>
+                <chart-component :title="'완료'"></chart-component>
+                <chart-component :title="'진행중'"></chart-component>
+                <chart-component :title="'장애'"></chart-component>
+                <chart-component :title="'이슈'"></chart-component>
+                <chart-component :title="'지연'"></chart-component>
             </v-layout>
-        </v-card-title>
-    </v-card>
+        </card-component>
+    </v-layout>
 </template>
 
 <script>

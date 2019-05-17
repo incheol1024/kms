@@ -1,38 +1,29 @@
 <template>
     <v-layout column>
-        <h2 class="mb-5">New Project Document(쇼트카드 컴포넌트 대체)</h2>
+        <h2>New Project Document</h2>
         <v-layout>
             <shortencard-component color="blue"
-                                   icon="settings"
-                                   title="카드"
-                                   value="되나"
-                                   sub-icon="settings"
-                                   sub-text="잘란다.">
-                <v-layout>
-                    <h1>여기에 내용들어감</h1>
-                </v-layout>
+                                   icon="check_box"
+                                   title="프로젝트"
+                                   value="완료"
+                                   sub-icon=""
+                                   sub-text="A사이트 프로젝트 완료" class="mr-3">
             </shortencard-component>
 
             <shortencard-component color="green"
                                    icon="settings"
-                                   title="카드"
-                                   value="되나"
-                                   sub-icon="settings"
-                                   sub-text="잘란다.">
-                <v-layout>
-                    <h1>여기에 내용들어감</h1>
-                </v-layout>
+                                   title="프로젝트"
+                                   value="진행중"
+                                   sub-icon=""
+                                   sub-text="B사이트 프로젝트 중 C단계" class="mr-3">
             </shortencard-component>
 
             <shortencard-component color="red"
-                                   icon="settings"
-                                   title="카드"
-                                   value="되나"
-                                   sub-icon="settings"
-                                   sub-text="잘란다.">
-                <v-layout>
-                    <h1>여기에 내용들어감</h1>
-                </v-layout>
+                                   icon="error"
+                                   title="솔루션"
+                                   value="패치"
+                                   sub-icon=""
+                                   sub-text="6.1.3 긴급수정" class="mr-3">
             </shortencard-component>
         </v-layout>
     </v-layout>

@@ -1,19 +1,23 @@
 <template>
-    <chartjs-horizontal-bar :width="200" :height="75" :option="option" :data="data"></chartjs-horizontal-bar>
+    <v-layout>
+        <h5>{{title}}</h5>
+        <chartjs-horizontal-bar :width="150" :height="50" :option="option" :data="data"></chartjs-horizontal-bar>
+    </v-layout>
 </template>
 
 <script>
     module.exports = {
+        props : ['title'],
         data: () => ({
-            data : [11],
+            data: [11],
             option: {
                 responsive: false,
                 maintainAspectRatio: false,
-                tooltips :{
-                    mode : 'point'
+                tooltips: {
+                    mode: 'point'
                 },
                 animation: {
-                    easing : "linear"
+                    easing: "linear"
                 },
                 title: {
                     display: false
