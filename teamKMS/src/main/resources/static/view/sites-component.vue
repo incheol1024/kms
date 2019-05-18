@@ -41,7 +41,7 @@
 
                 <v-window-item>
                     <h3>Project : {{curProject.name}}</h3>
-                    <table-component ref="table" :headers="boardHeader"></table-component>
+                    <table-component ref="table2" :headers="boardHeader"></table-component>
                     <v-btn color="primary" @click="addBoard">Add Board</v-btn>
                 </v-window-item>
             </v-window>
@@ -104,6 +104,9 @@
         watch: {
             id: function (id) {
                 this.getSiteList(id);
+            },
+            'curSite.siteId' : function(value){
+                this.$refs.table.sync();
             }
         },
         data: () => ({
@@ -134,7 +137,6 @@
                 router.push("sites/write/" + this.id);
             },
             getSiteList: function (id) {
-                console.log("/getSiteList : "+id+" this"+this.data );
                 _this = this;
                 axios.get(`site/${id}`).then(res => {
                     _this.siteData = res.data;
@@ -144,7 +146,8 @@
                 let _this = this;
                 this.curSite = site;
                 this.getProjects().then(res => {
-                    for (const key in res.data.content)
+                    _this.$refs.table.clear();//중복으로 데이터 첨가 되는거 클리어 처리 .
+                  for (const key in res.data.content)
                         _this.$refs.table.addFunction(res.data.content[key])
                 }).catch(reason => catchPromise(reason));
                 this.window = 1;
@@ -184,6 +187,7 @@
                 return axios.delete(`site/${item.siteId}/${item.projectId}`)
             },
             getBoard : function (item) {
+                let _this = this;
                 this.curProject = item;
                 this.window = 2;
                 console.log("get Board call :"+item);
@@ -191,7 +195,13 @@
                 if (this.curSite.siteId === 0) return;
                 return axios.get(`site/${this.id}/${item.siteId}/${item.projectId}`, {
                     params: {page:0,size:5}
-                });
+                }).then(res => {
+                    console.log("호출 성공  Data bind after");
+                    _this.$refs.table2.data = res.data;
+                }).catch(reason => catchPromise(reason));
+            },
+            addBoard : function () {
+                
             }
         }
     };
