@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 public class BoardDto {
     long boardId;
     String subject;
-    String contents;
     String userId;
     LocalDateTime regDate = LocalDateTime.now();
     LocalDateTime updDate  = LocalDateTime.now();
@@ -28,14 +27,6 @@ public class BoardDto {
 
     public void setSubject(String subject) {
         this.subject = subject;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
     }
 
     public String getUserId() {
@@ -70,15 +61,4 @@ public class BoardDto {
         this.hits = hits;
     }
 
-    public BoardDao toDao() {
-        BoardDao dao = new BoardDao();
-        dao.setBoardId(boardId);
-        dao.setHits(hits);
-        dao.setSubject(subject);
-        dao.setContents(contents);
-        dao.setUserId(userId);
-        dao.setRegDate(regDate);
-        dao.setUpdDate(updDate);
-        return dao;
-    }
 }

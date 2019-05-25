@@ -5,6 +5,9 @@ import org.jooq.DSLContext;
 import org.jooq.generated.kms.tables.KmsBoard;
 import org.jooq.generated.kms.tables.KmsComment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,10 +16,19 @@ import java.util.List;
 public class BoardRepoImpl {
     @Autowired
     DSLContext context;
-    
-    public List<BoardDao> test() {
-    	return context.select(KmsBoard.KMS_BOARD.BOARD_ID)
-    			.from(KmsBoard.KMS_BOARD) 
-    			.fetchInto(BoardDao.class);
+    KmsBoard table = KmsBoard.KMS_BOARD;
+
+    public Page<BoardDao> findAll(Pageable pageable) {
+        List<BoardDao> list =
+                context.select(table.BOARD_ID, table.SUBJECT, table.USER_ID, table.REG_DATE, table.UPD_DATE, table.HITS)
+                        .from(table)
+                        .limit((int) pageable.getOffset(), pageable.getPageSize())
+                        .fetchInto(BoardDao.class);
+        return new PageImpl(list, pageable, findCountByLikeExpression());
     }
+
+    private long findCountByLikeExpression() {
+        return context.fetchCount(context.select().from(table));
+    }
+
 }

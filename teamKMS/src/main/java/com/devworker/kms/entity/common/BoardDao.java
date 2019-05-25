@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.devworker.kms.dto.UserDto;
+import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -109,17 +110,27 @@ public class BoardDao {
 	}
 
 	@JsonIgnore
-	public BoardDto getDto() {
+	public BoardDto getBoardDto() {
 		BoardDto boardDto = new BoardDto();
 		boardDto.setBoardId(boardId);
-		boardDto.setContents(contents);
 		boardDto.setHits(hits);
 		boardDto.setRegDate(regDate);
 		boardDto.setSubject(subject);
 		boardDto.setUpdDate(updDate);
 		boardDto.setUserId(userId);
-
 		return boardDto;
 	}
-	
+
+	@JsonIgnore
+	public BoardDetailDto getBoardDetailDto() {
+		BoardDetailDto boardDto = new BoardDetailDto();
+		boardDto.setBoardId(boardId);
+		boardDto.setHits(hits);
+		boardDto.setRegDate(regDate);
+		boardDto.setSubject(subject);
+		boardDto.setUpdDate(updDate);
+		boardDto.setContents(contents);
+		boardDto.setUserId(userId);
+		return boardDto;
+	}
 }

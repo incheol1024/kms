@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDateTime;
 
+import com.devworker.kms.dto.common.BoardDetailDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,9 +42,9 @@ public class SiteControllerTest {
 	public void site_AddBoardTest() {
 		int siteId=9;
 		int projectId=17;
-		
-		
-		BoardDto boardDto=new BoardDto();
+
+
+		BoardDetailDto boardDto=new BoardDetailDto();
 		boardDto.setSubject("0428Test");
 		boardDto.setContents("TTTTTTTTTTTT");
 		boardDto.setUserId("USER");
