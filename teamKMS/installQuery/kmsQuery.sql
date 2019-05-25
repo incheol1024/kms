@@ -114,6 +114,98 @@ values ('1', 'ADMIN');
 insert into KMS.KMS_ACE(AclId, AceId)
 values ('2', 'USER');
 
+create table KMS_BOARD
+(
+    board_id int(255) unsigned auto_increment comment '게시글 key'
+        primary key,
+    subject  varchar(255) not null comment '게시글 제목',
+    contents text         not null comment '게시글 내용',
+    user_id  varchar(32)  not null comment '작성자',
+    reg_date date         not null comment '등록일자',
+    upd_date date         not null comment '수정일자',
+    hits     int(255)     not null comment '조회수'
+);
+
+create table KMS_COMMENT
+(
+    board_id     int(255) unsigned not null comment '게시글 key',
+    cmt_id       int(255) unsigned auto_increment comment '댓글 key',
+    cmt_contents text              not null comment '댓글 내용',
+    cmt_code     text              null,
+    cmt_user_id  varchar(20)       not null comment '댓글 작성자',
+    cmt_date     date              not null comment '댓글 등록일자',
+    cmt_like     int default 0     null,
+    constraint index_cmt_id
+        unique (cmt_id),
+    constraint FK_TBL_COMMENT_TBL_BOARD
+        foreign key (board_id) references KMS_BOARD (board_id)
+            on update cascade on delete cascade
+) comment '댓글 테이블';
+
+create table KMS_DOC
+(
+    doc_id      int(255) unsigned auto_increment comment '문서 key',
+    board_id    int(255) unsigned null comment '게시글 key',
+    cmt_id      int(32) unsigned  null comment '댓글 key',
+    doc_path    varchar(255)      not null comment '문서 경로',
+    doc_name    varchar(255)      null comment '문서 이',
+    doc_ext     varchar(45)       null comment '문서 확장자',
+    doc_user_id varchar(32)       not null comment '문서 등록자',
+    doc_size    int(32) unsigned  not null comment '파일 사이즈',
+    constraint unique_doc_id
+        unique (doc_id),
+    constraint FK_KMS_COMMENT_ID
+        foreign key (cmt_id) references KMS_COMMENT (cmt_id)
+            on update cascade on delete cascade,
+    constraint FK_TBL_DOC_TBL_BOARD
+        foreign key (board_id) references KMS_BOARD (board_id)
+            on update cascade on delete cascade
+) comment '첨부문서 테이블';
+
+-- auto-generated definition
+create table KMS_LIKE_CHECK
+(
+    like_check_id int(255)                   not null
+        primary key,
+    cmt_id        int(255) unsigned          not null,
+    user_id       varchar(32)                not null,
+    like_yn       int(255) unsigned zerofill not null,
+    unlike_yn     int(255) unsigned zerofill not null,
+    constraint fk_like_cmt_id
+        foreign key (cmt_id) references KMS_COMMENT (cmt_id)
+);
+
+create index idx_like_cmt_id
+    on KMS_LIKE_CHECK (cmt_id);
+
+create index idx_like_user_id
+    on KMS_LIKE_CHECK (user_id);
+
+-- auto-generated definition
+create table KMS_QNA_CODE
+(
+    menu_id  int(11) unsigned  not null,
+    board_id int(255) unsigned not null,
+    constraint FK_KMS_QNA_CODE_BOARD_ID_KMS_BOARD
+        foreign key (board_id) references KMS_BOARD (board_id)
+            on update cascade on delete cascade,
+    constraint FK_KMS_QNA_CODE_MENU_ID_KMS_MENU
+        foreign key (menu_id) references KMS_Menu (menu_id)
+            on update cascade
+) comment 'QnA 게시판 언어별 게시물 매핑 테이블';
+
+create table KMS_Solution
+(
+    board_id int(255) unsigned not null
+        primary key,
+    menu_id  int(11) unsigned  not null,
+    constraint FK_KMSSolution_KMS_BOARD
+        foreign key (board_id) references KMS_BOARD (board_id)
+            on update cascade on delete cascade,
+    constraint KMS_Solution_KMS_Menu_menu_id_fk
+        foreign key (menu_id) references KMS_Menu (menu_id)
+);
+
 create table KMS_SITE
 (
   MENU_ID INT(11) unsigned,
