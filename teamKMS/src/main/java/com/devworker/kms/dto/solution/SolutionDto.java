@@ -1,12 +1,14 @@
 package com.devworker.kms.dto.solution;
 
+import com.devworker.kms.dto.common.BoardDetailDto;
+import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.entity.solution.SolutionDao;
 
 public class SolutionDto {
     long boardId;
-    String site;
-    String solution;
-    int replyCount = 0;
+    long menuId;
+
+    BoardDto dto;
 
     public long getBoardId() {
         return boardId;
@@ -16,36 +18,26 @@ public class SolutionDto {
         this.boardId = boardId;
     }
 
-    public String getSite() {
-        return site;
+    public long getMenuId() {
+        return menuId;
     }
 
-    public void setSite(String site) {
-        this.site = site;
+    public void setMenuId(long menuId) {
+        this.menuId = menuId;
     }
 
-    public String getSolution() {
-        return solution;
+    public BoardDto getDto() {
+        return dto;
     }
 
-    public void setSolution(String solution) {
-        this.solution = solution;
+    public void setDto(BoardDto dto) {
+        this.dto = dto;
     }
-    
-    public int getReplyCount() {
-    	return replyCount;
-    }
-    
-    public void setReplyCount(int replyCount) {
-    	this.replyCount = replyCount;
-    }
-    
+
     public SolutionDao toDao() {
     	SolutionDao solutionDao = new SolutionDao();
-    	solutionDao.setId(boardId);
-    	solutionDao.setSite(site);
-    	solutionDao.setSolution(solution);
-    	solutionDao.setReplyCount(replyCount);
+        solutionDao.setBoardId(boardId);
+        solutionDao.setMenuId(menuId);
         return solutionDao;
     }
 }

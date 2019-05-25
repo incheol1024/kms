@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
+import com.devworker.kms.util.CommonUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -105,8 +106,7 @@ public class BoardDao {
 
 	@Override
 	public String toString() {
-		return "BoardDao [boardId=" + boardId + ", subject=" + subject + ", contents=" + contents + ", userId=" + userId
-				+ ", regDate=" + regDate + ", updDate=" + updDate + ", hits=" + hits + "]";
+		return CommonUtil.toJson(this);
 	}
 
 	@JsonIgnore

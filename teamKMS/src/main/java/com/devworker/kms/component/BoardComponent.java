@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -23,6 +24,10 @@ public class BoardComponent {
 	public Page<BoardDto> getPages(Pageable pageable)
 	{
 		return boardRepoImpl.findAll(pageable).map(BoardDao::getBoardDto);
+	}
+
+	public Page<BoardDto> getPages(List<Long> pageList, Pageable pageable) {
+		return boardRepoImpl.findAll(pageList,pageable).map(boardDao -> boardDao.getBoardDto());
 	}
 
 	public long register(BoardDetailDto dto) {
@@ -43,6 +48,5 @@ public class BoardComponent {
 	{
 		return boardRepo.findById(id).orElseThrow(() -> new NotExistException("Board Not Found")).getBoardDetailDto();
 	}
-
 
 }
