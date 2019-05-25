@@ -186,9 +186,8 @@
             deleteProject: function (item) {
                 return axios.delete(`site/${item.siteId}/${item.projectId}`)
             },
-            getBoard : function (item) {
+            getBoard : function (page) {
                 let _this = this;
-                this.curProject = item;
                 this.window = 2;
                 console.log("get Board call :"+item);
                 console.log(item);
