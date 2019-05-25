@@ -1,5 +1,6 @@
 package com.devworker.kms.service.site;
 
+import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.site.ProjectBoardDto;
 import com.devworker.kms.dto.site.ProjectDto;
@@ -60,13 +61,13 @@ public class SiteService {
         projectRepo.deleteById(projectId);
     }
 
-    public void addBoard(BoardDto dto, int siteId, int projectId) {
+    public void addBoard(BoardDetailDto dto, int siteId, int projectId) {
         //TODO::
     	
     	ProjectBoardDao projectBoardDao=new ProjectBoardDao();
     	
     	
-    	projectBoardDao.setBoardId((boardWriteService.register(dto)).getBoardId());
+    	projectBoardDao.setBoardId((boardWriteService.register(dto)));
     	projectBoardDao.setProjectId(projectId);
     	
        projectBoardRepo.save(projectBoardDao);

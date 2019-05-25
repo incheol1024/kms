@@ -41,7 +41,7 @@
 
                 <v-window-item>
                     <h3>Project : {{curProject.name}}</h3>
-                    <table-component ref="table2" :headers="boardHeader"></table-component>
+                    <table-component ref="table2" :headers="boardHeader" :page-req="getBoard"></table-component>
                     <v-btn color="primary" @click="addBoard">Add Board</v-btn>
                 </v-window-item>
             </v-window>
@@ -193,11 +193,13 @@
                 console.log("get Board call :"+item);
                 console.log(item);
                 if (this.curSite.siteId === 0) return;
-                return axios.get(`site/${this.id}/${item.siteId}/${item.projectId}`, {
+                return axios.get(`site/${_this.id}/${_this.curSite.siteId}/${_this.curProject.projectId}`, {
                     params: {page:0,size:5}
                 }).then(res => {
                     console.log("호출 성공  Data bind after");
-                    _this.$refs.table2.data = res.data;
+                    _this.$refs.table2.clear();//중복으로 데이터 첨가 되는거 클리어 처리 .
+                    for (const key in res.data.content)
+                        _this.$refs.table2.addFunction(res.data.content[key])
                 }).catch(reason => catchPromise(reason));
             },
             addBoard : function () {
