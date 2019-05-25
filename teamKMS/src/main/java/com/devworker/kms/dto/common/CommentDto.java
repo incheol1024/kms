@@ -10,179 +10,150 @@ import com.devworker.kms.entity.common.DocDao;
 
 public class CommentDto {
 
-	private long boardId;
+    private long boardId;
 
-	private long cmtId;
+    private long cmtId;
 
-	private String cmtContents;
+    private String cmtContents;
 
-	private String cmtCode;
+    private String cmtCode;
 
-	private String cmtUserId;
+    private String cmtUserId;
 
-	private LocalDateTime cmtDate;
+    private LocalDateTime cmtDate;
 
-	private long cmtLike;
+    private long cmtLike;
 
-	private long docId;
+    private long docId;
 
-	private String docName;
+    private String docName;
 
-	private Map<Long, String> docEntry;
+    private Map<Long, String> docEntry;
 
-	private String fileTransactKey;
+    private String fileTransactKey;
 
-	private int fileCount;
+    private int fileCount;
 
-	public CommentDto(List<CommentDao> commentDaos) {
-	}
+    public CommentDto() {
+    }
 
-	public CommentDto(CommentDao comment, List<DocDao> docs) {
-		setUpCommentDto(comment);
-		setDocs(docs);
-	}
+    public CommentDto(CommentDao comment) {
+        setUpCommentDto(comment);
 
-	public CommentDto(CommentDao comment, DocDao doc) {
-		setUpCommentDto(comment);
-		setDoc(doc);
-	}
+        if (comment.getDocDaos() != null) {
+            setUpDocs(comment.getDocDaos());
+        }
+    }
 
-	private void setDocs(List<DocDao> docs) {
-		for(DocDao doc : docs) {
-			docEntry.put(doc.getDocId(), doc.getDocName());
-		}
-	}
+    private void setUpDocs(List<DocDao> docDaos) {
+        for (DocDao docDao : docDaos) {
+            docEntry.put(docDao.getDocId(), docDao.getDocName());
+        }
+    }
 
-	public CommentDto(CommentDao comment) {
-		setUpCommentDto(comment);
-	}
+    private void setUpCommentDto(CommentDao comment) {
+        this.cmtId = comment.getCmtId();
+        this.cmtContents = comment.getCmtContents();
+        this.cmtCode = comment.getCmtCode();
+        this.cmtUserId = comment.getCmtUserId();
+        this.cmtDate = comment.getCmtDate();
+        this.cmtLike = comment.getCmtLike();
+    }
 
-	private void setDoc(DocDao doc) {
-		this.docId = doc.getDocId();
-		this.docName = bringDocName(doc.getDocPath());
+    private String bringDocName(String docPath) {
+        int lastIndex = docPath.lastIndexOf(File.separator);
 
+        if (lastIndex == -1)
+            return docPath;
+        return docPath.substring(lastIndex + 1);
+    }
 
-	}
+    public long getBoardId() {
+        return boardId;
+    }
 
-	private void setUpCommentDto(CommentDao comment) {
-		this.cmtId = comment.getCmtId();
-		this.cmtContents = comment.getCmtContents();
-		this.cmtCode = comment.getCmtCode();
-		this.cmtUserId = comment.getCmtUserId();
-		this.cmtDate = comment.getCmtDate();
-		this.cmtLike = comment.getCmtLike();
-	}
+    public void setBoardId(long boardId) {
+        this.boardId = boardId;
+    }
 
-	private String bringDocName(String docPath) {
-		int lastIndex = docPath.lastIndexOf(File.separator);
+    public long getCmtId() {
+        return cmtId;
+    }
 
-		if (lastIndex == -1)
-			return docPath;
-		return docPath.substring(lastIndex + 1);
-	}
+    public void setCmtId(long cmtId) {
+        this.cmtId = cmtId;
+    }
 
-	public long getBoardId() {
-		return boardId;
-	}
+    public String getCmtContents() {
+        return cmtContents;
+    }
 
-	public void setBoardId(long boardId) {
-		this.boardId = boardId;
-	}
+    public void setCmtContents(String cmtContents) {
+        this.cmtContents = cmtContents;
+    }
 
-	public long getCmtId() {
-		return cmtId;
-	}
+    public String getCmtCode() {
+        return cmtCode;
+    }
 
-	public void setCmtId(long cmtId) {
-		this.cmtId = cmtId;
-	}
+    public void setCmtCode(String cmtCode) {
+        this.cmtCode = cmtCode;
+    }
 
-	public String getCmtContents() {
-		return cmtContents;
-	}
+    public String getCmtUserId() {
+        return cmtUserId;
+    }
 
-	public void setCmtContents(String cmtContents) {
-		this.cmtContents = cmtContents;
-	}
+    public void setCmtUserId(String cmtUserId) {
+        this.cmtUserId = cmtUserId;
+    }
 
-	public String getCmtCode() {
-		return cmtCode;
-	}
+    public LocalDateTime getCmtDate() {
+        return cmtDate;
+    }
 
-	public void setCmtCode(String cmtCode) {
-		this.cmtCode = cmtCode;
-	}
+    public void setCmtDate(LocalDateTime cmtDate) {
+        this.cmtDate = cmtDate;
+    }
 
-	public String getCmtUserId() {
-		return cmtUserId;
-	}
+    public long getCmtLike() {
+        return cmtLike;
+    }
 
-	public void setCmtUserId(String cmtUserId) {
-		this.cmtUserId = cmtUserId;
-	}
+    public void setCmtLike(long cmtLike) {
+        this.cmtLike = cmtLike;
+    }
 
-	public LocalDateTime getCmtDate() {
-		return cmtDate;
-	}
+    public String getFileTransactKey() {
+        return fileTransactKey;
+    }
 
-	public void setCmtDate(LocalDateTime cmtDate) {
-		this.cmtDate = cmtDate;
-	}
+    public void setFileTransactKey(String fileTransactKey) {
+        this.fileTransactKey = fileTransactKey;
+    }
 
-	public long getCmtLike() {
-		return cmtLike;
-	}
+    public int getFileCount() {
+        return fileCount;
+    }
 
-	public void setCmtLike(long cmtLike) {
-		this.cmtLike = cmtLike;
-	}
-
-/*	public long getDocId() {
-		return docId;
-	}
-
-	public void setDocId(long docId) {
-		this.docId = docId;
-	}
-
-	public String getDocName() {
-		return docName;
-	}
-
-	public void setDocName(String docName) {
-		this.docName = docName;
-	}*/
-
-	public String getFileTransactKey() {
-		return fileTransactKey;
-	}
-
-	public void setFileTransactKey(String fileTransactKey) {
-		this.fileTransactKey = fileTransactKey;
-	}
-
-	public int getFileCount() {
-		return fileCount;
-	}
-
-	public void setFileCount(int fileCount) {
-		this.fileCount = fileCount;
-	}
+    public void setFileCount(int fileCount) {
+        this.fileCount = fileCount;
+    }
 
 
-	@Override
-	public String toString() {
-		return "CommentDto{" +
-				"boardId=" + boardId +
-				", cmtId=" + cmtId +
-				", cmtContents='" + cmtContents + '\'' +
-				", cmtCode='" + cmtCode + '\'' +
-				", cmtUserId='" + cmtUserId + '\'' +
-				", cmtDate=" + cmtDate +
-				", cmtLike=" + cmtLike +
-				", docEntry=" + docEntry +
-				", fileTransactKey='" + fileTransactKey + '\'' +
-				", fileCount=" + fileCount +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "CommentDto{" +
+                "boardId=" + boardId +
+                ", cmtId=" + cmtId +
+                ", cmtContents='" + cmtContents + '\'' +
+                ", cmtCode='" + cmtCode + '\'' +
+                ", cmtUserId='" + cmtUserId + '\'' +
+                ", cmtDate=" + cmtDate +
+                ", cmtLike=" + cmtLike +
+                ", docEntry=" + docEntry +
+                ", fileTransactKey='" + fileTransactKey + '\'' +
+                ", fileCount=" + fileCount +
+                '}';
+    }
 }

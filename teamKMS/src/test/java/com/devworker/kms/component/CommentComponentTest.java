@@ -123,9 +123,20 @@ public class CommentComponentTest {
         System.out.println(convertedPage.getContent());
     }
 
+    @Test
+    public void assertPageExpectedCommentDoc() {
 
-//		CommentComponent commentComponent = new CommentComponent();
-//		commentComponent.findPageByBoardId(boardDao, );
+        BoardDao boardDao = new BoardDao();
+        boardDao.setBoardId(40);
 
+        List<CommentDao> commentDaos = commentRepo.findByBoardId(boardDao);
+        commentDaos.stream().forEach( commentDao -> System.out.println(commentDao.getDocDaos()));
+
+
+
+
+
+
+    }
 
 }

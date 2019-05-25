@@ -3,6 +3,10 @@ package com.devworker.kms.entity.common;
 import javax.persistence.*;
 
 import com.devworker.kms.dto.common.FileDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +25,7 @@ public class DocDao {
     private BoardDao boardId;
 
     @ManyToOne
-    @JoinColumn(name = "cmt_id")
+    @JoinColumn(name = "cmt_Id")
     private CommentDao cmtId;
 
     @Column(name = "doc_path")
@@ -38,6 +42,7 @@ public class DocDao {
 
     @Column(name = "doc_size")
     private long docSize;
+
 
     public DocDao() {
     }

@@ -24,79 +24,83 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 @Primary
 public class FileHandlerImplAmazonS3 implements FileHandler {
 
-	@Value(value = "${amazon.s3.bucket}")
-	private String bucket;
+    @Value(value = "${amazon.s3.bucket}")
+    private String bucket;
 
-	@Value(value = "${file.download.tmp}")
-	private String tmpDown;
+    @Value(value = "${file.download.tmp}")
+    private String tmpDown;
 
-	@Value(value = "${file.upload.tmp}")
-	private String tmpUpload;
-	
-	private String uploadFile(File file) {
-		
-		S3Client s3Client = getS3Client();
-		
-		try (s3Client) {
-			String key = StringKeyUtil.generateUniqueKey();
-			boolean putSuccess = s3Client
-					.putObject((putObjectRequestBuilder) -> { putObjectRequestBuilder.bucket(bucket).key(key).build(); }, 
-							RequestBody.fromFile(file)).sdkHttpResponse().isSuccessful();
+    @Value(value = "${file.upload.tmp}")
+    private String tmpUpload;
 
-			if (putSuccess) 
-				return key;
-			
-		}
-		throw new RuntimeException();
-	}
+    private String uploadFile(File file) {
 
-	private GetObjectResponse downloadFile(String key, File file) {
-		
-		S3Client s3Client = getS3Client();
-		
-		try(s3Client; FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-			ResponseInputStream<GetObjectResponse> responseInputStream = s3Client
-					.getObject((getObjectReqeustBuilder) -> { getObjectReqeustBuilder.bucket(bucket).key(key).build(); });
-			responseInputStream.transferTo(fileOutputStream);
+        S3Client s3Client = getS3Client();
 
-			return responseInputStream.response();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+        try (s3Client) {
+            String key = StringKeyUtil.generateUniqueKey();
+            boolean putSuccess = s3Client
+                    .putObject((putObjectRequestBuilder) -> {
+                                putObjectRequestBuilder.bucket(bucket).key(key).build();
+                            },
+                            RequestBody.fromFile(file)).sdkHttpResponse().isSuccessful();
 
-	@Override
-	public FileDto processDownloadFile(FileDto fileDto) {
-		
-		File getTmpFile = new File(tmpDown + File.separator + fileDto.getKey());
-		GetObjectResponse getObjectResponse = downloadFile(fileDto.getKey() ,getTmpFile);
-		
-		if(getObjectResponse.sdkHttpResponse().isSuccessful()) 
-			return FileDto.builder().setFile(getTmpFile).build();
+            if (putSuccess)
+                return key;
 
-		throw new RuntimeException();
-	}
+        }
+        throw new RuntimeException();
+    }
 
-	@Override
-	public FileDto processUploadFile(FileDto fileDto) throws Exception {
+    private GetObjectResponse downloadFile(String key, File file) {
 
-		String key = uploadFile(fileDto.getFile());
-		return FileDto.builder().setKey(key).build();
-	}
+        S3Client s3Client = getS3Client();
 
-	@Override
-	public boolean deleteFile(String key) throws Exception {
+        try (s3Client; FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+            ResponseInputStream<GetObjectResponse> responseInputStream = s3Client
+                    .getObject((getObjectReqeustBuilder) -> {
+                        getObjectReqeustBuilder.bucket(bucket).key(key).build();
+                    });
+            responseInputStream.transferTo(fileOutputStream);
 
-		DeleteObjectResponse deleteObjectResponse = getS3Client().deleteObject((deleteObjectlBuilder) -> {
-			deleteObjectlBuilder.bucket(bucket).key(key).build();
-		});
+            return responseInputStream.response();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-		return deleteObjectResponse.sdkHttpResponse().isSuccessful();
-	}
-	
-	private S3Client getS3Client() {
-		return S3Client.builder().region(Region.AP_NORTHEAST_2).build();
-	}
+    @Override
+    public FileDto processDownloadFile(FileDto fileDto) {
+
+        File getTmpFile = new File(tmpDown + File.separator + fileDto.getKey());
+        GetObjectResponse getObjectResponse = downloadFile(fileDto.getKey(), getTmpFile);
+
+        if (getObjectResponse.sdkHttpResponse().isSuccessful())
+            return FileDto.builder().setFile(getTmpFile).build();
+
+        throw new RuntimeException();
+    }
+
+    @Override
+    public FileDto processUploadFile(FileDto fileDto) throws Exception {
+
+        String key = uploadFile(fileDto.getFile());
+        return FileDto.builder().setKey(key).build();
+    }
+
+    @Override
+    public boolean deleteFile(String key) throws Exception {
+
+        DeleteObjectResponse deleteObjectResponse = getS3Client().deleteObject((deleteObjectlBuilder) -> {
+            deleteObjectlBuilder.bucket(bucket).key(key).build();
+        });
+
+        return deleteObjectResponse.sdkHttpResponse().isSuccessful();
+    }
+
+    private S3Client getS3Client() {
+        return S3Client.builder().region(Region.AP_NORTHEAST_2).build();
+    }
 
 }

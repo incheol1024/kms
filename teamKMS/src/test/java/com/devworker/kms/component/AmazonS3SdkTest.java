@@ -45,9 +45,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AmazonS3SdkTest {
 
-	@Autowired
-	S3Client s3ClientBean;
-
 	static S3Client s3;
 	static Region region;
 	static List<String> myBuckets;
@@ -71,10 +68,6 @@ public class AmazonS3SdkTest {
 		testFile = new File("D:/app/test.png");
 	}
 
-	@Test
-	public void notNullBean() {
-		assertThat(s3ClientBean).isNotNull();
-	}
 
 	@Test
 	public void listBucketRequestTest() {
@@ -96,6 +89,7 @@ public class AmazonS3SdkTest {
 		synchronized (s3) {
 			PutObjectResponse putObjectResponse = s3.putObject(
 					PutObjectRequest.builder().bucket(bucket).key(key).build(), RequestBody.fromFile(testFile));
+
 
 			assertThat(putObjectResponse.sdkHttpResponse().statusCode()).isEqualTo(200);
 			assertThat(putObjectResponse.sdkHttpResponse().isSuccessful()).isTrue();
@@ -151,7 +145,7 @@ public class AmazonS3SdkTest {
 		String deleteKey = "aaaabbbbcccc";
 		synchronized (s3) {
 
-			DeleteObjectResponse deleteObjectResponse = s3ClientBean.deleteObject((deleteObjectBuilder) -> {
+			DeleteObjectResponse deleteObjectResponse = s3.deleteObject((deleteObjectBuilder) -> {
 				deleteObjectBuilder.bucket(bucket).key(key).build();
 			});
 
@@ -172,7 +166,7 @@ public class AmazonS3SdkTest {
 	public void getObjectResponseTest() {
 
 		String downloadKey = "15566297014682RDf1SRpGB";
-		ResponseInputStream<GetObjectResponse> responseInputStream =  s3ClientBean.getObject((getObjectRequestBuilder) -> {
+		ResponseInputStream<GetObjectResponse> responseInputStream =  s3.getObject((getObjectRequestBuilder) -> {
 			getObjectRequestBuilder.bucket(bucket).key(downloadKey).build();
 		});
 		
@@ -181,5 +175,7 @@ public class AmazonS3SdkTest {
 		System.out.println("getObjectResponse.toString() ================== " +  getObjectResponse.toString());
 
 	}
+
+
 
 }

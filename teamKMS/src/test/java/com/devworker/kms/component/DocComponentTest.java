@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.dto.common.FileTransactionDto;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -108,6 +112,7 @@ public class DocComponentTest {
 	@Test
 	@WithMockUser(username = "USER")
 	public void makeTempFile() throws IllegalStateException, IOException {
+
 		assertThat(testFile).isFile();
 		MockMultipartFile mockMultipartFile = new MockMultipartFile("file1", new FileInputStream(testFile));
 		DocComponent docComponent = new DocComponent(fileHandler);
@@ -115,7 +120,10 @@ public class DocComponentTest {
 		
 		assertThat(actual).isFile();
 		System.out.println("file name ~~ " +actual.getName());
-		
 	}
+
+
+
+
 
 }

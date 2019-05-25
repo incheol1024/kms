@@ -136,7 +136,7 @@ public class CommentComponent {
 		// 조건2. 파일 등록처리가 완료 되면 메모리를 해제해야 한다.
 		// 조건3. 파일 등록 처리를 하다가 예외가 발생하면 메모리를 해제해야한다.
 
-		return new CommentDto(savedComment, savedDoc);
+		return new CommentDto(savedComment);
 		// return savedCommentDao;
 	}
 
@@ -147,19 +147,11 @@ public class CommentComponent {
 		List<CommentDao> comments = pageComment.getContent();
 		List<CommentDto> resultComments = new ArrayList<CommentDto>();
 		CommentDto commentDto = null;
-		List<DocDao> docs = null;
 		
 		for (CommentDao comment : comments) {
-			docs = docRepo.findByCmtId(comment);
-			if (docs.isEmpty()) {
-				commentDto = new CommentDto(comment);
-				resultComments.add(commentDto);
-				continue;
-			}
-			commentDto = new CommentDto(comment, docs);
+			commentDto = new CommentDto(comment);
 			resultComments.add(commentDto);
 		}
-
 		return resultComments;
 	}
 
@@ -171,12 +163,12 @@ public class CommentComponent {
 		List<CommentDto> commentDtos = new ArrayList<CommentDto>();
 
 		for(CommentDao commentDao : commentDaos) {
-			CommentDto commentDto = new CommentDto(commentDao, docRepo.findByCmtId(commentDao));
+			CommentDto commentDto = new CommentDto(commentDao);
 			commentDtos.add(commentDto);
 		}
 
 		commentDaoPage.map( (CommentDao commentDao) -> {
-			return new CommentDto(commentDao, docRepo.findByCmtId(commentDao));
+			return new CommentDto(commentDao);
 		});
 			return null;
 	}

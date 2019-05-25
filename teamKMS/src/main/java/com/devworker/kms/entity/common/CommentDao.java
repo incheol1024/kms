@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.persistence.*;
 
+import com.devworker.kms.util.CommonUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.devworker.kms.dto.common.CommentDto;
@@ -41,6 +43,7 @@ public class CommentDao {
     private long cmtLike;
 
     @OneToMany(mappedBy = "cmtId", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<DocDao> docDaos = new ArrayList<>();
 
     public CommentDao() {
@@ -119,16 +122,7 @@ public class CommentDao {
 
     @Override
     public String toString() {
-        return "CommentDao{" +
-                "boardId=" + boardId +
-                ", cmtId=" + cmtId +
-                ", cmtContents='" + cmtContents + '\'' +
-                ", cmtCode='" + cmtCode + '\'' +
-                ", cmtUserId='" + cmtUserId + '\'' +
-                ", cmtDate=" + cmtDate +
-                ", cmtLike=" + cmtLike +
-                ", docDaos=" + docDaos +
-                '}';
+        return CommonUtil.toJson(this);
     }
 
     public void setUpEntity(CommentDto commentDto) {
