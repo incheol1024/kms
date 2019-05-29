@@ -1,14 +1,12 @@
 package com.devworker.kms.dto.solution;
 
 import com.devworker.kms.dto.common.BoardDetailDto;
-import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.entity.solution.SolutionDao;
 
 public class SolutionDto {
-    long boardId;
-    long menuId;
-
-    BoardDto dto;
+    private long boardId;
+    private long menuId;
+    private BoardDetailDto boardDetailDto;
 
     public long getBoardId() {
         return boardId;
@@ -26,12 +24,12 @@ public class SolutionDto {
         this.menuId = menuId;
     }
 
-    public BoardDto getDto() {
-        return dto;
+    public BoardDetailDto getBoardDetailDto() {
+        return boardDetailDto;
     }
 
-    public void setDto(BoardDto dto) {
-        this.dto = dto;
+    public void setBoardDetailDto(BoardDetailDto boardDetailDto) {
+        this.boardDetailDto = boardDetailDto;
     }
 
     public SolutionDao toDao() {

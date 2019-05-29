@@ -3,6 +3,7 @@ package com.devworker.kms.controller.solution;
 import javax.validation.Valid;
 
 import com.devworker.kms.dto.common.BoardDetailDto;
+import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.solution.SolutionDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +20,23 @@ public class SolutionController {
 	SolutionService solutionService;
 
 	@GetMapping("/{menuId}")
-	public Page<SolutionDto> getList(@PathVariable int menuId, Pageable pageable){
+	public Page<BoardDto> getList(@PathVariable int menuId, Pageable pageable){
 		return solutionService.getPageList(menuId, pageable);
 	}
 
 	@GetMapping("/{menuId}/{id}")
-	public BoardDetailDto getSolutionById(@PathVariable Long id, @PathVariable String menuId) {
+	public BoardDetailDto getSolutionById(@PathVariable String menuId, @PathVariable Long id) {
 		return solutionService.getSolutionById(id);
 	}
 	
 	@PostMapping
-	public long solutionRegister(@Valid @RequestBody SolutionDto solutionDto,
-								 @Valid @RequestBody BoardDetailDto boardDetailDto) {
-		return solutionService.registerSolution(solutionDto,boardDetailDto);
+	public long solutionRegister(@Valid @RequestBody SolutionDto solutionDto) {
+		return solutionService.registerSolution(solutionDto);
 	}
 	
 	@PutMapping
-	public void solutionEdit(@Valid @RequestBody SolutionDto solutionDto,
-							 @Valid @RequestBody BoardDetailDto boardDetailDto) {
-		solutionService.editSolution(solutionDto,boardDetailDto);
+	public void solutionEdit(@Valid @RequestBody SolutionDto solutionDto) {
+		solutionService.editSolution(solutionDto);
 	}
 	
 	@DeleteMapping("/{boardId}")

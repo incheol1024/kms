@@ -6,11 +6,17 @@ import com.devworker.kms.dto.acl.AceDto;
 import com.devworker.kms.dto.acl.AclDto;
 import com.devworker.kms.dto.base.BasePageReqDto;
 import com.devworker.kms.dto.base.BasePageResDto;
+import com.devworker.kms.dto.common.BoardDetailDto;
+import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.site.ProjectDto;
 import com.devworker.kms.dto.site.SiteDto;
+import com.devworker.kms.dto.solution.SolutionDto;
 import com.devworker.kms.entity.acl.AclDao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -18,7 +24,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class JsonModelTest {
-	private ObjectMapper mapper = new ObjectMapper();
+	private static ObjectMapper mapper = new ObjectMapper();
+
+	@BeforeClass
+	public static  void setting(){
+		mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+		mapper.registerModule(new JavaTimeModule());
+	}
 	
 	@Test
 	public void makeMessageModel() throws JsonProcessingException {
@@ -86,4 +98,24 @@ public class JsonModelTest {
 		SiteDto dto = new SiteDto();
 		System.out.println(mapper.writeValueAsString(dto));
 	}
+
+	@Test
+	public void makeBoardDtoModel() throws JsonProcessingException{
+		BoardDto dto = new BoardDto();
+		System.out.println(mapper.writeValueAsString(dto));
+	}
+
+	@Test
+	public void makeBoardDetailDtoModel() throws JsonProcessingException{
+		BoardDetailDto dto = new BoardDetailDto();
+		System.out.println(mapper.writeValueAsString(dto));
+	}
+
+	@Test
+	public void makeSolutionDtoModel() throws JsonProcessingException{
+		SolutionDto dto = new SolutionDto();
+		dto.setBoardDetailDto(new BoardDetailDto());
+		System.out.println(mapper.writeValueAsString(dto));
+	}
+
 }

@@ -15,3 +15,33 @@ const PROJECTMODEL = {
     "mangerName": ""
 };
 const SITEMODEL = {"menuId": 0, "siteId": 0, "name": ""};
+const BoardDto = {
+    "boardId": 0,
+    "subject": null,
+    "userId": null,
+    "regDate": "",
+    "updDate": "",
+    "hits": 0
+};
+const BoardDetailDto = {
+    "boardId": 0,
+    "subject": null,
+    "userId": null,
+    "regDate": "",
+    "updDate": "",
+    "hits": 0,
+    "contents": null
+};
+const SolutionDto = {
+    "boardId": 0,
+    "menuId": 0,
+    "boardDetailDto": {
+        "boardId": 0,
+        "subject": null,
+        "userId": null,
+        "regDate": "",
+        "updDate": "",
+        "hits": 0,
+        "contents": null
+    }
+};

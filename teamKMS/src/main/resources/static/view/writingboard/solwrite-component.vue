@@ -1,45 +1,41 @@
 <template>
-    <v-layout column>
-        <v-layout>
-            <v-flex xs12 sm6 md3>
-                <v-text-field label="title" placeholder="subject" v-model="subject"></v-text-field>
-            </v-flex>
-            <v-flex xs12 sm4>
-                <v-text-field placeholder="solution" label="solution" v-model="solution"></v-text-field>
-            </v-flex>
-            <v-flex xs12 sm4>
-                <v-text-field placeholder="site" label="site" v-model="site"></v-text-field>
-            </v-flex>
-        </v-layout>
-        <write-component ref="editor" v-bind:read-only="$route.query.readOnly"></write-component>
-        <v-btn v-if="!$route.query.readOnly" :loading="loading" :disabled="loading" color="primary" @click="save">
-            {{buttonName}}
-        </v-btn>
-        <comment-component v-if="boardId !== 0" comment-component :qid="$route.params.id"></comment-component>
+    <v-layout wrap>
+        <v-flex xs12>
+            <v-text-field v-model="curSolution.boardDetailDto.subject" label="제목" single-line ></v-text-field>
+        </v-flex>
+        <v-flex xs12>
+            <write-component ref="editor" v-bind:read-only="$route.query.readOnly"></write-component>
+        </v-flex>
+        <v-flex xs12 lg4>
+            <v-btn v-if="!$route.query.readOnly" :loading="loading" :disabled="loading" color="primary" @click="save">
+                {{buttonName}}
+            </v-btn>
+        </v-flex>
+        <v-flex v-if="boardId !== 0" xs12>
+            <comment-component comment-component :qid="$route.params.id"></comment-component>
+        </v-flex>
     </v-layout>
 </template>
 
 <script>
     module.exports = {
-        props: ["id"],
+        props: ["menuId","id"],
         data: () => ({
-            subject: '',
-            solution: '',
-            site: '',
-            buttonName: "New",
-            url: "solution/register",
+            buttonName: "New Save",
+            url: "solution",
             boardId: 0,
-            loading: false
+            loading: false,
+            curSolution : copyObject(SolutionDto)
         }),
         watch: {
             id() {
                 if (id === "0") {
-                    this.buttonName = "New";
-                    this.url = "solution/register";
+                    this.buttonName = "New Save";
+                    this.url = "solution";
                     this.boardId = 0;
                 } else {
                     this.buttonName = "Edit";
-                    this.url = "solution/edit";
+                    this.url = "solution";
                     this.boardId = id;
                 }
             }
@@ -47,11 +43,10 @@
         methods: {
             save: function save() {
                 this.loading = true;
-                let board = {subject: this.subject, contents: this.$refs.editor.getText(), boardId: this.boardId};
-                let solution = {site: this.site, solution: this.solution, boardId: this.boardId};
-                let data = Object.assign({}, board, solution);
-                axios.post(this.url, data).then(response => {
-                    console.log("Asdfasdf");
+                this.curSolution.menuId = this.menuId;
+                this.curSolution.boardDetailDto.contents = this.$refs.editor.getText();
+                axios.post(this.url, this.curSolution).then(response => {
+                    this.$router.push(`/solutions/${this.menuId}`);
                 })
                     .catch(error =>
                         catchPromise(error)
@@ -59,7 +54,7 @@
                     .finally(() => {
                         this.loading = false;
                     });
-                this.$router.push(`/solutions/${this.id}`);
+
             }
         }
     };

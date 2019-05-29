@@ -1,7 +1,6 @@
 package com.devworker.kms.dto.common;
 
-import com.devworker.kms.entity.common.BoardDao;
-import com.devworker.kms.util.CommonUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +8,9 @@ public class BoardDto {
     long boardId;
     String subject;
     String userId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:SS")
     LocalDateTime regDate = LocalDateTime.now();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:SS")
     LocalDateTime updDate  = LocalDateTime.now();
     int hits = 0;
 

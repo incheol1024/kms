@@ -1,12 +1,6 @@
 <template>
     <v-layout column>
-        <card-component color="blue"
-                        title="프로젝트 현황"
-                        text="">
-            <v-layout>
-                <chart-component></chart-component>
-            </v-layout>
-        </card-component>
+        <chart-component></chart-component>
     </v-layout>
 </template>
 

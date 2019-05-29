@@ -5,8 +5,6 @@ import org.jooq.DSLContext;
 import org.jooq.generated.kms.tables.KmsSolution;
 import org.jooq.types.UInteger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +21,8 @@ public class SolutionRepoImpl {
         return context.select(table.MENU_ID, table.BOARD_ID)
                 .from(table)
                 .where(table.MENU_ID.eq(UInteger.valueOf(menuId)))
-                .limit(pageable.getPageSize(), (int) pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .offset((int)pageable.getOffset())
                 .fetchInto(SolutionDao.class);
     }
 }
