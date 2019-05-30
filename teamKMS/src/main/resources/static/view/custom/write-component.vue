@@ -19,6 +19,9 @@
         methods : {
             getText() {
                 return this.editorData;
+            },
+            setText(value){
+                this.editorData = value;
             }
         }
     };

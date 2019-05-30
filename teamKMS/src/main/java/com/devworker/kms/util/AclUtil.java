@@ -68,7 +68,10 @@ public class AclUtil {
         List<AceDto> aceList = Optional.ofNullable(aceService.getAceByAceId(aceId)).orElse(new ArrayList<>());
         for (AceDto sub : aceList) {
             AclDto acl = aclService.getAcl(sub.getAclId());
-            if (acl.getHasPermission().contains(type)) return true;
+            for(PermissionType check : acl.getHasPermission()){
+                if(check.getValue() == type.getValue() && check.isHas())
+                    return true;
+            }
         }
         return false;
     }

@@ -3,7 +3,16 @@ package com.devworker.kms.dto.common;
 import com.devworker.kms.entity.common.BoardDao;
 
 public class BoardDetailDto extends BoardDto{
-    String contents;
+    private String contents;
+    private boolean readOnly = false;
+
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
 
     public String getContents() {
         return contents;
