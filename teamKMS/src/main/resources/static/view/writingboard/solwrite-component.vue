@@ -28,7 +28,6 @@
             curSolution: copyObject(SolutionDto)
         }),
         mounted() {
-            console.log("BAORD " + this.boardId);
             if (this.boardId === "0") {
                 this.buttonName = "New Save";
                 this.showComment = false;

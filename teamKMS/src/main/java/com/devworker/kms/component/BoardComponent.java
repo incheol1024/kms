@@ -27,7 +27,7 @@ public class BoardComponent {
 	}
 
 	public Page<BoardDto> getPages(List<Long> pageList, Pageable pageable) {
-		return boardRepoImpl.findAll(pageList,pageable).map(boardDao -> boardDao.getBoardDto());
+		return boardRepoImpl.findAll(pageList,pageable).map(BoardDao::getBoardDto);
 	}
 
 	public long register(BoardDetailDto dto) {

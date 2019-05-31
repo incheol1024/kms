@@ -1,13 +1,13 @@
 <template inline-template>
     <v-data-table :headers="headers" :items="items" :pagination.sync="pagination"
-                  :select-all="allowSelect ? true : false" v-model="selection"
+                  :select-all="!!allowSelect" v-model="selection" :search="search"
                   :total-items="total" :loading="loading" must-sort class="elevation-1">
         <template slot="items" slot-scope="props">
-            <tr @click="clickRow(props.item)">
+            <tr>
                 <td v-if="allowSelect">
                     <v-checkbox v-model="props.selected" primary hide-details @change="updateSelection"></v-checkbox>
                 </td>
-                <td v-for="value in mappingHeader(props.item)">{{ value }}</td>
+                <td v-for="value in mappingHeader(props.item)" @click="clickRow(props.item)">{{ value }}</td>
                 <td v-if="allowDelete || allowEdit">
                     <v-icon v-if="allowEdit" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
                     <v-icon v-if="allowDelete" small @click="deleteItem(props.item)">delete</v-icon>

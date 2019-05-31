@@ -6,7 +6,7 @@
                 <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                 <v-btn color="primary" @click="newWrite">글쓰기</v-btn>
             </v-card-title>
-            <table-component ref="table" :headers="headers" :search="search" :page-req="getSolutionList"
+            <table-component ref="table" :headers="headers" v-model="search" :page-req="getSolutionList"
                              :allow-delete="true" :click-row="clickRow" :delete-function="deleteSolution">
             </table-component>
         </v-card>

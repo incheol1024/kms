@@ -1,5 +1,6 @@
 <template>
-    <ckeditor :editor="editor" v-model="editorData" :config="editorConfig" :disabled="readOnly"></ckeditor>
+    <ckeditor :editor="editor" v-model="editorData"
+              :config="getConfig" :disabled="readOnly"></ckeditor>
 </template>
 
 <script>
@@ -9,13 +10,22 @@
                 default: false,
                 type: Boolean,
                 required : true
+            },
+            toolbar : {
+                default: true,
+                type : Boolean,
+                required: false
             }
         },
         data: () => ({
             editorData: '',
-            editor: ClassicEditor,
-            editorConfig: {}
+            editor: ClassicEditor
         }),
+        computed : {
+            getConfig(){
+                return this.toolbar ? {} : { toolbar: [  ]}
+            }
+        },
         methods : {
             getText() {
                 return this.editorData;
@@ -26,3 +36,7 @@
         }
     };
 </script>
+
+<style scoped>
+
+</style>
