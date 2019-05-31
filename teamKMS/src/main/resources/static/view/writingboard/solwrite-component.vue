@@ -37,13 +37,15 @@
                 axios.get(`solution/${this.menuId}/${this.boardId}`).then(value => {
                     this.curSolution.boardDetailDto = value.data;
                     this.$refs.editor.setText(this.curSolution.boardDetailDto.contents);
-                }).catch(error => catchPromise(error))
+                }).catch(error => catchPromise(error));
+                this.curSolution.boardId = this.boardId;
             }
         },
         methods: {
             save: function save() {
                 this.loading = true;
                 this.curSolution.menuId = this.menuId;
+                this.curSolution.boardDetailDto.boardId = this.curSolution.boardId;
                 this.curSolution.boardDetailDto.contents = this.$refs.editor.getText();
                 let fetch = axios.post("solution", this.curSolution);
                 if (this.boardId !== "0")
