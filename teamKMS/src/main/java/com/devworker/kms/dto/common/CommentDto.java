@@ -40,9 +40,11 @@ public class CommentDto {
     public CommentDto(CommentDao comment) {
         setUpCommentDto(comment);
 
-        if (comment.getDocDaos() != null) {
+/*        if (comment.getDocDaos() != null) {
             setUpDocs(comment.getDocDaos());
         }
+        */
+
     }
 
     private void setUpDocs(List<DocDao> docDaos) {

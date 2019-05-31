@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.devworker.kms.entity.common.BoardDao;
@@ -63,10 +64,10 @@ public class CommentRepoTest {
         comment.setCmtDate(LocalDateTime.now());
         comment.setCmtUserId("USER");
 
-        CommentDao savedComment = commentRepo.save(comment);
-
-        assertThat(savedComment).isNotNull()
-                .isExactlyInstanceOf(commentRepo.findById(savedComment.getCmtId()).get().getClass());
+//        CommentDao savedComment = commentRepo.save(comment);
+//
+//        assertThat(savedComment).isNotNull()
+//                .isExactlyInstanceOf(commentRepo.findById(savedComment.getCmtId()).get().getClass());
 
     }
 
@@ -95,4 +96,8 @@ public class CommentRepoTest {
                         .forEach(docDao -> System.out.println(docDao.getDocId()) ));
     }
 
+    @Test
+    public void findByPageable() {
+
+    }
 }
