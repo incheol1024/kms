@@ -3,6 +3,7 @@ package com.devworker.kms.component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.devworker.kms.service.UserService;
 
@@ -226,6 +227,12 @@ public class CommentComponent {
 	
 	private String getUserName() {
 		return userService.getUser(CommonUtil.getCurrentUser()).getName();
+	}
+
+	public Page<CommentDto> findCommentsByPage(BoardDao boardId, Pageable pageable) {
+		Page<CommentDao> commentDaoPage = commentRepo.findAll(pageable);
+		return commentDaoPage.map(commentDao -> new CommentDto(commentDao));
+		//return null;
 	}
 
 

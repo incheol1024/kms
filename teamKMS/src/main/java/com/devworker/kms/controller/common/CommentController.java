@@ -31,7 +31,7 @@ public class CommentController {
 	private Logger logger = LoggerFactory.getLogger(CommentController.class);
 
 	@Autowired
-	CommentComponent commentService;
+	CommentComponent commentComponent;
 	
 	@Autowired
 	CommentRepo commentRepo;
@@ -40,7 +40,7 @@ public class CommentController {
 	public CommentDto addComment(@RequestBody CommentDto commentDto) throws Exception {
 
 		logger.debug("{}", commentDto);
-		return commentService.addComment(commentDto);
+		return commentComponent.addComment(commentDto);
 	}
 	/*
 	 * @PostMapping("/add/files") public CommentDao addComment(@RequestBody
@@ -71,7 +71,7 @@ public class CommentController {
 
 	@PostMapping("/add/files")
 	public CommentDto addCommentAndFile(@RequestBody CommentDto commentDto) throws Exception {
-		return commentService.addCommentAndFile(commentDto);
+		return commentComponent.addCommentAndFile(commentDto);
 	}
 
 	/*
@@ -82,27 +82,28 @@ public class CommentController {
 	 * commentService.findByBoardId(boardId); }
 	 */	
 	@GetMapping("/list/{boardId}")
-	public Page<CommentDao> listComment(@PathVariable BoardDao boardId, Pageable pageable) {
+	public Page<CommentDto> listComment(@PathVariable BoardDao boardId, Pageable pageable) {
 		//return commentService.findByBoardId(boardId);
-		
-		return commentRepo.findAll(pageable);
+
+		System.out.println(pageable);
+		return commentComponent.findCommentsByPage(boardId, pageable);
 //		return null;
 	}
 
 	@PostMapping("/update")
 	public CommentDto updateComment(@RequestBody CommentDao commentDao) throws Exception {
-		return commentService.updateComment(commentDao);
+		return commentComponent.updateComment(commentDao);
 	}
 
 	@DeleteMapping("/delete")
 	public Integer deleteComment(@RequestParam Integer cmtId) throws Exception {
-		commentService.deleteComment(cmtId);
+		commentComponent.deleteComment(cmtId);
 		return cmtId;
 	}
 
 	@PostMapping("/like/{cmtId}")
 	public CommentDao updateCommentLike(@PathVariable int cmtId) {
-		return commentService.updateCommentLike(cmtId);
+		return commentComponent.updateCommentLike(cmtId);
 	}
 	/*
 	 * @PostMapping("/unlike") public CommentDao updateCommentUnlike(@RequestBody

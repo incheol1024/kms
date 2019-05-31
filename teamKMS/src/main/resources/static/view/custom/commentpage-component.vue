@@ -1,31 +1,93 @@
-  <template>
-
-         <v-flex xs8>
-          <v-card>
-            <v-card-text>
-              <v-pagination
-                v-model="page"
-                :length="15"
-              ></v-pagination>
-            </v-card-text>
-          </v-card>
+<template>
+    <v-layout row wrap>
+        <v-flex xs8>
+            <v-card>
+                <v-card-text>
+                    <v-pagination
+                            v-model="page"
+                            :dark="true"
+                            :length="5"
+                            :circle="true"
+                            :total-visible="totalVisible"
+                            :value="page"
+                    ></v-pagination>
+                </v-card-text>
+            </v-card>
         </v-flex>
-  </template>
+    </v-layout>
+</template>
 
-  <script>
-  module.exports = {
-    props: [],
-    data() {
-      return {
-      page:1
-      }
-    },
+<script>
+    module.exports = {
+        props: ["id", "name", "qid"],
+        data() {
+            return {
+                page: 1,
+                size: 3,
+                sort: 'cmtId,desc',
+                comments: [],
+                totalVisible: 0,
+                maxPage: 5
+            }
+        },
 
-    created: function() {
+        created: function () {
+            this.getComments(this.page);
+        },
+        methods: {
+            getComments: function (page) {
+                var that = this;
+                axios.get("/comment/list/" + this.qid,
+                    {
+                        params: {
+                            page: page,
+                            size: this.size,
+                            sort: this.sort
+                        }
+                    }
+                )
+                    .then(
+                        function (response) {
+                            console.dir(response.data);
+                            if (response.data.content.length > 0) {
+                                that.removeComment();
+                                for (var i = 0; i < response.data.content.length; i++) {
+                                    that.comments.push(response.data.content[i]);
+                                }
+                            }
+                            that.setTotalVisible(response);
+                        }
+                    )
+                    .then(response => {
 
-    },
+                    })
+                    .then(response => {
+                        that.emitComment();
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+            },
+            emitComment: function () {
+                this.$emit('setcomments', this.comments, '');
+            },
+            removeComment: function () {
+                this.comments = [];
+            },
+            setTotalVisible: function (response) {
 
-    methods: {  
+                if (response.data.totalPages < this.maxPage) {
+                    console.log(response.data.totalPages);
+                    // this.totalVisible = response.data.totalPages;
+                    this.totalVisible = 2;
+                }
+            }
+        },
+        watch: {
+            page: function (page) {
+                this.getComments(page);
+            }
+        }
+
     }
-  }
-  </script>
+</script>
