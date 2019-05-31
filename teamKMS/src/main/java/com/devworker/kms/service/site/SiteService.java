@@ -50,14 +50,17 @@ public class SiteService {
         return projectRepo.getSiteProjects(siteId, pageable).map(ProjectDao::getDto);
     }
 
-    public Page<BoardDetailDto> getProjectBoards(int menuId, int siteId, int projectId, Pageable pageable) {
+    public Page<BoardDto> getProjectBoards(int menuId, int siteId, int projectId, Pageable pageable) {
          Page<ProjectBoardDto> projectBoardDtoLIst=projectBoardRepo.getSiteProjects(projectId, pageable).map(ProjectBoardDao::getDto);
-         List<BoardDetailDto> BoardDtoLIst= new ArrayList<>();
+         List<Long> collect =new ArrayList<>();
+
+         //List<BoardDetailDto> BoardDtoLIst= new ArrayList<>();
 
         for(ProjectBoardDto  projectDto : projectBoardDtoLIst)
-            BoardDtoLIst.add(boardWriteService.getBoard(projectDto.getBoardId()));
+            collect.add(projectDto.getBoardId());
 
-        return new PageImpl(BoardDtoLIst, pageable, BoardDtoLIst.size());
+        //return new PageImpl(BoardDtoLIst, pageable, BoardDtoLIst.size());
+        return boardWriteService.getPages(collect, pageable);
         //return projectBoardRepo.getSiteProjects(projectId, pageable).map(ProjectBoardDao::getDto);
     }
 

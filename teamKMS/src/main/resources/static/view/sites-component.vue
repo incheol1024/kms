@@ -130,7 +130,6 @@
             boardHeader : [
                 {text: "boardId", value: "boardId"},
                 {text: "subject", value: "subject"},
-                {text: "contents",value: "contents"},
                 {text: "userId",value: "userId"},
                 {text: "updDate",value: "updDate"},
                 {text: "regDate",value: "regDate"},
