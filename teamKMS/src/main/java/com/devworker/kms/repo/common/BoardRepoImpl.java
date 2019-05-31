@@ -1,7 +1,10 @@
 package com.devworker.kms.repo.common;
 
 import com.devworker.kms.entity.common.BoardDao;
-import org.jooq.*;
+import org.jooq.Condition;
+import org.jooq.DSLContext;
+import org.jooq.SortField;
+import org.jooq.TableField;
 import org.jooq.generated.kms.tables.KmsBoard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 @Repository
