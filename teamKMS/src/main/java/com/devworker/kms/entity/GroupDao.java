@@ -21,7 +21,6 @@ public class GroupDao {
 	private String name;
 	@Column(name="group_parent")
 	private Integer parentId;
-	
 	public int getId() {
 		return id;
 	}

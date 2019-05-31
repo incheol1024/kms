@@ -15,6 +15,7 @@ import com.devworker.kms.repo.site.SiteRepo;
 import com.devworker.kms.component.BoardComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -49,8 +50,15 @@ public class SiteService {
         return projectRepo.getSiteProjects(siteId, pageable).map(ProjectDao::getDto);
     }
 
-    public Page<ProjectBoardDto> getProjectBoards(int menuId, int siteId, int projectId, Pageable pageable) {
-        return projectBoardRepo.getSiteProjects(projectId, pageable).map(ProjectBoardDao::getDto);
+    public Page<BoardDetailDto> getProjectBoards(int menuId, int siteId, int projectId, Pageable pageable) {
+         Page<ProjectBoardDto> projectBoardDtoLIst=projectBoardRepo.getSiteProjects(projectId, pageable).map(ProjectBoardDao::getDto);
+         List<BoardDetailDto> BoardDtoLIst= new ArrayList<>();
+
+        for(ProjectBoardDto  projectDto : projectBoardDtoLIst)
+            BoardDtoLIst.add(boardWriteService.getBoard(projectDto.getBoardId()));
+
+        return new PageImpl(BoardDtoLIst, pageable, BoardDtoLIst.size());
+        //return projectBoardRepo.getSiteProjects(projectId, pageable).map(ProjectBoardDao::getDto);
     }
 
     public int addProject(ProjectDto dto) {

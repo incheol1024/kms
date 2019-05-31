@@ -1,11 +1,21 @@
 package com.devworker.kms.dto.site;
 
+import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.entity.site.ProjectBoardDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ProjectBoardDto {
     private int projectId;
     private long boardId;
+    private BoardDetailDto boardDetailDto;
+
+    public BoardDetailDto getBoardDetailDto() {
+        return boardDetailDto;
+    }
+
+    public void setBoardDetailDto(BoardDetailDto boardDetailDto) {
+        this.boardDetailDto = boardDetailDto;
+    }
 
     public int getProjectId() {
         return projectId;

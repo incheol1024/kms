@@ -41,7 +41,7 @@
 
                 <v-window-item>
                     <h3>Project : {{curProject.name}}</h3>
-                    <table-component ref="table2" :headers="boardHeader" :page-req="getBoard"></table-component>
+                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board"></table-component>
                     <v-btn color="primary" @click="addBoard">Add Board</v-btn>
                 </v-window-item>
             </v-window>
@@ -128,8 +128,14 @@
             ],
 
             boardHeader : [
-                {text: "projectId", value: "projectId"},
-                {text: "boardId", value: "boardId"}
+                {text: "boardId", value: "boardId"},
+                {text: "subject", value: "subject"},
+                {text: "contents",value: "contents"},
+                {text: "userId",value: "userId"},
+                {text: "updDate",value: "updDate"},
+                {text: "regDate",value: "regDate"},
+                {text: "hits",value: "hits"}
+
             ]
         }),
         methods: {
@@ -145,15 +151,12 @@
             setSite: function (site) {
                 let _this = this;
                 this.curSite = site;
-                this.getProjects().then(res => {
-                    _this.$refs.table.clear();//중복으로 데이터 첨가 되는거 클리어 처리 .
-                  for (const key in res.data.content)
-                        _this.$refs.table.addFunction(res.data.content[key])
-                }).catch(reason => catchPromise(reason));
                 this.window = 1;
+
             },
             getProjects: function (page) {
                 if (this.curSite.siteId === 0) return;
+                _this.$refs.table.clear();//중복으로 데이터 첨가 되는거 클리어 처리 .
                 return axios.get(`site/${this.id}/${this.curSite.siteId}`, {
                     params: page
                 })
@@ -186,20 +189,18 @@
             deleteProject: function (item) {
                 return axios.delete(`site/${item.siteId}/${item.projectId}`)
             },
-            getBoard : function (page) {
+            getBoard : function (item) {
                 let _this = this;
+                _this.curProject.projectId=item.projectId;
                 this.window = 2;
-                console.log("get Board call :"+item);
-                console.log(item);
+                this.$refs.table2.sync();
+            },
+            getPage_board : function(page){
+                let _this=this;
                 if (this.curSite.siteId === 0) return;
                 return axios.get(`site/${_this.id}/${_this.curSite.siteId}/${_this.curProject.projectId}`, {
-                    params: {page:0,size:5}
-                }).then(res => {
-                    console.log("호출 성공  Data bind after");
-                    _this.$refs.table2.clear();//중복으로 데이터 첨가 되는거 클리어 처리 .
-                    for (const key in res.data.content)
-                        _this.$refs.table2.addFunction(res.data.content[key])
-                }).catch(reason => catchPromise(reason));
+                    params: page
+                } );
             },
             addBoard : function () {
                 

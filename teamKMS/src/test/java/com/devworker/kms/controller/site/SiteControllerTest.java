@@ -57,9 +57,9 @@ public class SiteControllerTest {
 	}
 	@Test
 	public void getboardTest() throws Exception {
-		this.mock.perform(get("/site/9/17?page=0&size=10")).andDo(print()).andExpect(status().isOk())
-		.andExpect(content().string(containsString("board")));
-		
+		this.mock.perform(get("/site/13/9/17?page=0&size=10")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string(containsString("board")));
+
 	}
 	
 	
