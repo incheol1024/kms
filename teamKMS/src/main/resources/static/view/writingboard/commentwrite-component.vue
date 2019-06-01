@@ -11,7 +11,7 @@
                         <v-btn flat color="orange" @click="viewCodemirror">코드 추가</v-btn>
                     </v-card-title>
 
-                    <write-component ref="editor" :toolbar="false"></write-component>
+                    <write-component ref="commentEditor" :toolbar="false"></write-component>
 
                     <div v-if="codemirror">
                         <codemirror ref="myCm"
@@ -26,7 +26,7 @@
 
                     <v-card-actions>
                         <span></span>
-                        <v-space></v-space>
+                        <v-spacer></v-spacer>
                         <v-btn
                                 :loading="loading"
                                 :disabled="loading"
@@ -68,10 +68,9 @@
         props: ['id', 'name', 'qid'],
         data() {
             return {
-                editor: ClassicEditor,
-                cmtContents: '<p>댓글을 입력하세요~^^..!!</p>',
+                cmtContents: '',
                 editorConfig: {},
-                cmtCode: 'const a = 10',
+                cmtCode: '',
                 cmOptions: {
                     tabSize: 4,
                     mode: 'text/javascript',
@@ -220,6 +219,12 @@
 
             },
             addComment: function () {
+
+                if (this.$refs.commentEditor.getText().length === 0) {
+                    alert("댓글은 공백을 입력할 수 없습니다.");
+                    return;
+                }
+
                 var that = this;
                 var url = "/comment/add";
                 if (this.fileTransactKey !== undefined && this.fileCount > 0) {
@@ -229,7 +234,7 @@
                 console.log('defined url ' + url);
                 axios.post(url, {
                     boardId: Number(this.qid),
-                    cmtContents: this.$refs.editor.getText(),
+                    cmtContents: this.$refs.commentEditor.getText(),
                     cmtCode: this.cmtCode,
                     fileTransactKey: this.fileTransactKey,
                     fileCount: this.fileCount

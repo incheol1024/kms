@@ -3,6 +3,7 @@ package com.devworker.kms.repo.common;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -61,7 +63,7 @@ public class CommentRepoTest {
         boardDao.setBoardId(1);
         comment.setBoardId(boardDao);
         comment.setCmtContents("aabbcc");
-        comment.setCmtDate(LocalDateTime.now());
+        //comment.setCmtDate(LocalDateTime.now());
         comment.setCmtUserId("USER");
 
 //        CommentDao savedComment = commentRepo.save(comment);
@@ -93,11 +95,46 @@ public class CommentRepoTest {
         List<CommentDao> commentDaos = commentRepo.findByBoardId(boardDao);
         commentDaos.stream()
                 .forEach(commentDao -> commentDao.getDocDaos().stream()
-                        .forEach(docDao -> System.out.println(docDao.getDocId()) ));
+                        .forEach(docDao -> System.out.println(docDao.getDocId())));
+    }
+
+
+    @Test
+    public void boardId_FetchTypeLazy() {
+        BoardDao boardDao = new BoardDao();
+        boardDao.setBoardId(40L);
+        commentRepo.findByBoardId(boardDao);
+
     }
 
     @Test
-    public void findByPageable() {
+    public void docId_innerJoinTest() {
+        BoardDao boardDao = new BoardDao();
+        boardDao.setBoardId(40L);
+        commentRepo.findByBoardId(boardDao);
 
+    }
+
+    @Test
+    public void pagingQueryTest() {
+
+        Pageable firstPageWithTwoElements = PageRequest.of(0, 2);
+        commentRepo.findAll(firstPageWithTwoElements);
+    }
+
+    @Test
+    public void temporalTest() {
+
+
+        CommentDao commentDao = new CommentDao();
+        commentDao.setCmtUserId("USER");
+        commentDao.setCmtContents("aaa");
+
+        BoardDao boardDao = new BoardDao();
+        boardDao.setBoardId(40L);
+        commentDao.setBoardId(boardDao);
+        commentDao.setCmtDate(new Date());
+
+        commentRepo.save(commentDao);
     }
 }

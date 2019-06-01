@@ -27,7 +27,8 @@
                 sort: 'cmtId,desc',
                 comments: [],
                 totalVisible: 0,
-                maxPage: 5
+                maxPage: 5,
+                numberOfElements: 0
             }
         },
 
@@ -56,6 +57,7 @@
                                 }
                             }
                             that.setTotalVisible(response);
+                            that.setNumberOfElements(response);
                         }
                     )
                     .then(response => {
@@ -80,6 +82,14 @@
                     console.log(response.data.totalPages);
                     // this.totalVisible = response.data.totalPages;
                     this.totalVisible = 2;
+                }
+            },
+            setNumberOfElements: function (response) {
+
+                const numberOfElements = response.data.numberOfElements;
+
+                if(numberOfElements > 0 ) {
+                    this.numberOfElements = numberOfElements;
                 }
             }
         },

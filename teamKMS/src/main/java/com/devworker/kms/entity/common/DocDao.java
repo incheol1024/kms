@@ -3,6 +3,7 @@ package com.devworker.kms.entity.common;
 import javax.persistence.*;
 
 import com.devworker.kms.dto.common.FileDto;
+import com.devworker.kms.util.CommonUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,8 +21,8 @@ public class DocDao {
     @Column(name = "doc_id")
     private long docId;
 
-    @ManyToOne
-    @JoinColumn(name = "board_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false)
     private BoardDao boardId;
 
     @ManyToOne
@@ -118,9 +119,7 @@ public class DocDao {
 
     @Override
     public String toString() {
-        return "DocDao [docId=" + docId + ", boardId=" + boardId + ", cmtId=" + cmtId + ", docPath=" + docPath
-                + ", docName=" + docName + ", docExt=" + docExt + ", docUserId=" + docUserId + ", docSize=" + docSize
-                + "]";
+        return CommonUtil.toJson(this);
     }
 
     public void setUpEntity(FileDto fileDto) {

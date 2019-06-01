@@ -51,7 +51,7 @@ public class CommentComponentTest {
         commentDao.setBoardId(boardDao);
         commentDao.setCmtContents("Comment Service Test Data");
         commentDao.setCmtUserId("USER");
-        commentDao.setCmtDate(LocalDateTime.now());
+        //commentDao.setCmtDate(LocalDateTime.now());
         commentDao.setCmtId(200);
 
     }

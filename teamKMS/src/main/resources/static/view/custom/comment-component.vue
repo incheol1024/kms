@@ -3,13 +3,12 @@
     <v-container grid-list-xs align-content-center>
 
 
-                <commentwrite-component
-                        :id="id"
-                        :name="name"
-                        :qid="qid"
-                        @emitcomment="renderAddComment">
-                </commentwrite-component>
-
+        <commentwrite-component
+                :id="id"
+                :name="name"
+                :qid="qid"
+                @emitcomment="renderAddComment">
+        </commentwrite-component>
 
 
         <template v-for="(comment, index) in comments">
@@ -67,12 +66,18 @@
             </v-layout>
         </template>
 
-        <commentpage-component
-                :id="id"
-                :name="name"
-                :qid="qid"
-                @setcomments="renderComment"
-        ></commentpage-component>
+        <v-layout row wrap justify-space-around :key="index">
+            <v-flex xs12>
+                <div v-if="seenCommentpage">
+                    <commentpage-component
+                            :id="id"
+                            :name="name"
+                            :qid="qid"
+                            @setcomments="renderComment"
+                    ></commentpage-component>
+                </div>
+            </v-flex>
+        </v-layout>
 
     </v-container>
 </template>
@@ -103,6 +108,7 @@
                 multiPartFile: [],
                 comments: [],
                 docs: [],
+                seenCommentpage: false,
                 _this: this
             }
         },
@@ -228,10 +234,14 @@
                     })
             },
             renderComment: function (data) {
-                if (this.comments.length > 0) {
-                    this.comments = [];
-                }
+                this.comments = [];
                 this.comments = data;
+                const commentSize = this.comments.length;
+
+                if (commentSize > 3) {
+                    this.seenCommentpage = true;
+                }
+
             },
             renderAddComment: function (data) {
                 this.comments.unshift(data);
@@ -262,3 +272,7 @@
         computed: {}
     }
 </script>
+<style lang="scss">
+    @import url(https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css);
+
+</style>

@@ -2,6 +2,7 @@ package com.devworker.kms.entity.common;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,8 @@ import com.devworker.kms.repo.common.BoardRepo;
 @Table(name = "KMS_COMMENT")
 public class CommentDao {
 
-    @ManyToOne
-    @JoinColumn(name = "board_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "board_id", nullable = false)
     private BoardDao boardId;
 
     @Id
@@ -37,23 +38,24 @@ public class CommentDao {
     private String cmtUserId;
 
     @Column(name = "cmt_date")
-    private LocalDateTime cmtDate;
+    @Temporal(value = TemporalType.DATE)
+    private Date cmtDate;
+    //private LocalDateTime cmtDate;
 
     @Column(name = "cmt_like")
     private long cmtLike;
 
     @OneToMany(mappedBy = "cmtId", fetch = FetchType.EAGER)
-    @JsonIgnore
     private List<DocDao> docDaos = new ArrayList<>();
 
     public CommentDao() {
-        this.cmtDate = LocalDateTime.now();
+        //this.cmtDate = LocalDateTime.now();
     }
 
     public CommentDao(BoardDao boardId, String cmtContents) {
         this.boardId = boardId;
         this.cmtContents = cmtContents;
-        this.cmtDate = LocalDateTime.now();
+        //this.cmtDate = LocalDateTime.now();
     }
 
     public BoardDao getBoardId() {
@@ -96,11 +98,11 @@ public class CommentDao {
         this.cmtUserId = cmtUserId;
     }
 
-    public LocalDateTime getCmtDate() {
+    public Date getCmtDate() {
         return cmtDate;
     }
 
-    public void setCmtDate(LocalDateTime cmtDate) {
+    public void setCmtDate(Date cmtDate) {
         this.cmtDate = cmtDate;
     }
 
@@ -140,7 +142,7 @@ public class CommentDao {
             this.cmtCode = commentDto.getCmtCode();
 
         if (isNotEmpty(commentDto.getCmtDate()))
-            this.cmtDate = commentDto.getCmtDate();
+            //this.cmtDate = commentDto.getCmtDate();
 
         if (isNotEmpty(commentDto.getCmtId()))
             this.cmtId = commentDto.getCmtId();
