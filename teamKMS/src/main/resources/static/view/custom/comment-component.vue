@@ -2,11 +2,17 @@
 
     <v-container grid-list-xs align-content-center>
 
-        <commentwrite-component :id="id" :name="name" :qid="qid"
-                                @emitcomment="renderAddComment"></commentwrite-component>
+
+                <commentwrite-component
+                        :id="id"
+                        :name="name"
+                        :qid="qid"
+                        @emitcomment="renderAddComment">
+                </commentwrite-component>
+
+
 
         <template v-for="(comment, index) in comments">
-
             <v-layout row wrap justify-space-around :key="index">
                 <v-flex xs12>
                     <v-card>

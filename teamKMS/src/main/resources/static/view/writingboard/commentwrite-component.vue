@@ -3,18 +3,45 @@
 
         <v-layout row wrap>
             <v-flex xs12>
-                <write-component ref="editor" :toolbar="false"></write-component>
+                <v-card>
+                    <v-card-title>
+                        <v-avatar color="grey lighten-4">
+                        </v-avatar>
+                        <v-spacer></v-spacer>
+                        <v-btn flat color="orange" @click="viewCodemirror">코드 추가</v-btn>
+                    </v-card-title>
+
+                    <write-component ref="editor" :toolbar="false"></write-component>
+
+                    <div v-if="codemirror">
+                        <codemirror ref="myCm"
+                                    :value="cmtCode"
+                                    v-model="cmtCode"
+                                    :options="cmOptions"
+                                    @ready="onCmReady"
+                                    @focus="onCmFocus"
+                                    @input="onCmCodeChange">
+                        </codemirror>
+                    </div>
+
+                    <v-card-actions>
+                        <span></span>
+                        <v-space></v-space>
+                        <v-btn
+                                :loading="loading"
+                                :disabled="loading"
+                                color="blue-grey"
+                                class="white--text"
+                                @click="loader = 'loading'"
+                                @click.prevent="addCommentAndFile">
+                            등록
+                            <v-icon right dark>cloud_upload</v-icon>
+                        </v-btn>
+                    </v-card-actions>
+
+                </v-card>
             </v-flex>
-            <v-flex xs12>
-                <codemirror ref="myCm"
-                            :value="cmtCode"
-                            v-model="cmtCode"
-                            :options="cmOptions"
-                            @ready="onCmReady"
-                            @focus="onCmFocus"
-                            @input="onCmCodeChange">
-                </codemirror>
-            </v-flex>
+
             <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
                 <template v-for="doc in docs">
                     <img :src="doc.fileUrl" height="100" v-if="doc.fileName" :key="doc.fileName"/>
@@ -30,9 +57,8 @@
                         multiple
                 >
             </v-flex>
-            <v-btn color="info" @click.prevent="addCommentAndFile">댓글 등록</v-btn>
-        </v-layout>
 
+        </v-layout>
 
     </div>
 </template>
@@ -63,7 +89,10 @@
                 imageFile: '',
                 fileTransactKey: null,
                 fileCount: 0,
-                docs: []
+                docs: [],
+                loader: null,
+                loading: false,
+                codemirror: false
             }
         },
         created: function () {
@@ -82,7 +111,16 @@
                 } else if (8 === Number(this.id)) {
                     this.cmOptions.mode = 'text/html';
                 }
+            },
+            loader() {
+                const loader = this.loader;
+                this[l] = !this[l];
+
+                setTimeout(() => (this[l] = false), 3000);
+
+                this.loader = null;
             }
+
         },
         methods: {
             onCmReady(cm) {
@@ -268,6 +306,9 @@
             },
             onEditorReady: function (editor) {
 
+            },
+            viewCodemirror: function () {
+                this.codemirror = !this.codemirror;
             }
         },
         computed: {
@@ -283,8 +324,45 @@
     }
 </script>
 <style>
-    .ck-editor__editable {
-        min-height: 50px;
+    .custom-loader {
+        animation: loader 1s infinite;
+        display: flex;
+    }
+
+    @-moz-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @-webkit-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @-o-keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes loader {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
     }
 </style>
     
