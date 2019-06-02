@@ -22,10 +22,10 @@
         props: ["id", "name", "qid"],
         data() {
             return {
-                page: 1,
+                page: 0,
                 size: 3,
                 sort: 'cmtId,desc',
-                comments: [],
+                comments: []
                 totalVisible: 0,
                 maxPage: 5,
                 numberOfElements: 0

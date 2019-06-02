@@ -83,8 +83,6 @@ public class CommentController {
      */
     @GetMapping("/list/{boardId}")
     public Page<CommentDto> listComment(@PathVariable BoardDao boardId, Pageable pageable) {
-        //return commentService.findByBoardId(boardId);
-
         System.out.println(pageable);
         return commentComponent.findCommentsByPage(boardId, pageable);
 //		return null;

@@ -232,9 +232,8 @@ public class CommentComponent {
 	}
 
 	public Page<CommentDto> findCommentsByPage(BoardDao boardId, Pageable pageable) {
-		Page<CommentDao> commentDaoPage = commentRepo.findAll(pageable);
+		Page<CommentDao> commentDaoPage = commentRepo.findByBoardIdEquals(boardId, pageable);
 		return commentDaoPage.map(commentDao -> new CommentDto(commentDao));
-		//return null;
 	}
 
 

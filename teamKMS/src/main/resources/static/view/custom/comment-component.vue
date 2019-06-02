@@ -235,6 +235,7 @@
                 this.comments = [];
                 this.comments = data;
                 const commentSize = this.comments.length;
+                console.log("commentSize = " + commentSize );
 
                 if (commentSize > 3) {
                     this.seenCommentpage = true;

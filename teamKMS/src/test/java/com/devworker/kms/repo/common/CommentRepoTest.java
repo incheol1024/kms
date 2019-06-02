@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -118,8 +119,15 @@ public class CommentRepoTest {
     @Test
     public void pagingQueryTest() {
 
+        BoardDao boardDao = new BoardDao();
+        boardDao.setBoardId(40L);
         Pageable firstPageWithTwoElements = PageRequest.of(0, 2);
-        commentRepo.findAll(firstPageWithTwoElements);
+//        commentRepo.findAll(firstPageWithTwoElements);
+        Page<CommentDao> commentDaoPage = commentRepo.findByBoardIdEquals(boardDao, firstPageWithTwoElements);
+
+        commentDaoPage.stream().forEach(commentDao -> {
+            System.out.println(commentDao);
+        });
     }
 
     @Test

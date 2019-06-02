@@ -25,7 +25,7 @@ import static java.util.Objects.isNull;
 @Table(name = "KMS_COMMENT")
 public class CommentDao {
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "board_id", nullable = false)
     private BoardDao boardId;
 
