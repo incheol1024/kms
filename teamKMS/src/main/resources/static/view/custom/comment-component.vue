@@ -2,14 +2,12 @@
 
     <v-container grid-list-xs align-content-center>
 
-
         <commentwrite-component
                 :id="id"
                 :name="name"
                 :qid="qid"
                 @emitcomment="renderAddComment">
         </commentwrite-component>
-
 
         <template v-for="(comment, index) in comments">
             <v-layout row wrap justify-space-around :key="index">
@@ -68,7 +66,7 @@
 
         <v-layout row wrap justify-space-around :key="index">
             <v-flex xs12>
-                <div v-if="seenCommentpage">
+                <div v-show="seenCommentpage">
                     <commentpage-component
                             :id="id"
                             :name="name"
@@ -272,7 +270,4 @@
         computed: {}
     }
 </script>
-<style lang="scss">
-    @import url(https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css);
 
-</style>

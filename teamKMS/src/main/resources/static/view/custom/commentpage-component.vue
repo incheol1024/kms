@@ -87,6 +87,7 @@
             setNumberOfElements: function (response) {
 
                 const numberOfElements = response.data.numberOfElements;
+                console.log("response.data.numberOfElements = " + response.data.numberOfElements)
 
                 if(numberOfElements > 0 ) {
                     this.numberOfElements = numberOfElements;

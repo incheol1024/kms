@@ -1,6 +1,7 @@
 package com.devworker.kms.component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -77,7 +78,8 @@ public class CommentComponent {
 		CommentDao comment = new CommentDao();
 		comment.setUpEntity(commentDto);
 		comment.setCmtUserId(getUserName());
-		logger.debug("{}", comment);
+		comment.setCmtDate(new Date());
+		logger.debug("new comment@ {}", comment);
 		return new CommentDto(commentRepo.save(comment));
 	}
 

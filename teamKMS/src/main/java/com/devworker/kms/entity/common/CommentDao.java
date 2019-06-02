@@ -14,6 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.devworker.kms.dto.common.CommentDto;
 import com.devworker.kms.repo.common.BoardRepo;
+import org.springframework.data.annotation.CreatedDate;
+
+import static java.time.Instant.ofEpochMilli;
+import static java.time.LocalDateTime.ofInstant;
+import static java.time.ZoneId.systemDefault;
+import static java.util.Objects.isNull;
 
 @Entity
 @Table(name = "KMS_COMMENT")
@@ -38,7 +44,8 @@ public class CommentDao {
     private String cmtUserId;
 
     @Column(name = "cmt_date")
-    @Temporal(value = TemporalType.DATE)
+    @Temporal(value = TemporalType.TIMESTAMP)
+    @CreatedDate
     private Date cmtDate;
     //private LocalDateTime cmtDate;
 
@@ -98,11 +105,11 @@ public class CommentDao {
         this.cmtUserId = cmtUserId;
     }
 
-    public Date getCmtDate() {
-        return cmtDate;
+    public LocalDateTime getCmtDate() {
+        return getLocalDateTimeFrom(cmtDate);
     }
 
-    public void setCmtDate(Date cmtDate) {
+    public void setCmtDate(final Date cmtDate) {
         this.cmtDate = cmtDate;
     }
 
@@ -120,6 +127,14 @@ public class CommentDao {
 
     public void setDocDaos(List<DocDao> docDaos) {
         this.docDaos = docDaos;
+    }
+
+    private LocalDateTime getLocalDateTimeFrom(Date date) {
+        return isNull(date) ? null : ofInstant(ofEpochMilli(date.getTime()), systemDefault());
+    }
+
+    private Date getDateFrom(LocalDateTime localDateTime) {
+        return isNull(localDateTime) ? null : Date.from(localDateTime.atZone(systemDefault()).toInstant());
     }
 
     @Override

@@ -41,14 +41,14 @@
       }
     },
     created: function() {
-      console.log("question-component: life cycle created start");
-      console.log("question-component: id = " + this.id);
-      console.log("question-component: name = " + this.name);
-      console.log("question-component: qid = " + this.qid);
+      // console.log("question-component: life cycle created start");
+      // console.log("question-component: id = " + this.id);
+      // console.log("question-component: name = " + this.name);
+      // console.log("question-component: qid = " + this.qid);
       var _this = this;
       this.getQuestionById(_this);
       //this.getDocById(_this);
-      console.log("question-component: life cycle created end");
+      // console.log("question-component: life cycle created end");
 
     },
     methods: {

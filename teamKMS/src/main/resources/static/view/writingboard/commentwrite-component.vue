@@ -112,12 +112,10 @@
                 }
             },
             loader() {
-                const loader = this.loader;
-                this[l] = !this[l];
-
-                setTimeout(() => (this[l] = false), 3000);
-
-                this.loader = null;
+                // const loader = this.loader;
+                // this[l] = !this[l];
+                // setTimeout(() => (this[l] = false), 3000);
+                // this.loader = null;
             }
 
         },
@@ -300,8 +298,6 @@
                 })
                     .then(
                         function (response) {
-                            // router.push("/qna/answer/" + _this.name + "/" + _this.id + "/" + response.data.boardId );
-                            //_this.answers.push(response.data);
                             console.log(response.data);
                         }
                     )

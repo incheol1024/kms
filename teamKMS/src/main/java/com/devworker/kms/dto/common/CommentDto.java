@@ -58,7 +58,7 @@ public class CommentDto {
         this.cmtContents = comment.getCmtContents();
         this.cmtCode = comment.getCmtCode();
         this.cmtUserId = comment.getCmtUserId();
-        //this.cmtDate = comment.getCmtDate();
+        this.cmtDate = comment.getCmtDate();
         this.cmtLike = comment.getCmtLike();
     }
 
