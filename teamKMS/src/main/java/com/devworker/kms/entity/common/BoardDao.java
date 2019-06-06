@@ -25,21 +25,27 @@ public class BoardDao {
 	long boardId;
 
 	@Column(name = "subject")
+	private
 	String subject;
 
 	@Column(name = "contents")
+	private
 	String contents;
 
 	@Column(name = "user_id")
+	private
 	String userId;
 
 	@Column(name = "reg_date")
+	private
 	LocalDateTime regDate;
 
 	@Column(name = "upd_date")
+	private
 	LocalDateTime updDate;
 
 	@Column(name = "hits")
+	private
 	int hits;
 
 	public BoardDao() {

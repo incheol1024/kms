@@ -63,7 +63,6 @@ public class BoardRepoImpl {
     }
 
     private TableField getTableField(String sortFieldName) {
-        System.out.println(sortFieldName);
         switch (sortFieldName){
             case "regDate" : return table.REG_DATE;
             case "subject" : return table.SUBJECT;

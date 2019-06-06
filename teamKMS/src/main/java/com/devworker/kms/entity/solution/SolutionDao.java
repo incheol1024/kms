@@ -10,9 +10,11 @@ import javax.persistence.Table;
 public class SolutionDao {
 	@Id
 	@Column(name = "board_id")
+	private
 	long boardId;
 	
 	@Column(name = "menu_id")
+	private
 	long menuId;
 
 	public long getBoardId() {

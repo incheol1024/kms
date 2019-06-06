@@ -1,5 +1,6 @@
 package com.devworker.kms.fts;
 
+import com.devworker.kms.dto.FtsDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
@@ -11,6 +12,7 @@ public class FTSDao {
 	private String user;
 	private String time;	
 	private int category;
+	private String word;
 	
 	public int getId() {
 		return id;
@@ -42,6 +44,22 @@ public class FTSDao {
 	public void setCategory(int category) {
 		this.category = category;
 	}
-	
-	
+	public String getWord() {
+		return word;
+	}
+
+	public void setWord(String word) {
+		this.word = word;
+	}
+
+	public FtsDto toDto(){
+		FtsDto dto = new FtsDto();
+		dto.setCategory(category);
+		dto.setId(id);
+		dto.setName(name);
+		dto.setTime(time);
+		dto.setUser(user);
+		dto.setWord(word);
+		return dto;
+	}
 }

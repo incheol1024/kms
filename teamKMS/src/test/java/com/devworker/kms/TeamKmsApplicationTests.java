@@ -12,6 +12,7 @@ import java.util.Random;
 
 import javax.sql.DataSource;
 
+import com.devworker.kms.dto.FtsDto;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -144,19 +145,19 @@ public class TeamKmsApplicationTests {
 	@Test
 	public void ftsgetCountTest() {
 		System.out.println(ftsService.getCount());
-		FTSDao dto = new FTSDao();
+		FtsDto dto = new FtsDto();
 		dto.setId(1);
 		dto.setCategory(1);
 		dto.setName("aaa");
 		dto.setUser("bbb");
 		ftsService.save(dto);
-		List<FTSDao> findbyuser = ftsService.findbyuser("bbb");
+		List<FtsDto> findbyuser = ftsService.findByUser("bbb");
 		System.out.println(findbyuser);
 	}
 
 	@Test
 	public void ftsSaveTest() {
-		FTSDao dto = new FTSDao();
+		FtsDto dto = new FtsDto();
 		dto.setId(1);
 		dto.setCategory(1);
 		dto.setName("aaa");
@@ -166,7 +167,7 @@ public class TeamKmsApplicationTests {
 
 	@Test
 	public void ftsSearchTest() {
-		List<FTSDao> findbyuser = ftsService.findbyuser("bbb");
+		List<FtsDto> findbyuser = ftsService.findByUser("bbb");
 		assertThat(findbyuser, not(findbyuser.isEmpty()));
 	}
 }
