@@ -203,8 +203,8 @@
             },
             addBoard : function () {
                  let _this=this;
-                 console.log("add board call()");
-                 router.push(`/site/write/${_this.curProject.projectId}`);
+                 console.log("add board call() : "+_this.curProject.projectId);
+                 router.push(`/sites/write/${_this.curProject.projectId}`);
             }
         }
     };
