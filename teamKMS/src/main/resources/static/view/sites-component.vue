@@ -202,7 +202,9 @@
                 } );
             },
             addBoard : function () {
-                
+                 let _this=this;
+                 console.log("add board call()");
+                 router.push(`/site/write/${_this.curProject.projectId}`);
             }
         }
     };

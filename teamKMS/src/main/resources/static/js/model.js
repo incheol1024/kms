@@ -45,3 +45,16 @@ const SolutionDto = {
         "contents": null
     }
 };
+const SiteDto = {
+	    "boardId": 0,
+	    "projectId": 0,
+	    "boardDetailDto": {
+	        "boardId": 0,
+	        "subject": null,
+	        "userId": null,
+	        "regDate": "",
+	        "updDate": "",
+	        "hits": 0,
+	        "contents": null
+	    }
+	};
