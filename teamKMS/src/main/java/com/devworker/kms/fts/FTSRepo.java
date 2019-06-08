@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-public interface FTSRepo extends ElasticsearchRepository<FTSDao,Integer>{
+public interface FTSRepo extends ElasticsearchRepository<FTSDao,Long>{
 	
 	List<FTSDao> findByName(String name);
 }

@@ -40,6 +40,7 @@ public class BoardRepoImpl {
                         .where(table.BOARD_ID.in(pageList))
                         .orderBy(getSortFields(pageable.getSort()))
                         .fetchInto(BoardDao.class);
+
         return new PageImpl(list, pageable, findCountByLikeExpression(table.BOARD_ID.in(pageList)));
     }
 

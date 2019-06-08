@@ -34,6 +34,8 @@
             },
             pageRes: {
                 default: function (value, _this) {
+                    //TODO:: 버그있음
+                    _this.pagination.totalItems = value.data.totalElements;
                     _this.total = value.data.totalElements;
                     let max = value.data.content.length;
                     for (let i = 0; i < max; i++) {
@@ -150,7 +152,7 @@
         cursor: pointer;
     }
 
-    table thead tr th span{
+    table thead tr th span {
         font-size: 1.0625rem !important;
     }
 </style>

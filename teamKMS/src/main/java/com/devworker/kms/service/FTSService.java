@@ -22,6 +22,10 @@ public class FTSService {
 	public void save(FtsDto dto) {
 		repo.save(dto.toDao());
 	}
+
+	public void delete(long id){
+		repo.deleteById(id);
+	}
 	
 	public List<FtsDto> findByUser(String name) {
 		return repo.findByName(name).stream().map(FTSDao::toDto).collect(Collectors.toList());
