@@ -46,6 +46,7 @@ const SolutionDto = {
     }
 };
 const SiteDto = {
+        "siteId":0,
 	    "boardId": 0,
 	    "projectId": 0,
 	    "boardDetailDto": {

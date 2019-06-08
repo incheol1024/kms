@@ -1,21 +1,21 @@
 package com.devworker.kms.service.site;
 
+import com.devworker.kms.component.BoardComponent;
+import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.site.ProjectBoardDto;
 import com.devworker.kms.dto.site.ProjectDto;
 import com.devworker.kms.dto.site.SiteDto;
-import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.site.ProjectBoardDao;
 import com.devworker.kms.entity.site.ProjectDao;
 import com.devworker.kms.entity.site.SiteDao;
 import com.devworker.kms.repo.site.ProjectBoardRepo;
 import com.devworker.kms.repo.site.ProjectRepo;
 import com.devworker.kms.repo.site.SiteRepo;
-import com.devworker.kms.component.BoardComponent;
+import com.devworker.kms.util.AclUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -54,14 +54,9 @@ public class SiteService {
          Page<ProjectBoardDto> projectBoardDtoLIst=projectBoardRepo.getSiteProjects(projectId, pageable).map(ProjectBoardDao::getDto);
          List<Long> collect =new ArrayList<>();
 
-         //List<BoardDetailDto> BoardDtoLIst= new ArrayList<>();
-
         for(ProjectBoardDto  projectDto : projectBoardDtoLIst)
             collect.add(projectDto.getBoardId());
-
-        //return new PageImpl(BoardDtoLIst, pageable, BoardDtoLIst.size());
         return boardWriteService.getPages(collect, pageable);
-        //return projectBoardRepo.getSiteProjects(projectId, pageable).map(ProjectBoardDao::getDto);
     }
 
     public int addProject(ProjectDto dto) {
@@ -74,10 +69,7 @@ public class SiteService {
 
     public void addBoard(BoardDetailDto dto, int siteId, int projectId) {
         //TODO::
-    	
     	ProjectBoardDao projectBoardDao=new ProjectBoardDao();
-    	
-    	
     	projectBoardDao.setBoardId((boardWriteService.register(dto)));
     	projectBoardDao.setProjectId(projectId);
     	
@@ -87,5 +79,14 @@ public class SiteService {
     public void deleteBoard(int siteId, int projectId, int boardId) {
         //TODO::
     	projectBoardRepo.deleteById(boardId);
+    }
+    public BoardDetailDto getSiteProjectBoardById(Long id) {
+       /* Optional<SiteDao> siteDao =  projectRepo.findById(id);
+        siteDao.orElseThrow(() -> new NotExistException("Site Board Not Found"));*/
+        BoardDetailDto dto = boardWriteService.getBoard(id);
+        dto.setReadOnly(!AclUtil.checkPermission(dto.getUserId() , PermissionType.MODIFYSOL));
+        dto.setHits(dto.getHits() +1);
+        boardWriteService.edit(dto);
+        return dto;
     }
 }

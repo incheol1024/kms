@@ -2,10 +2,8 @@ package com.devworker.kms.controller.site;
 
 import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
-import com.devworker.kms.dto.site.ProjectBoardDto;
 import com.devworker.kms.dto.site.ProjectDto;
 import com.devworker.kms.dto.site.SiteDto;
-import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.service.site.SiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,9 +50,12 @@ public class SiteController {
     }
 
     @GetMapping("/{menuId}/{siteId}/{projectId}")
-    public Page<BoardDto> getProjectBoards(@PathVariable int menuId, @PathVariable int siteId, @PathVariable int projectId, @PageableDefault(page=0,size=5)Pageable pageable){
-    	//BoardDetailDto boardDetailDto=
-        return siteService.getProjectBoards(menuId,siteId,projectId,pageable);
+    public Page<BoardDto> getProjectBoardLists(@PathVariable int menuId, @PathVariable int siteId, @PathVariable int projectId, @PageableDefault(page=0,size=5)Pageable pageable){
+    	 return siteService.getProjectBoards(menuId,siteId,projectId,pageable);
+    }
+     @GetMapping("/board/{siteId}/{projectId}/{boardId}")
+    public BoardDetailDto getProjectBoardByDetail(@PathVariable int siteId, @PathVariable int projectId, @PathVariable Long boardId){
+         return siteService.getSiteProjectBoardById(boardId);
     }
 
     @PutMapping("/{siteId}/{projectId}")

@@ -41,7 +41,7 @@
 
                 <v-window-item>
                     <h3>Project : {{curProject.name}}</h3>
-                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board"></table-component>
+                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board" :click-row="clickBoard"></table-component>
                     <v-btn color="primary" @click="addBoard">Add Board</v-btn>
                 </v-window-item>
             </v-window>
@@ -203,8 +203,12 @@
             },
             addBoard : function () {
                  let _this=this;
-                 console.log("add board call() : "+_this.curProject.projectId);
-                 router.push(`/sites/write/${_this.curProject.projectId}`);
+                 console.log("add New board call() : "+_this.curProject.projectId);
+                 router.push(`/sites/write/${_this.curSite.siteId}/${_this.curProject.projectId}/0`);
+            },
+            clickBoard : function(item){
+                let _this=this;
+                router.push(`/sites/write/${_this.curSite.siteId}/${_this.curProject.projectId}/${item.boardId}`);
             }
         }
     };
