@@ -41,7 +41,8 @@
 
                 <v-window-item>
                     <h3>Project : {{curProject.name}}</h3>
-                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board" :click-row="clickBoard"></table-component>
+                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board" :click-row="clickBoard"
+                                     :allow-delete="true" :delete-function="deleteBoard"></table-component>
                     <v-btn color="primary" @click="addBoard">Add Board</v-btn>
                 </v-window-item>
             </v-window>
@@ -133,7 +134,8 @@
                 {text: "userId",value: "userId"},
                 {text: "updDate",value: "updDate"},
                 {text: "regDate",value: "regDate"},
-                {text: "hits",value: "hits"}
+                {text: "hits",value: "hits"},
+                {text: 'action', value: '' , sortable : false}
 
             ]
         }),
@@ -186,6 +188,7 @@
                 this.dialog = false;
             },
             deleteProject: function (item) {
+                if (confirm("삭제하시겠습니까?"))
                 return axios.delete(`site/${item.siteId}/${item.projectId}`)
             },
             getBoard : function (item) {
@@ -203,12 +206,17 @@
             },
             addBoard : function () {
                  let _this=this;
-                 console.log("add New board call() : "+_this.curProject.projectId);
-                 router.push(`/sites/write/${_this.curSite.siteId}/${_this.curProject.projectId}/0`);
+                 router.push(`/sites/write/${_this.id}/${_this.curSite.siteId}/${_this.curProject.projectId}/0`);
             },
             clickBoard : function(item){
                 let _this=this;
-                router.push(`/sites/write/${_this.curSite.siteId}/${_this.curProject.projectId}/${item.boardId}`);
+                router.push(`/sites/write/${_this.id}/${_this.curSite.siteId}/${_this.curProject.projectId}/${item.boardId}`);
+            },
+            deleteBoard : function (item) {
+                let _this=this;
+                console.log(item)
+                if (confirm("삭제하시겠습니까?"))
+                return axios.delete(`site/${_this.curSite.siteId}/${_this.curProject.projectId}/${item.boardId}`);
             }
         }
     };

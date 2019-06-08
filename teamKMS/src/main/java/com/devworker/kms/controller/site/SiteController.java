@@ -2,6 +2,7 @@ package com.devworker.kms.controller.site;
 
 import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
+import com.devworker.kms.dto.site.ProjectBoardDto;
 import com.devworker.kms.dto.site.ProjectDto;
 import com.devworker.kms.dto.site.SiteDto;
 import com.devworker.kms.service.site.SiteService;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -53,14 +55,18 @@ public class SiteController {
     public Page<BoardDto> getProjectBoardLists(@PathVariable int menuId, @PathVariable int siteId, @PathVariable int projectId, @PageableDefault(page=0,size=5)Pageable pageable){
     	 return siteService.getProjectBoards(menuId,siteId,projectId,pageable);
     }
-     @GetMapping("/board/{siteId}/{projectId}/{boardId}")
-    public BoardDetailDto getProjectBoardByDetail(@PathVariable int siteId, @PathVariable int projectId, @PathVariable Long boardId){
+     @GetMapping("/{menuId}/{siteId}/{projectId}/{boardId}")
+    public BoardDetailDto getProjectBoardByDetail(@PathVariable int menuId,@PathVariable int siteId, @PathVariable int projectId, @PathVariable Long boardId){
          return siteService.getSiteProjectBoardById(boardId);
     }
 
-    @PutMapping("/{siteId}/{projectId}")
-    public void addProjectBoards(@RequestBody BoardDetailDto boarddetalDto, @PathVariable int siteId, @PathVariable int projectId){
-         siteService.addBoard(boarddetalDto, siteId, projectId);
+    @PostMapping("/add")
+    public void addProjectBoards(@Valid @RequestBody ProjectBoardDto projectBoardDto){
+        siteService.addBoard(projectBoardDto);
+    }
+    @PutMapping("/edit")
+    public void editProjectBoards(@Valid @RequestBody ProjectBoardDto projectBoardDto){
+        siteService.editBoard(projectBoardDto);
     }
 
     @DeleteMapping("/{siteId}/{projectId}/{boardId}")

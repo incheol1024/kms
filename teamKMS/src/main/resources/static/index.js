@@ -83,7 +83,7 @@ const router = new VueRouter({
         {path: '/qna/:name/:id', component: Vue.component('qna-component'), props: true},
         {path: '/search', component: Vue.component('search-component')},
         {path: '/help', component: Vue.component('help-component')},
-        {path: '/sites/write/:siteId/:projectId/:boardId', component: Vue.component('siteswrite-component'), props: true},
+        {path: '/sites/write/:menuId/:siteId/:projectId/:boardId', component: Vue.component('siteswrite-component'), props: true},
         {path: '/solutions/write/:menuId/:boardId', component: Vue.component('solwrite-component'), props: true},
         {path: '/write/:id', component: Vue.component('write-component'), props: true},
         {path: '/qna/write/:name/:id', component: Vue.component('qnawrite-component'), props: true},

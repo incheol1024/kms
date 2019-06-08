@@ -51,8 +51,8 @@ public class SiteControllerTest {
 		boardDto.setRegDate(LocalDateTime.now());
 		boardDto.setUpdDate(LocalDateTime.now());
 		
-		siteService.addBoard(boardDto, siteId, projectId);
-		String res = null;
+		//siteService.addBoard(boardDto, siteId, projectId);
+		//String res = null;
 //		solutionService.registerSolution(boardDao, res);
 	}
 	@Test
