@@ -70,7 +70,7 @@ public class BoardComponent {
 
 	public void edit(BoardDetailDto newer, BoardDetailDto old,PermissionType type) {
 		boardRepo.findById(old.getBoardId()).orElseThrow(() -> new NotExistException("Board Not Found"));
-		if(!AclUtil.checkPermission(type))
+		if(!AclUtil.checkPermission(CommonUtil.getCurrentUser(),type))
 			throw new NotAllowException("You Have not Board Permission." + type.getValue());
 		old.setUpdDate(LocalDateTime.now());
 		old.setContents(newer.getContents());
