@@ -11,7 +11,6 @@ public class FTSDao {
 	private String name;	
 	private String user;
 	private String time;	
-	private long category;
 	private String word;
 	
 
@@ -42,14 +41,6 @@ public class FTSDao {
 		this.id = id;
 	}
 
-	public long getCategory() {
-		return category;
-	}
-
-	public void setCategory(long category) {
-		this.category = category;
-	}
-
 	public String getWord() {
 		return word;
 	}
@@ -59,7 +50,6 @@ public class FTSDao {
 
 	public FtsDto toDto(){
 		FtsDto dto = new FtsDto();
-		dto.setCategory(category);
 		dto.setId(id);
 		dto.setName(name);
 		dto.setUser(user);

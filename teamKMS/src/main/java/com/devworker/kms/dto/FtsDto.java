@@ -7,7 +7,6 @@ public class FtsDto {
     private long id;
     private String name;
     private String user;
-    private long category;
     private String word;
 
 
@@ -41,18 +40,9 @@ public class FtsDto {
         this.id = id;
     }
 
-    public long getCategory() {
-        return category;
-    }
-
-    public void setCategory(long category) {
-        this.category = category;
-    }
-
     @JsonIgnore
     public FTSDao toDao(){
         FTSDao dao = new FTSDao();
-        dao.setCategory(category);
         dao.setId(id);
         dao.setName(name);
         dao.setUser(user);
