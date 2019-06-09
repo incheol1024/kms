@@ -19,6 +19,7 @@ import com.devworker.kms.util.AclUtil;
 import com.devworker.kms.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +61,8 @@ public class SiteService {
          List<Long> collect =new ArrayList<>();
           for(ProjectBoardDto  projectDto : projectBoardDtoLIst)
             collect.add(projectDto.getBoardId());
-        return boardWriteService.getPages(collect, pageable);
+          return new PageImpl(collect);
+        //return boardWriteService.getPages(collect, pageable);
     }
 
     public int addProject(ProjectDto dto) {

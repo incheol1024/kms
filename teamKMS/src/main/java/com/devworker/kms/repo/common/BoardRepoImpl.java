@@ -1,54 +1,44 @@
 package com.devworker.kms.repo.common;
 
-import com.devworker.kms.entity.common.BoardDao;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
-import org.jooq.SortField;
-import org.jooq.TableField;
+import org.jooq.*;
 import org.jooq.generated.kms.tables.KmsBoard;
+import org.jooq.types.UInteger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Repository
 public class BoardRepoImpl {
     @Autowired
     DSLContext context;
+
     KmsBoard table = KmsBoard.KMS_BOARD;
 
-    public Page<BoardDao> findAll(Pageable pageable) {
-        List<BoardDao> list =
-                context.select(table.BOARD_ID, table.SUBJECT, table.USER_ID, table.REG_DATE, table.UPD_DATE, table.HITS)
-                        .from(table)
-                        .orderBy(getSortFields(pageable.getSort()))
-                        .limit((int) pageable.getOffset(), pageable.getPageSize())
-                        .fetchInto(BoardDao.class);
-        return new PageImpl(list, pageable, findCountByLikeExpression(null));
+    public SelectJoinStep<Record6<UInteger, String, String, Date, Date, Integer>> select() {
+        return context.select(table.BOARD_ID, table.SUBJECT, table.USER_ID, table.REG_DATE, table.UPD_DATE, table.HITS)
+                .from(table);
     }
 
-    public Page<BoardDao> findAll(List<Long> pageList, Pageable pageable) {
-        List<BoardDao> list =
-                context.select(table.BOARD_ID, table.SUBJECT, table.USER_ID, table.REG_DATE, table.UPD_DATE, table.HITS)
-                        .from(table)
-                        .where(table.BOARD_ID.in(pageList))
-                        .orderBy(getSortFields(pageable.getSort()))
-                        .fetchInto(BoardDao.class);
-
-        return new PageImpl(list, pageable, findCountByLikeExpression(table.BOARD_ID.in(pageList)));
+    public SelectJoinStep<Record7<UInteger, String, String, Date, Date, Integer, String>> selectWithContent() {
+        return context.select(table.BOARD_ID, table.SUBJECT, table.USER_ID, table.REG_DATE, table.UPD_DATE, table.HITS, table.CONTENTS)
+                .from(table);
     }
 
-    private long findCountByLikeExpression(Condition condition) {
-        if(condition == null)
-            return context.fetchCount(context.select().from(table));
-        return context.fetchCount(
-                context.select().from(table).where(condition));
+    public SelectWithTiesAfterOffsetStep paging(SelectSeekStepN step, Pageable pageable){
+        return step.limit((int) pageable.getOffset(), pageable.getPageSize());
+    }
+
+    public SelectSeekStepN sorting(SelectConditionStep<Record6<UInteger, String, String, Date, Date, Integer>> step, Pageable pageable){
+        return step.orderBy(getSortFields(pageable.getSort()));
+    }
+
+    public Condition boardIdEq(TableField field){
+        return table.BOARD_ID.eq(field);
     }
 
     private Collection<SortField<?>> getSortFields(Sort sortSpecification) {
