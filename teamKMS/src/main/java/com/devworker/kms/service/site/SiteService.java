@@ -77,39 +77,25 @@ public class SiteService {
 
     public void addBoard(ProjectBoardDto projectBoardDto) {
         //TODO::
-        projectBoardDto.getBoardDetailDto().setRegDate(LocalDateTime.now());
-        projectBoardDto.getBoardDetailDto().setUpdDate(LocalDateTime.now());
-        projectBoardDto.getBoardDetailDto().setUserId(CommonUtil.getCurrentUser());
-        projectBoardDto.setBoardId((boardWriteService.register(projectBoardDto.getBoardDetailDto())));
-
+        projectBoardDto.setBoardId((boardWriteService.register(projectBoardDto.getBoardDetailDto(),PermissionType.CREATESITE)));
        projectBoardRepo.save(projectBoardDto.getDao());
     }
     public void editBoard(ProjectBoardDto projectBoardDto) {
         //TODO::
         BoardDetailDto boardDetailDto=boardWriteService.getBoard(projectBoardDto.getBoardDetailDto().getBoardId());
-        if(!AclUtil.checkPermission(boardDetailDto.getUserId() , PermissionType.MODIFYSITE))
-            throw new NotAllowException("You Have not Delete Project Board Permission");
-        projectBoardDto.getBoardDetailDto().setUpdDate(LocalDateTime.now());
-        projectBoardDto.getBoardDetailDto().setUserId(CommonUtil.getCurrentUser());
-
-        boardWriteService.register(projectBoardDto.getBoardDetailDto());
+        boardWriteService.edit(projectBoardDto.getBoardDetailDto(),boardDetailDto,PermissionType.MODIFYSITE);
     }
 
     public void deleteBoard(int siteId, int projectId, long boardId) {
         //TODO::
-        BoardDetailDto boardDetailDto=boardWriteService.getBoard(boardId);
+        BoardDetailDto boardDetailDto=getSiteProjectBoardById(boardId);
         if(!AclUtil.checkPermission(boardDetailDto.getUserId() , PermissionType.DELETESITE))
             throw new NotAllowException("You Have not Delete Project Board Permission");
        	projectBoardRepo.deleteById(boardId);
         boardWriteService.delete(boardId);
     }
     public BoardDetailDto getSiteProjectBoardById(Long id) {
-        Optional<ProjectBoardDao> projectBoardDao =  projectBoardRepo.findByBoardId(id);
-        projectBoardDao.orElseThrow(() -> new NotExistException("Site Board Not Found"));
-        BoardDetailDto dto = boardWriteService.getBoard(id);
-        dto.setReadOnly(!AclUtil.checkPermission(dto.getUserId() , PermissionType.MODIFYSITE));
-        dto.setHits(dto.getHits() +1);
-        boardWriteService.edit(dto);
-        return dto;
+        projectBoardRepo.findByBoardId(id).orElseThrow(() -> new NotExistException("Site Board Not Found"));;
+        return boardWriteService.getBoard(id);
     }
 }

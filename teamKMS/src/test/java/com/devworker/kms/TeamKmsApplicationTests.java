@@ -147,7 +147,7 @@ public class TeamKmsApplicationTests {
 		System.out.println(ftsService.getCount());
 		FtsDto dto = new FtsDto();
 		dto.setId(1);
-		dto.setCategory(1);
+		//dto.setCategory(1);
 		dto.setName("aaa");
 		dto.setUser("bbb");
 		ftsService.save(dto);
@@ -159,7 +159,7 @@ public class TeamKmsApplicationTests {
 	public void ftsSaveTest() {
 		FtsDto dto = new FtsDto();
 		dto.setId(1);
-		dto.setCategory(1);
+		//dto.setCategory(1);
 		dto.setName("aaa");
 		dto.setUser("bbb");
 		ftsService.save(dto);
