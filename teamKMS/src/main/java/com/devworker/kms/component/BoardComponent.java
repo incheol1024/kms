@@ -91,10 +91,10 @@ public class BoardComponent {
 		boardRepo.deleteById(id);
 	}
 	
-	public BoardDetailDto getBoard(Long id)
+	public BoardDetailDto getBoard(Long id,PermissionType type)
 	{
 		BoardDetailDto dto = boardRepo.findById(id).orElseThrow(() -> new NotExistException("Board Not Found")).getBoardDetailDto();
-		dto.setReadOnly(!AclUtil.checkPermission(dto.getUserId() , PermissionType.MODIFYSOL));
+		dto.setReadOnly(!AclUtil.checkPermission(dto.getUserId() , type));
 		if(!dto.getUserId().equals(CommonUtil.getCurrentUser())){
 			dto.setHits(dto.getHits() +1);
 			boardRepo.save(dto.toDao());

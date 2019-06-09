@@ -62,6 +62,6 @@ public class SolutionService {
 
 	public BoardDetailDto getSolutionById(Long id) {
 		solutionRepo.findById(id).orElseThrow(() -> new NotExistException("Solution Board Not Found"));
-		return boardComponent.getBoard(id);
+		return boardComponent.getBoard(id,PermissionType.MODIFYSOL);
 	}
 }
