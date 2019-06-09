@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ProjectBoardRepo  extends PagingAndSortingRepository<ProjectBoardDao, Long> {
     @Query("select t from ProjectBoardDao t where t.projectId = :projectId")
-    Page<ProjectBoardDao> getSiteProjects(@Param("projectId") int projectId, Pageable pageable);
+    Page<ProjectBoardDao> getSiteProjects(@Param("projectId") int projectId,Pageable pageable);
     @Query("select t from ProjectBoardDao t where t.boardId =:boardId")
     Optional<ProjectBoardDao> findByBoardId(@Param("boardId") Long id);
 }

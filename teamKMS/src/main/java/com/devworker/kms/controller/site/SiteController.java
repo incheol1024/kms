@@ -37,7 +37,7 @@ public class SiteController {
     }
 
     @GetMapping("/{menuId}/{siteId}")
-    public Page<ProjectDto> getSiteProjects(@PathVariable int menuId, @PathVariable int siteId, @PageableDefault(page=0,size=5) Pageable pageable){
+    public Page<ProjectDto> getSiteProjects(@PathVariable int menuId, @PathVariable int siteId,  Pageable pageable){
         return siteService.getSiteProjects(menuId, siteId,pageable);
     }
 
@@ -52,8 +52,9 @@ public class SiteController {
     }
 
     @GetMapping("/{menuId}/{siteId}/{projectId}")
-    public Page<BoardDto> getProjectBoardLists(@PathVariable int menuId, @PathVariable int siteId, @PathVariable int projectId, @PageableDefault(page=0,size=5)Pageable pageable){
-    	 return siteService.getProjectBoards(menuId,siteId,projectId,pageable);
+    public Page<BoardDto> getProjectBoardLists(@PathVariable int menuId, @PathVariable int siteId, @PathVariable int projectId, Pageable pageable){
+
+        return siteService.getProjectBoards(menuId,siteId,projectId,pageable);
     }
      @GetMapping("/{menuId}/{siteId}/{projectId}/{boardId}")
     public BoardDetailDto getProjectBoardByDetail(@PathVariable int menuId,@PathVariable int siteId, @PathVariable int projectId, @PathVariable Long boardId){

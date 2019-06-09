@@ -41,7 +41,8 @@
 
                 <v-window-item>
                     <h3>Project : {{curProject.name}}</h3>
-                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board" :click-row="clickBoard"
+                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board"
+                                     :click-row="clickBoard"
                                      :allow-delete="true" :delete-function="deleteBoard"></table-component>
                     <v-btn color="primary" @click="addBoard">Add Board</v-btn>
                 </v-window-item>
@@ -106,7 +107,7 @@
             id: function (id) {
                 this.getSiteList(id);
             },
-            'curSite.siteId' : function(value){
+            'curSite.siteId': function (value) {
                 this.$refs.table.sync();
             }
         },
@@ -128,21 +129,18 @@
                 {text: "action", value: "action", sortable: false}
             ],
 
-            boardHeader : [
+            boardHeader: [
                 {text: "boardId", value: "boardId"},
                 {text: "subject", value: "subject"},
-                {text: "userId",value: "userId"},
-                {text: "updDate",value: "updDate"},
-                {text: "regDate",value: "regDate"},
-                {text: "hits",value: "hits"},
-                {text: 'action', value: '' , sortable : false}
+                {text: "userId", value: "userId"},
+                {text: "updDate", value: "updDate"},
+                {text: "regDate", value: "regDate"},
+                {text: "hits", value: "hits"},
+                {text: 'action', value: '', sortable: false}
 
             ]
         }),
         methods: {
-            writePage: function writepage() {
-                router.push("sites/write/" + this.id);
-            },
             getSiteList: function (id) {
                 _this = this;
                 axios.get(`site/${id}`).then(res => {
@@ -153,7 +151,6 @@
                 let _this = this;
                 this.curSite = site;
                 this.window = 1;
-
             },
             getProjects: function (page) {
                 if (this.curSite.siteId === 0) return;
@@ -174,9 +171,11 @@
             },
             deleteSite: function (site) {
                 let _this = this;
-                axios.delete(`site/${site.siteId}`).then(res => {
-                    _this.siteData.splice(_this.siteData.indexOf(site), 1)
-                }).catch(reason => catchPromise(reason));
+                if (confirm("삭제하시겠습니까?")) {
+                    axios.delete(`site/${site.siteId}`).then(res => {
+                        _this.siteData.splice(_this.siteData.indexOf(site), 1)
+                    }).catch(reason => catchPromise(reason));
+                }
             },
             addProject: function () {
                 let _this = this;
@@ -189,34 +188,33 @@
             },
             deleteProject: function (item) {
                 if (confirm("삭제하시겠습니까?"))
-                return axios.delete(`site/${item.siteId}/${item.projectId}`)
+                    return axios.delete(`site/${item.siteId}/${item.projectId}`)
             },
-            getBoard : function (item) {
+            getBoard: function (item) {
                 let _this = this;
-                _this.curProject.projectId=item.projectId;
+                _this.curProject.projectId = item.projectId;
                 this.window = 2;
                 this.$refs.table2.sync();
             },
-            getPage_board : function(page){
-                let _this=this;
+            getPage_board: function (page) {
+                let _this = this;
                 if (this.curSite.siteId === 0) return;
                 return axios.get(`site/${_this.id}/${_this.curSite.siteId}/${_this.curProject.projectId}`, {
                     params: page
-                } );
+                });
             },
-            addBoard : function () {
-                 let _this=this;
-                 router.push(`/sites/write/${_this.id}/${_this.curSite.siteId}/${_this.curProject.projectId}/0`);
+            addBoard: function () {
+                let _this = this;
+                router.push(`/sites/write/${_this.id}/${_this.curSite.siteId}/${_this.curProject.projectId}/0`);
             },
-            clickBoard : function(item){
-                let _this=this;
+            clickBoard: function (item) {
+                let _this = this;
                 router.push(`/sites/write/${_this.id}/${_this.curSite.siteId}/${_this.curProject.projectId}/${item.boardId}`);
             },
-            deleteBoard : function (item) {
-                let _this=this;
-                console.log(item)
+            deleteBoard: function (item) {
+                let _this = this;
                 if (confirm("삭제하시겠습니까?"))
-                return axios.delete(`site/${_this.curSite.siteId}/${_this.curProject.projectId}/${item.boardId}`);
+                    return axios.delete(`site/${_this.curSite.siteId}/${_this.curProject.projectId}/${item.boardId}`);
             }
         }
     };
