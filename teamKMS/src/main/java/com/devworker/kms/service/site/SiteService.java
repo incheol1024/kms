@@ -82,7 +82,7 @@ public class SiteService {
     }
     public void editBoard(ProjectBoardDto projectBoardDto) {
         //TODO::
-        BoardDetailDto boardDetailDto=boardWriteService.getBoard(projectBoardDto.getBoardDetailDto().getBoardId());
+        BoardDetailDto boardDetailDto=boardWriteService.getBoard(projectBoardDto.getBoardDetailDto().getBoardId(),PermissionType.MODIFYSITE);
         boardWriteService.edit(projectBoardDto.getBoardDetailDto(),boardDetailDto,PermissionType.MODIFYSITE);
     }
 
@@ -96,6 +96,6 @@ public class SiteService {
     }
     public BoardDetailDto getSiteProjectBoardById(Long id) {
         projectBoardRepo.findByBoardId(id).orElseThrow(() -> new NotExistException("Site Board Not Found"));;
-        return boardWriteService.getBoard(id);
+        return boardWriteService.getBoard(id,PermissionType.MODIFYSITE);
     }
 }
