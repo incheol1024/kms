@@ -1,5 +1,5 @@
 <template inline-template>
-    <v-data-table :headers="headers" :items="items" :pagination.sync="pagination"
+    <v-data-table :headers="headers" :items="datas" :pagination.sync="pagination"
                   :select-all="!!allowSelect" v-model="selection" :search="search"
                   :total-items="total" :loading="loading" must-sort class="elevation-1">
         <template slot="items" slot-scope="props">
@@ -34,12 +34,9 @@
             },
             pageRes: {
                 default: function (value, _this) {
-                    //TODO:: 버그있음
-                    _this.pagination.totalItems = value.data.totalElements;
-                    _this.total = value.data.totalElements;
                     let max = value.data.content.length;
                     for (let i = 0; i < max; i++) {
-                        _this.items.push(value.data.content[i]);
+                        _this.datas.push(value.data.content[i]);
                     }
                 },
                 type: Function
@@ -58,7 +55,8 @@
             },
             addFunction: {
                 default: function (item) {
-                    this.items.push(copyObject(item));
+                    this.datas.push(copyObject(item));
+                    this.total += 1;
                 },
                 type: Function
             },
@@ -91,16 +89,17 @@
             }
         },
         data: () => ({
-            items: [],
+            datas: [],
             pagination: {},
             loading: false,
             total: 0
         }),
         watch: {
             pagination: {
-                handler() {
+                handler () {
                     this.sync();
-                }
+                },
+                deep: true
             }
         },
         methods: {
@@ -109,8 +108,9 @@
                 let _this = this;
                 try {
                     this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
-                        _this.items = [];
+                        _this.datas = [];
                         _this.pageRes(value, _this);
+                        _this.total = value.data.totalElements;
                     }).catch(reason => catchPromise(reason))
                 } finally {
                     _this.loading = false
@@ -122,7 +122,8 @@
             deleteItem: function deleteItem(item) {
                 let _this = this;
                 this.deleteFunction(item).then(res => {
-                    _this.items.splice(_this.items.indexOf(item), 1)
+                    _this.datas.splice(_this.datas.indexOf(item), 1);
+                    _this.total -= 1;
                 }).catch(reason => catchPromise(reason));
             },
             mappingHeader: function mappingHeader(item) {
@@ -137,7 +138,7 @@
                 this.$emit("update:selection", this.selection)
             },
             clear: function () {
-                this.items = [];
+                this.datas = [];
             }
         }
     }

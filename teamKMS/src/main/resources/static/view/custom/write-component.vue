@@ -9,7 +9,7 @@
             readOnly:  {
                 default: false,
                 type: Boolean,
-                required : true
+                required : false
             },
             toolbar : {
                 default: true,
