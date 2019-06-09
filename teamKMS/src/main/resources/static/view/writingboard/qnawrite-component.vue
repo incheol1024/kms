@@ -1,17 +1,26 @@
 <template>
     <v-content>
         qna {{name}} {{id}}
+        <v-layout row wrap>
+            <v-flex xs12>
 
-        <codemirror v-model="code" :options="cmOptions"></codemirror>
-        <codemirror ref="myCm" :value="code" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
-                    @input="onCmCodeChange">
-        </codemirror>
-        <no-ssr placeholder="Codemirror Loading...">
-            <codemirror ref="myCm" :value="code" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
-                        @input="onCmCodeChange">
+        <write-component ref="commentEditor" :toolbar="false"></write-component>
 
-            </codemirror>
-        </no-ssr>
+            </v-flex>
+        </v-layout>
+
+<!--        <codemirror v-model="code" :options="cmOptions"></codemirror>-->
+<!--        <codemirror ref="myCm" :value="code" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"-->
+<!--                    @input="onCmCodeChange">-->
+<!--        </codemirror>-->
+<!--        <no-ssr placeholder="Codemirror Loading...">-->
+<!--            <codemirror ref="myCm" :value="code" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"-->
+<!--                        @input="onCmCodeChange">-->
+
+<!--            </codemirror>-->
+<!--        </no-ssr>-->
+
+
     </v-content>
 </template>
 

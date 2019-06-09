@@ -9,21 +9,6 @@
 
   <script>
   module.exports = {
-    props: ['id', 'name', 'qid'],
-    data() {
-      return {
-      }
-    },
-
-    created: function() {
-        // console.log('qnaposts-component: life cycle created start');
-        // console.log('qnaposts-component: id =' + this.id);
-        // console.log('qnaposts-component: name = ' + this.name);
-        // console.log('qnaposts-component: qid = ' + this.qid);
-        // console.log('qnaposts-component: life cycle created end');
-    },
-
-    methods: {
-    }
+    props: ['id', 'name', 'qid']
   }
   </script>

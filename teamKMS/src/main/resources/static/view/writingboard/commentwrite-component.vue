@@ -8,7 +8,17 @@
                         <v-avatar color="grey lighten-4">
                         </v-avatar>
                         <v-spacer></v-spacer>
-                        <v-btn flat color="orange" @click="viewCodemirror">코드 추가</v-btn>
+                        <v-btn v-if="isRequiredCodeButton" flat color="orange" @click="viewCodemirror">코드 추가</v-btn>
+                        <v-btn
+                                :loading="loading"
+                                :disabled="loading"
+                                color="blue-grey"
+                                class="white--text"
+                                @click="loader = 'loading'"
+                                @click.prevent="addCommentAndFile">
+                            등록
+                            <v-icon right dark>cloud_upload</v-icon>
+                        </v-btn>
                     </v-card-title>
 
                     <write-component ref="commentEditor" :toolbar="false"></write-component>
@@ -23,21 +33,6 @@
                                     @input="onCmCodeChange">
                         </codemirror>
                     </div>
-
-                    <v-card-actions>
-                        <span></span>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                                :loading="loading"
-                                :disabled="loading"
-                                color="blue-grey"
-                                class="white--text"
-                                @click="loader = 'loading'"
-                                @click.prevent="addCommentAndFile">
-                            등록
-                            <v-icon right dark>cloud_upload</v-icon>
-                        </v-btn>
-                    </v-card-actions>
 
                 </v-card>
             </v-flex>
@@ -65,7 +60,16 @@
 
 <script>
     module.exports = {
-        props: ['id', 'name', 'qid'],
+        // props: ['id', 'name', 'qid', 'isRequiredCodeButton'],
+        props: {
+            id: Number,
+            name: String,
+            qid: Number,
+            isRequiredCodeButton: {
+                type: Boolean,
+                default: false
+            }
+        },
         data() {
             return {
                 cmtContents: '',
@@ -314,7 +318,7 @@
         },
         computed: {
             codemirror() {
-                return this.$refs.myCm.codemirror
+                return this.$refs.myCm.codemirror;
             }
         },
         mounted() {
@@ -324,46 +328,5 @@
 
     }
 </script>
-<style>
-    .custom-loader {
-        animation: loader 1s infinite;
-        display: flex;
-    }
 
-    @-moz-keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    @-webkit-keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    @-o-keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    @keyframes loader {
-        from {
-            transform: rotate(0);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-</style>
     

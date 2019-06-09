@@ -1,15 +1,15 @@
 <template>
     <v-layout row wrap>
-        <v-flex xs8>
+        <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
             <v-card>
                 <v-card-text>
                     <v-pagination
-                            v-model="page"
+                            v-model="number"
                             :dark="true"
-                            :length="5"
+                            :length="totalPages"
                             :circle="true"
                             :total-visible="totalVisible"
-                            :value="page"
+                            :value="number"
                     ></v-pagination>
                 </v-card-text>
             </v-card>
@@ -22,26 +22,34 @@
         props: ["id", "name", "qid"],
         data() {
             return {
-                page: 0,
+                page: 1,
                 size: 3,
                 sort: 'cmtId,desc',
-                comments: []
-                totalVisible: 0,
+                comments: [],
+                totalVisible: 5,
                 maxPage: 5,
-                numberOfElements: 0
+                // page object variable
+                empty: false, // 코멘트가 있는지 여부
+                first: true, // 첫번째 페이지 여부
+                last: false, // 마지막 페이지 여부
+                totalPages: 0, // 총 필요 페이지 수
+                number: 0, // 현재 페이지 번호 ( -1 한 값임)
+                totalElements: 0, // 총 댓글 개수
+                numberOfElements: 0 // 현재 댓글 개수
             }
         },
 
         created: function () {
-            this.getComments(this.page);
+            console.log("comment page");
+            this.getComments(this.number);
         },
         methods: {
-            getComments: function (page) {
+            getComments: function (number) {
                 var that = this;
                 axios.get("/comment/list/" + this.qid,
                     {
                         params: {
-                            page: page,
+                            page: number - 1,
                             size: this.size,
                             sort: this.sort
                         }
@@ -49,19 +57,17 @@
                 )
                     .then(
                         function (response) {
-                            console.dir(response.data);
-                            if (response.data.content.length > 0) {
-                                that.removeComment();
-                                for (var i = 0; i < response.data.content.length; i++) {
-                                    that.comments.push(response.data.content[i]);
-                                }
-                            }
-                            that.setTotalVisible(response);
-                            that.setNumberOfElements(response);
+                            that.setPageValues(response.data);
+                            return response;
                         }
                     )
                     .then(response => {
-
+                        if (response.data.content.length > 0) {
+                            that.removeComment();
+                            for (var i = 0; i < response.data.content.length; i++) {
+                                that.comments.push(response.data.content[i]);
+                            }
+                        }
                     })
                     .then(response => {
                         that.emitComment();
@@ -76,27 +82,19 @@
             removeComment: function () {
                 this.comments = [];
             },
-            setTotalVisible: function (response) {
-
-                if (response.data.totalPages < this.maxPage) {
-                    console.log(response.data.totalPages);
-                    // this.totalVisible = response.data.totalPages;
-                    this.totalVisible = 2;
-                }
-            },
-            setNumberOfElements: function (response) {
-
-                const numberOfElements = response.data.numberOfElements;
-                console.log("response.data.numberOfElements = " + response.data.numberOfElements)
-
-                if(numberOfElements > 0 ) {
-                    this.numberOfElements = numberOfElements;
-                }
+            setPageValues: function (responseData) {
+                this.empty = responseData.empty;
+                this.first = responseData.first;
+                this.last = responseData.last;
+                this.totalPages = responseData.totalPages;
+                this.number = responseData.number + 1;
+                this.totalElements = responseData.totalElements;
+                this.numberOfElements = responseData.numberOfElements;
             }
         },
         watch: {
-            page: function (page) {
-                this.getComments(page);
+            number: function (number) {
+                this.getComments(number);
             }
         }
 

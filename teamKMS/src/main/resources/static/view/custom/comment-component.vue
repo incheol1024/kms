@@ -3,9 +3,10 @@
     <v-container grid-list-xs align-content-center>
 
         <commentwrite-component
-                :id="id"
+                :id="Number(id)"
                 :name="name"
-                :qid="qid"
+                :qid="Number(qid)"
+                :is-required-code-button="true"
                 @emitcomment="renderAddComment">
         </commentwrite-component>
 
@@ -45,12 +46,10 @@
 
                         <v-card-actions v-if="isExistData(comment.docId)">
                             <div>
-                                <!-- <template v-for="(doc, index) in docs"> -->
                                 <v-chip close color="orange" label outline :key="index"
                                         @click="fileDownload(comment.docId, comment.docName)">
                                     {{comment.docName}}
                                 </v-chip>
-                                <!-- </template>                                             -->
                             </div>
                         </v-card-actions>
                         <v-card-actions>
@@ -72,6 +71,7 @@
                             :name="name"
                             :qid="qid"
                             @setcomments="renderComment"
+                            ref=commentPage"
                     ></commentpage-component>
                 </div>
             </v-flex>
@@ -166,7 +166,7 @@
                             }
                         )
                         .catch(function (error) {
-                            console.log(error)
+                            console.log(error);
                         })
                 } else {
                     // Do nothing!
@@ -184,7 +184,7 @@
                         }
                     )
                     .catch(function (error) {
-                        console.log(error)
+                        console.log(error);
                     })
             },
             updateUnLike: function () {
@@ -228,18 +228,16 @@
                         }
                     )
                     .catch(function (error) {
-                        console.log(error)
+                        console.log(error);
                     })
             },
             renderComment: function (data) {
                 this.comments = [];
                 this.comments = data;
-                const commentSize = this.comments.length;
+                let commentSize = this.comments.length;
                 console.log("commentSize = " + commentSize );
 
-                if (commentSize > 3) {
-                    this.seenCommentpage = true;
-                }
+                this.seenCommentpage = true; // 수정필요
 
             },
             renderAddComment: function (data) {
@@ -254,21 +252,20 @@
 
             },
             onCmReady(cm) {
-                console.log('the editor is readied!', cm)
+                console.log('the editor is readied!', cm);
             },
             onCmFocus(cm) {
-                console.log('the editor is focus!', cm)
+                console.log('the editor is focus!', cm);
             },
             onCmCodeChange(newCode) {
-                console.log('this is new code', newCode)
+                console.log('this is new code', newCode);
                 this.code = newCode
             },
             onCkViewReady(editor) {
                 console.log('this is ckeditor view ready');
             }
 
-        },
-        computed: {}
+        }
     }
 </script>
 
