@@ -9,7 +9,7 @@ public class QnaCodeDaoId implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private int menuId;
-	private int boardId;
+	private long boardId;
 
 	public QnaCodeDaoId() {
 	}
@@ -22,11 +22,11 @@ public class QnaCodeDaoId implements Serializable {
 		this.menuId = menuId;
 	}
 
-	public int getBoardId() {
+	public long getBoardId() {
 		return boardId;
 	}
 
-	public void setBoardId(int boardId) {
+	public void setBoardId(long boardId) {
 		this.boardId = boardId;
 	}
 
@@ -45,6 +45,6 @@ public class QnaCodeDaoId implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return this.menuId + Integer.numberOfLeadingZeros(this.boardId) + Integer.numberOfTrailingZeros(this.boardId);
+		return this.menuId + Long.numberOfLeadingZeros(this.boardId) + Long.numberOfTrailingZeros(this.boardId);
 	}
 }

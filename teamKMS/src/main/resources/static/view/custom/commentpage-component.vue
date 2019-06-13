@@ -68,16 +68,17 @@
                                 that.comments.push(response.data.content[i]);
                             }
                         }
+                        return response;
                     })
                     .then(response => {
-                        that.emitComment();
+                        that.emitComment(response.data.content);
                     })
                     .catch(function (error) {
                         console.log(error)
                     })
             },
-            emitComment: function () {
-                this.$emit('setcomments', this.comments, '');
+            emitComment: function (comments) {
+                this.$emit('setcomments', comments, '');
             },
             removeComment: function () {
                 this.comments = [];
@@ -90,6 +91,9 @@
                 this.number = responseData.number + 1;
                 this.totalElements = responseData.totalElements;
                 this.numberOfElements = responseData.numberOfElements;
+            },
+            getTotalPages() {
+                return this.totalPages;
             }
         },
         watch: {

@@ -71,7 +71,7 @@
                             :name="name"
                             :qid="qid"
                             @setcomments="renderComment"
-                            ref=commentPage"
+                            ref="commentPage"
                     ></commentpage-component>
                 </div>
             </v-flex>
@@ -187,24 +187,6 @@
                         console.log(error);
                     })
             },
-            updateUnLike: function () {
-                console.log("updateUnLike function is called");
-                axios.post('/comment/unlike', {
-                    cmtId: this.cmtId
-                })
-                    .then(
-                        function (response) {
-                            // router.push("/qna/comment/" + _this.name + "/" + _this.id + "/" + response.data.boardId );
-
-                            _this.comments.push(response.data);
-
-                            console.log(response.data);
-                        }
-                    )
-                    .catch(function (error) {
-                        console.log(error)
-                    })
-            },
             fileDownload: function (docId, docName) {
                 console.log("fileDownload function is called");
                 console.log("file download url" + " file/download/" + docId);
@@ -231,17 +213,15 @@
                         console.log(error);
                     })
             },
-            renderComment: function (data) {
-                this.comments = [];
-                this.comments = data;
-                let commentSize = this.comments.length;
-                console.log("commentSize = " + commentSize );
-
-                this.seenCommentpage = true; // 수정필요
+            renderComment: function (comments) {
+                this.comments = comments;
+                let totalPages = this.$refs.commentPage.getTotalPages();
+                if(totalPages > 0 )
+                    this.seenCommentpage = true;
 
             },
             renderAddComment: function (data) {
-                this.comments.unshift(data);
+                this.$refs.commentPage.getComments(1);
             },
             isExistData: function (data) {
                 if (data === undefined || data === null || data === '0' || 0 === Number(data)) {

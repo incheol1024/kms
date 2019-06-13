@@ -74,16 +74,20 @@ public class QnaService {
 		//return null;
 	}
 
+/**
+ *
+*/
 	@Transactional
 	public BoardDao createQuestion(BoardDao boardDao, int menuId) {
 		boardDao.setUserId(CommonUtil.getCurrentUser());
 		boardDao.setRegDate(LocalDateTime.now());
 		boardDao.setUpdDate(LocalDateTime.now());
+
 		BoardDao savedBoardDao = boardRepo.save(boardDao);
-		MenuDao menuDao = menuRepo.findById(menuId).get();
+
 		QnaCodeDao qnaCodeDao = new QnaCodeDao();
-		qnaCodeDao.setBoardId(boardDao);
-		qnaCodeDao.setMenuId(menuDao);
+		qnaCodeDao.setBoardId(boardRepo.save(savedBoardDao));
+		qnaCodeDao.setMenuId(menuRepo.findById(menuId).get());
 		qnaCodeRepo.save(qnaCodeDao);
 		return savedBoardDao;
 	}
