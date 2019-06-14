@@ -27,7 +27,8 @@
                                 </v-list-tile-action>
                             </v-list-tile>
                         </v-list>
-                        <v-text-field v-model="siteName" label="SiteName" single-line hide-details></v-text-field>
+                        <v-spacer></v-spacer>
+                        <v-text-field v-model="siteName" label="input SiteName" single-line hide-details></v-text-field>
                         <v-btn color="primary" @click="addSite">Add Site</v-btn>
                     </v-card>
                 </v-window-item>
@@ -40,7 +41,7 @@
                 </v-window-item>
 
                 <v-window-item>
-                    <v-card-title>
+                 <v-card-title>
                 <v-spacer></v-spacer>
                 <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                 
@@ -54,7 +55,7 @@
             </v-window>
         </v-flex>
 
-        <v-dialog v-model="dialog" width="500">
+        <v-dialog v-model="dialog" width="500" persistent="true">
             <v-card>
                 <v-card-title class="headline primary lighten-2" primary-title>
                     ADD NEW PROJECT
@@ -95,6 +96,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" flat @click="dialog =false">Close</v-btn>
                     <v-btn color="blue darken-1" flat @click="addProject">Save</v-btn>
                 </v-card-actions>
             </v-card>
@@ -110,6 +112,7 @@
         },
         watch: {
             id: function (id) {
+                this.window=0;
                 this.getSiteList(id);
             },
             'curSite.siteId': function (value) {
@@ -185,6 +188,7 @@
             addProject: function () {
                 let _this = this;
                 _this.curProject.siteId = _this.curSite.siteId;
+                _this.curProject.projectId=0;
                 axios.put(`site/${_this.curSite.siteId}`, _this.curProject).then(res => {
                     _this.curProject.projectId = res.data;
                     _this.$refs.table.addFunction(_this.curProject);
@@ -197,6 +201,7 @@
             },
             getBoard: function (item) {
                 let _this = this;
+                _this.curProject.name=item.name;
                 _this.curProject.projectId = item.projectId;
                 this.window = 2;
                 this.$refs.table2.sync();

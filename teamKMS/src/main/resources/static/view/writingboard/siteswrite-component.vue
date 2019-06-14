@@ -47,14 +47,18 @@ module.exports =  {
           this.curSite.projectId=this.projectId;
           this.curSite.boardDetailDto.boardId = this.curSite.boardId;
           this.curSite.boardDetailDto.contents = this.$refs.editor.getText();
-          let fetch = axios.post("/site/add", this.curSite);
+          let fetch ;
+
           if (this.boardId !== "0")
               fetch = axios.put("/site/edit", this.curSite);
+          else
+              fetch = axios.post("/site/add", this.curSite);
           fetch.then(response => {
           }).catch(error => catchPromise(error))
               .finally(() => {
                   this.loading = false;
-                  this.$router.push(`/sites/${this.menuId}`);
+                  this.$router.go(-1);
+                  //this.$router.push(`/sites/${this.menuId}`);
               });
       }
   }
