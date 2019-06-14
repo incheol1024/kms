@@ -40,8 +40,13 @@
                 </v-window-item>
 
                 <v-window-item>
+                    <v-card-title>
+                <v-spacer></v-spacer>
+                <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                
+                    </v-card-title>
                     <h3>Project : {{curProject.name}}</h3>
-                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board"
+                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board" v-model="search"
                                      :click-row="clickBoard"
                                      :allow-delete="true" :delete-function="deleteBoard"></table-component>
                     <v-btn color="primary" @click="addBoard">Add Board</v-btn>
@@ -122,20 +127,20 @@
             startDialog: false,
             endDialog: false,
             siteHeader: [
-                {text: "name", value: "name"},
-                {text: "startDate", value: "startDate"},
-                {text: "endDate", value: "endDate"},
-                {text: "mangerName", value: "mangerName", sortable: false},
+                {text: "프로젝트명", value: "name"},
+                {text: "시작일자", value: "startDate"},
+                {text: "완료일자", value: "endDate"},
+                {text: "관리자", value: "mangerName", sortable: false},
                 {text: "action", value: "action", sortable: false}
             ],
 
             boardHeader: [
                 {text: "boardId", value: "boardId"},
-                {text: "subject", value: "subject"},
-                {text: "userId", value: "userId"},
-                {text: "updDate", value: "updDate"},
-                {text: "regDate", value: "regDate"},
-                {text: "hits", value: "hits"},
+                {text: "제목", value: "subject"},
+                {text: "작성자", value: "userId"},
+                {text: "수정일", value: "updDate"},
+                {text: "등록일", value: "regDate"},
+                {text: "조회수", value: "hits"},
                 {text: 'action', value: '', sortable: false}
 
             ]
