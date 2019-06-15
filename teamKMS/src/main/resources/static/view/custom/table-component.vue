@@ -1,13 +1,12 @@
 <template inline-template>
     <div>
-        <v-data-table :headers="headers" :items="datas" :pagination.sync="pagination"
+        <v-data-table :headers="headers" :items="datas" :pagination.sync="pagination" :total-items="totalDesserts"
                       :select-all="!!allowSelect" v-model="selection" :search="search"
-                      :loading="loading" must-sort class="elevation-1" hide-actions>
+                      :loading="loading" must-sort class="elevation-1">
             <template slot="items" slot-scope="props">
                 <tr>
                     <td v-if="allowSelect">
-                        <v-checkbox v-model="props.selected" primary hide-details
-                                    @change="updateSelection"></v-checkbox>
+                        <v-checkbox v-model="props.selected" primary hide-details @change="updateSelection"></v-checkbox>
                     </td>
                     <td v-for="value in mappingHeader(props.item)" @click="clickRow(props.item)">{{ value }}</td>
                     <td v-if="allowDelete || allowEdit">
@@ -17,9 +16,6 @@
                 </tr>
             </template>
         </v-data-table>
-        <div class="text-xs-center pt-2">
-            <v-pagination v-model="pagination.page" :length="pageSize"></v-pagination>
-        </div>
     </div>
 </template>
 
@@ -97,14 +93,14 @@
             datas: [],
             pagination: {},
             loading: false,
-            pageSize : 0
+            totalDesserts : 0
         }),
         watch: {
             pagination: {
-                handler(event) {
-                    this.pagination.totalItems = this.sync();
-                    this.pageSize = Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
-                    console.log(event)
+                handler() {
+                    this.sync().then(value => {
+                        this.totalDesserts = value;
+                    });
                 },
                 deep: true
             }
@@ -114,11 +110,12 @@
                 this.loading = true;
                 let _this = this;
                 try {
-                    this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
+                    return this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
                         _this.datas = [];
                         _this.pageRes(value, _this);
                         return parseInt(value.data.totalElements);
-                    }).catch(reason => catchPromise(reason))
+                    }).
+                    catch(reason => catchPromise(reason))
                 } finally {
                     _this.loading = false
                 }

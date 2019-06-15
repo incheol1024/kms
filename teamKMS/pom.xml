@@ -147,6 +147,7 @@
             <artifactId>jooq-meta</artifactId>
             <version>3.11.7</version>
         </dependency>
+
     </dependencies>
 
     <profiles>
