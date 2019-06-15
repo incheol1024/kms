@@ -18,8 +18,8 @@
 <v-app id='test'>
 		<span>
 		<table-component ref="table" :headers="tableHeader" :allow-select="true" :selection.sync="selection"
-           :page-req="page" :page-res="pageRes" :allow-delete="true" :allow-edit="true" :edit-function="edit" :delete-function="deleted"
-        >
+           :page-req="page" :page-res="pageRes" :allow-delete="true" :allow-edit="true" :total-items="total"
+                         :edit-function="edit" :delete-function="deleted">
 		</table-component>
 		</span>
     <v-btn @click="addtable">ADD BUTTON</v-btn>
@@ -43,7 +43,8 @@
                     {text: "name", value: "name"},
                     {text: "actions", value: "actions"}
                 ],
-                selection : []
+                selection : [],
+                total : 0
             }
         },
         methods: {
@@ -54,8 +55,8 @@
                 return new Promise(function (resolve, reject) {
                     var items = _this.getItem();
                     var total = items.length;
-                    if (item.page > 0 && item.size > 0) {
-                        items = items.splice((item.page - 1) * item.size, item.page * item.size);
+                    if (item.page > -1 && item.size > 0) {
+                        items = items.splice((item.page) * item.size, (item.page+1) * item.size);
                     }
                     resolve(new function(){
                         return {
@@ -72,7 +73,7 @@
                 _this.total = res.data.totalElements;
                 let max = res.data.content.length;
                 for (let i = 0; i < max; i++) {
-                    _this.items.push(res.data.content[i]);
+                    _this.datas.push(res.data.content[i]);
                 }
             },
             addtable : function addtable(item){
@@ -98,6 +99,61 @@
                         selected : false,
                         id: "1111",
                         name: 'Froasdfasdfzen Yogurt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
+                    },
+                    {
+                        selected : true,
+                        id: "124124",
+                        name: 'Frozen Yogufffffrt'
                     },
                     {
                         selected : true,

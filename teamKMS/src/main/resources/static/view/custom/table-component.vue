@@ -1,20 +1,26 @@
 <template inline-template>
-    <v-data-table :headers="headers" :items="datas" :pagination.sync="pagination"
-                  :select-all="!!allowSelect" v-model="selection" :search="search"
-                  :total-items="total" :loading="loading" must-sort class="elevation-1">
-        <template slot="items" slot-scope="props">
-            <tr>
-                <td v-if="allowSelect">
-                    <v-checkbox v-model="props.selected" primary hide-details @change="updateSelection"></v-checkbox>
-                </td>
-                <td v-for="value in mappingHeader(props.item)" @click="clickRow(props.item)">{{ value }}</td>
-                <td v-if="allowDelete || allowEdit">
-                    <v-icon v-if="allowEdit" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
-                    <v-icon v-if="allowDelete" small @click="deleteItem(props.item)">delete</v-icon>
-                </td>
-            </tr>
-        </template>
-    </v-data-table>
+    <div>
+        <v-data-table :headers="headers" :items="datas" :pagination.sync="pagination"
+                      :select-all="!!allowSelect" v-model="selection" :search="search"
+                      :loading="loading" must-sort class="elevation-1" hide-actions>
+            <template slot="items" slot-scope="props">
+                <tr>
+                    <td v-if="allowSelect">
+                        <v-checkbox v-model="props.selected" primary hide-details
+                                    @change="updateSelection"></v-checkbox>
+                    </td>
+                    <td v-for="value in mappingHeader(props.item)" @click="clickRow(props.item)">{{ value }}</td>
+                    <td v-if="allowDelete || allowEdit">
+                        <v-icon v-if="allowEdit" small class="mr-2" @click="editItem(props.item)">edit</v-icon>
+                        <v-icon v-if="allowDelete" small @click="deleteItem(props.item)">delete</v-icon>
+                    </td>
+                </tr>
+            </template>
+        </v-data-table>
+        <div class="text-xs-center pt-2">
+            <v-pagination v-model="pagination.page" :length="pageSize"></v-pagination>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -56,7 +62,6 @@
             addFunction: {
                 default: function (item) {
                     this.datas.push(copyObject(item));
-                    this.total += 1;
                 },
                 type: Function
             },
@@ -92,12 +97,14 @@
             datas: [],
             pagination: {},
             loading: false,
-            total: 0
+            pageSize : 0
         }),
         watch: {
             pagination: {
-                handler () {
-                    this.sync();
+                handler(event) {
+                    this.pagination.totalItems = this.sync();
+                    this.pageSize = Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage);
+                    console.log(event)
                 },
                 deep: true
             }
@@ -110,7 +117,7 @@
                     this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
                         _this.datas = [];
                         _this.pageRes(value, _this);
-                        _this.total = value.data.totalElements;
+                        return parseInt(value.data.totalElements);
                     }).catch(reason => catchPromise(reason))
                 } finally {
                     _this.loading = false
@@ -123,7 +130,6 @@
                 let _this = this;
                 this.deleteFunction(item).then(res => {
                     _this.datas.splice(_this.datas.indexOf(item), 1);
-                    _this.total -= 1;
                 }).catch(reason => catchPromise(reason));
             },
             mappingHeader: function mappingHeader(item) {
