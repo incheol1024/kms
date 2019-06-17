@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import com.devworker.kms.entity.MenuDao;
 import com.devworker.kms.repo.qna.QnaCodeRepo;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -31,15 +32,30 @@ public class QnaCodeRepoTest {
 	@Autowired
 	MenuRepo menuRepo;
 
-	static QnaCodeDao qnaCodeDao;
-	static long boardId = 1;
-	static int menuId = 4;
+	QnaCodeDao qnaCodeDao;
+	MenuDao menuDao;
+	static long boardId = 40;
+	static int menuId = 5;
 
 	@Before
 	public void setUp() {
+
 		qnaCodeDao = new QnaCodeDao();
-		qnaCodeDao.setBoardId(boardRepo.findById(boardId).get());
-		qnaCodeDao.setMenuId(menuRepo.findById(menuId).get());
+		qnaCodeDao.setMenuId(menuDao);
+
+//		menuDao = new MenuDao();
+//		menuDao.setId(5);
+
+		menuDao = menuRepo.findById(5).get();
+	}
+
+
+	@Test
+	public void findByMenuId() {
+
+		List<QnaCodeDao> qnaCodeDaos = qnaCodeRepo.findByMenuId(menuDao);
+		qnaCodeDaos.forEach(System.out::println);
+
 	}
 
 	@Test

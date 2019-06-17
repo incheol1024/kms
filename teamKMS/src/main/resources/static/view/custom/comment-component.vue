@@ -63,7 +63,7 @@
             </v-layout>
         </template>
 
-        <v-layout row wrap justify-space-around :key="index">
+        <v-layout row wrap justify-space-around >
             <v-flex xs12>
                 <div v-show="seenCommentpage">
                     <commentpage-component
@@ -82,7 +82,16 @@
 
 <script>
     module.exports = {
-        props: ['id', 'name', 'qid'],
+        // props: ['id', 'name', 'qid'],
+        props: {
+            id: Number,
+            name: String,
+            qid: Number,
+            isRequiredCodeButton: {
+                type: Boolean,
+                default: false
+            }
+        },
         data() {
             return {
                 cmtId: 1,

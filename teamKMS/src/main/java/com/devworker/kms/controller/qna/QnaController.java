@@ -2,15 +2,13 @@ package com.devworker.kms.controller.qna;
 
 import java.util.List;
 
+import com.devworker.kms.dto.common.BoardDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.service.qna.QnaService;
@@ -25,8 +23,12 @@ public class QnaController {
 	QnaService qnaService;
 
 	@GetMapping("/{menuId}")
-	public List<BoardDao> qnaHome(@PathVariable int menuId) {
-		return qnaService.getFirstPageList(menuId);
+	public Page<BoardDto> qnaHome(@PathVariable int menuId, Pageable pageable) {
+
+		logger.debug("menuId = {}", menuId);
+		logger.debug("Pageable = {}", pageable);
+		return qnaService.getQnaPage(menuId, pageable);
+		//return qnaService.getFirstPageList(menuId);
 	}
 
 	@PostMapping("/register/{menuId}")
@@ -40,6 +42,12 @@ public class QnaController {
 	@GetMapping("/answer/{id}")
 	public BoardDao getQnaById(@PathVariable Long id) {
 		return qnaService.findById(id);
+	}
+
+	@DeleteMapping("/delete/{id}")
+	public void deleteQuestion(@PathVariable long id) {
+		logger.debug("{}", id);
+		qnaService.deleteQuestion(id);
 	}
 
 }

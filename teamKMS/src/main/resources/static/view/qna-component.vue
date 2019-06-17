@@ -1,33 +1,27 @@
 <template>
     <v-layout column>
-        <v-card-title>
-            <v-btn slot="activator" color="primary" dark class="mb-2" @click="moveToWritePage"> 글쓰기</v-btn>
-            <v-spacer></v-spacer>
-            <v-text-field v-model="search" append-icon="search" label="검색" single-line hide-details></v-text-field>
-        </v-card-title>
-        <v-data-table :headers="headers" :items="questions" :search="search">
-            <template slot="headerCell" slot-scope="props">
-                <v-tooltip bottom>
-        <span slot="activator">
-          {{ props.header.text }}
-        </span>
-                    <span>
-          {{ props.header.text }}
-        </span>
-                </v-tooltip>
-            </template>
-            <template slot="items" slot-scope="props">
-                <tr @click="moveToSpecificPage(props.item)">
-                    <td class="text-xs-left">{{ props.item.hits }}</td>
-                    <td class="text-xs-left">{{ props.item.subject }}</td>
-                    <td class="text-xs-left">{{ props.item.userId }}</td>
-                    <td class="text-xs-left">{{ props.item.hits }}</td>
-                </tr>
-            </template>
-            <v-alert slot="no-results" :value="true" color="error" icon="warning">
-                "{{ search }}"에 대한 결과를 찾을 수 없습니다.
-            </v-alert>
-        </v-data-table>
+        <v-card>
+            <v-card-title> {{name}}
+                <v-spacer></v-spacer>
+                <v-text-field v-model="search"
+                              append-icon="search"
+                              label="Search"
+                              single-line hide-details>
+                </v-text-field>
+                <v-btn color="primary"
+                       @click="moveToWritePage">
+                    글쓰기
+                </v-btn>
+            </v-card-title>
+            <table-component ref="table"
+                             :headers="headers"
+                             v-model="search"
+                             :page-req="getQnaList"
+                             :allow-delete="true"
+                             :click-row="clickRow"
+                             :delete-function="deleteQna">
+            </table-component>
+        </v-card>
     </v-layout>
 </template>
 
@@ -36,62 +30,40 @@
         name: 'qna',
         props: ['id', 'name'],
         data: () => ({
-            search: '',
-            headers: [{
-                text: '조회수',
-                align: 'left',
-                sortable: false,
-                value: 'viewCount'
-            },
-                {
-                    text: '제목',
-                    value: 'title'
-                },
-                {
-                    text: '작성자',
-                    value: 'userName'
-                },
-                {
-                    text: '답변수',
-                    value: 'replyCount'
-                }
+            headers: [
+                {text: '번호', value: 'boardId'},
+                {text: '제목', value: 'subject'},
+                {text: '작성자', value: 'userId', sortable: false},
+                {text: '조회수', value: 'hits', sortable: false},
+                {text: '등록일자', value: 'regDate'},
+                {text: 'action', value: '', sortable: false}
             ],
-            questions: []
+            search: ""
         }),
         created: function () {
             this.getQnaList(this.id);
         },
 
         methods: {
-            getQnaList: function (id) {
-                var that = this;
-                axios.get("/qna/" + id)
-                    .then(
-                        function (response) {
-                            that.questions = [];
-                            for (var i = 0; i < response.data.length; i++) {
-                                that.questions.push(response.data[i]);
-                            }
-                        }
-                    )
-                    .catch(function (error) {
-                        console.log(error);
-                    })
+            getQnaList: function (page) {
+                return axios.get(`qna/${this.id}`, {
+                        params: page
+                    });
             },
             moveToWritePage: function () {
-                this.$router.push("/qna/write/" + this.name + "/" + this.id);
+                this.$router.push(`/qna/write/${this.name}/${this.id}`);
             },
-            writepage: function writepage() {
-                router.push("/qna/write/" + this.name + "/" + this.id);
+            deleteQna: function (item) {
+                if (confirm("삭제하시겠습니까?"))
+                    return axios.delete(`qna/delete/${item.boardId}`);
             },
-            moveToSpecificPage: function (question) {
-                console.log('qna-component: moveToSpecificPage() router.push url /qna/answer/' + this.name + "/" + this.id + "/" + question.boardId);
-                router.push("/qna/answer/" + this.name + "/" + this.id + "/" + question.boardId);
+            clickRow: function (item) {
+                router.push(`/qna/answer/${this.name}/${this.id}/${item.boardId}`);
             }
         },
         watch: {
-            id: function (id) {
-                this.getQnaList(id);
+            id : function(){
+                this.$refs.table.sync();
             }
         }
     };

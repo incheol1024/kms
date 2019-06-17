@@ -4,26 +4,27 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import com.devworker.kms.component.BoardComponent;
+import com.devworker.kms.dto.common.BoardDto;
+import com.devworker.kms.repo.qna.QnaRepoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.entity.MenuDao;
 import com.devworker.kms.entity.common.BoardDao;
-import com.devworker.kms.entity.common.CommentDao;
 import com.devworker.kms.entity.qna.QnaCodeDao;
-import com.devworker.kms.entity.qna.QnaDao;
 import com.devworker.kms.repo.MenuRepo;
 import com.devworker.kms.repo.common.BoardRepo;
 import com.devworker.kms.repo.common.CommentRepo;
 import com.devworker.kms.repo.common.DocRepo;
 import com.devworker.kms.repo.qna.QnaCodeRepo;
-import com.devworker.kms.repo.qna.QnaRepo;
 import com.devworker.kms.util.CommonUtil;
 
 @Service
@@ -31,9 +32,6 @@ public class QnaService {
 
 	private Logger logger = LoggerFactory.getLogger(QnaService.class);
 	
-	@Autowired
-	QnaRepo qnaRepo;
-
 	@Autowired
 	BoardRepo boardRepo;
 
@@ -48,6 +46,10 @@ public class QnaService {
 	
 	@Autowired
 	MenuRepo menuRepo;
+
+
+	@Autowired
+	QnaRepoImpl qnaRepo;
 
 	/**
 	 * @param menuId
@@ -74,6 +76,11 @@ public class QnaService {
 		//return null;
 	}
 
+	public Page<BoardDto> getQnaPage(int menuId, Pageable pageable) {
+		Page<BoardDao> boardDaoPage = qnaRepo.getPage(menuId, pageable);
+		return boardDaoPage.map((boardDao)-> boardDao.getBoardDto());
+	}
+
 /**
  *
 */
@@ -98,17 +105,10 @@ public class QnaService {
 		return boardRepo.save(boardDao);
 	}
 
-	public QnaDao findPostById(Long id) {
 
-		Optional<BoardDao> opBoardDao = boardRepo.findById(id);
-			BoardDao boardDao = opBoardDao.get();
-		return null;
-	}
-
-	public int AnswerQna(CommentDao commentDao, BoardDao boardId) {
-		commentRepo.save(commentDao);
-		return 0;
-
-	}
-
+    public void deleteQuestion(long id) {
+		BoardDao boardDao = new BoardDao();
+		boardDao.setBoardId(id);
+		boardRepo.delete(boardDao);
+    }
 }

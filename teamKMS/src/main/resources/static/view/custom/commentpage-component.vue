@@ -40,12 +40,10 @@
         },
 
         created: function () {
-            console.log("comment page");
             this.getComments(this.number);
         },
         methods: {
             getComments: function (number) {
-                var that = this;
                 axios.get("/comment/list/" + this.qid,
                     {
                         params: {
@@ -57,21 +55,21 @@
                 )
                     .then(
                         function (response) {
-                            that.setPageValues(response.data);
+                            this.setPageValues(response.data);
                             return response;
                         }
                     )
                     .then(response => {
                         if (response.data.content.length > 0) {
-                            that.removeComment();
+                            this.removeComment();
                             for (var i = 0; i < response.data.content.length; i++) {
-                                that.comments.push(response.data.content[i]);
+                                this.comments.push(response.data.content[i]);
                             }
                         }
                         return response;
                     })
                     .then(response => {
-                        that.emitComment(response.data.content);
+                        this.emitComment(response.data.content);
                     })
                     .catch(function (error) {
                         console.log(error)

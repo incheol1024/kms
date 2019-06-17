@@ -10,20 +10,20 @@
                         <v-spacer></v-spacer>
                         <v-btn v-if="isRequiredCodeButton" flat color="orange" @click="viewCodemirror">코드 추가</v-btn>
                         <v-btn
-                                :loading="loading"
-                                :disabled="loading"
+                                :loading="uploading"
+                                :disabled="uploading"
                                 color="blue-grey"
                                 class="white--text"
-                                @click="loader = 'loading'"
                                 @click.prevent="addCommentAndFile">
                             등록
                             <v-icon right dark>cloud_upload</v-icon>
                         </v-btn>
                     </v-card-title>
 
-                    <write-component ref="commentEditor" :toolbar="false"></write-component>
+                        <write-component ref="commentEditor" :toolbar="false"></write-component>
 
                     <div v-if="codemirror">
+                        <v-divider></v-divider>
                         <codemirror ref="myCm"
                                     :value="cmtCode"
                                     v-model="cmtCode"
@@ -33,6 +33,17 @@
                                     @input="onCmCodeChange">
                         </codemirror>
                     </div>
+                    <v-card-actions>
+                        <template v-if="fileChips.length > 0" v-for="fileChip in fileChips">
+                            <v-chip
+                                    v-model="fileChip.deletion"
+                                    close
+                                    color="green"
+                                    outline
+                            > {{ fileChip.name }}
+                            </v-chip>
+                        </template>
+                    </v-card-actions>
 
                 </v-card>
             </v-flex>
@@ -90,11 +101,12 @@
                 imageName: '',
                 imageUrl: '',
                 imageFile: '',
+                fileChips: [{name: "aaa", deletion: true}],
                 fileTransactKey: null,
                 fileCount: 0,
                 docs: [],
                 loader: null,
-                loading: false,
+                uploading: false,
                 codemirror: false
             }
         },
@@ -241,10 +253,9 @@
                     fileTransactKey: this.fileTransactKey,
                     fileCount: this.fileCount
                 })
-                    .then(
-                        function (response) {
-                            console.log(response.data);
+                    .then(response => {
                             that.emitComment(response.data);
+                            this.uploading = false;
                         }
                     )
                     .catch(function (error) {
@@ -252,6 +263,7 @@
                     })
             },
             addCommentAndFile: function () {
+                this.uploading = true;
 
                 if (this.docs.length < 1) {
                     this.addComment();
@@ -280,6 +292,7 @@
                     )
                     .then(res => {
                         that.addComment();
+                        this.uploading = false;
                     })
                     .catch(function (error) {
                         console.log(error)
