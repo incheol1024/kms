@@ -1,9 +1,13 @@
 package com.devworker.kms.controller.qna;
 
+import com.devworker.kms.dto.common.BoardDto;
+import com.devworker.kms.entity.MenuDao;
 import com.devworker.kms.entity.common.BoardDao;
+import com.devworker.kms.entity.qna.QnaCodeDao;
+import com.devworker.kms.repo.common.BoardRepo;
+import com.devworker.kms.repo.qna.QnaCodeRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.http.entity.ContentType;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -16,16 +20,18 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.awt.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,6 +43,12 @@ public class QnaControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    BoardRepo boardRepo;
+
+    @Autowired
+    QnaCodeRepo qnaCodeRepo;
 
     private static int MENU_JAVA;
     private static int MENU_CPP;
@@ -91,9 +103,6 @@ public class QnaControllerTest {
     @WithMockUser(value = "USER")
     public void createQuestionTest() throws Exception {
 
-//        subject: this.subject
-//        contents: this.$refs.questionEditor.getText()
-
         BoardDao boardDao = new BoardDao();
         boardDao.setContents("contents Testing");
         boardDao.setSubject("subject Testing");
@@ -107,7 +116,6 @@ public class QnaControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(status().is2xxSuccessful())
-//                .andExpect(jsonPath("$", Matchers.hasSize(1)))
                 .andExpect(jsonPath("$.boardId", Matchers.greaterThan(180)))
                 .andExpect(jsonPath("$.subject", Matchers.is(Matchers.equalTo(boardDao.getSubject()))))
                 .andExpect(jsonPath("$.userId", Matchers.is(Matchers.equalTo("USER"))))
@@ -120,20 +128,69 @@ public class QnaControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "USER")
     public void getQnaByIdTest() throws Exception {
+
+        for (int menuId = MENU_JAVA; menuId <= MENU_OTHER; menuId++) {
+
+            BoardDto randomBoardDto = randomBoardDto(menuId);
+
+            this.mockMvc
+                    .perform(
+                            get("/qna/answer/" + randomBoardDto.getBoardId())
+                                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                    .accept(MediaType.APPLICATION_JSON_UTF8)
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(status().is2xxSuccessful())
+                    .andExpect(jsonPath("$.boardId", Matchers.equalTo((int) randomBoardDto.getBoardId())))
+                    .andExpect(jsonPath("$.subject", Matchers.equalTo(randomBoardDto.getSubject())))
+                    .andExpect(jsonPath("$.userId", Matchers.equalTo(randomBoardDto.getUserId())))
+                    .andExpect(jsonPath("$.regDate", Matchers.equalTo(randomBoardDto.getRegDate().format(DateTimeFormatter.ofPattern("YYYY-MM-dd hh:mm:ss")))))
+                    .andExpect(jsonPath("$.updDate", Matchers.equalTo(randomBoardDto.getUpdDate().format(DateTimeFormatter.ofPattern("YYYY-MM-dd hh:mm:ss")))))
+                    .andExpect(jsonPath("$.hits", Matchers.equalTo(randomBoardDto.getHits() + 1)))
+                    .andDo(print())
+                    .andReturn();
+        }
 
     }
 
     @Test
-    public void qnaChooseTest() throws Exception {
+    @WithMockUser(username = "USER")
+    public void deleteQuestionTest() throws Exception {
 
+        BoardDto randomBoardDto = this.randomBoardDto(MENU_JAVA);
+
+            this.mockMvc
+                    .perform(
+                            delete("/qna/delete/" + randomBoardDto.getBoardId())
+                                    .contentType(MediaType.APPLICATION_JSON_UTF8)
+                                    .accept(MediaType.APPLICATION_JSON_UTF8)
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(status().is2xxSuccessful())
+                    .andDo(print())
+                    .andReturn();
+
+    }
+
+    private BoardDto randomBoardDto(int menuId) {
+
+        MenuDao menuDao = new MenuDao();
+        menuDao.setId(MENU_JAVA);
+        List<QnaCodeDao> qnaCodeDaoList = qnaCodeRepo.findByMenuId(menuDao);
+        int randomIndex = new Random().nextInt(qnaCodeDaoList.size());
+        return qnaCodeDaoList
+                        .get(randomIndex)
+                        .getBoardId()
+                        .getBoardDto();
     }
 
 
     private <T> String toJsonString(T... values) {
 
         String jsonString = "";
-        for(T value : values) {
+        for (T value : values) {
             try {
                 jsonString += objectMapper.writeValueAsString(value);
             } catch (JsonProcessingException e) {
