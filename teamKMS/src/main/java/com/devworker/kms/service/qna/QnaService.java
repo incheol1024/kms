@@ -36,46 +36,22 @@ public class QnaService {
 	BoardRepo boardRepo;
 
 	@Autowired
-	CommentRepo commentRepo;
-	
-	@Autowired
-	DocRepo docRepo;
-	
-	@Autowired
 	QnaCodeRepo qnaCodeRepo;
 	
 	@Autowired
 	MenuRepo menuRepo;
 
-
 	@Autowired
 	QnaRepoImpl qnaRepo;
 
-	/**
-	 * @param menuId
-	 * @return List<BoardDao> is return value, there is difference depending on menuId 
-	 * 페이징 처리 구현이 되면 변경되어야 하는 코드입니다.
-	 *
-	 */
-	public List<BoardDao> getFirstPageList(int menuId) {
-		MenuDao menuDao = menuRepo.findById(menuId).get();
-		
-		List<QnaCodeDao> qnaCodeList = qnaCodeRepo.findByMenuId(menuDao);
-	
-		List<BoardDao> boardList = new ArrayList<>();
+	@Autowired
+	BoardComponent boardComponent;
 
-		if(!qnaCodeList.isEmpty())
-			logger.debug("boardDao.toString() {}" + qnaCodeList.get(0).toString());
-		for(QnaCodeDao qna : qnaCodeList) {
-			logger.debug("QnaCOdeDao 조회 BoardDao 리스트 {}", qna.getBoardId());
-			boardList.add(qna.getBoardId());
-		}
-		
-		return boardList;
-		
-		//return null;
-	}
-
+/**
+ * Qna paging Service code
+ * @param menuId
+ * @param pageable
+*/
 	public Page<BoardDto> getQnaPage(int menuId, Pageable pageable) {
 		Page<BoardDao> boardDaoPage = qnaRepo.getPage(menuId, pageable);
 		return boardDaoPage.map((boardDao)-> boardDao.getBoardDto());
@@ -85,7 +61,7 @@ public class QnaService {
  *
 */
 	@Transactional
-	public BoardDao createQuestion(BoardDao boardDao, int menuId) {
+	public BoardDto createQuestion(BoardDao boardDao, int menuId) {
 		boardDao.setUserId(CommonUtil.getCurrentUser());
 		boardDao.setRegDate(LocalDateTime.now());
 		boardDao.setUpdDate(LocalDateTime.now());
@@ -96,13 +72,13 @@ public class QnaService {
 		qnaCodeDao.setBoardId(boardRepo.save(savedBoardDao));
 		qnaCodeDao.setMenuId(menuRepo.findById(menuId).get());
 		qnaCodeRepo.save(qnaCodeDao);
-		return savedBoardDao;
+		return savedBoardDao.getBoardDto();
 	}
 
-	public BoardDao findById(Long id) {
+	public BoardDto findById(Long id) {
 		BoardDao boardDao = boardRepo.findById(id).get();
 		boardDao.setHits(1);
-		return boardRepo.save(boardDao);
+		return boardRepo.save(boardDao).getBoardDto();
 	}
 
 

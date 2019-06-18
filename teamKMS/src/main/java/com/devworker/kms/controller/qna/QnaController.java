@@ -17,37 +17,43 @@ import com.devworker.kms.service.qna.QnaService;
 @RequestMapping("/qna")
 public class QnaController {
 
-	private Logger logger = LoggerFactory.getLogger(QnaController.class);
+    private Logger logger = LoggerFactory.getLogger(QnaController.class);
 
-	@Autowired
-	QnaService qnaService;
+    @Autowired
+    QnaService qnaService;
 
-	@GetMapping("/{menuId}")
-	public Page<BoardDto> qnaHome(@PathVariable int menuId, Pageable pageable) {
+    @GetMapping("/{menuId}")
+    public Page<BoardDto> findQnaPage(@PathVariable int menuId, Pageable pageable) {
 
-		logger.debug("menuId = {}", menuId);
-		logger.debug("Pageable = {}", pageable);
-		return qnaService.getQnaPage(menuId, pageable);
-		//return qnaService.getFirstPageList(menuId);
-	}
+        logger.debug("menuId = {}", menuId);
+        logger.debug("Pageable = {}", pageable);
+        return qnaService.getQnaPage(menuId, pageable);
+        //return qnaService.getFirstPageList(menuId);
+    }
 
-	@PostMapping("/register/{menuId}")
-	public String createQuestion(@RequestBody BoardDao boardDao, @PathVariable int menuId) {
-		logger.debug("BoardDao message Converting {} ", boardDao);
-		logger.debug("PathVariable data binding {} ", menuId);
-		qnaService.createQuestion(boardDao, menuId);
-		return boardDao.toString();
-	}
+    @PostMapping("/register/{menuId}")
+    public BoardDto createQuestion(@RequestBody BoardDao boardDao, @PathVariable int menuId) {
+        logger.debug("BoardDao message Converting {} ", boardDao);
+        logger.debug("PathVariable data binding {} ", menuId);
+        return qnaService.createQuestion(boardDao, menuId);
+    }
 
-	@GetMapping("/answer/{id}")
-	public BoardDao getQnaById(@PathVariable Long id) {
-		return qnaService.findById(id);
-	}
+    @GetMapping("/answer/{id}")
+    public BoardDto getQnaById(@PathVariable long id) {
+        return qnaService.findById(id);
+    }
 
-	@DeleteMapping("/delete/{id}")
-	public void deleteQuestion(@PathVariable long id) {
-		logger.debug("{}", id);
-		qnaService.deleteQuestion(id);
-	}
+    @DeleteMapping("/delete/{id}")
+    public void deleteQuestion(@PathVariable long id) {
+        logger.debug("{}", id);
+        qnaService.deleteQuestion(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public BoardDto updateQnaById(@PathVariable long id) {
+        //서비스 레이어와 함께 구현 필요
+        return null;
+    }
+
 
 }
