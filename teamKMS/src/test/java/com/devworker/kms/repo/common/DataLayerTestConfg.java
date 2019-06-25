@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @TestConfiguration
 @AutoConfigureJooq
-@Transactional // Transactional 먹는지 확인필요
+//@Transactional // Transactional 먹는지 확인필요
 @ImportAutoConfiguration(classes = {ElasticsearchAutoConfiguration.class, ElasticsearchDataAutoConfiguration.class})
 public class DataLayerTestConfg {
 
