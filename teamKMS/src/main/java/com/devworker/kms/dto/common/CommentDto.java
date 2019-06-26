@@ -28,7 +28,7 @@ public class CommentDto {
 
     private String docName;
 
-    private Map<Long, String> docEntry;
+    private Map<Long, String> docEntry; //docId, docName
 
     private String fileTransactKey;
 
@@ -140,6 +140,19 @@ public class CommentDto {
 
     public void setFileCount(int fileCount) {
         this.fileCount = fileCount;
+    }
+
+    public void setDocEntry(Map<Long, String> docEntry) {
+        this.docEntry = docEntry;
+    }
+
+    public Map<Long, String> getDocEntry() {
+        return docEntry;
+    }
+
+    public CommentDto addDocEntry(Map<Long, String> docEntry) {
+        this.docEntry = docEntry;
+        return this;
     }
 
 

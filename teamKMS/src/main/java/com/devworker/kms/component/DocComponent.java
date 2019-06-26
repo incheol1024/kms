@@ -3,7 +3,9 @@ package com.devworker.kms.component;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -179,6 +181,14 @@ public class DocComponent {
 		File tmpFile = new File(tmpUpload + File.separator + file.getOriginalFilename());
 		file.transferTo(tmpFile);
 		return tmpFile;
+	}
+
+	public Map<Long, String> getDocEntry(CommentDao commentDao) {
+		Map<Long, String> docEntry = new HashMap<>();
+		docRepo.findByCmtId(commentDao)
+				.stream()
+				.forEach(docDao -> docEntry.put(docDao.getDocId(), docDao.getDocName()));
+		return docEntry;
 	}
 
 }

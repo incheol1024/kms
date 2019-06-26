@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.devworker.kms.entity.common.CommentDao;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -46,7 +48,7 @@ public class DocComponentTest {
 
 	@Before
 	public void setUp() throws Exception {
-
+/*
 		testFile = new File("D:\\inzent\\run.sh.txt");
 		
 		FileInputStream fileInputStream1 = new FileInputStream(testFile);
@@ -74,7 +76,7 @@ public class DocComponentTest {
 		
 		BDDMockito.given(fileHandler.processUploadFile(fileDto)).willReturn(resultFileDto);
 			
-		docComponent = new DocComponent(fileHandler);
+		docComponent = new DocComponent(fileHandler);*/
 	}
 
 	@Test
@@ -121,6 +123,18 @@ public class DocComponentTest {
 		assertThat(actual).isFile();
 		System.out.println("file name ~~ " +actual.getName());
 	}
+
+	@Test
+	@WithMockUser(username = "USER")
+	public void getDocEntryTest() {
+		CommentDao commentDao = new CommentDao();
+		commentDao.setCmtId(434L);
+		Map<Long, String> docEntry = docComponent.getDocEntry(commentDao);
+
+		System.out.println(docEntry);
+
+	}
+
 
 
 

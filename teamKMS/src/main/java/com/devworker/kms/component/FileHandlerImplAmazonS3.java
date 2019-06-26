@@ -46,7 +46,6 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 
         S3Client s3Client = FileHandlerImplAmazonS3.s3Client;
 
-        try (s3Client) {
             String key = StringKeyUtil.generateUniqueKey();
             boolean putSuccess = s3Client
                     .putObject((putObjectRequestBuilder) -> {
@@ -57,15 +56,13 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
             if (putSuccess)
                 return key;
 
-        }
         throw new RuntimeException();
     }
 
     private GetObjectResponse downloadFile(String key, File file) {
 
-        S3Client s3Client = FileHandlerImplAmazonS3.s3Client;
 
-        try (s3Client; FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
             ResponseInputStream<GetObjectResponse> responseInputStream = s3Client
                     .getObject((getObjectReqeustBuilder) -> {
                         getObjectReqeustBuilder.bucket(bucket).key(key).build();
@@ -103,16 +100,11 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 
         S3Client s3Client = FileHandlerImplAmazonS3.s3Client;
 
-        try(s3Client) {
             DeleteObjectResponse deleteObjectResponse = getS3Client().deleteObject((deleteObjectlBuilder) -> {
                 deleteObjectlBuilder.bucket(bucket).key(key).build();
             });
         return deleteObjectResponse.sdkHttpResponse().isSuccessful();
 
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            throw e;
-        }
     }
 
     private static S3Client getS3Client() {

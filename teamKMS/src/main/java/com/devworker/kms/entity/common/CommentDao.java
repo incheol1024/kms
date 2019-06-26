@@ -52,7 +52,7 @@ public class CommentDao {
     @Column(name = "cmt_like")
     private long cmtLike;
 
-    @OneToMany(mappedBy = "cmtId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cmtId", fetch = FetchType.LAZY)
     private List<DocDao> docDaos = new ArrayList<>();
 
     public CommentDao() {
@@ -109,7 +109,11 @@ public class CommentDao {
         return getLocalDateTimeFrom(cmtDate);
     }
 
-    public void setCmtDate(final Date cmtDate) {
+    public void setCmtDate(Date cmtDate) {
+        if (isNull(cmtDate)) {
+            this.cmtDate = new Date();
+            return;
+        }
         this.cmtDate = cmtDate;
     }
 
@@ -159,8 +163,8 @@ public class CommentDao {
         if (isNotEmpty(commentDto.getCmtDate()))
             //this.cmtDate = commentDto.getCmtDate();
 
-        if (isNotEmpty(commentDto.getCmtId()))
-            this.cmtId = commentDto.getCmtId();
+            if (isNotEmpty(commentDto.getCmtId()))
+                this.cmtId = commentDto.getCmtId();
 
         if (isNotEmpty(commentDto.getCmtLike()))
             this.cmtLike = commentDto.getCmtLike();

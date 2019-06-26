@@ -23,6 +23,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -160,6 +161,17 @@ public class CommentControllerTest {
             Map.Entry entry = it.next();
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
+    }
+
+    @Test
+    @WithMockUser(username = "USER")
+    public void testMapJson() throws Exception {
+
+        this.mvc.perform(get("/comment/test"))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn()
+                ;
+
     }
 
 }

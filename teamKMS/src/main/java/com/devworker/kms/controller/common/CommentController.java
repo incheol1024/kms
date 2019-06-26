@@ -1,6 +1,8 @@
 package com.devworker.kms.controller.common;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,54 +40,18 @@ public class CommentController {
 
     @PostMapping("/add")
     public CommentDto addComment(@RequestBody CommentDto commentDto) throws Exception {
-
-        logger.debug("{}", commentDto);
         return commentComponent.addComment(commentDto);
     }
-    /*
-     * @PostMapping("/add/files") public CommentDao addComment(@RequestBody
-     * CommentAndFileTransactionDto comFileDto) throws Exception {
-     *
-     * logger.debug("RequestBody Test = {}", comFileDto);
-     *
-     * logger.debug("PathVaiable boardId = {}", boardId);
-     * logger.debug("RequestBody CommentDao = {}", commentDao);
-     * logger.debug("FileTranctionDto = {}", fileTransactionDto);
-     *
-     *
-     * return commentService.addComment(comFileDto.getBoardId(),
-     * comFileDto.getCmtContents(), comFileDto.getFileTransactKey(),
-     * comFileDto.getFileCount());
-     *
-     * }
-     *
-     */
-    /*
-     * @PostMapping("/add/files") public CommentDto addComment(@RequestBody
-     * CommentAndFileTransactionDto comFileDto) throws Exception {
-     *
-     * return commentService.addComment(comFileDto.getBoardId(),
-     * comFileDto.getCmtContents(), comFileDto.getFileTransactKey(),
-     * comFileDto.getFileCount()); }
-     */
 
     @PostMapping("/add/files")
     public CommentDto addCommentAndFile(@RequestBody CommentDto commentDto) throws Exception {
+        logger.debug("commentDto = {}", commentDto);
         return commentComponent.addCommentAndFile(commentDto);
     }
 
-    /*
-     * @GetMapping("/list/{boardId}") public List<CommentDto>
-     * listComment(@PathVariable @RequestBody BoardDao boardId) throws Exception {
-     *
-     * logger.debug("CommentDto {}", commentService.findByBoardId(boardId)); return
-     * commentService.findByBoardId(boardId); }
-     */
     @GetMapping("/list/{boardId}")
     public Page<CommentDto> listComment(@PathVariable BoardDao boardId, Pageable pageable) {
-        System.out.println(pageable);
         return commentComponent.findCommentsByPage(boardId, pageable);
-//		return null;
     }
 
     @PostMapping("/update")
@@ -103,11 +69,15 @@ public class CommentController {
     public CommentDao updateCommentLike(@PathVariable int cmtId) {
         return commentComponent.updateCommentLike(cmtId);
     }
-    /*
-     * @PostMapping("/unlike") public CommentDao updateCommentUnlike(@RequestBody
-     * CommentDao commentDao) { return
-     * commentService.updateCommentUnLike(commentDao);
-     *
-     * }
-     */
+
+    @GetMapping("/test")
+    public Map<Long, String> test() {
+
+        Map map = new HashMap();
+        map.put(1, "aa");
+        map.put(2, "bb");
+        map.put(3, "cc");
+
+        return map;
+    }
 }

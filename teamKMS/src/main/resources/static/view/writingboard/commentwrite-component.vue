@@ -193,14 +193,12 @@
                             fileReader.readAsDataURL(file);
 
 
-                            fileReader.onload = function (fileReader, event) {
-                                if (fileReader.readyState == FileReader.DONE) {
-                                    this.fileChips.push({
-                                        name: file.name,
-                                        deletion: true,
-                                        file: file
-                                    });
-                                }
+                            fileReader.onload = (fileReader, event) => {
+                                this.fileChips.push({
+                                    name: file.name,
+                                    deletion: true,
+                                    file: file
+                                });
                             }
 
                         }
@@ -218,9 +216,11 @@
 
                 })
                     .then(() => {
-                        this.addFile();
+                        return this.addFile();
                     }, alert) // if files exist trans file, not if next step
-                    .then(() => {
+                    .then((response) => {
+                        this.fileTransactKey = response.data.fileTransactKey;
+                        this.fileCount = response.data.fileCount;
                         this.addComment();
                     }) // add comment
                     .then(() => {
@@ -235,7 +235,7 @@
                 return true;
             },
             addFile: function () {
-
+                console.log("addFile()")
                 // set FormData
                 let formData = new FormData();
                 formData.append("boardId", this.qid);
@@ -253,11 +253,10 @@
                             }
                         })
                     .then((response) => {
-                        this.fileTransactKey = response.data.fileTransactKey;
-                        this.fileCount = response.data.fileCount;
-                        this.fileChips = [];
+                        return response;
                     })
-                    .catch((error) => console.log(error));
+                    .catch((error) => {console.log(error);})
+                ;
             },
             addComment: function () {
 
@@ -265,6 +264,9 @@
                 if (this.fileTransactKey !== undefined && this.fileCount > 0) {
                     url = this.addCommentAndFileUrl;
                 }
+
+
+                console.log(url);
 
                 axios.post(url, {
                     boardId: Number(this.qid),
@@ -283,7 +285,7 @@
                     })
             },
             initailizeProperty: function () {
-
+                this.fileChips = [];
 
             },
             viewCodemirror: function () {
