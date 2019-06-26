@@ -40,9 +40,11 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     @Value(value = "${file.upload.tmp}")
     private String tmpUpload;
 
+    private static final S3Client s3Client = getS3Client();
+
     private String uploadFile(File file) {
 
-        S3Client s3Client = getS3Client();
+        S3Client s3Client = FileHandlerImplAmazonS3.s3Client;
 
         try (s3Client) {
             String key = StringKeyUtil.generateUniqueKey();
@@ -61,7 +63,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
 
     private GetObjectResponse downloadFile(String key, File file) {
 
-        S3Client s3Client = getS3Client();
+        S3Client s3Client = FileHandlerImplAmazonS3.s3Client;
 
         try (s3Client; FileOutputStream fileOutputStream = new FileOutputStream(file)) {
             ResponseInputStream<GetObjectResponse> responseInputStream = s3Client
@@ -97,16 +99,23 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     }
 
     @Override
-    public boolean deleteFile(String key) throws Exception {
+    public boolean deleteFile(String key) {
 
-        DeleteObjectResponse deleteObjectResponse = getS3Client().deleteObject((deleteObjectlBuilder) -> {
-            deleteObjectlBuilder.bucket(bucket).key(key).build();
-        });
+        S3Client s3Client = FileHandlerImplAmazonS3.s3Client;
 
+        try(s3Client) {
+            DeleteObjectResponse deleteObjectResponse = getS3Client().deleteObject((deleteObjectlBuilder) -> {
+                deleteObjectlBuilder.bucket(bucket).key(key).build();
+            });
         return deleteObjectResponse.sdkHttpResponse().isSuccessful();
+
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
-    private S3Client getS3Client() {
+    private static S3Client getS3Client() {
         AwsCredentialsProvider awsCredentialsProvider = ProfileCredentialsProvider.create();
         return S3Client.builder().credentialsProvider(awsCredentialsProvider).region(Region.AP_NORTHEAST_2).build();
     }
