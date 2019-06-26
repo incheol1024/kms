@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.http.client.CredentialsProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -12,10 +15,14 @@ import org.springframework.stereotype.Component;
 import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.util.StringKeyUtil;
 
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3ClientBuilder;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
@@ -100,7 +107,8 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     }
 
     private S3Client getS3Client() {
-        return S3Client.builder().region(Region.AP_NORTHEAST_2).build();
+        AwsCredentialsProvider awsCredentialsProvider = ProfileCredentialsProvider.create();
+        return S3Client.builder().credentialsProvider(awsCredentialsProvider).region(Region.AP_NORTHEAST_2).build();
     }
 
 }

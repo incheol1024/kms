@@ -7,6 +7,7 @@
                 :name="name"
                 :qid="Number(qid)"
                 :is-required-code-button="true"
+                :is-required-file-button="true"
                 @emitcomment="renderAddComment">
         </commentwrite-component>
 
@@ -15,7 +16,11 @@
                 <v-flex xs12>
                     <v-card>
                         <v-card-title>
-                            <v-avatar color="grey lighten-4">
+                            <v-avatar color="grey lighten-4"
+                                      :tile="avatarTile"
+                                      :size="avatarSize"
+                            >
+                                <v-icon dark>account_circle</v-icon>
                             </v-avatar>
                             {{ comment.cmtId }} - {{ comment.cmtDate }}
                             <v-spacer></v-spacer>
@@ -63,7 +68,7 @@
             </v-layout>
         </template>
 
-        <v-layout row wrap justify-space-around >
+        <v-layout row wrap justify-space-around>
             <v-flex xs12>
                 <div v-show="seenCommentpage">
                     <commentpage-component
@@ -116,6 +121,8 @@
                 comments: [],
                 docs: [],
                 seenCommentpage: false,
+                avatarTile: true,
+                avatarSize: '100px',
                 _this: this
             }
         },
@@ -225,7 +232,7 @@
             renderComment: function (comments) {
                 this.comments = comments;
                 let totalPages = this.$refs.commentPage.getTotalPages();
-                if(totalPages > 0 )
+                if (totalPages > 0)
                     this.seenCommentpage = true;
 
             },

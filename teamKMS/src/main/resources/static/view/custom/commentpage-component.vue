@@ -53,8 +53,7 @@
                         }
                     }
                 )
-                    .then(
-                        function (response) {
+                    .then(response => {
                             this.setPageValues(response.data);
                             return response;
                         }
