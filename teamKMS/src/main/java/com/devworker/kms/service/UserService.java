@@ -14,4 +14,5 @@ public interface UserService {
 	Page<UserDto> getUserList(Pageable pageable);
 	Page<UserDto> getUserListPage(Pageable pageable);
 	long getCount();
+    String addAvatar();
 }

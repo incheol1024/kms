@@ -4,11 +4,12 @@
             <v-card>
                 <v-card-title> User List
                     <v-spacer></v-spacer>
-                    <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                    <v-text-field v-model="search" append-icon="search" label="Search" single-line
+                                  hide-details></v-text-field>
                     <v-btn color="primary" dark class="mb-2" @click="addItem">New User</v-btn>
                 </v-card-title>
                 <table-component ref="table" :headers="headers" :search="search" :allow-edit="true" :allow-delete="true"
-                                 :edit-function="editItem" :delete-function="deleteItem" :page-req="page" >
+                                 :edit-function="editItem" :delete-function="deleteItem" :page-req="page">
                 </table-component>
             </v-card>
         </v-flex>
@@ -24,12 +25,17 @@
                 <v-stepper-items>
                     <v-stepper-content step="1">
                         <v-card class="mb-5" color="lighten-1">
-                            <v-text-field :disabled="updateMode" v-model="curItem.id" label="ID"></v-text-field>
-                            <v-text-field v-model="curItem.name" label="NAME"></v-text-field>
-                            <v-text-field v-model="curItem.password" label="PASSWORD" type="password"></v-text-field>
-                            <v-text-field v-model="samepass" label="PASSWORD CHECK" type="password"></v-text-field>
-                            <v-text-field v-model="curItem.groupName" label="Group Name" disabled></v-text-field>
-                            <v-select :items="usertype" label="Type" solo></v-select>
+                            <v-card-title>
+                                <v-layout column>
+                                    <v-text-field :disabled="updateMode" v-model="curItem.id" label="ID"></v-text-field>
+                                    <v-text-field v-model="curItem.name" label="NAME"></v-text-field>
+                                    <v-text-field v-model="curItem.password" label="PASSWORD" type="password"></v-text-field>
+                                    <v-text-field v-model="samepass" label="PASSWORD CHECK" type="password"></v-text-field>
+                                    <v-text-field v-model="curItem.groupName" label="Group Name" disabled></v-text-field>
+                                    <v-select :items="usertype" label="Type" solo></v-select>
+                                    <upload-btn @file-update="update" title="Avatar" accept="image/*"></upload-btn>
+                                </v-layout>
+                            </v-card-title>
                         </v-card>
                         <v-btn color="primary" @click="stage = 2">Continue</v-btn>
                     </v-stepper-content>
@@ -70,17 +76,20 @@
             usertype: ["USER", "ADMIN"],
             active: [],
             groupItem: [],
+            curFile : null
         }),
         created: function () {
             let _this = this;
             axios.get("group")
-                .then(value => {_this.groupItem.push(value.data)})
+                .then(value => {
+                    _this.groupItem.push(value.data)
+                })
                 .catch(reason => catchPromise(reason));
         },
         methods: {
-            page : function (page){
+            page: function (page) {
                 return axios.get("user", {
-                    params : page
+                    params: page
                 })
             },
             selectedTreeId() {
@@ -111,10 +120,15 @@
                 if (this.updateMode) promise = axios.post("user", _this.curItem);
                 promise.then(value => {
                     if (!_this.updateMode)
-                    _this.$refs.table.addFunction(_this.curItem)
+                        _this.$refs.table.addFunction(_this.curItem)
+                }).then(value => {
+                    //axios add file
                 }).catch(reason => catchPromise(reason));
                 this.stage = 3;
                 this.hideInput = false;
+            },
+            update(file) {
+                this.curFile = file;
             }
         }
     };

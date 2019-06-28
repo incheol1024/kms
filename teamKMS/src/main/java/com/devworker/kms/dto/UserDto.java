@@ -23,6 +23,9 @@ public class UserDto{
 	@ApiModelProperty(notes = "사용자의 암호. 어떤경우에도 암호가 복호화 된 상태로 전달되어서는 안된다.")
 	@NotBlank
 	private String password;
+
+	@ApiModelProperty(notes = "사용자의 아바타의 S3 경로")
+	private String avatar;
 	
 	public String getId() {
 		return id;
@@ -60,7 +63,15 @@ public class UserDto{
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
-	
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
 	@JsonIgnore
 	public UserDao getDao() {
 		UserDao dao = new UserDao();
@@ -69,6 +80,7 @@ public class UserDto{
 		dao.setGroupId(groupId);
 		dao.setPassword(password);
 		dao.setType(type);
+		dao.setAvatar(avatar);
 		return dao;
 	}
 }

@@ -37,9 +37,10 @@
             pageRes: {
                 default: function (value, _this) {
                     let max = value.data.content.length;
-                    for (let i = 0; i < max; i++) {
-                        _this.datas.push(value.data.content[i]);
-                    }
+                    _this.datas = value.data.content;
+                    // for (let i = 0; i < max; i++) {
+                    //     _this.datas.push(value.data.content[i]);
+                    // }
                 },
                 type: Function
             },
@@ -110,7 +111,7 @@
                 this.loading = true;
                 let _this = this;
                 try {
-                    return this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
+                    return _this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
                         _this.datas = [];
                         _this.pageRes(value, _this);
                         return parseInt(value.data.totalElements);

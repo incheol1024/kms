@@ -82,7 +82,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
         File getTmpFile = new File(tmpDown + File.separator + fileDto.getKey());
         GetObjectResponse getObjectResponse = downloadFile(fileDto.getKey(), getTmpFile);
 
-        if (getObjectResponse.sdkHttpResponse().isSuccessful())
+        if (getObjectResponse != null && getObjectResponse.sdkHttpResponse().isSuccessful())
             return FileDto.builder().setFile(getTmpFile).build();
 
         throw new RuntimeException();

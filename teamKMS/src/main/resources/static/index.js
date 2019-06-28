@@ -6,6 +6,7 @@ Vue.use(VueRouter);
 Vue.use(VueCodemirror);
 Vue.use(CKEditor);
 Vue.use(VueCharts);
+Vue.use(VuetifyUploadButton);
 
 httpVueLoader.httpRequest = function (url) {
     return axios.get(url)

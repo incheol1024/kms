@@ -6,13 +6,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -63,5 +59,10 @@ public class UserController {
 	public long getTotalUser() {
 		return service.getCount();
 	}
-	
+
+	@ApiOperation(value	= "사용자 아바타 이미지 업로드")
+	@PostMapping("/avatar")
+	public String addAvatar(){
+		return service.addAvatar();
+	}
 }

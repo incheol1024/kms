@@ -1,5 +1,6 @@
 package com.devworker.kms.service;
 
+import com.devworker.kms.component.FileHandler;
 import com.devworker.kms.entity.UserDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.UserDto;
@@ -19,24 +20,29 @@ import org.springframework.stereotype.Service;
 
 @Service("UserService")
 public class UserServiceImpl implements UserService {
-    private final
-    UserRepo repo;
-    private final
-    GroupService service;
-    private final
-    PasswordEncoder encoder;
+    private final UserRepo repo;
+    private final GroupService service;
+    private final PasswordEncoder encoder;
+    private final FileHandler fileHandler;
 
     @Autowired
-    public UserServiceImpl(UserRepo repo, @Lazy GroupService service, PasswordEncoder encoder) {
+    public UserServiceImpl(UserRepo repo, @Lazy GroupService service, PasswordEncoder encoder, FileHandler fileHandler) {
         this.repo = repo;
         this.service = service;
         this.encoder = encoder;
+        this.fileHandler = fileHandler;
     }
 
     @Override
     @Cacheable(key = "'userCount'", value = "userCache")
     public long getCount() {
         return repo.count();
+    }
+
+    @Override
+    public String addAvatar() {
+
+        return null;
     }
 
     @Override
