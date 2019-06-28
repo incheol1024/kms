@@ -58,8 +58,6 @@ public class DocComponent {
 	/**
 	 * 글 또는 댓글에 이미지 첨부 시 수행되는 메소드 입니다.
 	 * 
-	 * @param boardId
-	 * @param cmtId
 	 * @param files
 	 * @return
 	 * @throws Exception
@@ -190,5 +188,10 @@ public class DocComponent {
 				.forEach(docDao -> docEntry.put(docDao.getDocId(), docDao.getDocName()));
 		return docEntry;
 	}
+
+	public List<DocDao> findByCmtId(CommentDao commentDao) {
+		return docRepo.findByCmtId(commentDao);
+	}
+
 
 }

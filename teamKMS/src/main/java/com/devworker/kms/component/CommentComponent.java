@@ -229,7 +229,7 @@ public class CommentComponent {
         Page<CommentDao> commentDaoPage = commentRepo.findByBoardIdEquals(boardId, pageable);
         return commentDaoPage
                 .map(commentDao ->
-                        new CommentDto(commentDao).addDocEntry(docComponent.getDocEntry(commentDao)));
+                        new CommentDto(commentDao));
     }
 
 }

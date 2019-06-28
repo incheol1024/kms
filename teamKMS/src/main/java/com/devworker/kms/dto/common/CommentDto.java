@@ -2,6 +2,7 @@ package com.devworker.kms.dto.common;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +25,10 @@ public class CommentDto {
 
     private long cmtLike;
 
-    private long docId;
+//    private Map<Long, String> docEntry; //docId, docName
 
-    private String docName;
+    private List<DocDto> docDtos;
 
-    private Map<Long, String> docEntry; //docId, docName
 
     private String fileTransactKey;
 
@@ -40,18 +40,15 @@ public class CommentDto {
     public CommentDto(CommentDao comment) {
         setUpCommentDto(comment);
 
-/*        if (comment.getDocDaos() != null) {
-            setUpDocs(comment.getDocDaos());
-        }
-        */
-
     }
 
+/*
     private void setUpDocs(List<DocDao> docDaos) {
         for (DocDao docDao : docDaos) {
             docEntry.put(docDao.getDocId(), docDao.getDocName());
         }
     }
+*/
 
     private void setUpCommentDto(CommentDao comment) {
         this.cmtId = comment.getCmtId();
@@ -142,17 +139,23 @@ public class CommentDto {
         this.fileCount = fileCount;
     }
 
-    public void setDocEntry(Map<Long, String> docEntry) {
-        this.docEntry = docEntry;
+    public List<DocDto> getDocDtos() {
+        return docDtos;
     }
 
-    public Map<Long, String> getDocEntry() {
-        return docEntry;
+    public void setDocDtos(List<DocDto> docDtos) {
+        this.docDtos = docDtos;
     }
 
-    public CommentDto addDocEntry(Map<Long, String> docEntry) {
-        this.docEntry = docEntry;
+    public CommentDto addDoc(DocDto docDto) {
+        docDtos.add(docDto);
         return this;
+    }
+
+    public boolean addDoc() {
+
+
+        return false;
     }
 
 
@@ -166,9 +169,10 @@ public class CommentDto {
                 ", cmtUserId='" + cmtUserId + '\'' +
                 ", cmtDate=" + cmtDate +
                 ", cmtLike=" + cmtLike +
-                ", docEntry=" + docEntry +
                 ", fileTransactKey='" + fileTransactKey + '\'' +
                 ", fileCount=" + fileCount +
                 '}';
     }
+
+
 }

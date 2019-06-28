@@ -49,11 +49,11 @@
 
                         <v-divider></v-divider>
 
-                        <v-card-actions v-if="isExistData(comment.docId)">
+                        <v-card-actions v-if="isExistDocEntry(comment.docEntry)">
                             <div>
                                 <v-chip close color="orange" label outline :key="index"
-                                        @click="fileDownload(comment.docId, comment.docName)">
-                                    {{comment.docName}}
+                                        @click="fileDownload(comment.docEntry)">
+                                    {{comment.docEntry[0]}}
                                 </v-chip>
                             </div>
                         </v-card-actions>
@@ -203,7 +203,7 @@
                         console.log(error);
                     })
             },
-            fileDownload: function (docId, docName) {
+            fileDownload: function (docEntry) {
                 console.log("fileDownload function is called");
                 console.log("file download url" + " file/download/" + docId);
                 axios.get('/file/download/' + docId,
@@ -246,6 +246,12 @@
                     return true;
                 }
 
+            },
+            isExistDocEntry: function (docEntry) {
+
+                if(docEntry.length > 0)
+                    return true;
+                return false;
             },
             onCmReady(cm) {
                 console.log('the editor is readied!', cm);
