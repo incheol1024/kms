@@ -1,30 +1,23 @@
 package com.devworker.kms.component;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import org.apache.http.client.CredentialsProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.devworker.kms.dto.common.FileDto;
+import com.devworker.kms.util.StringKeyUtil;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-
-import com.devworker.kms.dto.common.FileDto;
-import com.devworker.kms.util.StringKeyUtil;
-
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.S3ClientBuilder;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Component
 @Qualifier(value = "amazonS3")
@@ -34,11 +27,17 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     @Value(value = "${amazon.s3.bucket}")
     private String bucket;
 
+/*
     @Value(value = "${file.download.tmp}")
     private String tmpDown;
 
     @Value(value = "${file.upload.tmp}")
     private String tmpUpload;
+*/
+
+    private String tmpDown = FileHandler.tempDefaultDir;
+
+    private String tmpUpload = FileHandler.tempDefaultDir;
 
     private static final S3Client s3Client = getS3Client();
 
@@ -89,7 +88,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     }
 
     @Override
-    public FileDto processUploadFile(FileDto fileDto) throws Exception {
+    public FileDto processUploadFile(FileDto fileDto) {
 
         String key = uploadFile(fileDto.getFile());
         return FileDto.builder().setKey(key).build();

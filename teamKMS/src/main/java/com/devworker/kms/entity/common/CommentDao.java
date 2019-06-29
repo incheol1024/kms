@@ -62,7 +62,6 @@ public class CommentDao {
     public CommentDao(BoardDao boardId, String cmtContents) {
         this.boardId = boardId;
         this.cmtContents = cmtContents;
-        //this.cmtDate = LocalDateTime.now();
     }
 
     public BoardDao getBoardId() {
@@ -161,10 +160,10 @@ public class CommentDao {
             this.cmtCode = commentDto.getCmtCode();
 
         if (isNotEmpty(commentDto.getCmtDate()))
-            //this.cmtDate = commentDto.getCmtDate();
+            this.cmtDate = getDateFrom(commentDto.getCmtDate());
 
-            if (isNotEmpty(commentDto.getCmtId()))
-                this.cmtId = commentDto.getCmtId();
+        if (isNotEmpty(commentDto.getCmtId()))
+            this.cmtId = commentDto.getCmtId();
 
         if (isNotEmpty(commentDto.getCmtLike()))
             this.cmtLike = commentDto.getCmtLike();

@@ -89,7 +89,6 @@ public class DocController {
 */
 
     /**
-     * @param filekey is docId that KMS_DOC table primary column value
      * @return ResponseEntity 로 리턴하고있지만.. 다른 방식으로 리턴하는게 좋아보임 아직은 모름.
      * @throws IOException
      */

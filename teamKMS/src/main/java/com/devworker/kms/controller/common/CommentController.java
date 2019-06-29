@@ -70,14 +70,4 @@ public class CommentController {
         return commentComponent.updateCommentLike(cmtId);
     }
 
-    @GetMapping("/test")
-    public Map<Long, String> test() {
-
-        Map map = new HashMap();
-        map.put(1, "aa");
-        map.put(2, "bb");
-        map.put(3, "cc");
-
-        return map;
-    }
 }

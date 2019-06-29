@@ -36,7 +36,7 @@ public class FileHandlerImplLocal implements FileHandler {
 	}
 
 	@Override
-	public FileDto processUploadFile(FileDto fileDto) throws Exception {
+	public FileDto processUploadFile(FileDto fileDto) {
 
 		/*
 		 * File destFile = new File(FILE_PATH + file.getOriginalFilename());
@@ -53,7 +53,7 @@ public class FileHandlerImplLocal implements FileHandler {
 		}
 
 	@Override
-	public boolean deleteFile(String key) throws Exception {
+	public boolean deleteFile(String key) {
 		
 		File file = new File(key);
 		if(file.exists()) {
