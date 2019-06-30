@@ -1,6 +1,6 @@
 <template inline-template>
     <div>
-        <v-data-table :headers="headers" :items="datas" :pagination.sync="pagination" :total-items="totalDesserts"
+        <v-data-table :headers="headers" :items="datas" :pagination.sync="pagination"
                       :select-all="!!allowSelect" v-model="selection" :search="search"
                       :loading="loading" must-sort class="elevation-1">
             <template slot="items" slot-scope="props">
@@ -37,10 +37,10 @@
             pageRes: {
                 default: function (value, _this) {
                     let max = value.data.content.length;
-                    _this.datas = value.data.content;
-                    // for (let i = 0; i < max; i++) {
-                    //     _this.datas.push(value.data.content[i]);
-                    // }
+                    //_this.datas = value.data.content;
+                    for (let i = 0; i < max; i++) {
+                         _this.datas.push(value.data.content[i]);
+                    }
                 },
                 type: Function
             },
@@ -94,30 +94,31 @@
             datas: [],
             pagination: {},
             loading: false,
-            totalDesserts : 0
+            totals : 0
         }),
         watch: {
             pagination: {
                 handler() {
-                    this.sync().then(value => {
-                        this.totalDesserts = value;
-                    });
+                    this.sync()
                 },
                 deep: true
             }
         },
         methods: {
-            sync: function sync() {
+            sync: async function sync() {
                 this.loading = true;
                 let _this = this;
+                _this.datas = [];
                 try {
-                    return _this.pageReq(jsTojavaPage(_this.pagination)).then(value => {
-                        _this.datas = [];
-                        _this.pageRes(value, _this);
-                        return parseInt(value.data.totalElements);
-                    }).
-                    catch(reason => catchPromise(reason))
-                } finally {
+                    let response = await _this.pageReq(jsTojavaPage(_this.pagination));
+                    _this.pageRes(response, _this);
+                    _this.pagination.totalItems = response.data.totalElements;
+                    _this.totals = response.data.totalElements;
+                }
+                catch (reason) {
+                    catchPromise(reason)
+                }
+                finally {
                     _this.loading = false
                 }
             },
