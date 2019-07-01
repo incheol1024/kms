@@ -1,8 +1,7 @@
 package com.devworker.kms.component;
 
-import org.springframework.stereotype.Service;
-
 import com.devworker.kms.dto.common.FileDto;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,31 +9,44 @@ import java.io.IOException;
 @Service
 public interface FileHandler {
 
-	String tempDefaultDir = System.getProperty("java.io.tmpdir");
+    String DefaultTemporaryDirectory = System.getProperty("java.io.tmpdir") + File.separator + "kms." + System.currentTimeMillis();
 
-	FileDto processUploadFile(FileDto fileDto);
-	
-	FileDto processDownloadFile(FileDto fileDto);
-	
-	boolean deleteFile(String key);
+    FileDto processUploadFile(FileDto fileDto);
 
-	static File checkUploadDir() throws IOException {
+    FileDto processDownloadFile(FileDto fileDto);
 
-		String tempUploadDir = tempDefaultDir + File.separator + "upload";
-		File tempFile = new File(tempUploadDir);
-		if(!tempFile.exists())
-			new File(tempUploadDir).mkdir();
+    boolean deleteFile(String key);
 
-		return tempFile;
-	}
+    static String getUploadTemporaryDirectory() {
+        return getCanonicalPath(checkTemporaryDirectory(DefaultTemporaryDirectory + File.separator + "upload"));
+    }
 
-	static File checkDownloadDir() throws IOException {
 
-		String tempUploadDir = tempDefaultDir + File.separator + "upload";
-		File tempFile = new File(tempUploadDir);
-		if(!tempFile.exists())
-			new File(tempUploadDir).mkdir();
+    static String getDownloadTemporaryDirectory() {
+        return getCanonicalPath(checkTemporaryDirectory(DefaultTemporaryDirectory + File.separator + "download"));
+    }
 
-		return tempFile;
-	}
+    private static String getCanonicalPath(File file) {
+
+        String path = "";
+        try {
+            path = file.getCanonicalPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return path;
+    }
+
+    private static File checkTemporaryDirectory(String directory) {
+
+        File file = new File(DefaultTemporaryDirectory);
+        if (!file.exists())
+            file.mkdir();
+
+        File tempFile = new File(directory);
+        if (!tempFile.exists())
+            new File(directory).mkdir();
+
+        return tempFile;
+    }
 }

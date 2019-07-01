@@ -45,12 +45,6 @@ public class DocComponent {
 	@Qualifier(value = "amazonS3")
 	private FileHandler fileHandler;
 
-	@Value("${file.upload.tmp}")
-	private String tmpUpload;
-
-	@Value("${file.download.tmp}")
-	private String tmpDownload;
-
 	public DocComponent(FileHandler fileHandler) {
 		this.fileHandler = fileHandler;
 	}
@@ -127,7 +121,7 @@ public class DocComponent {
 		String fileTransactKey = "";
 
 		for (MultipartFile file : multiPartFile) {
-			File tmpFile = new File(tmpUpload + File.separator + file.getName());
+			File tmpFile = new File(FileHandler.getUploadTemporaryDirectory() + File.separator + file.getName());
 			file.transferTo(tmpFile);
 
 			FileDto fileDto = FileDto.builder().setFile(tmpFile)
@@ -161,7 +155,7 @@ public class DocComponent {
 		Optional<DocDao> optionalDocDao = docRepo.findById(docId);
 		DocDao docDao = optionalDocDao.orElseThrow(() -> new RuntimeException("docId is not Exist"));
 		FileDto fileDto = fileHandler.processDownloadFile(FileDto.builder().setKey(docDao.getDocPath())
-				.setFile(new File(tmpDownload + File.separator + docDao.getDocPath())).build());
+				.setFile(new File(FileHandler.getDownloadTemporaryDirectory() + File.separator + docDao.getDocPath())).build());
 
 		return FileDto.builder().setFile(fileDto.getFile()).setFileExt(docDao.getDocExt())
 				.setFileName(docDao.getDocName()).setFileSize(docDao.getDocSize()).build();
@@ -176,7 +170,7 @@ public class DocComponent {
 	}
 	
 	public File makeTempFile(MultipartFile file) throws IllegalStateException, IOException {
-		File tmpFile = new File(tmpUpload + File.separator + file.getOriginalFilename());
+		File tmpFile = new File(FileHandler.getUploadTemporaryDirectory() + File.separator + file.getOriginalFilename());
 		file.transferTo(tmpFile);
 		return tmpFile;
 	}

@@ -35,15 +35,13 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     private String tmpUpload;
 */
 
-    private String tmpDown = FileHandler.tempDefaultDir;
+    private String tmpDown = FileHandler.DefaultTemporaryDirectory;
 
-    private String tmpUpload = FileHandler.tempDefaultDir;
+    private String tmpUpload = FileHandler.DefaultTemporaryDirectory;
 
     private static final S3Client s3Client = getS3Client();
 
     private String uploadFile(File file) {
-
-        S3Client s3Client = FileHandlerImplAmazonS3.s3Client;
 
             String key = StringKeyUtil.generateUniqueKey();
             boolean putSuccess = s3Client
@@ -78,7 +76,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     @Override
     public FileDto processDownloadFile(FileDto fileDto) {
 
-        File getTmpFile = new File(tmpDown + File.separator + fileDto.getKey());
+        File getTmpFile = new File(FileHandler.getDownloadTemporaryDirectory() + fileDto.getKey());
         GetObjectResponse getObjectResponse = downloadFile(fileDto.getKey(), getTmpFile);
 
         if (getObjectResponse != null && getObjectResponse.sdkHttpResponse().isSuccessful())
@@ -97,9 +95,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     @Override
     public boolean deleteFile(String key) {
 
-        S3Client s3Client = FileHandlerImplAmazonS3.s3Client;
-
-            DeleteObjectResponse deleteObjectResponse = getS3Client().deleteObject((deleteObjectlBuilder) -> {
+            DeleteObjectResponse deleteObjectResponse = s3Client.deleteObject((deleteObjectlBuilder) -> {
                 deleteObjectlBuilder.bucket(bucket).key(key).build();
             });
         return deleteObjectResponse.sdkHttpResponse().isSuccessful();

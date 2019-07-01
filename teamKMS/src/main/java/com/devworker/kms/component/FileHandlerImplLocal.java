@@ -26,8 +26,7 @@ public class FileHandlerImplLocal implements FileHandler {
 	@Autowired
 	DocRepo docRepo;
 
-	@Value("${fileDestPath}")
-	private String FILE_PATH;
+	private static String FILE_PATH = FileHandler.DefaultTemporaryDirectory;
 
 	@Override
 	public FileDto processDownloadFile(FileDto fileDto) {

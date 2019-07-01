@@ -10,20 +10,20 @@ public class FileHandlerTest {
     @Test
     public void propStaticTest() {
 
-        String tempDir = FileHandler.tempDefaultDir;
+        String tempDir = FileHandler.DefaultTemporaryDirectory;
         Assertions.assertThat(tempDir).isNotNull().isNotEmpty();
         System.out.println(tempDir);
-
     }
 
     @Test
-    public void checkUploadDirTest() throws IOException {
-        Assertions.assertThat(FileHandler.checkUploadDir()).exists().isDirectory();
+    public void getUploadDirTest() throws IOException {
+        System.out.println(FileHandler.getUploadTemporaryDirectory());
+        Assertions.assertThat(FileHandler.getUploadTemporaryDirectory()).isNotEmpty().startsWith("C:");
     }
 
     @Test
-    public void checkDownloadDirTest() throws IOException {
-        Assertions.assertThat(FileHandler.checkDownloadDir()).exists().isDirectory();
+    public void getDownloadDirTest() throws IOException {
+        Assertions.assertThat(FileHandler.getDownloadTemporaryDirectory()).isNotEmpty().startsWith("C:");
     }
 
 
