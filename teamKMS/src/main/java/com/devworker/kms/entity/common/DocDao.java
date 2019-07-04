@@ -40,7 +40,7 @@ public class DocDao {
     public DocDao() {
     }
 
-    public DocDao(Long docId, CommentDao cmtId) {
+    public DocDao(Long docId) {
         this.docId = docId;
     }
 

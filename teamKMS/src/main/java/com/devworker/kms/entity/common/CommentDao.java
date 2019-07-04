@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.xml.stream.events.Comment;
 
 import com.devworker.kms.util.CommonUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,6 +20,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import static java.time.Instant.ofEpochMilli;
 import static java.time.LocalDateTime.ofInstant;
+import static java.time.ZoneId.ofOffset;
 import static java.time.ZoneId.systemDefault;
 import static java.util.Objects.isNull;
 
@@ -60,7 +62,6 @@ public class CommentDao {
     private List<DocDao> docDaos = new ArrayList<>();
 
     public CommentDao() {
-        //this.cmtDate = LocalDateTime.now();
     }
 
     public CommentDao(BoardDao boardId, String cmtContents) {
@@ -150,30 +151,14 @@ public class CommentDao {
         return CommonUtil.toJson(this);
     }
 
-    public void setUpEntity(CommentDto commentDto) {
+    private void setUpEntity(CommentDto commentDto) {
 
-        if (!isNotEmpty(commentDto))
-            throw new RuntimeException();
-
-        if (isNotEmpty(commentDto.getBoardId()))
             this.boardId = new BoardDao(commentDto.getBoardId());
-
-        if (isNotEmpty(commentDto.getCmtContents()))
             this.cmtContents = commentDto.getCmtContents();
-
-        if (isNotEmpty(commentDto.getCmtCode()))
             this.cmtCode = commentDto.getCmtCode();
-
-        if (isNotEmpty(commentDto.getCmtDate()))
             this.cmtDate = getDateFrom(commentDto.getCmtDate());
-
-        if (isNotEmpty(commentDto.getCmtId()))
             this.cmtId = commentDto.getCmtId();
-
-        if (isNotEmpty(commentDto.getCmtLike()))
             this.cmtLike = commentDto.getCmtLike();
-
-        if (isNotEmpty(commentDto.getCmtUserId()))
             this.cmtUserId = commentDto.getCmtUserId();
     }
 
@@ -181,5 +166,18 @@ public class CommentDao {
         Optional<T> optional = Optional.ofNullable(type);
         return optional.isPresent();
     }
+
+    public CommentDto getCommentDto() {
+        return new CommentDto(this);
+    }
+
+    public static CommentDao valueOf(CommentDto commentDto) {
+        CommentDao commentDao = new CommentDao();
+        commentDao.setUpEntity(commentDto);
+        commentDao.setCmtUserId(CommonUtil.getCurrentUser());
+        commentDao.setCmtDate(new Date());
+        return commentDao;
+    }
+
 
 }

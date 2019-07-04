@@ -65,7 +65,7 @@ public class FileTransactionUtil {
 
 	/**
 	 * @author Hwang In Cheol
-	 * @param String key We use java.util.UUID for HashMap key, so parameter should
+	 * @param key We use java.util.UUID for HashMap key, so parameter should
 	 *               be converted to String
 	 */
 	public static List<Long> getFileList(String key) {
@@ -81,11 +81,27 @@ public class FileTransactionUtil {
 	 *         return false
 	 * @throws FileTransactionException
 	 */
-	public static boolean isSameTransaction(String key, int expectedFileCount) throws FileTransactionException {
-		if (!fileData.containsKey(key)) {
+	private static boolean isSameTransaction(String key, int expectedFileCount) throws FileTransactionException {
+		if (!fileData.containsKey(key))
 			throw new FileTransactionException("File Transact key is not found.");
-		}
+
 		return expectedFileCount == getFileCount(key) ? true : false;
+	}
+
+	/**
+	 * @author Hwang In Cheol
+	 * @param key               TransactionKey generated when doc(file) is stored
+	 * @param expectedFileCount Excpected file count, it will be checked equivalent
+	 *                          to actual file count
+	 * @return If exist same transactionKey return doc id list, if not
+	 *         throw FileTransactionException
+	 */
+	public static List<Long> findSameTransaction(String key, int expectedFileCount) {
+
+		if(isSameTransaction(key, expectedFileCount))
+			return getFileList(key);
+
+		throw new FileTransactionException("File count is not same.");
 	}
 
 	/**

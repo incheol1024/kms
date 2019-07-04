@@ -1,6 +1,6 @@
 package com.devworker.kms.exception.board;
 
-public class FileTransactionException extends Exception {
+public class FileTransactionException extends RuntimeException {
 
 	/**
 	 * 
