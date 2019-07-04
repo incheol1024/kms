@@ -1,7 +1,7 @@
 <template inline-template>
     <div>
-        <v-data-table :headers="headers" :items="datas" :pagination.sync="pagination"
-                      :select-all="!!allowSelect" v-model="selection" :search="search"
+        <v-data-table :headers="headers" :items="datas" :pagination.sync="pagination" :total-items="totalCount"
+                      :select-all="!!allowSelect" v-model="selection" 
                       :loading="loading" must-sort class="elevation-1">
             <template slot="items" slot-scope="props">
                 <tr>
@@ -36,11 +36,7 @@
             },
             pageRes: {
                 default: function (value, _this) {
-                    let max = value.data.content.length;
-                    //_this.datas = value.data.content;
-                    for (let i = 0; i < max; i++) {
-                         _this.datas.push(value.data.content[i]);
-                    }
+                    _this.datas = value.data.content;
                 },
                 type: Function
             },
@@ -94,7 +90,8 @@
             datas: [],
             pagination: {},
             loading: false,
-            totals : 0
+            length : 0,
+            totalCount : 0
         }),
         watch: {
             pagination: {
@@ -105,15 +102,13 @@
             }
         },
         methods: {
-            sync: async function sync() {
+            sync: async function sync(e) {
                 this.loading = true;
                 let _this = this;
-                _this.datas = [];
                 try {
                     let response = await _this.pageReq(jsTojavaPage(_this.pagination));
                     _this.pageRes(response, _this);
-                    _this.pagination.totalItems = response.data.totalElements;
-                    _this.totals = response.data.totalElements;
+                    _this.totalCount = response.data.totalElements;
                 }
                 catch (reason) {
                     catchPromise(reason)
