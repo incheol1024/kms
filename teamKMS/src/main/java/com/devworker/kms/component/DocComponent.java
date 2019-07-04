@@ -30,162 +30,188 @@ import com.devworker.kms.util.FileTransactionUtil;
 
 /**
  * @author Incheol
- *
  */
 @Component
 public class DocComponent {
 
-	@Autowired
-	private DocRepo docRepo;
+    @Autowired
+    private DocRepo docRepo;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	@Qualifier(value = "amazonS3")
-	private FileHandler fileHandler;
+    @Autowired
+    @Qualifier(value = "amazonS3")
+    private FileHandler fileHandler;
 
-	public DocComponent(FileHandler fileHandler) {
-		this.fileHandler = fileHandler;
-	}
+    public DocComponent(FileHandler fileHandler) {
+        this.fileHandler = fileHandler;
+    }
 
-	/**
-	 * 글 또는 댓글에 이미지 첨부 시 수행되는 메소드 입니다.
-	 * 
-	 * @param files
-	 * @return
-	 * @throws Exception
-	 */
-	@Transactional
-	public FileTransactionDto addDoc(List<MultipartFile> files) throws Exception {
-		String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
-		String fileTransactKey = "";
-		int fileCount = 0;
+    /**
+     * 글 또는 댓글에 이미지 첨부 시 수행되는 메소드 입니다.
+     *
+     * @param files
+     * @return
+     * @throws Exception
+     */
+    @Transactional
+    public FileTransactionDto addDocs(List<MultipartFile> files) throws Exception {
+        String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
+        String fileTransactKey = "";
+        int fileCount = 0;
 
-		for (MultipartFile file : files) {
-			File tmpFile = makeTempFile(file);
-			FileDto fileDto = FileDto.builder()
-					.setFile(tmpFile)
-					.setFileExt(FilenameUtils.getExtension(file.getName()))
-					.setFileName(file.getName())
-					.setFileSize(file.getSize())
-					.build();
 
-			DocDao docDao = new DocDao();
-			docDao.setUpEntity(fileDto);
-			docDao.setDocUserId(userName);
-			fileDto = fileHandler.processUploadFile(fileDto);
-			docDao.setDocPath(fileDto.getKey());
-			if (docRepo.save(docDao) == null) 
-				rollbackFileTransaction(fileTransactKey);
+        for (MultipartFile file : files) {
+            File tmpFile = makeTempFile(file);
+            FileDto fileDto = FileDto.builder()
+                    .setFile(tmpFile)
+                    .setFileExt(FilenameUtils.getExtension(file.getOriginalFilename()))
+                    .setFileName(file.getOriginalFilename())
+                    .setFileSize(file.getSize())
+                    .build();
 
-			fileTransactKey = FileTransactionUtil.putFileInfo(fileTransactKey, docDao.getDocId());
-			fileCount += 1;
-		}
+            DocDao docDao = new DocDao();
+            docDao.setUpEntity(fileDto);
+            docDao.setDocUserId(userName);
+            fileDto = fileHandler.processUploadFile(fileDto);
+            docDao.setDocPath(fileDto.getKey());
+            if (docRepo.save(docDao) == null)
+                rollbackFileTransaction(fileTransactKey);
 
-		FileTransactionDto fileTransactionDto = new FileTransactionDto();
-		fileTransactionDto.setFileTransactKey(fileTransactKey);
-		fileTransactionDto.setFileCount(fileCount);
-		return fileTransactionDto;
-	}
+            fileTransactKey = FileTransactionUtil.putFileInfo(fileTransactKey, docDao.getDocId());
+            fileCount += 1;
+        }
 
-	/**
-	 * @param boardId
-	 * @return
-	 */
-	public List<DocDao> listDoc(int boardId) {
-		BoardDao boardDao = new BoardDao();
-		boardDao.setBoardId(boardId);
-		return docRepo.findByBoardId(boardDao);
-	}
+        FileTransactionDto fileTransactionDto = new FileTransactionDto();
+        fileTransactionDto.setFileTransactKey(fileTransactKey);
+        fileTransactionDto.setFileCount(fileCount);
+        return fileTransactionDto;
+    }
 
-	/**
-	 * 게시판글 또는 댓글의 이미지를 수정 시 수행되는 서비스 메소드 입니다.
-	 * 
-	 * @param boardId
-	 * @param cmtId
-	 * @param multiPartFile
-	 * @return transactKey type of String
-	 * @throws Exception
-	 */
-	@Transactional
-	public String updateDoc(int boardId, int cmtId, List<MultipartFile> multiPartFile) throws Exception {
-		BoardDao boardDao = new BoardDao();
-		boardDao.setBoardId(boardId);
-		CommentDao commentDao = new CommentDao();
-		commentDao.setCmtId(cmtId);
-		DocDao docDao = new DocDao();
-		docDao.setBoardId(boardDao);
-		docDao.setCmtId(commentDao);
+    @Transactional
+    public DocDao addDoc(MultipartFile multipartFile) {
 
-		String fileTransactKey = "";
+        FileDto fileDto = null;
+        try {
+            fileDto  = FileDto.builder()
+                    .setFile(makeTempFile(multipartFile))
+			        .setFileExt(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
+                    .setFileName(multipartFile.getOriginalFilename())
+                    .setFileSize(multipartFile.getSize())
+                    .build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		for (MultipartFile file : multiPartFile) {
-			File tmpFile = new File(FileHandler.getUploadTemporaryDirectory() + File.separator + file.getName());
-			file.transferTo(tmpFile);
 
-			FileDto fileDto = FileDto.builder().setFile(tmpFile)
-					.setFileExt(FilenameUtils.getExtension(tmpFile.getName())).setFileName(tmpFile.getName())
-					.setFileSize(tmpFile.length()).build();
+        fileDto = fileHandler.processUploadFile(fileDto);
+        if(fileDto.getKey().equals("") || fileDto.getKey() == null)
+            throw new RuntimeException("File not saved");
 
-			fileDto = fileHandler.processUploadFile(fileDto);
-			docDao.setDocPath(fileDto.getKey());
-			docDao.setDocSize(fileDto.getFileSize());
-			docDao.setDocUserId(CommonUtil.getCurrentUser());
+        DocDao docDao = new DocDao();
+        docDao.setUpEntity(fileDto);
+        docDao.setDocUserId(userService.getUser(CommonUtil.getCurrentUser()).getName());
+        return docRepo.save(docDao);
+    }
 
-			if (docRepo.save(docDao) == null)
-				rollbackFileTransaction(fileTransactKey);
+    /**
+     * @param boardId
+     * @return
+     */
+    public List<DocDao> listDoc(int boardId) {
+        BoardDao boardDao = new BoardDao();
+        boardDao.setBoardId(boardId);
+//        return docRepo.findByBoardId(boardDao);
+        return null;
+    }
 
-			fileTransactKey = FileTransactionUtil.putFileInfo(fileTransactKey, docDao.getDocId());
-		}
-		return fileTransactKey;
-	}
+    /**
+     * 게시판글 또는 댓글의 이미지를 수정 시 수행되는 서비스 메소드 입니다.
+     *
+     * @param boardId
+     * @param cmtId
+     * @param multiPartFile
+     * @return transactKey type of String
+     * @throws Exception
+     */
+    @Transactional
+    public String updateDoc(int boardId, int cmtId, List<MultipartFile> multiPartFile) throws Exception {
+        BoardDao boardDao = new BoardDao();
+        boardDao.setBoardId(boardId);
+        CommentDao commentDao = new CommentDao();
+        commentDao.setCmtId(cmtId);
+        DocDao docDao = new DocDao();
+//        docDao.setBoardId(boardDao);
+//        docDao.setCmtId(commentDao);
 
-	public void deleteDoc(long docId) throws Exception {
-		Optional<DocDao> opDocDao = docRepo.findById(docId);
-		if (!opDocDao.isPresent())
-			throw new RuntimeException("Doc is not found");
+        String fileTransactKey = "";
 
-		DocDao docDao = opDocDao.get();
-		fileHandler.deleteFile(docDao.getDocPath());
-		docRepo.delete(docDao);
-	}
+        for (MultipartFile file : multiPartFile) {
+            File tmpFile = new File(FileHandler.getUploadTemporaryDirectory() + File.separator + file.getName());
+            file.transferTo(tmpFile);
 
-	public FileDto downDoc(long docId) {
-		Optional<DocDao> optionalDocDao = docRepo.findById(docId);
-		DocDao docDao = optionalDocDao.orElseThrow(() -> new RuntimeException("docId is not Exist"));
-		FileDto fileDto = fileHandler.processDownloadFile(FileDto.builder().setKey(docDao.getDocPath())
-				.setFile(new File(FileHandler.getDownloadTemporaryDirectory() + File.separator + docDao.getDocPath())).build());
+            FileDto fileDto = FileDto.builder().setFile(tmpFile)
+                    .setFileExt(FilenameUtils.getExtension(tmpFile.getName())).setFileName(tmpFile.getName())
+                    .setFileSize(tmpFile.length()).build();
 
-		return FileDto.builder().setFile(fileDto.getFile()).setFileExt(docDao.getDocExt())
-				.setFileName(docDao.getDocName()).setFileSize(docDao.getDocSize()).build();
-	}
+            fileDto = fileHandler.processUploadFile(fileDto);
+            docDao.setDocPath(fileDto.getKey());
+            docDao.setDocSize(fileDto.getFileSize());
+            docDao.setDocUserId(CommonUtil.getCurrentUser());
 
-	public void rollbackFileTransaction(String fileTransactKey) throws Exception {
-		List<Long> fileList = FileTransactionUtil.getFileList(fileTransactKey);
-		for (Long fList : fileList) {
-			deleteDoc(fList);
-		}
-		throw new FileNotSavedException("File Not Saved Database");
-	}
-	
-	public File makeTempFile(MultipartFile file) throws IllegalStateException, IOException {
-		File tmpFile = new File(FileHandler.getUploadTemporaryDirectory() + File.separator + file.getOriginalFilename());
-		file.transferTo(tmpFile);
-		return tmpFile;
-	}
+            if (docRepo.save(docDao) == null)
+                rollbackFileTransaction(fileTransactKey);
 
-	public Map<Long, String> getDocEntry(CommentDao commentDao) {
-		Map<Long, String> docEntry = new HashMap<>();
-		docRepo.findByCmtId(commentDao)
-				.stream()
-				.forEach(docDao -> docEntry.put(docDao.getDocId(), docDao.getDocName()));
-		return docEntry;
-	}
+            fileTransactKey = FileTransactionUtil.putFileInfo(fileTransactKey, docDao.getDocId());
+        }
+        return fileTransactKey;
+    }
 
-	public List<DocDao> findByCmtId(CommentDao commentDao) {
-		return docRepo.findByCmtId(commentDao);
-	}
+    public void deleteDoc(long docId) {
+        Optional<DocDao> opDocDao = docRepo.findById(docId);
+        if (!opDocDao.isPresent())
+            throw new RuntimeException("Doc is not found");
+
+        DocDao docDao = opDocDao.get();
+        fileHandler.deleteFile(docDao.getDocPath());
+        docRepo.delete(docDao);
+    }
+
+    public FileDto downDoc(long docId) {
+        Optional<DocDao> optionalDocDao = docRepo.findById(docId);
+        DocDao docDao = optionalDocDao.orElseThrow(() -> new RuntimeException("docId is not Exist"));
+        FileDto fileDto = fileHandler.processDownloadFile(FileDto.builder().setKey(docDao.getDocPath())
+                .setFile(new File(FileHandler.getDownloadTemporaryDirectory() + File.separator + docDao.getDocPath())).build());
+
+        return FileDto.builder().setFile(fileDto.getFile()).setFileExt(docDao.getDocExt())
+                .setFileName(docDao.getDocName()).setFileSize(docDao.getDocSize()).build();
+    }
+
+    public void rollbackFileTransaction(String fileTransactKey) {
+        List<Long> fileList = FileTransactionUtil.getFileList(fileTransactKey);
+        fileList.parallelStream().forEach(this::deleteDoc);
+        throw new FileNotSavedException("File Not Saved Database");
+    }
+
+    public File makeTempFile(MultipartFile file) throws IllegalStateException, IOException {
+        File tmpFile = new File(FileHandler.getUploadTemporaryDirectory() + File.separator + file.getOriginalFilename());
+        file.transferTo(tmpFile);
+        return tmpFile;
+    }
+
+    public Map<Long, String> getDocEntry(CommentDao commentDao) {
+        Map<Long, String> docEntry = new HashMap<>();
+//        docRepo.findByCmtId(commentDao)
+//                .stream()
+//                .forEach(docDao -> docEntry.put(docDao.getDocId(), docDao.getDocName()));
+        return docEntry;
+    }
+
+    public List<DocDao> findByCmtId(CommentDao commentDao) {
+//        return docRepo.findByCmtId(commentDao);
+        return null;
+    }
 
 
 }

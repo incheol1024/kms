@@ -10,7 +10,6 @@ import com.devworker.kms.entity.common.DocDao;
 
 public interface DocRepo extends JpaRepository<DocDao, Long> {
 
-	List<DocDao> findByBoardId(BoardDao boardDao);
-	List<DocDao> findByCmtId(CommentDao commentDao);
+//	List<DocDao> findByBoardId(BoardDao boardDao);
 
 }

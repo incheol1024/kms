@@ -128,7 +128,7 @@ public class CommentComponent {
         for (Long docId : fileList) {
             Optional<DocDao> docDao = docRepo.findById(docId);
             savedDoc = docDao.orElseThrow(() -> new DocNotFoundException());
-            savedDoc.setCmtId(savedComment);
+//            savedDoc.setCmtId(savedComment);
             DocDao tmpDoc = null;
             if ((tmpDoc = docRepo.save(savedDoc)) == null)
                 docComponent.rollbackFileTransaction(fileTransactKey);
@@ -201,12 +201,14 @@ public class CommentComponent {
         Optional<CommentDao> opComment = commentRepo.findById(cmtId);
         CommentDao commentDao = opComment
                 .orElseThrow(() -> new CommentNotFoundException("comment is not found cmtid = " + cmtId));
-        List<DocDao> docs = docRepo.findByCmtId(commentDao);
+//        List<DocDao> docs = docRepo.findByCmtId(commentDao);
 
+/*
         for (DocDao doc : docs) {
             docComponent.deleteDoc(doc.getDocId());
         }
         commentRepo.deleteById(cmtId);
+*/
     }
 
     /**

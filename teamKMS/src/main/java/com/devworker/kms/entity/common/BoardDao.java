@@ -1,13 +1,10 @@
 package com.devworker.kms.entity.common;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.dto.common.BoardDetailDto;
@@ -47,6 +44,12 @@ public class BoardDao {
 	@Column(name = "hits")
 	private
 	int hits;
+
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "KMS_BOARD_DOC",
+			joinColumns = @JoinColumn(name = "board_id"),
+			inverseJoinColumns = @JoinColumn(name = "doc_id"))
+	private List<DocDao> docDaos = new ArrayList<>();
 
 	public BoardDao() {
 	}
@@ -108,6 +111,20 @@ public class BoardDao {
 
 	public void setHits(int hits) {
 		this.hits += hits;
+	}
+
+	public List<DocDao> getDocDaos() {
+		return docDaos;
+	}
+
+	public void setDocDaos(List<DocDao> docDaos) {
+		this.docDaos = docDaos;
+	}
+
+	public void addDoc(DocDao docDao) {
+
+		if(!docDaos.contains(docDao))
+			docDaos.add(docDao);
 	}
 
 	@Override

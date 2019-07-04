@@ -15,6 +15,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.http.entity.ContentType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -87,9 +88,9 @@ public class DocComponentTest {
 
 	@Test
 	@WithMockUser(username = "USER")
-	public void addDocTest() throws Exception {
+	public void addDocsTest() throws Exception {
 
-		FileTransactionDto fileTransactionDto = docComponent.addDoc(files);
+		FileTransactionDto fileTransactionDto = docComponent.addDocs(files);
 		assertThat(fileTransactionDto).isNotNull().extracting(FileTransactionDto::getFileCount).isEqualTo(files.size());
 		assertThat(fileTransactionDto.getFileTransactKey()).isNotNull();
 
@@ -133,6 +134,18 @@ public class DocComponentTest {
 
 		System.out.println(docEntry);
 
+	}
+
+	@Test
+	@WithMockUser(username = "USER")
+	public void addDocTest() throws IOException {
+
+		MultipartFile multipartFile = new MockMultipartFile("multipart", "zzz", "image/png", "aaa".getBytes());
+		FileItemFactory fileItemFactory = new DiskFileItemFactory(10240, new File("D:\\app\\download"));
+		FileItem fileItem = fileItemFactory.createItem("1557298263287w1jl3O7KfY", ContentType.IMAGE_PNG.getMimeType(), true, "aaa");
+		fileItem.getOutputStream();
+		MultipartFile multipartFile1 = new CommonsMultipartFile(fileItem);
+		docComponent.addDoc(multipartFile1);
 	}
 
 

@@ -141,9 +141,9 @@ public class DocDto {
                     .setDocExt(docDao.getDocName())
                     .setDocPath(docDao.getDocPath())
                     .setDocSize(docDao.getDocSize())
-                    .setDocUserId(docDao.getDocUserId())
-                    .setBoardId(docDao.getBoardId())
-                    .setCmtId(docDao.getCmtId());
+                    .setDocUserId(docDao.getDocUserId());
+//                    .setBoardId(docDao.getBoardId())
+//                    .setCmtId(docDao.getCmtId());
         }
 
         public DocDto build() {

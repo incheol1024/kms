@@ -3,15 +3,16 @@ package com.devworker.kms.repo.common;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import com.devworker.kms.entity.common.DocDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +22,17 @@ import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.common.CommentDao;
 
 @SpringBootTest
+//@DataJpaTest
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@Import(value = DataLayerTestConfg.class)
 @RunWith(SpringRunner.class)
 public class CommentRepoTest {
 
     @Autowired
     CommentRepo commentRepo;
+
+    @Autowired
+    DocRepo docRepo;
 
     @Test
     public void commentRepo_추가쿼리메소드_테스트() {
@@ -143,6 +150,21 @@ public class CommentRepoTest {
         commentDao.setBoardId(boardDao);
         commentDao.setCmtDate(new Date());
 
+        commentRepo.save(commentDao);
+    }
+
+    @Test
+    public void docJointableTest() {
+
+        CommentDao commentDao = new CommentDao();
+        commentDao.setCmtDate(new Date());
+        commentDao.setCmtContents("joinTableTest");
+        commentDao.setCmtUserId("USER");
+        commentDao.setBoardId(new BoardDao(190L));
+
+
+        DocDao docDao = docRepo.findById(293L).orElseThrow(IllegalArgumentException::new);
+        commentDao.addDoc(docDao);
         commentRepo.save(commentDao);
     }
 }

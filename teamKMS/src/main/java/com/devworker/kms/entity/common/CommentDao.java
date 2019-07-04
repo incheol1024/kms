@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import com.devworker.kms.util.CommonUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -52,7 +53,10 @@ public class CommentDao {
     @Column(name = "cmt_like")
     private long cmtLike;
 
-    @OneToMany(mappedBy = "cmtId", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "KMS_COMMENT_DOC",
+            joinColumns = @JoinColumn(name = "cmt_id"),
+            inverseJoinColumns = @JoinColumn(name = "doc_id"))
     private List<DocDao> docDaos = new ArrayList<>();
 
     public CommentDao() {
@@ -108,11 +112,7 @@ public class CommentDao {
         return getLocalDateTimeFrom(cmtDate);
     }
 
-    public void setCmtDate(Date cmtDate) {
-        if (isNull(cmtDate)) {
-            this.cmtDate = new Date();
-            return;
-        }
+    public void setCmtDate(@NotNull Date cmtDate) {
         this.cmtDate = cmtDate;
     }
 
@@ -132,6 +132,11 @@ public class CommentDao {
         this.docDaos = docDaos;
     }
 
+    public void addDoc(DocDao docDao) {
+
+        if(!docDaos.contains(docDao))
+            docDaos.add(docDao);
+    }
     private LocalDateTime getLocalDateTimeFrom(Date date) {
         return isNull(date) ? null : ofInstant(ofEpochMilli(date.getTime()), systemDefault());
     }

@@ -21,14 +21,6 @@ public class DocDao {
     @Column(name = "doc_id")
     private long docId;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
-    private BoardDao boardId;
-
-    @ManyToOne
-    @JoinColumn(name = "cmt_Id")
-    private CommentDao cmtId;
-
     @Column(name = "doc_path")
     private String docPath;
 
@@ -50,15 +42,6 @@ public class DocDao {
 
     public DocDao(Long docId, CommentDao cmtId) {
         this.docId = docId;
-        this.cmtId = cmtId;
-    }
-
-    public BoardDao getBoardId() {
-        return boardId;
-    }
-
-    public void setBoardId(BoardDao boardId) {
-        this.boardId = boardId;
     }
 
     public long getDocId() {
@@ -91,14 +74,6 @@ public class DocDao {
 
     public void setDocSize(long docSize) {
         this.docSize = docSize;
-    }
-
-    public CommentDao getCmtId() {
-        return cmtId;
-    }
-
-    public void setCmtId(CommentDao cmtId) {
-        this.cmtId = cmtId;
     }
 
     public String getDocName() {

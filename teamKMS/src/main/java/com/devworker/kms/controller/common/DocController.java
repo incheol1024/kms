@@ -51,16 +51,13 @@ public class DocController {
     @PostMapping("/upload/comment")
     public FileTransactionDto uploadFileOnComment(
             @RequestParam(name = "boardId", required = false) BoardDao boardId,
-            @RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile)
+            @RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFiles)
             throws Exception {
 
-        logger.debug("boardId = {}  ", boardId);
-        logger.debug("muiltiPartFile = {} ", multiPartFile);
-
-        return docService.addDoc(
+        return docService.addDocs(
                 //boardId,
                 //cmtId,
-                multiPartFile);
+                multiPartFiles);
     }
 
     @PostMapping("/upload/etc/{id}")

@@ -33,19 +33,6 @@ public class DocRepoTest {
     }
 
     @Test
-    public void a_findByboardId_Test() {
-
-        BoardDao boardDao = new BoardDao();
-        boardDao.setBoardId(1);
-        List<DocDao> list = docRepo.findByBoardId(boardDao);
-
-        System.out.println(list.size());
-
-        assertNotNull(list);
-
-    }
-
-    @Test
     public void boardId_commentId_객체연관관계_테스트() {
         /*
          * BoardDao common = new BoardDao(); common.setBoardId(1);
@@ -68,21 +55,6 @@ public class DocRepoTest {
 
 		assertThat(docRepo.save(doc)).isNotNull().isEqualTo(doc);*/
 
-    }
-
-    @Test
-    public void findByCmtId_쿼리메소드_테스트() {
-
-        CommentDao commentDao = null;
-
-        Optional<CommentDao> opCommentDao = commentRepo.findById(293L);
-        commentDao = opCommentDao.get();
-
-        List<DocDao> docs = docRepo.findByCmtId(commentDao);
-
-        for (DocDao doc : docs) {
-            System.out.println(doc.getDocId() + doc.getDocPath());
-        }
     }
 
     @Test
