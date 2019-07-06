@@ -1,20 +1,25 @@
 package com.devworker.kms.component;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.devworker.kms.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -25,64 +30,70 @@ import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.common.CommentDao;
 import com.devworker.kms.repo.common.CommentRepo;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.xml.stream.events.Comment;
 
 @SpringBootTest
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 public class CommentComponentTest {
 
-    //	@Mock
-//	CommentComponent commentService;
-//
-//	// @Autowired
-    @Autowired
+    @MockBean
     CommentRepo commentRepo;
 
-    private static CommentDao commentDao;
-    private static BoardDao boardDao;
+    @MockBean
+    DocComponent docComponent;
+
+    @MockBean
+    UserService userService;
+
+    @MockBean
+    BoardComponent boardComponent;
+
+    @Autowired
+    CommentComponent commentComponent;
+
+    @Mock
+    private CommentDao commentDao;
+
+    @Mock
+    private CommentDto commentDto;
 
     @Before
     public void setUp() {
-        //boardDao = mock(BoardDao.class);
-        boardDao = new BoardDao();
-        boardDao.setBoardId(1);
-        commentDao = mock(CommentDao.class);
-        commentDao.setBoardId(boardDao);
-        commentDao.setCmtContents("Comment Service Test Data");
-        commentDao.setCmtUserId("USER");
-        //commentDao.setCmtDate(LocalDateTime.now());
-        commentDao.setCmtId(200);
 
+        commentDto = mock(CommentDto.class);
+        given(commentDto.getCmtContents()).willReturn("mockito Contents");
+        given(commentDto.getCmtId()).willReturn(200L);
+        given(commentDto.getBoardId()).willReturn(40L);
+
+        commentDao = mock(CommentDao.class);
+        given(commentDao.getCmtContents()).willReturn("mockito Contents");
+        given(commentDao.getCmtId()).willReturn(200L);
+        given(commentDao.getBoardId()).willReturn(new BoardDao(40L));
+        given(commentDao.getCommentDto()).willReturn(commentDto);
     }
 
     @Test
     public void beanNotNullTest() {
-//		System.out.println("=========================");
-//		System.out.println(boardDao.toString());
-//		System.out.println(commentDao.toString());
-//		System.out.println("=========================");
-//		assertThat(commentRepo).isNotNull();
-//		assertThat(commentService).isNotNull();
-
+        assertThat(commentRepo).isNotNull();
+        assertThat(commentComponent).isNotNull();
+        assertThat(docComponent).isNotNull();
+        assertThat(userService).isNotNull();
+        assertThat(boardComponent).isNotNull();
     }
 
 
     @Test
     @WithMockUser(value = "USER")
-    public void addCommentTest() throws Exception {
-
-        //when(commentService.addComment(commentDto)).thenReturn(commentDao);
-
+    public void addCommentTest() {
+        given(commentRepo.save(any(CommentDao.class))).willReturn(commentDao);
+        when(commentComponent.addComment(commentDao.getCommentDto())).thenReturn(commentDto);
     }
 
     @Test
     public void findByBoardIdTest() throws Exception {
 
-//		List<CommentDto> commentList = commentService.findByBoardId(boardDao);
-//		when(commentService.findByBoardId(boardDao)).thenReturn(commentList);
-//
-//		assertThat(commentList).isNotNull().size().isLessThan(1);
     }
 
     @Test
@@ -97,10 +108,6 @@ public class CommentComponentTest {
 
     @Test
     public void updateCommentLikeTest() {
-/*
-		int commentLikeNumber = commentDao.getCmtLike();
-		CommentDao newComment = commentService.updateCommentLike(commentDao);
-		assertThat(newComment).isNotNull();*/
 
     }
 
@@ -116,7 +123,7 @@ public class CommentComponentTest {
 
         System.out.println(page.getContent());
 
-        Page convertedPage = page.map( (commentDao) -> {
+        Page convertedPage = page.map((commentDao) -> {
             return new CommentDto((CommentDao) commentDao);
         });
 
@@ -130,11 +137,7 @@ public class CommentComponentTest {
         boardDao.setBoardId(40);
 
         List<CommentDao> commentDaos = commentRepo.findByBoardId(boardDao);
-        commentDaos.stream().forEach( commentDao -> System.out.println(commentDao.getDocDaos()));
-
-
-
-
+        commentDaos.stream().forEach(commentDao -> System.out.println(commentDao.getDocDaos()));
 
 
     }

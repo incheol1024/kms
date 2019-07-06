@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.devworker.kms.entity.common.CommentDao;
 import com.devworker.kms.entity.common.DocDao;
@@ -57,6 +59,22 @@ public class CommentDto {
         this.cmtUserId = comment.getCmtUserId();
         this.cmtDate = comment.getCmtDate();
         this.cmtLike = comment.getCmtLike();
+        if (!comment.getDocDaos().isEmpty())
+            docDtos = findDocs(comment.getDocDaos());
+    }
+
+    private List<DocDto> findDocs(List<DocDao> docDaos) {
+        return docDaos.stream().map(docDao -> {
+            return new DocDto.DocDtoBuilder()
+                    .setDocId(docDao.getDocId())
+                    .setDocName(docDao.getDocName())
+                    .setDocExt(docDao.getDocExt())
+                    .setDocPath(docDao.getDocPath())
+                    .setDocSize(docDao.getDocSize())
+                    .setDocUserId(docDao.getDocUserId())
+                    .build();
+        }).collect(Collectors.toList());
+
     }
 
     private String bringDocName(String docPath) {

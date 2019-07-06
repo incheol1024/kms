@@ -44,14 +44,10 @@ public class CommentComponent {
 
     /**
      * Comment(댓글) 등록 시 호출 되는 메소드입니다.
-     *
      * @return
-     * @throws Exception
      */
-    public CommentDto addComment(CommentDto commentDto) throws Exception {
-        CommentDao comment = CommentDao.valueOf(commentDto);
-        logger.debug("new comment@ {}", comment);
-        return new CommentDto(commentRepo.save(comment));
+    public CommentDto addComment(CommentDto commentDto) {
+        return commentRepo.save(CommentDao.valueOf(commentDto)).getCommentDto();
     }
 
     /**
@@ -114,10 +110,7 @@ public class CommentComponent {
     }
 
     public Page<CommentDto> findCommentsByPage(BoardDao boardId, Pageable pageable) {
-        Page<CommentDao> commentDaoPage = commentRepo.findByBoardIdEquals(boardId, pageable);
-        return commentDaoPage
-                .map(commentDao ->
-                        new CommentDto(commentDao));
+        return commentRepo.findByBoardIdEquals(boardId, pageable).map(CommentDao::getCommentDto);
     }
 
 }

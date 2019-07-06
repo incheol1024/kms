@@ -60,7 +60,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/delete")
-    public Integer deleteComment(@RequestParam Integer cmtId) throws Exception {
+    public Integer deleteComment(@RequestParam int cmtId) throws Exception {
         commentComponent.deleteComment(cmtId);
         return cmtId;
     }

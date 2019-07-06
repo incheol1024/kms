@@ -55,7 +55,7 @@ public class CommentDao {
     @Column(name = "cmt_like")
     private long cmtLike;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "KMS_COMMENT_DOC",
             joinColumns = @JoinColumn(name = "cmt_id"),
             inverseJoinColumns = @JoinColumn(name = "doc_id"))
