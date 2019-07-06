@@ -9,4 +9,13 @@
            memoryStoreEvictionPolicy="LFU">
         <persistence strategy="localTempSwap" />
     </cache>
+
+    <cache name="requestCache"
+           maxEntriesLocalHeap="10000"
+           diskSpoolBufferSizeMB="20"
+           timeToLiveSeconds="1"
+           timeToIdleSeconds="1"
+           memoryStoreEvictionPolicy="FIFO">
+        <persistence strategy="localTempSwap" />
+    </cache>
 </ehcache>

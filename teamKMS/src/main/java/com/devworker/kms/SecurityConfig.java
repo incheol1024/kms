@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsUtils;
 
@@ -18,10 +19,14 @@ import org.springframework.web.cors.CorsUtils;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SecurityProvider provider;
+    @Autowired
+    private RequestHandler requestHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors();
+
+        //http.addFilterBefore(requestHandler, BasicAuthenticationFilter.class);
 
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
