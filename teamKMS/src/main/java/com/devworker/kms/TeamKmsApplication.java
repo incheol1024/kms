@@ -1,6 +1,8 @@
 package com.devworker.kms;
 
 import io.swagger.annotations.ApiOperation;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.core.io.ClassPathResource;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
@@ -69,13 +71,14 @@ public class TeamKmsApplication {
     }
 
     @Bean
-    public CacheManager getCache() {
+    public EhCacheCacheManager getCache() {
         return new EhCacheCacheManager(Objects.requireNonNull(ehCacheManagerFactoryBean().getObject()));
     }
 
     @Bean
     public EhCacheManagerFactoryBean ehCacheManagerFactoryBean() {
         EhCacheManagerFactoryBean bean = new EhCacheManagerFactoryBean();
+        bean.setConfigLocation(new ClassPathResource("ehcache.xml"));
         bean.setShared(true);
         return bean;
     }
@@ -98,5 +101,4 @@ public class TeamKmsApplication {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-    
 }
