@@ -41,16 +41,7 @@ public class CommentDto {
 
     public CommentDto(CommentDao comment) {
         setUpCommentDto(comment);
-
     }
-
-/*
-    private void setUpDocs(List<DocDao> docDaos) {
-        for (DocDao docDao : docDaos) {
-            docEntry.put(docDao.getDocId(), docDao.getDocName());
-        }
-    }
-*/
 
     private void setUpCommentDto(CommentDao comment) {
         this.cmtId = comment.getCmtId();
@@ -64,16 +55,9 @@ public class CommentDto {
     }
 
     private List<DocDto> findDocs(List<DocDao> docDaos) {
-        return docDaos.stream().map(docDao -> {
-            return new DocDto.DocDtoBuilder()
-                    .setDocId(docDao.getDocId())
-                    .setDocName(docDao.getDocName())
-                    .setDocExt(docDao.getDocExt())
-                    .setDocPath(docDao.getDocPath())
-                    .setDocSize(docDao.getDocSize())
-                    .setDocUserId(docDao.getDocUserId())
-                    .build();
-        }).collect(Collectors.toList());
+        return docDaos.stream()
+                .map(docDao ->  new DocDto.DocDtoBuilder().docDao(docDao).build())
+                .collect(Collectors.toList());
 
     }
 

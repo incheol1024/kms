@@ -44,6 +44,7 @@ public class CommentComponent {
 
     /**
      * Comment(댓글) 등록 시 호출 되는 메소드입니다.
+     *
      * @return
      */
     public CommentDto addComment(CommentDto commentDto) {
@@ -60,11 +61,11 @@ public class CommentComponent {
 
         List<Long> docIds = FileTransactionUtil.findSameTransaction(fileTransactKey, fileCount);
         CommentDao commentDao = CommentDao.valueOf(commentDto);
-        docIds.stream().forEach((docId) -> {
-            commentDao.addDoc(new DocDao(docId));
-        });
-
-        return commentRepo.save(commentDao).getCommentDto();
+        docIds.stream().forEach((docId) -> commentDao.addDoc(new DocDao(docId)));
+        return commentRepo
+                .findById(commentRepo.save(commentDao).getCmtId())
+                .orElseThrow(CommentNotFoundException::new)
+                .getCommentDto();
     }
 
     /**
@@ -92,7 +93,9 @@ public class CommentComponent {
 
         List<DocDao> docDaos = commentDao.getDocDaos();
         if (!docDaos.isEmpty())
-            docDaos.parallelStream().forEach((docDao) -> {docComponent.deleteDoc(docDao.getDocId());});
+            docDaos.parallelStream().forEach((docDao) -> {
+                docComponent.deleteDoc(docDao.getDocId());
+            });
 
         commentRepo.delete(commentDao);
     }

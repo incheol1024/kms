@@ -44,6 +44,7 @@
         },
         methods: {
             getComments: function (number) {
+
                 axios.get("/comment/list/" + this.qid,
                     {
                         params: {
@@ -91,6 +92,9 @@
             },
             getTotalPages() {
                 return this.totalPages;
+            },
+            getCurrentPageNumber: function () {
+                return this.number;
             }
         },
         watch: {

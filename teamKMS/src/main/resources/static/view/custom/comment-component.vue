@@ -49,12 +49,14 @@
 
                         <v-divider></v-divider>
 
-                        <v-card-actions v-if="isExistDocEntry(comment.docEntry)">
+                        <v-card-actions v-if="isExistDocEntry(comment.docDtos)">
                             <div>
-                                <v-chip close color="orange" label outline :key="index"
-                                        @click="fileDownload(comment.docEntry)">
-                                    {{comment.docEntry[0]}}
-                                </v-chip>
+                                <template v-for="doc in comment.docDtos">
+                                    <v-chip close color="orange" label outline :key="index"
+                                            @click="fileDownload(doc)">
+                                        {{doc.docName}}
+                                    </v-chip>
+                                </template>
                             </div>
                         </v-card-actions>
                         <v-card-actions>
@@ -168,20 +170,19 @@
             },
             deleteComment: function (cmtId, index) {
                 if (confirm('답글을 삭제 하시겠습니까?')) {
-                    console.log("deleteComment function is called" + "cmtId = " + cmtId);
                     var _this = this;
-                    axios.delete('/comment/delete', {
-                        params: {
-                            cmtId: cmtId
-                        }
-                    })
-                        .then(
-                            function (response) {
-                                console.log(response.data);
-                                _this.comments.splice(index, 1);
+                    axios
+                        .delete('/comment/delete', {
+                            params: {cmtId: cmtId}
+                        })
+                        .then(response => {
+                                if (Number(response.data) === Number(cmtId)) {
+                                    const pageNumber = this.$refs.commentPage.getCurrentPageNumber();
+                                    this.$refs.commentPage.getComments(pageNumber);
+                                }
                             }
                         )
-                        .catch(function (error) {
+                        .catch(error => {
                             console.log(error);
                         })
                 } else {
@@ -203,12 +204,12 @@
                         console.log(error);
                     })
             },
-            fileDownload: function (docEntry) {
+            fileDownload: function (doc) {
                 console.log("fileDownload function is called");
-                console.log("file download url" + " file/download/" + docId);
-                axios.get('/file/download/' + docId,
+                console.log("file download url" + " file/download/" + doc.docId);
+                axios.get('/file/download/' + doc.docId,
                     {
-                        docId: docId
+                        docId: doc.docId
                     },
                     {
                         headers: {
@@ -220,7 +221,7 @@
                             const url = window.URL.createObjectURL(new Blob([response.data]));
                             const link = document.createElement('a');
                             link.href = url;
-                            link.setAttribute('download', docName); //or any other extension
+                            link.setAttribute('download', doc.docName); //or any other extension
                             document.body.appendChild(link);
                             link.click();
                         }
@@ -248,8 +249,12 @@
 
             },
             isExistDocEntry: function (docEntry) {
-
-                if(docEntry.length > 0)
+                //docEntry 배열임 배열로 처리해야함
+                if (docEntry === null || docEntry === undefined)
+                    return false;
+                console.dir(docEntry);
+                console.log(docEntry.length);
+                if (docEntry.length > 0)
                     return true;
                 return false;
             },

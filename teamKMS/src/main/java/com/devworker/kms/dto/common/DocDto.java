@@ -138,7 +138,7 @@ public class DocDto {
 
             return this.setDocId(docDao.getDocId())
                     .setDocName(docDao.getDocName())
-                    .setDocExt(docDao.getDocName())
+                    .setDocExt(docDao.getDocExt())
                     .setDocPath(docDao.getDocPath())
                     .setDocSize(docDao.getDocSize())
                     .setDocUserId(docDao.getDocUserId());
@@ -163,8 +163,8 @@ public class DocDto {
 
             DocDtoBuilder docDtoBuilder = (DocDtoBuilder) t;
 
-            if (isNull(docDtoBuilder.boardId) && isNull(docDtoBuilder.cmtId))
-                assertionMessage = "Either boardId or cmtId is must not be null.";
+//            if (isNull(docDtoBuilder.boardId) && isNull(docDtoBuilder.cmtId))
+//                assertionMessage = "Either boardId or cmtId is must not be null.";
 
             if (docDtoBuilder.docId <= 0)
                 assertionMessage = "docId must be larger than zero.";
