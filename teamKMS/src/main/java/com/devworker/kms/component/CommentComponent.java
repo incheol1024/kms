@@ -93,9 +93,11 @@ public class CommentComponent {
 
         List<DocDao> docDaos = commentDao.getDocDaos();
         if (!docDaos.isEmpty())
-            docDaos.parallelStream().forEach((docDao) -> {
+            docDaos.stream().forEach((docDao) -> {
                 docComponent.deleteDoc(docDao.getDocId());
             });
+
+//        commentDao = commentRepo.findById(cmtId).;
 
         commentRepo.delete(commentDao);
     }

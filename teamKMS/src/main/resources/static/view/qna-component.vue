@@ -41,14 +41,11 @@
             search: ""
         }),
         created: function () {
-            this.getQnaList(this.id);
         },
-
         methods: {
             getQnaList: function (page) {
-                return axios.get(`qna/${this.id}`, {
-                        params: page
-                    });
+               return axios
+                    .get(`qna/${this.id}`, { params: page });
             },
             moveToWritePage: function () {
                 this.$router.push(`/qna/write/${this.name}/${this.id}`);
@@ -62,7 +59,7 @@
             }
         },
         watch: {
-            id : function(){
+            id: function () {
                 this.$refs.table.sync();
             }
         }

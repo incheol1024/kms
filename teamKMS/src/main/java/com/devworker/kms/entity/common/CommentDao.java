@@ -28,7 +28,7 @@ import static java.util.Objects.isNull;
 @Table(name = "KMS_COMMENT")
 public class CommentDao {
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "board_id", nullable = false)
     private BoardDao boardId;
 
@@ -55,10 +55,10 @@ public class CommentDao {
     @Column(name = "cmt_like")
     private long cmtLike;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = {CascadeType.REMOVE, CascadeType.MERGE} )
     @JoinTable(name = "KMS_COMMENT_DOC",
-            joinColumns = @JoinColumn(name = "cmt_id"),
-            inverseJoinColumns = @JoinColumn(name = "doc_id"))
+            joinColumns = @JoinColumn(name = "cmt_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "doc_id", nullable = false))
     private List<DocDao> docDaos = new ArrayList<>();
 
     public CommentDao() {
