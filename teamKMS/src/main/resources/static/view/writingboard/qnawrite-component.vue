@@ -1,9 +1,16 @@
 <template>
 
     <v-container grid-list-xs align-content-center>
-        qna {{name}} {{id}}
-
         <v-layout row wrap>
+            <v-flex xs2>
+                <v-combobox
+                        v-model="select"
+                        :items="items"
+                        chips
+                        label="language"
+                ></v-combobox>
+            </v-flex>
+
             <v-flex xs12>
                 <v-text-field
                         v-model="subject"
@@ -15,20 +22,9 @@
             </v-flex>
 
             <v-flex xs12>
-
                 <write-component ref="questionEditor"></write-component>
-
             </v-flex>
 
-
-            <v-flex xs2>
-                <v-combobox
-                        v-model="select"
-                        :items="items"
-                        chips
-                        label="language"
-                ></v-combobox>
-            </v-flex>
             <v-spacer></v-spacer>
             <div></div>
             <v-flex xs12>

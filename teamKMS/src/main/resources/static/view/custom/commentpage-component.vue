@@ -17,6 +17,7 @@
     </v-layout>
 </template>
 
+
 <script>
     module.exports = {
         props: ["id", "name", "qid"],
@@ -33,22 +34,22 @@
                 first: true, // 첫번째 페이지 여부
                 last: false, // 마지막 페이지 여부
                 totalPages: 0, // 총 필요 페이지 수
-                number: 0, // 현재 페이지 번호 ( -1 한 값임)
+                number: 1, // 현재 페이지 번호 ( -1 한 값임)
                 totalElements: 0, // 총 댓글 개수
                 numberOfElements: 0 // 현재 댓글 개수
             }
         },
 
         created: function () {
-            this.getComments(this.number);
+            this.getComments(this.page);
         },
         methods: {
-            getComments: function (number) {
+            getComments: function (pageNumber) {
 
                 axios.get("/comment/list/" + this.qid,
                     {
                         params: {
-                            page: number - 1,
+                            page: pageNumber - 1,
                             size: this.size,
                             sort: this.sort
                         }
@@ -62,9 +63,9 @@
                     .then(response => {
                         if (response.data.content.length > 0) {
                             this.removeComment();
-                            for (var i = 0; i < response.data.content.length; i++) {
-                                this.comments.push(response.data.content[i]);
-                            }
+                            response.data.content.forEach(content => {
+                                this.comments.push(content);
+                            });
                         }
                         return response;
                     })

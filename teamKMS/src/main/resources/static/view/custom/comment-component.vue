@@ -252,8 +252,6 @@
                 //docEntry 배열임 배열로 처리해야함
                 if (docEntry === null || docEntry === undefined)
                     return false;
-                console.dir(docEntry);
-                console.log(docEntry.length);
                 if (docEntry.length > 0)
                     return true;
                 return false;

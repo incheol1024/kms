@@ -7,12 +7,9 @@
                     <v-card-title>
                         <v-avatar color="grey lighten-4"
                                   :tile="avatarTile"
-                                  :size="avatarSize"
-                        >
-                            <img
-                                    :src="imgSrc"
-                                    alt="John"
-                            >
+                                  :size="avatarSize">
+                            <img :src="imgSrc"
+                                 alt="John">
                         </v-avatar>
                         <v-spacer></v-spacer>
                         <v-btn v-if="true" flat color="orange" @click="pickFile">파일 추가</v-btn>
@@ -22,9 +19,12 @@
                                 ref="image"
                                 accept="image/*"
                                 @change="onFilePickedCustom"
-                                multiple
-                        >
-                        <v-btn v-if="isRequiredCodeButton" flat color="orange" @click="viewCodemirror">코드 추가</v-btn>
+                                multiple>
+                        <v-btn v-if="isRequiredCodeButton"
+                               flat color="orange"
+                               @click="viewCodemirror">
+                            코드 추가
+                        </v-btn>
                         <v-btn
                                 :loading="uploading"
                                 :disabled="uploading"
@@ -255,8 +255,10 @@
                     .then((response) => {
                         return response;
                     })
-                    .catch((error) => {console.log(error);})
-                ;
+                    .catch((error) => {
+                        console.log(error);
+                    })
+                    ;
             },
             addComment: function () {
 
