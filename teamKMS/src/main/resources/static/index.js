@@ -28,8 +28,14 @@ httpVueLoader.register(Vue, 'view/setting-component.vue');
 
 httpVueLoader.register(Vue, 'view/writingboard/qnawrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/siteswrite-component.vue');
-httpVueLoader.register(Vue, 'view/writingboard/solwrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/commentwrite-component.vue');
+//solution
+httpVueLoader.register(Vue, 'view/solution/solwrite-component.vue');
+httpVueLoader.register(Vue, 'view/solution/solbug-component.vue');
+httpVueLoader.register(Vue, 'view/solution/solmenual-component.vue');
+httpVueLoader.register(Vue, 'view/solution/solpathch-component.vue');
+httpVueLoader.register(Vue, 'view/solution/solsite-component.vue');
+
 
 //리팩토링 대상
 httpVueLoader.register(Vue, 'view/board/qnapost-component.vue');
