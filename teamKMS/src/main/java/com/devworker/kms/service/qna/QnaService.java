@@ -4,11 +4,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import javax.transaction.Transactional;
 
 import com.devworker.kms.component.BoardComponent;
+import com.devworker.kms.dic.PermissionType;
+import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
+import com.devworker.kms.entity.qna.QnaCodeDaoId;
+import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.qna.QnaRepoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +67,7 @@ public class QnaService {
  *
 */
 	@Transactional
-	public BoardDto createQuestion(BoardDao boardDao, int menuId) {
+	public BoardDetailDto createQuestion(BoardDao boardDao, int menuId) {
 		boardDao.setUserId(CommonUtil.getCurrentUser());
 		boardDao.setRegDate(LocalDateTime.now());
 		boardDao.setUpdDate(LocalDateTime.now());
@@ -72,13 +78,15 @@ public class QnaService {
 		qnaCodeDao.setBoardId(boardRepo.save(savedBoardDao));
 		qnaCodeDao.setMenuId(menuRepo.findById(menuId).get());
 		qnaCodeRepo.save(qnaCodeDao);
-		return savedBoardDao.getBoardDto();
+		return boardComponent.getBoard(boardDao.getBoardId(), PermissionType.CREATEQNA);
 	}
 
-	public BoardDto findById(Long id) {
-		BoardDao boardDao = boardRepo.findById(id).get();
-		boardDao.setHits(1);
-		return boardRepo.save(boardDao).getBoardDto();
+	public BoardDetailDto findById(Long id) {
+//		BoardDao boardDao = boardRepo.findById(id).get();
+//		boardDao.setHits(1);
+		Optional<QnaCodeDao> qnaCodeDaoOptional = qnaCodeRepo.findByBoardIdEquals(new BoardDao(id));
+		qnaCodeDaoOptional.orElseThrow(() -> new NotExistException("Not Exist Qna board id=" + id));
+		return boardComponent.getBoard(id, PermissionType.MODIFYQNA);
 	}
 
 

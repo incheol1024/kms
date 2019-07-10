@@ -2,6 +2,7 @@ package com.devworker.kms.controller.qna;
 
 import java.util.List;
 
+import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,14 +33,14 @@ public class QnaController {
     }
 
     @PostMapping("/register/{menuId}")
-    public BoardDto createQuestion(@RequestBody BoardDao boardDao, @PathVariable int menuId) {
+    public BoardDetailDto createQuestion(@RequestBody BoardDao boardDao, @PathVariable int menuId) {
         logger.debug("BoardDao message Converting {} ", boardDao);
         logger.debug("PathVariable data binding {} ", menuId);
         return qnaService.createQuestion(boardDao, menuId);
     }
 
     @GetMapping("/answer/{id}")
-    public BoardDto getQnaById(@PathVariable long id) {
+    public BoardDetailDto getQnaById(@PathVariable long id) {
         return qnaService.findById(id);
     }
 
