@@ -24,6 +24,12 @@
             <v-flex xs12>
                 <write-component ref="questionEditor"></write-component>
             </v-flex>
+            <v-flex xs12>
+                <div v-if="codemirror">
+                    <v-divider></v-divider>
+                    <codemirror-component ref="myCodemirror" :language-mode="languageMode"></codemirror-component>
+                </div>
+            </v-flex>
 
             <v-spacer></v-spacer>
             <div></div>
@@ -86,9 +92,16 @@
                     'Python': 6,
                     'CSharp': 7,
                     'Other': 8
+                },
+                codemirror: true,
+                languageMode: "",
+                languageList: {
+                    'C++': {name: "javascript"},
+                    'CSharp':"text/x-csharp",
+                    'Java':{name: "Java"},
+                    'Python':"text/x-python",
+                    'Other':"text/html"
                 }
-
-
             }
         },
         created: function () {
@@ -135,6 +148,15 @@
                 } else {
                     return true;
                 }
+            },
+            setLanguageMode: function () {
+                // this.languageMode = this.languageList[this.select];
+                this.$refs.myCodemirror.setLanguageMode(this.languageList[this.select]);
+            }
+        },
+        watch: {
+            select: function() {
+                this.setLanguageMode();
             }
         }
     }

@@ -121,7 +121,6 @@
             }
         },
         created: function () {
-            // this.setLangMode();
         },
         watch: {
             mode: function () {

@@ -60,6 +60,7 @@ httpVueLoader.register(Vue, 'view/custom/question-component.vue');
 httpVueLoader.register(Vue, 'view/custom/write-component.vue');
 httpVueLoader.register(Vue, 'view/custom/card-component.vue');
 httpVueLoader.register(Vue, 'view/custom/shortencard-component.vue');
+httpVueLoader.register(Vue, 'view/custom/codemirror-component.vue');
 
 httpVueLoader.register(Vue, 'view/custom/helper/offset-helper.vue');
 
