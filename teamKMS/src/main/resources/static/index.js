@@ -32,11 +32,13 @@ httpVueLoader.register(Vue, 'view/writingboard/commentwrite-component.vue');
 //solution
 httpVueLoader.register(Vue, 'view/solution/solwrite-component.vue');
 httpVueLoader.register(Vue, 'view/solution/solbug-component.vue');
+Vue.component('solbug-component');
 httpVueLoader.register(Vue, 'view/solution/solmenual-component.vue');
-httpVueLoader.register(Vue, 'view/solution/solpathch-component.vue');
+Vue.component('solpatch-component');
+httpVueLoader.register(Vue, 'view/solution/solpatch-component.vue');
+Vue.component('solpatch-component');
 httpVueLoader.register(Vue, 'view/solution/solsite-component.vue');
-
-
+Vue.component('solsite-component');
 //리팩토링 대상
 httpVueLoader.register(Vue, 'view/board/qnapost-component.vue');
 
@@ -45,41 +47,56 @@ httpVueLoader.register(Vue, 'view/setting/group-component.vue');
 httpVueLoader.register(Vue, 'view/setting/permission-component.vue');
 
 httpVueLoader.register(Vue, 'view/dashboard/project-component.vue');
+Vue.component('project-component');
+
 httpVueLoader.register(Vue, 'view/dashboard/chart-component.vue');
+Vue.component('chart-component');
+
 httpVueLoader.register(Vue, 'view/dashboard/event-component.vue');
+Vue.component('event-component');
+
 httpVueLoader.register(Vue, 'view/dashboard/overview-component.vue');
+Vue.component('overview-component');
+
 httpVueLoader.register(Vue, 'view/dashboard/recent-component.vue');
+Vue.component('recent-component');
 
 httpVueLoader.register(Vue, 'view/custom/comment-component.vue');
+Vue.component('comment-component');
+
 httpVueLoader.register(Vue, 'view/custom/commentpage-component.vue');
+Vue.component('commentpage-component');
+
 httpVueLoader.register(Vue, 'view/custorm/fileupload-component.vue');
+Vue.component('fileupload-component');
+
 httpVueLoader.register(Vue, 'view/custom/tree-component.vue');
+Vue.component('tree-component');
+
 httpVueLoader.register(Vue, 'view/custom/treenode-component.vue');
+Vue.component('treenode-component');
+
 httpVueLoader.register(Vue, 'view/custom/table-component.vue');
+Vue.component('table-component');
+
 httpVueLoader.register(Vue, 'view/custom/question-component.vue');
+Vue.component('question-component');
+
 httpVueLoader.register(Vue, 'view/custom/write-component.vue');
+Vue.component('write-component');
+
 httpVueLoader.register(Vue, 'view/custom/card-component.vue');
+Vue.component('card-component');
+
 httpVueLoader.register(Vue, 'view/custom/shortencard-component.vue');
+Vue.component('shortencard-component');
+
 httpVueLoader.register(Vue, 'view/custom/codemirror-component.vue');
+Vue.component('codemirror-component');
 
 httpVueLoader.register(Vue, 'view/custom/helper/offset-helper.vue');
-
-Vue.component('comment-component');
-Vue.component('commentpage-component');
-Vue.component('fileupload-component');
-Vue.component('tree-component');
-Vue.component('treenode-component');
-Vue.component('table-component');
-Vue.component('question-component');
-Vue.component('write-component');
-Vue.component('chart-component');
-Vue.component('event-component');
-Vue.component('overview-component');
-Vue.component('recent-component');
-Vue.component('project-component');
-Vue.component('card-component');
-Vue.component('shortencard-component');
 Vue.component('offset-helper');
+
 //for tree
 const EventBus = new Vue();
 
