@@ -8,6 +8,7 @@ const ACEMODEL = {"aclId": "", "aceId": ""};
 const PROJECTMODEL = {
     "siteId": 0,
     "projectId": 0,
+    "grade": 0,
     "name": "",
     "startDate": "",
     "endDate": "",

@@ -4,6 +4,9 @@ package com.devworker.kms.service;
 import com.devworker.kms.dto.UserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface UserService {
 	UserDto addUser(UserDto dto);
@@ -14,5 +17,5 @@ public interface UserService {
 	Page<UserDto> getUserList(Pageable pageable);
 	Page<UserDto> getUserListPage(Pageable pageable);
 	long getCount();
-    String addAvatar();
+    long addAvatar(List<MultipartFile> multiPartFiles);
 }

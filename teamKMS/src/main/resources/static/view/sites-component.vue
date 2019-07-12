@@ -43,11 +43,11 @@
                 <v-window-item>
                  <v-card-title>
                 <v-spacer></v-spacer>
-                <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                <!--<v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>-->
                 
                     </v-card-title>
                     <h3>Project : {{curProject.name}}</h3>
-                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board" v-model="search"
+                    <table-component ref="table2" :headers="boardHeader" :page-req="getPage_board"
                                      :click-row="clickBoard"
                                      :allow-delete="true" :delete-function="deleteBoard"></table-component>
                     <v-btn color="primary" @click="addBoard">Add Board</v-btn>
@@ -115,8 +115,8 @@
                 this.window=0;
                 this.getSiteList(id);
             },
-            'curSite.siteId': function (value) {
-                this.$refs.table.sync();
+            'curSite.siteId': function () {
+               this.$refs.table.sync();
             }
         },
         data: () => ({
@@ -131,9 +131,11 @@
             endDialog: false,
             siteHeader: [
                 {text: "프로젝트명", value: "name"},
+                {text: "등급(상,중,하)", value: "grade"},
+                {text: "진척현황", value: "step"},
                 {text: "시작일자", value: "startDate"},
                 {text: "완료일자", value: "endDate"},
-                {text: "관리자", value: "mangerName", sortable: false},
+                {text: "관리자", value: "manger", sortable: false},
                 {text: "action", value: "action", sortable: false}
             ],
 
@@ -161,8 +163,8 @@
                 this.window = 1;
             },
             getProjects: function (page) {
-                if (this.curSite.siteId === 0) return;
-                _this.$refs.table.clear();//중복으로 데이터 첨가 되는거 클리어 처리 .
+             if (this.curSite.siteId === 0) return;
+              //  _this.$refs.table.clear();//중복으로 데이터 첨가 되는거 클리어 처리 .
                 return axios.get(`site/${this.id}/${this.curSite.siteId}`, {
                     params: page
                 })
@@ -173,7 +175,7 @@
                 site.menuId = this.id;
                 site.name = this.siteName;
                 axios.put(`site`, site).then(res => {
-                    site.siteId = res.data;
+                   site.siteId = res.data;
                     _this.siteData.push(site);
                 }).catch(reason => catchPromise(reason))
             },

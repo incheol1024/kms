@@ -119,8 +119,7 @@
                 let promise = axios.put("user", _this.curItem);
                 if (this.updateMode) promise = axios.post("user", _this.curItem);
                 promise.then(value => {
-                    if (!_this.updateMode)
-                        _this.$refs.table.addFunction(_this.curItem)
+                    if (!_this.updateMode) _this.$refs.table.addFunction(_this.curItem)
                 }).then(value => {
                     //axios add file
                 }).catch(reason => catchPromise(reason));
@@ -128,7 +127,16 @@
                 this.hideInput = false;
             },
             update(file) {
+                console.log("aaa");
                 this.curFile = file;
+                let formData = new FormData();
+                formData.append("multiPartFile", this.curFile);
+                return axios.post("user/avatar", formData,
+                        { headers: {'Content-Type': 'multipart/form-data'}})
+                    .then(response => {
+                        return response;
+                    })
+                    .catch(err => catchPromise(err))
             }
         }
     };

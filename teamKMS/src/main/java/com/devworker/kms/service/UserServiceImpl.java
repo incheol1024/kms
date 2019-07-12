@@ -1,6 +1,6 @@
 package com.devworker.kms.service;
 
-import com.devworker.kms.component.FileHandler;
+import com.devworker.kms.component.DocComponent;
 import com.devworker.kms.entity.UserDao;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.UserDto;
@@ -17,20 +17,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service("UserService")
 public class UserServiceImpl implements UserService {
     private final UserRepo repo;
     private final GroupService service;
     private final PasswordEncoder encoder;
-    private final FileHandler fileHandler;
+    @Autowired
+    private DocComponent docComponent;
 
     @Autowired
-    public UserServiceImpl(UserRepo repo, @Lazy GroupService service, PasswordEncoder encoder, FileHandler fileHandler) {
+    public UserServiceImpl(UserRepo repo, @Lazy GroupService service, PasswordEncoder encoder) {
         this.repo = repo;
         this.service = service;
         this.encoder = encoder;
-        this.fileHandler = fileHandler;
     }
 
     @Override
@@ -40,9 +43,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String addAvatar() {
-
-        return null;
+    public long addAvatar(List<MultipartFile> multiPartFiles) {
+        long ret = 0;
+        for (MultipartFile multiPartFile : multiPartFiles) {
+           ret = docComponent.addDoc(multiPartFile).getDocId();
+        }
+        return ret;
     }
 
     @Override
