@@ -163,8 +163,8 @@
                 this.window = 1;
             },
             getProjects: function (page) {
-             if (this.curSite.siteId === 0) return;
-              //  _this.$refs.table.clear();//중복으로 데이터 첨가 되는거 클리어 처리 .
+                if (this.curSite.siteId === 0) return;
+                //  _this.$refs.table.clear();//중복으로 데이터 첨가 되는거 클리어 처리 .
                 return axios.get(`site/${this.id}/${this.curSite.siteId}`, {
                     params: page
                 })

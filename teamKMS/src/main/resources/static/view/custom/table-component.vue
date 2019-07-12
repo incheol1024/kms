@@ -107,8 +107,10 @@
                 let _this = this;
                 try {
                     let response = await _this.pageReq(jsTojavaPage(_this.pagination));
-                    _this.pageRes(response, _this);
-                    _this.totalCount = response.data.totalElements;
+                    if(response !== undefined){
+                        _this.pageRes(response, _this);
+                        _this.totalCount = response.data.totalElements;
+                    }
                 }
                 catch (reason) {
                     catchPromise(reason)
