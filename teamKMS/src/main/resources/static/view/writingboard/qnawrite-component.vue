@@ -2,16 +2,15 @@
 
     <v-container grid-list-xs align-content-center>
         <v-layout row wrap>
-            <v-flex xs2>
-                <v-combobox
-                        v-model="select"
-                        :items="items"
-                        chips
-                        label="language"
-                ></v-combobox>
-            </v-flex>
 
-            <v-flex xs12>
+            <v-flex xs2>
+                <v-avatar :size="logoSize"
+                          :tile="tile">
+                    <img :src="getLanguageLogoName"
+                         alt="X">
+                </v-avatar>
+            </v-flex>
+            <v-flex xs10>
                 <v-text-field
                         v-model="subject"
                         :counter="30"
@@ -25,10 +24,9 @@
                 <write-component ref="questionEditor"></write-component>
             </v-flex>
             <v-flex xs12>
-                <div v-if="codemirror">
-                    <v-divider></v-divider>
-                    <codemirror-component ref="myCodemirror" :language-mode="languageMode"></codemirror-component>
-                </div>
+                <codemirror-component ref="kmsCodemirror"
+                                      :language-mode="getLanguageMode">
+                </codemirror-component>
             </v-flex>
 
             <v-spacer></v-spacer>
@@ -50,18 +48,6 @@
 
         </v-layout>
 
-        <!--        <codemirror v-model="code" :options="cmOptions"></codemirror>-->
-        <!--        <codemirror ref="myCm" :value="code" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"-->
-        <!--                    @input="onCmCodeChange">-->
-        <!--        </codemirror>-->
-        <!--        <no-ssr placeholder="Codemirror Loading...">-->
-        <!--            <codemirror ref="myCm" :value="code" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"-->
-        <!--                        @input="onCmCodeChange">-->
-
-        <!--            </codemirror>-->
-        <!--        </no-ssr>-->
-
-
     </v-container>
 </template>
 
@@ -78,30 +64,10 @@
                     v => v.length <= 30 || 'Title must be less than 30 characters'
                 ],
                 uploading: false,
-                select: '',
-                items: [
-                    'C++',
-                    'CSharp',
-                    'Java',
-                    'Python',
-                    'Other'
-                ],
-                menuAndId: {
-                    'Java': 4,
-                    'C++': 5,
-                    'Python': 6,
-                    'CSharp': 7,
-                    'Other': 8
-                },
                 codemirror: true,
-                languageMode: "",
-                languageList: {
-                    'C++': {name: "javascript"},
-                    'CSharp':"text/x-csharp",
-                    'Java':{name: "Java"},
-                    'Python':"text/x-python",
-                    'Other':"text/html"
-                }
+                //avatar attribute
+                logoSize: 80,
+                tile: true
             }
         },
         created: function () {
@@ -148,16 +114,17 @@
                 } else {
                     return true;
                 }
-            },
-            setLanguageMode: function () {
-                // this.languageMode = this.languageList[this.select];
-                this.$refs.myCodemirror.setLanguageMode(this.languageList[this.select]);
             }
         },
-        watch: {
-            select: function() {
-                this.setLanguageMode();
+        watch: {},
+        computed: {
+            getLanguageMode() {
+                return {"name": this.name};
+            },
+            getLanguageLogoName() {
+                return "../assets/" + this.name + ".png";
             }
         }
+
     }
 </script>

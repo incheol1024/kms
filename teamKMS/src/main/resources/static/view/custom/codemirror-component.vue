@@ -1,5 +1,5 @@
 <template>
-    <codemirror ref="customCm"
+    <codemirror ref="originalCodemirror"
                 :value="cmtCode"
                 v-model="cmtCode"
                 :options="cmOptions"
@@ -29,8 +29,11 @@
                     lineWrapping: true,
                     lineSeparator: "</br>"
                 },
-                cmtCode: ""
+                cmtCode: "",
+                language:{}
             }
+        },
+        created: function() {
         },
         methods: {
             onCmReady(cm) {
@@ -40,18 +43,22 @@
                 console.log('the editor is focus!', cm)
             },
             onCmCodeChange(newCode){
-                console.dir(this);
-                const test = this.$refs.customCm.codemirror.options.mode;
+                const test = this.$refs.originalCodemirror.codemirror.options.mode;
                 console.dir(test);
             },
             setLanguageMode: function (object) {
-                this.mode = object;
+                console.log("codemirror-component setLangaugeMode:");
+                console.dir(object);
+                this.language = object;
             }
         },
         watch: {
-            languageMode: function () {
-                console.log(this.languageMode);
-            }
+            language: function () {
+                this.cmOptions["mode"] = this.language;
+                console.log("cmOptions[mode]");
+                console.dir(this.cmOptions);
+
+            },
         }
 
     }
