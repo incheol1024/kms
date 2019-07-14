@@ -21,6 +21,7 @@
                 {text: '작성자', value: 'userId', sortable: false},
                 {text: '조회수', value: 'hits', sortable: false},
                 {text: '등록일자', value: 'regDate'},
+                {text: '수정일', value: 'updDate'},
                 {text: 'action', value: '', sortable: false}
             ],
             search: ""

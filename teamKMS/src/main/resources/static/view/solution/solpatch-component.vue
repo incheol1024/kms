@@ -18,8 +18,10 @@
             headers: [
                 {text: '번호', value: 'boardId'},
                 {text: '제목', value: 'subject'},
+                {text: '중요도', value: 'importance', sortable : false},
                 {text: '작성자', value: 'userId', sortable: false},
                 {text: '조회수', value: 'hits', sortable: false},
+                {text: '수정일', value: 'updDate'},
                 {text: '등록일자', value: 'regDate'},
                 {text: 'action', value: '', sortable: false}
             ],

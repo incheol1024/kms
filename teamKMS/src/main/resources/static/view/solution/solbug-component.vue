@@ -19,8 +19,12 @@
                 {text: '번호', value: 'boardId'},
                 {text: '제목', value: 'subject'},
                 {text: '작성자', value: 'userId', sortable: false},
+                {text: '사이트', value: 'site', sortable: false},
                 {text: '조회수', value: 'hits', sortable: false},
                 {text: '등록일자', value: 'regDate'},
+                {text: '수정일', value: 'updDate'},
+                {text: '담당자',value : 'manager',sortable : false},
+                {text: '해결여부',value : 'completed', sortable : false},
                 {text: 'action', value: '', sortable: false}
             ],
             search: ""
