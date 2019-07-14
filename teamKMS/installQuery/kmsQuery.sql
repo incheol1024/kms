@@ -194,16 +194,79 @@ create table KMS_QNA_CODE
             on update cascade
 ) comment 'QnA 게시판 언어별 게시물 매핑 테이블';
 
-create table KMS_Solution
+create table KMS_Solution_Patch
 (
     board_id int(255) unsigned not null
         primary key,
     menu_id  int(11) unsigned  not null,
+    importance varchar(11) not null,
+    version varchar(11) not null,
     constraint FK_KMSSolution_KMS_BOARD
         foreign key (board_id) references KMS_BOARD (board_id)
             on update cascade on delete cascade,
     constraint KMS_Solution_KMS_Menu_menu_id_fk
         foreign key (menu_id) references KMS_Menu (menu_id)
+) comment '솔루션 패치 노트 관련 테이블';
+
+create table KMS_Solution_SITE
+(
+    board_id int(255) unsigned not null
+        primary key,
+    menu_id  int(11) unsigned  not null,
+    site_id int(11) unsigned not null,
+    version varchar(11) not null,
+    constraint FK_KMSSolution_SITE_boardId
+        foreign key (board_id) references KMS_BOARD (board_id)
+            on update cascade on delete cascade,
+    constraint FK_KMSSolution_SITE_menuId
+        foreign key (menu_id) references KMS_Menu (menu_id),
+    constraint FK_KMSSolution_SITE_siteId
+        foreign key (site_id) references KMS_SITE (SITE_ID)
+) comment '솔루션 사이트 버전 관리 테이블';
+
+-- auto-generated definition
+create table KMS_Solution_Patch
+(
+    board_id int(255) unsigned not null
+        primary key,
+    menu_id  int(11) unsigned  not null,
+    importance varchar(11) not null,
+    version varchar(11) not null,
+    constraint FK_KMSSolution_PATCH_boardId
+        foreign key (board_id) references KMS_BOARD (board_id)
+            on update cascade on delete cascade,
+    constraint FK_KMSSolution_PATCH_menuId
+        foreign key (menu_id) references KMS_Menu (menu_id)
+);
+
+create table KMS_Solution_Patch
+(
+    board_id int(255) unsigned not null
+        primary key,
+    menu_id  int(11) unsigned  not null,
+    importance varchar(11) not null,
+    version varchar(11) not null,
+    constraint FK_KMSSolution_PATCH_boardId
+        foreign key (board_id) references KMS_BOARD (board_id)
+            on update cascade on delete cascade,
+    constraint FK_KMSSolution_PATCH_menuId
+        foreign key (menu_id) references KMS_Menu (menu_id)
+);
+
+create table KMS_Solution_BUG
+(
+    board_id int(255) unsigned not null
+        primary key,
+    menu_id  int(11) unsigned  not null,
+    manager  varchar(32) not null,
+    completed varchar(1) not null,
+    constraint FK_KMSSolution_BUG_boardId
+        foreign key (board_id) references KMS_BOARD (board_id)
+            on update cascade on delete cascade,
+    constraint FK_KMSSolution_BUG_menuId
+        foreign key (menu_id) references KMS_Menu (menu_id),
+    constraint FK_KMSSolution_BUG_userId
+        foreign key (manager) references KMS_User (user_id)
 );
 
 create table KMS_SITE
