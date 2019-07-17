@@ -8,8 +8,7 @@ import com.devworker.kms.dto.solution.SolutionDto;
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.exception.NotExistException;
-import com.devworker.kms.repo.solution.SolutionRepo;
-import com.devworker.kms.repo.solution.SolutionRepoImpl;
+import com.devworker.kms.repo.solution.*;
 import com.devworker.kms.util.AclUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,13 +17,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SolutionService {
-
 	@Autowired
 	SolutionRepo solutionRepo;
-	
+	@Autowired
+	SolutionSiteRepo solutionSiteRepo;
+	@Autowired
+	SolutionPatchRepo solutionPatchRepo;
+	@Autowired
+	SolutionBugRepo solutionBugRepo;
 	@Autowired
 	SolutionRepoImpl solutionRepoImpl;
-	
 	@Autowired
 	BoardComponent boardComponent;
 
