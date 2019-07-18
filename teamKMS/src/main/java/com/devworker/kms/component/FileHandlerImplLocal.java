@@ -1,19 +1,11 @@
 package com.devworker.kms.component;
 
 import java.io.File;
-import java.util.List;
-import java.util.Optional;
 
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.devworker.kms.entity.common.BoardDao;
-import com.devworker.kms.entity.common.DocDao;
 import com.devworker.kms.dto.common.FileDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.devworker.kms.repo.UserRepo;
 import com.devworker.kms.repo.common.DocRepo;
 
@@ -29,13 +21,13 @@ public class FileHandlerImplLocal implements FileHandler {
 	private static String FILE_PATH = FileHandler.DefaultTemporaryDirectory;
 
 	@Override
-	public FileDto processDownloadFile(FileDto fileDto) {
+	public File processDownloadFile(String key) {
 		//return new File(fileKey);
 		return null;
 	}
 
 	@Override
-	public FileDto processUploadFile(FileDto fileDto) {
+	public String processUploadFile(File file) {
 
 		/*
 		 * File destFile = new File(FILE_PATH + file.getOriginalFilename());

@@ -1,10 +1,10 @@
 package com.devworker.kms.controller.common;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
+import com.devworker.kms.dto.common.FileDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.common.DocDao;
-import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.dto.common.FileTransactionDto;
 import com.devworker.kms.component.DocComponent;
 
@@ -43,21 +41,15 @@ public class DocController {
     private Logger logger = LoggerFactory.getLogger(DocController.class);
 
     /**
-     * @param boardId
-     * @param multiPartFile
+     * @param multiPartFiles
      * @return fileTransactKey of String type
      * @throws Exception
      */
     @PostMapping("/upload/comment")
     public FileTransactionDto uploadFileOnComment(
-            @RequestParam(name = "boardId", required = false) BoardDao boardId,
-            @RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFiles)
-            throws Exception {
-
-        return docService.addDocs(
-                //boardId,
-                //cmtId,
-                multiPartFiles);
+            @RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFiles) {
+        multiPartFiles.stream().forEach((multipartFile) ->logger.info(multipartFile.getOriginalFilename()));
+        return docService.addDocs(multiPartFiles);
     }
 
     @PostMapping("/upload/etc/{id}")

@@ -1,3 +1,4 @@
+/*
 package com.devworker.kms.component;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -6,10 +7,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import com.devworker.kms.dto.common.FileDto;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.hamcrest.CoreMatchers;
@@ -18,23 +19,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.devworker.kms.component.FileHandler;
-import com.devworker.kms.component.FileHandlerImplAmazonS3;
-import com.devworker.kms.dto.common.FileDto;
-
-import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -126,7 +119,8 @@ public class FileHandlerImplAmazonS3Test {
 		assertThat(actualFileDto).isNull();
 	}
 
-	/*
+	*/
+/*
 	 * @Test public void shouldBeS3ClientProto() {
 	 * assertThat(applicationContext).isNotNull(); FileHandler fileHandler =
 	 * applicationContext.getBean(FileHandler.class);
@@ -135,7 +129,8 @@ public class FileHandlerImplAmazonS3Test {
 	 * S3Client s3Client = amazonS3.getS3Client();
 	 * assertThat(s3Client).isNotEqualTo(amazonS3.getS3Client()).isNotEqualTo(
 	 * amazonS3.getS3Client()); }
-	 */
+	 *//*
+
 
 	@Test
 	public void shuoldBeProtoProxy() throws NoSuchFieldException, SecurityException {
@@ -144,3 +139,4 @@ public class FileHandlerImplAmazonS3Test {
 		
 	}
 }
+*/

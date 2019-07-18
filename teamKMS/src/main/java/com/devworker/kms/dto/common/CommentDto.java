@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import com.devworker.kms.entity.common.CommentDao;
 import com.devworker.kms.entity.common.DocDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommentDto {
 
@@ -36,6 +38,8 @@ public class CommentDto {
 
     private int fileCount;
 
+    private Logger logger = LoggerFactory.getLogger(CommentDto.class);
+
     public CommentDto() {
     }
 
@@ -56,6 +60,7 @@ public class CommentDto {
 
     private List<DocDto> findDocs(List<DocDao> docDaos) {
         return docDaos.stream()
+                .peek(docDao -> logger.info(docDao.toString()))
                 .map(docDao ->  new DocDto.DocDtoBuilder().docDao(docDao).build())
                 .collect(Collectors.toList());
 

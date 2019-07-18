@@ -1,6 +1,5 @@
 package com.devworker.kms.component;
 
-import com.devworker.kms.dto.common.FileDto;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -11,16 +10,15 @@ public interface FileHandler {
 
     String DefaultTemporaryDirectory = System.getProperty("java.io.tmpdir") + File.separator + "kms." + System.currentTimeMillis();
 
-    FileDto processUploadFile(FileDto fileDto);
+    String processUploadFile(File file);
 
-    FileDto processDownloadFile(FileDto fileDto);
+    File processDownloadFile(String key);
 
     boolean deleteFile(String key);
 
     static String getUploadTemporaryDirectory() {
         return getCanonicalPath(checkTemporaryDirectory(DefaultTemporaryDirectory + File.separator + "upload"));
     }
-
 
     static String getDownloadTemporaryDirectory() {
         return getCanonicalPath(checkTemporaryDirectory(DefaultTemporaryDirectory + File.separator + "download"));

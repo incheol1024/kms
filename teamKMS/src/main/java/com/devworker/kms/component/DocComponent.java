@@ -1,22 +1,5 @@
 package com.devworker.kms.component;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
-import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.dto.common.FileTransactionDto;
 import com.devworker.kms.entity.common.BoardDao;
@@ -27,6 +10,19 @@ import com.devworker.kms.repo.common.DocRepo;
 import com.devworker.kms.service.UserService;
 import com.devworker.kms.util.CommonUtil;
 import com.devworker.kms.util.FileTransactionUtil;
+import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Incheol
@@ -44,6 +40,8 @@ public class DocComponent {
     @Qualifier(value = "amazonS3")
     private FileHandler fileHandler;
 
+    private Logger logger = LoggerFactory.getLogger(DocComponent.class);
+
     public DocComponent(FileHandler fileHandler) {
         this.fileHandler = fileHandler;
     }
@@ -56,58 +54,49 @@ public class DocComponent {
      * @throws Exception
      */
     @Transactional
-    public FileTransactionDto addDocs(List<MultipartFile> files) throws Exception {
+    public FileTransactionDto addDocs(List<MultipartFile> files) {
+
         String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
-        String fileTransactKey = "";
-        int fileCount = 0;
+        String fileTransactKey = UUID.randomUUID().toString();
 
+        List<Long> successDocIdList =
+                files.stream()
+                        .map(multipartFile -> makeTempFile(multipartFile))
+                        .map((file) -> {
+                                String key = fileHandler.processUploadFile(file);
+                                return FileDto.newInstance(
+                                        file,
+                                        key,
+                                        file.length(),
+                                        file.getName(),
+                                        FilenameUtils.getExtension(file.getName()));
+                        })
+                        .peek(fileDto -> logger.info("After S3 uploaded fileDto {}", fileDto.toString()))
+                        .map(fileDto -> {
+                            DocDao docDao = new DocDao();
+                            docDao.setUpEntity(fileDto);
+                            docDao.setDocUserId(userName);
+                            docDao.setDocPath(fileDto.getKey());
+                            return docRepo.save(docDao).getDocId();
+                        })
+                        .collect(Collectors.toList());
 
-        for (MultipartFile file : files) {
-            File tmpFile = makeTempFile(file);
-            FileDto fileDto = FileDto.builder()
-                    .setFile(tmpFile)
-                    .setFileExt(FilenameUtils.getExtension(file.getOriginalFilename()))
-                    .setFileName(file.getOriginalFilename())
-                    .setFileSize(file.getSize())
-                    .build();
-
-            DocDao docDao = new DocDao();
-            docDao.setUpEntity(fileDto);
-            docDao.setDocUserId(userName);
-            fileDto = fileHandler.processUploadFile(fileDto);
-            docDao.setDocPath(fileDto.getKey());
-            if (docRepo.save(docDao) == null)
-                rollbackFileTransaction(fileTransactKey);
-
-            fileTransactKey = FileTransactionUtil.putFileInfo(fileTransactKey, docDao.getDocId());
-            fileCount += 1;
-        }
-
+        FileTransactionUtil.putFileInfo(fileTransactKey, successDocIdList);
         FileTransactionDto fileTransactionDto = new FileTransactionDto();
+        fileTransactionDto.setFileCount(successDocIdList.size());
         fileTransactionDto.setFileTransactKey(fileTransactKey);
-        fileTransactionDto.setFileCount(fileCount);
         return fileTransactionDto;
     }
 
     @Transactional
     public DocDao addDoc(MultipartFile multipartFile) {
 
-        FileDto fileDto = null;
-        try {
-            fileDto  = FileDto.builder()
-                    .setFile(makeTempFile(multipartFile))
-			        .setFileExt(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
-                    .setFileName(multipartFile.getOriginalFilename())
-                    .setFileSize(multipartFile.getSize())
-                    .build();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileDto fileDto = FileDto.newInstance(makeTempFile(multipartFile),
+                multipartFile.getSize(),
+                multipartFile.getOriginalFilename(),
+                FilenameUtils.getExtension(multipartFile.getOriginalFilename()));
 
-
-        fileDto = fileHandler.processUploadFile(fileDto);
-        if(fileDto.getKey().equals("") || fileDto.getKey() == null)
-            throw new RuntimeException("File not saved");
+        fileDto.setKey(fileHandler.processUploadFile(fileDto.getFile()));
 
         DocDao docDao = new DocDao();
         docDao.setUpEntity(fileDto);
@@ -151,13 +140,13 @@ public class DocComponent {
             File tmpFile = new File(FileHandler.getUploadTemporaryDirectory() + File.separator + file.getName());
             file.transferTo(tmpFile);
 
-            FileDto fileDto = FileDto.builder().setFile(tmpFile)
-                    .setFileExt(FilenameUtils.getExtension(tmpFile.getName())).setFileName(tmpFile.getName())
-                    .setFileSize(tmpFile.length()).build();
+            FileDto fileDto = FileDto.newInstance(makeTempFile(file),
+                    file.getSize(),
+                    file.getOriginalFilename(),
+                    FilenameUtils.getExtension(file.getOriginalFilename()));
 
-            fileDto = fileHandler.processUploadFile(fileDto);
-            docDao.setDocPath(fileDto.getKey());
-            docDao.setDocSize(fileDto.getFileSize());
+            fileDto.setKey(fileHandler.processUploadFile(fileDto.getFile()));
+            docDao.setUpEntity(fileDto);
             docDao.setDocUserId(CommonUtil.getCurrentUser());
 
             if (docRepo.save(docDao) == null)
@@ -181,11 +170,12 @@ public class DocComponent {
     public FileDto downDoc(long docId) {
         Optional<DocDao> optionalDocDao = docRepo.findById(docId);
         DocDao docDao = optionalDocDao.orElseThrow(() -> new RuntimeException("docId is not Exist"));
-        FileDto fileDto = fileHandler.processDownloadFile(FileDto.builder().setKey(docDao.getDocPath())
-                .setFile(new File(FileHandler.getDownloadTemporaryDirectory() + File.separator + docDao.getDocPath())).build());
 
-        return FileDto.builder().setFile(fileDto.getFile()).setFileExt(docDao.getDocExt())
-                .setFileName(docDao.getDocName()).setFileSize(docDao.getDocSize()).build();
+        return FileDto.newInstance(
+                fileHandler.processDownloadFile(docDao.getDocPath()),
+                docDao.getDocSize(),
+                docDao.getDocName(),
+                docDao.getDocExt());
     }
 
     public void rollbackFileTransaction(String fileTransactKey) {
@@ -194,9 +184,13 @@ public class DocComponent {
         throw new FileNotSavedException("File Not Saved Database");
     }
 
-    public File makeTempFile(MultipartFile file) throws IllegalStateException, IOException {
+    public File makeTempFile(MultipartFile file) {
         File tmpFile = new File(FileHandler.getUploadTemporaryDirectory() + File.separator + file.getOriginalFilename());
-        file.transferTo(tmpFile);
+        try {
+            file.transferTo(tmpFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return tmpFile;
     }
 

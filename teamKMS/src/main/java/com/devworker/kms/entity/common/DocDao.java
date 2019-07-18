@@ -4,13 +4,6 @@ import javax.persistence.*;
 
 import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.util.CommonUtil;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "KMS_DOC")

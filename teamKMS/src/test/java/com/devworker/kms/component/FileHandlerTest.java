@@ -16,13 +16,13 @@ public class FileHandlerTest {
     }
 
     @Test
-    public void getUploadDirTest() throws IOException {
+    public void getUploadDirTest() {
         System.out.println(FileHandler.getUploadTemporaryDirectory());
         Assertions.assertThat(FileHandler.getUploadTemporaryDirectory()).isNotEmpty().startsWith("C:");
     }
 
     @Test
-    public void getDownloadDirTest() throws IOException {
+    public void getDownloadDirTest() {
         Assertions.assertThat(FileHandler.getDownloadTemporaryDirectory()).isNotEmpty().startsWith("C:");
     }
 

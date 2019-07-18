@@ -4,117 +4,64 @@ import java.io.File;
 
 public class FileDto {
 
-	private final File file;
+    private final File file;
 
-	private final String key;
+    private String key;
 
-	private final long fileSize;
+    private final long fileSize;
 
-	private final String fileName;
+    private final String fileName;
 
-	private final String fileExt;
+    private final String fileExt;
 
-	private FileDto() {
-		throw new AssertionError();
-	}
+    private FileDto() {
+        throw new AssertionError();
+    }
 
-	private FileDto(FileDtoBuilder fileDtoBuilder) {
-		this.file = fileDtoBuilder.getFile();
-		this.key = fileDtoBuilder.getKey();
-		this.fileSize = fileDtoBuilder.getFileSize();
-		this.fileName = fileDtoBuilder.getFileName();
-		this.fileExt = fileDtoBuilder.getFileExt();
-	}
+    private FileDto(File file, String key, long fileSize, String fileName, String fileExt) {
+        this.file = file;
+        this.key = key;
+        this.fileSize = fileSize;
+        this.fileName = fileName;
+        this.fileExt = fileExt;
+    }
 
-	public File getFile() {
-		return file;
-	}
+    public static FileDto newInstance(String key) {
+        return newInstance(null, key, 0, null, null);
+    }
 
-	public String getKey() {
-		return key;
-	}
+    public static FileDto newInstance(File file, long fileSize, String fileName, String fileExt) {
+        return newInstance(file, null, fileSize, fileName, fileExt);
+    }
 
-	public long getFileSize() {
-		return fileSize;
-	}
+    public static FileDto newInstance(File file, String key, long fileSize, String fileName, String fileExt) {
+        FileDto fileDtoSample = new FileDto(file, key, fileSize, fileName, fileExt);
+        return fileDtoSample;
+    }
 
-	public String getFileName() {
-		return fileName;
-	}
+    public File getFile() {
+        return file;
+    }
 
-	public String getFileExt() {
-		return fileExt;
-	}
-	
-	public static FileDtoBuilder builder() {
-		return new FileDto.FileDtoBuilder();
-	}
+    public String getKey() {
+        return key;
+    }
 
-	public static class FileDtoBuilder {
+    public void setKey(String key) {
+        this.key = key;
+    }
 
-		private File file;
+    public long getFileSize() {
+        return fileSize;
+    }
 
-		private String key;
+    public String getFileName() {
+        return fileName;
+    }
 
-		private long fileSize;
+    public String getFileExt() {
+        return fileExt;
+    }
 
-		private String fileName;
-
-		private String fileExt;
-
-		private FileDtoBuilder() {
-			//throw new AssertionError();
-		}
-
-		private File getFile() {
-			return file;
-		}
-
-		public FileDtoBuilder setFile(File file) {
-			this.file = file;
-			return this;
-		}
-
-		private String getKey() {
-			return key;
-		}
-
-		public FileDtoBuilder setKey(String key) {
-			this.key = key;
-			return this;
-		}
-
-		private long getFileSize() {
-			return fileSize;
-		}
-
-		public FileDtoBuilder setFileSize(long fileSize) {
-			this.fileSize = fileSize;
-			return this;
-		}
-
-		private String getFileName() {
-			return fileName;
-		}
-
-		public FileDtoBuilder setFileName(String fileName) {
-			this.fileName = fileName;
-			return this;
-		}
-
-		private String getFileExt() {
-			return fileExt;
-		}
-
-		public FileDtoBuilder setFileExt(String fileExt) {
-			this.fileExt = fileExt;
-			return this;
-		}
-
-		public FileDto build() {
-			return new FileDto(this);
-		}
-
-	}
 
 }
