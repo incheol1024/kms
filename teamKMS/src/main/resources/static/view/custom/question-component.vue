@@ -1,16 +1,32 @@
 <template>
     <v-layout row wrap mb-5>
         <v-flex xs12>
-            <v-card>
+            <v-card :hover="true" :flat="true">
+                <v-card-title>
+                    <div class="title font-weight-light">
+                        <p class="display-2">{{ title }}</p>
+                    </div>
+                </v-card-title>
                 <v-card-title>
                     <div>
-                        <h1 class="headline mb-0">Q.{{ title }}</h1>
+                        <span>
+                        <v-avatar
+                                :tile="tile"
+                                :size="avatarSize"
+                                color="grey lighten-4">
+                            <img src="https://vuetifyjs.com/apple-touch-icon-180x180.png" alt="avatar">
+                        </v-avatar>
+                        </span>
+                        <span>
+                            {{userName}}
+                            {{regDate}}
+                        </span>
                     </div>
                 </v-card-title>
                 <v-divider inset light></v-divider>
                 <v-card-text>
-                    <div>
-                        <h2>{{ content }}</h2>
+                    <div class="title font-weight-regular">
+                        {{ content }}
                     </div>
                 </v-card-text>
                 <v-card-actions>
@@ -37,7 +53,13 @@
             return {
                 title: "defualt title",
                 content: 'default content',
-                boardId: 0
+                userId: '1234',
+                userName: 'User TMP',
+                teamName: 'Team TMP',
+                regDate: '2019-10-11',
+                boardId: 0,
+                tile: false,
+                avatarSize: "80px"
             }
         },
         created: function () {
@@ -48,10 +70,10 @@
 
                 axios.get("/qna/answer/" + this.qid)
                     .then(response => {
-                            this.title = response.data.subject;
-                            this.content = response.data.contents;
-                        }
-                    )
+                        this.title = response.data.subject;
+                        this.content = response.data.contents;
+                        return response;
+                    })
                     .catch(error => {
                         console.log(error)
                     });

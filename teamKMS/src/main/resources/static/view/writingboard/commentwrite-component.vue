@@ -218,6 +218,7 @@
                         return this.addFile();
                     }, alert) // if files exist trans file, not if next step
                     .then((response) => {
+                        console.dir(response.data);
                         this.fileTransactKey = response.data.fileTransactKey;
                         this.fileCount = response.data.fileCount;
                         this.addComment();
