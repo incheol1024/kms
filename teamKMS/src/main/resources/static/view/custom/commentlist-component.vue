@@ -1,14 +1,13 @@
 <template>
 
-    <v-layout row wrap justify-space-around :key="index">
+    <v-layout row wrap justify-space-around>
         <v-flex xs12>
-            <v-card :flat="cardFlat">
-                <template v-for="(comment, index) in comments">
+            <v-card :flat="true">
+                <template v-if="comments.length != 0" v-for="(comment, index) in comments">
                     <v-card-title>
                         <v-avatar color="grey lighten-4"
                                   :tile="avatarTile"
-                                  :size="avatarSize"
-                        >
+                                  :size="avatarSize">
                             <v-icon dark>account_circle</v-icon>
                         </v-avatar>
                         {{ comment.cmtId }} - {{ comment.cmtDate }}
@@ -20,7 +19,6 @@
                             <v-icon>delete</v-icon>
                         </v-btn>
                     </v-card-title>
-
 
                     <v-card-actions>
                         <div v-html="comment.cmtContents"></div>
@@ -105,13 +103,41 @@
                 cardFlat: true
             }
         },
-
-        created: function () {
+        created() {
+            this.comments =[]
+            console.log("commentlist created");
+            commentBus.$on("refresh-comments", comments => {
+                console.log("on comments");
+                console.dir(comments);
+                this.comments = comments;
+            });
         },
-
+        mounted() {
+            console.log("commentlist mounted");
+            commentBus.$on("refresh-comments", comments => {
+                console.log("on comments");
+                console.dir(comments);
+                this.comments = comments;
+            });
+        },
+        beforeUpdate() {
+            console.log("commentlist beforeUpdate");
+            commentBus.$on("refresh-comments", comments => {
+                console.log("on comments");
+                console.dir(comments);
+                this.comments = comments;
+            });
+        },
+        updated() {
+            console.log("commentlist updated");
+            commentBus.$on("refresh-comments", comments => {
+                console.log("on comments");
+                console.dir(comments);
+                this.comments = comments;
+            });
+        },
         methods: {
             updateComment: function () {
-                console.log("updateComment function is called");
                 axios.post('/comment/update',
                     {
                         boardId: this.boardId,
@@ -121,9 +147,9 @@
                     .then(response => {
                         this.comments.push(response.data);
                     })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
+                    .catch(error => {
+                        catchPromise(error);
+                    });
             },
             deleteComment: function (cmtId, index) {
                 if (confirm('답글을 삭제 하시겠습니까?')) {
@@ -133,8 +159,7 @@
                         })
                         .then(response => {
                             if (Number(response.data) === Number(cmtId)) {
-                                const pageNumber = this.$refs.commentPage.getCurrentPageNumber();
-                                this.$refs.commentPage.getComments(pageNumber);
+                                // const pageNumber = this.$refs.commentPage.getCurrentPageNumber();
                             }
                         })
                         .catch(error => {
@@ -172,20 +197,12 @@
                         console.log(error);
                     })
             },
-            renderComment: function (comments) {
-                this.comments = comments;
-                let totalPages = this.$refs.commentPage.getTotalPages();
-            },
-            renderAddComment: function (data) {
-                this.$refs.commentPage.getComments(1);
-            },
             isExistData: function (data) {
                 if (data === undefined || data === null || data === '0' || 0 === Number(data)) {
                     return false;
                 } else {
                     return true;
                 }
-
             },
             isExistDocEntry: function (docEntry) {
                 //docEntry 배열임 배열로 처리해야함

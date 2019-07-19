@@ -20,7 +20,20 @@
 
 <script>
     module.exports = {
-        props: ["id", "name", "qid"],
+        props: {
+            id: {
+                type: Number,
+                required: true
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            qid: {
+                type: Number,
+                required: true
+            }
+        },
         data() {
             return {
                 page: 1,
@@ -55,35 +68,31 @@
                             size: this.size,
                             sort: this.sort
                         }
-                    }
-                )
+                    })
                     .then(response => {
-                            this.setPageValues(response.data);
-                            return response;
-                        }
-                    )
+                        this.setPageValues(response.data);
+                        return response;
+                    })
                     .then(response => {
                         if (response.data.content.length > 0) {
                             this.removeComment();
                             this.setComment(response.data.content);
+                            this.emitComment();
                         }
-                        return response;
                     })
-                    .then(response => {
-                        this.emitComment(response.data.content);
-                    })
-                    .catch(function (error) {
-                        console.log(error)
+                    .catch(error => {
+                        catchPromise(error);
                     })
             },
-            emitComment: function (comments) {
-                this.$emit('setcomments', comments, '');
+            emitComment: function () {
+                console.log("emitComment");
+                // commentBus.$emit('refresh-comments', this.comments);
             },
             removeComment: function () {
                 this.comments = [];
             },
-            setComment: function () {
-                response.data.content.forEach(content => {
+            setComment: function (contents) {
+                contents.forEach(content => {
                     this.comments.push(content);
                 });
             },

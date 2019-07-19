@@ -1,81 +1,83 @@
 <template>
-    <div>
+    <v-layout row wrap>
+        <v-flex xs12>
+            <v-card>
+                <v-card-title>
+                    <v-avatar color="grey lighten-4"
+                              :tile="avatarTile"
+                              :size="avatarSize">
+                        <img :src="imgSrc"
+                             alt="John">
+                    </v-avatar>
+                    <v-spacer></v-spacer>
+                    <v-btn v-if="isRequiredFileButton" flat color="orange" @click="pickFile">파일 추가</v-btn>
+                    <input
+                            type="file"
+                            style="display: none"
+                            ref="image"
+                            accept="image/*"
+                            @change="onFilePickedCustom"
+                            multiple>
+                    <v-btn v-if="isRequiredCodeButton"
+                           flat color="orange"
+                           @click="viewCodemirror">
+                        코드 추가
+                    </v-btn>
+                    <v-btn
+                            :loading="uploading"
+                            :disabled="uploading"
+                            color="blue-grey"
+                            class="white--text"
+                            @click.prevent="processAddCommentAndFile">
+                        등록
+                        <v-icon right dark>cloud_upload</v-icon>
+                    </v-btn>
+                </v-card-title>
 
-        <v-layout row wrap>
-            <v-flex xs12>
-                <v-card>
-                    <v-card-title>
-                        <v-avatar color="grey lighten-4"
-                                  :tile="avatarTile"
-                                  :size="avatarSize">
-                            <img :src="imgSrc"
-                                 alt="John">
-                        </v-avatar>
-                        <v-spacer></v-spacer>
-                        <v-btn v-if="isRequiredFileButton" flat color="orange" @click="pickFile">파일 추가</v-btn>
-                        <input
-                                type="file"
-                                style="display: none"
-                                ref="image"
-                                accept="image/*"
-                                @change="onFilePickedCustom"
-                                multiple>
-                        <v-btn v-if="isRequiredCodeButton"
-                               flat color="orange"
-                               @click="viewCodemirror">
-                            코드 추가
-                        </v-btn>
-                        <v-btn
-                                :loading="uploading"
-                                :disabled="uploading"
-                                color="blue-grey"
-                                class="white--text"
-                                @click.prevent="processAddCommentAndFile">
-                            등록
-                            <v-icon right dark>cloud_upload</v-icon>
-                        </v-btn>
-                    </v-card-title>
+                <write-component ref="commentEditor" :toolbar="false"></write-component>
 
-                    <write-component ref="commentEditor" :toolbar="false"></write-component>
-
-                    <div v-if="codemirror">
-                        <v-divider></v-divider>
-                        <codemirror ref="myCm"
-                                    :value="cmtCode"
-                                    v-model="cmtCode"
-                                    :options="cmOptions"
-                                    @ready="onCmReady"
-                                    @focus="onCmFocus"
-                                    @input="onCmCodeChange">
-                        </codemirror>
-                    </div>
-                    <v-card-actions>
-                        <template v-if="fileChips.length > 0" v-for="fileChip in fileChips">
-                            <v-chip
-                                    v-model="fileChip.deletion"
-                                    close
-                                    color="green"
-                                    outline
-                            > {{ fileChip.name }}
-                            </v-chip>
-                        </template>
-                    </v-card-actions>
-
-                </v-card>
-            </v-flex>
-
-        </v-layout>
-
-    </div>
+                <div v-if="codemirror">
+                    <v-divider></v-divider>
+                    <codemirror ref="myCm"
+                                :value="cmtCode"
+                                v-model="cmtCode"
+                                :options="cmOptions"
+                                @ready="onCmReady"
+                                @focus="onCmFocus"
+                                @input="onCmCodeChange">
+                    </codemirror>
+                </div>
+                <v-card-actions>
+                    <template v-if="fileChips.length > 0" v-for="fileChip in fileChips">
+                        <v-chip
+                                v-model="fileChip.deletion"
+                                close
+                                color="green"
+                                outline
+                        > {{ fileChip.name }}
+                        </v-chip>
+                    </template>
+                </v-card-actions>
+            </v-card>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
     module.exports = {
-        // props: ['id', 'name', 'qid', 'isRequiredCodeButton'],
         props: {
-            id: Number,
-            name: String,
-            qid: Number,
+            id: {
+                type: Number,
+                required: true
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            qid: {
+                type: Number,
+                required: true
+            },
             isRequiredCodeButton: {
                 type: Boolean,
                 default: false

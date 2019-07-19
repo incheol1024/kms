@@ -64,6 +64,9 @@ Vue.component('recent-component');
 httpVueLoader.register(Vue, 'view/custom/comment-component.vue');
 Vue.component('comment-component');
 
+httpVueLoader.register(Vue, 'view/custom/commentlist-component.vue');
+Vue.component('commentlist-component');
+
 httpVueLoader.register(Vue, 'view/custom/commentpage-component.vue');
 Vue.component('commentpage-component');
 
@@ -99,6 +102,8 @@ Vue.component('offset-helper');
 
 //for tree
 const EventBus = new Vue();
+
+const commentBus = new Vue();
 
 const router = new VueRouter({
     routes: [
