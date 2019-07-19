@@ -6,15 +6,16 @@
                 :id="Number(id)"
                 :name="name"
                 :qid="Number(qid)"
-                :is-required-code-button="true"
-                :is-required-file-button="true"
+                :is-required-code-button="isRequiredCodeButton"
+                :is-required-file-button="isRequiredFileButton"
                 @emitcomment="renderAddComment">
         </commentwrite-component>
 
-        <template v-for="(comment, index) in comments">
-            <v-layout row wrap justify-space-around :key="index">
-                <v-flex xs12>
-                    <v-card>
+        <!--        <template v-for="(comment, index) in comments">-->
+        <v-layout row wrap justify-space-around :key="index">
+            <v-flex xs12>
+                <v-card :flat="cardFlat">
+                    <template v-for="(comment, index) in comments">
                         <v-card-title>
                             <v-avatar color="grey lighten-4"
                                       :tile="avatarTile"
@@ -32,8 +33,6 @@
                             </v-btn>
                         </v-card-title>
 
-                        <v-divider></v-divider>
-
 
                         <v-card-actions>
                             <div v-html="comment.cmtContents"></div>
@@ -47,7 +46,7 @@
                         </codemirror>
 
 
-                        <v-divider></v-divider>
+<!--                        <v-divider :dark="dividerLineDark"></v-divider>-->
 
                         <v-card-actions v-if="isExistDocEntry(comment.docDtos)">
                             <div>
@@ -65,10 +64,12 @@
                             </v-btn>
                             <span class="subheading mr-2">{{comment.cmtLike}}</span>
                         </v-card-actions>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </template>
+                        <v-divider :light="dividerLineLight"></v-divider>
+                    </template>
+                </v-card>
+            </v-flex>
+        </v-layout>
+        <!--        </template>-->
 
         <v-layout row wrap justify-space-around>
             <v-flex xs12>
@@ -95,6 +96,10 @@
             name: String,
             qid: Number,
             isRequiredCodeButton: {
+                type: Boolean,
+                default: false
+            },
+            isRequiredFileButton: {
                 type: Boolean,
                 default: false
             }
@@ -125,7 +130,8 @@
                 seenCommentpage: false,
                 avatarTile: true,
                 avatarSize: '100px',
-                _this: this
+                dividerLineLight: true,
+                cardFlat: true
             }
         },
 

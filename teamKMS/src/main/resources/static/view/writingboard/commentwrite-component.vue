@@ -12,7 +12,7 @@
                                  alt="John">
                         </v-avatar>
                         <v-spacer></v-spacer>
-                        <v-btn v-if="true" flat color="orange" @click="pickFile">파일 추가</v-btn>
+                        <v-btn v-if="isRequiredFileButton" flat color="orange" @click="pickFile">파일 추가</v-btn>
                         <input
                                 type="file"
                                 style="display: none"

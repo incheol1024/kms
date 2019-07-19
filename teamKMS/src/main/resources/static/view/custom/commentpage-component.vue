@@ -1,7 +1,7 @@
 <template>
     <v-layout row wrap>
         <v-flex xs12 class="text-xs-center text-sm-center text-md-center text-lg-center">
-            <v-card>
+            <v-card :flat="cardFlat" :hover="true">
                 <v-card-text>
                     <v-pagination
                             v-model="number"
@@ -36,7 +36,9 @@
                 totalPages: 0, // 총 필요 페이지 수
                 number: 1, // 현재 페이지 번호 ( -1 한 값임)
                 totalElements: 0, // 총 댓글 개수
-                numberOfElements: 0 // 현재 댓글 개수
+                numberOfElements: 0, // 현재 댓글 개수
+                // vuetify component props
+                cardFlat: true
             }
         },
 
@@ -63,9 +65,7 @@
                     .then(response => {
                         if (response.data.content.length > 0) {
                             this.removeComment();
-                            response.data.content.forEach(content => {
-                                this.comments.push(content);
-                            });
+                            this.setComment(response.data.content);
                         }
                         return response;
                     })
@@ -81,6 +81,11 @@
             },
             removeComment: function () {
                 this.comments = [];
+            },
+            setComment: function () {
+                response.data.content.forEach(content => {
+                    this.comments.push(content);
+                });
             },
             setPageValues: function (responseData) {
                 this.empty = responseData.empty;

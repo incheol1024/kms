@@ -122,17 +122,6 @@ public class DocComponentTest {
 
 	@Test
 	@WithMockUser(username = "USER")
-	public void getDocEntryTest() {
-		CommentDao commentDao = new CommentDao();
-		commentDao.setCmtId(434L);
-		Map<Long, String> docEntry = docComponent.getDocEntry(commentDao);
-
-		System.out.println(docEntry);
-
-	}
-
-	@Test
-	@WithMockUser(username = "USER")
 	public void addDocTest() throws IOException {
 
 		MultipartFile multipartFile = new MockMultipartFile("multipart", "zzz", "image/png", "aaa".getBytes());

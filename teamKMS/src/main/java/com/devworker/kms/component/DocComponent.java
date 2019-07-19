@@ -194,18 +194,5 @@ public class DocComponent {
         return tmpFile;
     }
 
-    public Map<Long, String> getDocEntry(CommentDao commentDao) {
-        Map<Long, String> docEntry = new HashMap<>();
-//        docRepo.findByCmtId(commentDao)
-//                .stream()
-//                .forEach(docDao -> docEntry.put(docDao.getDocId(), docDao.getDocName()));
-        return docEntry;
-    }
-
-    public List<DocDao> findByCmtId(CommentDao commentDao) {
-//        return docRepo.findByCmtId(commentDao);
-        return null;
-    }
-
 
 }
