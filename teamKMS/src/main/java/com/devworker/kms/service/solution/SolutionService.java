@@ -30,6 +30,7 @@ public class SolutionService {
 	@Autowired
 	BoardComponent boardComponent;
 
+
 	public Page<BoardDto> getPageList(int menuId, Pageable pageable) {
 		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 	}
