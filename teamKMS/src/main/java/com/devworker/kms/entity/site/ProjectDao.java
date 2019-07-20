@@ -28,6 +28,10 @@ public class ProjectDao {
 
     @Column(name = "MANAGER")
     private String manager;
+    @Column(name = "step")
+    private int step;
+    @Column(name = "grade")
+    private int grade;
 
     public int getSiteId() {
         return siteId;
@@ -77,6 +81,22 @@ public class ProjectDao {
         this.manager = manager;
     }
 
+    public int getStep() {
+        return step;
+    }
+
+    public void setStep(int step) {
+        this.step = step;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
     @JsonIgnore
     public ProjectDto getDto(){
         ProjectDto dto = new ProjectDto();
@@ -86,6 +106,8 @@ public class ProjectDao {
         dto.setStartDate(startDate);
         dto.setSiteId(siteId);
         dto.setProjectId(projectId);
+        dto.setGrade(grade);
+        dto.setStep(step);
         return dto;
     }
 }

@@ -27,7 +27,7 @@ httpVueLoader.register(Vue, 'view/help-component.vue');
 httpVueLoader.register(Vue, 'view/setting-component.vue');
 
 httpVueLoader.register(Vue, 'view/writingboard/qnawrite-component.vue');
-httpVueLoader.register(Vue, 'view/writingboard/siteswrite-component.vue');
+httpVueLoader.register(Vue, 'view/site/siteswrite-component.vue');
 httpVueLoader.register(Vue, 'view/writingboard/commentwrite-component.vue');
 //solution
 httpVueLoader.register(Vue, 'view/solution/solwrite-component.vue');
@@ -99,6 +99,13 @@ Vue.component('codemirror-component');
 
 httpVueLoader.register(Vue, 'view/custom/helper/offset-helper.vue');
 Vue.component('offset-helper');
+//sites
+httpVueLoader.register(Vue, 'view/site/siteslist-component.vue');
+Vue.component('siteslist-component');
+httpVueLoader.register(Vue, 'view/site/project-component.vue');
+Vue.component('project-component');
+httpVueLoader.register(Vue, 'view/site/boardlist-component.vue');
+Vue.component('boardlist-component');
 
 //for tree
 const EventBus = new Vue();
@@ -109,6 +116,8 @@ const router = new VueRouter({
     routes: [
         {path: '/title', component: Vue.component('title-component')},
         {path: '/sites/:id', component: Vue.component('sites-component'), props: true},
+        {path: '/sites/:id/:siteId', component: Vue.component('project-component'), props: true},
+        {path: '/sites/:id/:siteId/:projectId', component: Vue.component('boardlist-component'), props: true},
         {path: '/solutions/:id', component: Vue.component('solutions-component'), props: true},
         {path: '/qna/:name/:id', component: Vue.component('qna-component'), props: true},
         {path: '/search', component: Vue.component('search-component')},

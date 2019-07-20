@@ -9,6 +9,7 @@ const PROJECTMODEL = {
     "siteId": 0,
     "projectId": 0,
     "grade": 0,
+    "step":0,
     "name": "",
     "startDate": "",
     "endDate": "",
