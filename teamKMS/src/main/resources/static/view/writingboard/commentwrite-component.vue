@@ -269,7 +269,6 @@
                     url = this.addCommentAndFileUrl;
                 }
 
-
                 console.log(url);
 
                 axios.post(url, {
@@ -280,7 +279,9 @@
                     fileCount: this.fileCount
                 })
                     .then(response => {
-                            this.emitComment(response.data);
+                            // this.emitComment(response.data);
+                        console.log("emit upload-comment");
+                        this.$emit('upload-comment','');
                             this.uploading = false;
                         }
                     )

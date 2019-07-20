@@ -1,9 +1,9 @@
 <template>
 
-    <v-layout row wrap justify-space-around>
+    <v-layout row wrap>
         <v-flex xs12>
             <v-card :flat="true">
-                <template v-if="comments.length != 0" v-for="(comment, index) in comments">
+                <template v-for="(comment, index) in comments">
                     <v-card-title>
                         <v-avatar color="grey lighten-4"
                                   :tile="avatarTile"
@@ -12,8 +12,10 @@
                         </v-avatar>
                         {{ comment.cmtId }} - {{ comment.cmtDate }}
                         <v-spacer></v-spacer>
-                        <v-btn flat icon>
+
+                        <v-btn flat icon @click="updateComment(comment, index)">
                             <v-icon>build</v-icon>
+
                         </v-btn>
                         <v-btn flat icon @click="deleteComment(comment.cmtId, index)">
                             <v-icon>delete</v-icon>
@@ -51,12 +53,22 @@
                 </template>
             </v-card>
         </v-flex>
+
+        <v-flex xs12>
+            <commentpage-component
+                    ref="commentPage"
+                    :id="Number(id)"
+                    :name="name"
+                    :qid="Number(qid)"
+                    @refresh-comments="refreshComments">
+            </commentpage-component>
+        </v-flex>
     </v-layout>
 
 </template>
 
 <script>
-    module.export = {
+    module.exports = {
         props: {
             id: {
                 type: Number,
@@ -100,44 +112,27 @@
                 avatarTile: true,
                 avatarSize: '80px',
                 dividerLineLight: true,
-                cardFlat: true
+                cardFlat: true,
+                dialog: false
             }
         },
-        created() {
-            this.comments =[]
-            console.log("commentlist created");
-            commentBus.$on("refresh-comments", comments => {
-                console.log("on comments");
-                console.dir(comments);
-                this.comments = comments;
-            });
-        },
-        mounted() {
-            console.log("commentlist mounted");
-            commentBus.$on("refresh-comments", comments => {
-                console.log("on comments");
-                console.dir(comments);
-                this.comments = comments;
-            });
-        },
-        beforeUpdate() {
-            console.log("commentlist beforeUpdate");
-            commentBus.$on("refresh-comments", comments => {
-                console.log("on comments");
-                console.dir(comments);
-                this.comments = comments;
-            });
-        },
-        updated() {
-            console.log("commentlist updated");
-            commentBus.$on("refresh-comments", comments => {
-                console.log("on comments");
-                console.dir(comments);
-                this.comments = comments;
-            });
+        created: function () {
+            console.log("commentlist-component created");
         },
         methods: {
+            requestFirstPage: function () {
+                console.log("commentlist-component requestFirstPage");
+                this.$refs.commentPage.getComments(1);
+            },
+            refreshComments: function (comments) {
+                this.comments = comments;
+            },
             updateComment: function () {
+
+                console.log("update Comment");
+                this.dialog = true;
+                return;
+
                 axios.post('/comment/update',
                     {
                         boardId: this.boardId,
@@ -226,6 +221,11 @@
                 console.log('this is ckeditor view ready');
             }
 
+        },
+        watch: {
+            pageNumber: function () {
+                console.log("commentlist-component " + this.pageNumber);
+            }
         }
     }
 </script>
