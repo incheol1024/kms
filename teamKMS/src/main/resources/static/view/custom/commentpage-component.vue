@@ -47,7 +47,7 @@
                 first: true, // 첫번째 페이지 여부
                 last: false, // 마지막 페이지 여부
                 totalPages: 0, // 총 필요 페이지 수
-                number: 1, // 현재 페이지 번호 ( 요청시 number-1을 보낼것)
+                number: 1, // 현재 페이지 번호 ( -1 한 값임)
                 totalElements: 0, // 총 댓글 개수
                 numberOfElements: 0, // 현재 댓글 개수
                 // vuetify component props
@@ -56,7 +56,6 @@
         },
 
         created: function () {
-            console.log("commnetpage-component created");
             this.getComments(this.page);
         },
         methods: {
@@ -87,7 +86,7 @@
             },
             emitComment: function () {
                 console.log("emitComment");
-                this.$emit('refresh-comments', this.comments);
+                // commentBus.$emit('refresh-comments', this.comments);
             },
             removeComment: function () {
                 this.comments = [];

@@ -1,6 +1,6 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-layout>
-        <v-flex xs12>
+        <v-flax>
             <v-window v-model="window" class="elevation-1" vertical>
 
                 <v-window-item>
@@ -10,7 +10,7 @@
                     <v-btn color="primary" @click="dialog = true">Add Project</v-btn>
                 </v-window-item>
             </v-window>
-        </v-flex>
+        </v-flax>
 
     </v-layout>
     <v-layout>
