@@ -2,6 +2,7 @@ package com.devworker.kms;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -29,20 +30,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //http.addFilterBefore(requestHandler, BasicAuthenticationFilter.class);
 
         http.authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/login").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/error").permitAll()
                 .antMatchers("/swagger-ui.html").permitAll()
-                .requestMatchers(CorsUtils::isCorsRequest).permitAll()
+                .requestMatchers(CorsUtils::isCorsRequest).authenticated()
                 .antMatchers("/**").authenticated();
 
         http.httpBasic().and().formLogin()
-                .loginPage("/login")
-                .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
-                .defaultSuccessUrl("/", true);
+                .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()));
 
         http.logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login");
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
         http.csrf().disable();
     }
