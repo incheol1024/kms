@@ -14,6 +14,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsUtils;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity (prePostEnabled = true, securedEnabled = true)
@@ -38,10 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").authenticated();
 
         http.httpBasic().and().formLogin()
-                .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()));
+                .failureHandler((request, response, exception) -> response.setStatus(HttpStatus.UNAUTHORIZED.value()))
+                .successHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_ACCEPTED));
 
         http.logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> httpServletResponse.setStatus(HttpServletResponse.SC_ACCEPTED));
 
         http.csrf().disable();
     }
