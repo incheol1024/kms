@@ -39,12 +39,12 @@ public class CommentController {
     CommentRepo commentRepo;
 
     @PostMapping("/add")
-    public CommentDto addComment(@RequestBody CommentDto commentDto) throws Exception {
+    public CommentDto addComment(@RequestBody CommentDto commentDto)  {
         return commentComponent.addComment(commentDto);
     }
 
     @PostMapping("/add/files")
-    public CommentDto addCommentAndFile(@RequestBody CommentDto commentDto) throws Exception {
+    public CommentDto addCommentAndFile(@RequestBody CommentDto commentDto) {
         logger.debug("commentDto = {}", commentDto);
         return commentComponent.addCommentAndFile(commentDto);
     }
@@ -55,12 +55,13 @@ public class CommentController {
     }
 
     @PostMapping("/update")
-    public CommentDto updateComment(@RequestBody CommentDao commentDao) throws Exception {
+    public CommentDto updateComment(@RequestBody CommentDao commentDao) {
+        logger.debug("commentDao {}", commentDao);
         return commentComponent.updateComment(commentDao);
     }
 
     @DeleteMapping("/delete")
-    public Integer deleteComment(@RequestParam int cmtId) throws Exception {
+    public Integer deleteComment(@RequestParam int cmtId) {
         commentComponent.deleteComment(cmtId);
         return cmtId;
     }
