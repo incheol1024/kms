@@ -14,8 +14,6 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -32,8 +30,6 @@ import java.util.Objects;
 @EnableAsync
 @EnableCaching
 @EnableSwagger2
-@EnableResourceServer
-@EnableAuthorizationServer
 @EnableElasticsearchRepositories (basePackages = "com.devworker.kms.fts")
 @SpringBootApplication
 public class TeamKmsApplication {
