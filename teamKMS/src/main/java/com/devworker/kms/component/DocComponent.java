@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Incheol
@@ -55,31 +56,9 @@ public class DocComponent {
      */
     @Transactional
     public FileTransactionDto addDocs(List<MultipartFile> files) {
-
-        String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
         String fileTransactKey = UUID.randomUUID().toString();
-
-        List<Long> successDocIdList =
-                files.stream()
-                        .map(multipartFile -> makeTempFile(multipartFile))
-                        .map((file) -> {
-                                String key = fileHandler.processUploadFile(file);
-                                return FileDto.newInstance(
-                                        file,
-                                        key,
-                                        file.length(),
-                                        file.getName(),
-                                        FilenameUtils.getExtension(file.getName()));
-                        })
-                        .peek(fileDto -> logger.info("After S3 uploaded fileDto {}", fileDto.toString()))
-                        .map(fileDto -> {
-                            DocDao docDao = new DocDao();
-                            docDao.setUpEntity(fileDto);
-                            docDao.setDocUserId(userName);
-                            docDao.setDocPath(fileDto.getKey());
-                            return docRepo.save(docDao).getDocId();
-                        })
-                        .collect(Collectors.toList());
+        Stream<FileDto> fileDtoStream = streamOfFileDto(files.stream());
+        List<Long> successDocIdList = streamOfDocIds(fileDtoStream).collect(Collectors.toList());
 
         FileTransactionUtil.putFileInfo(fileTransactKey, successDocIdList);
         FileTransactionDto fileTransactionDto = new FileTransactionDto();
@@ -98,8 +77,7 @@ public class DocComponent {
 
         fileDto.setKey(fileHandler.processUploadFile(fileDto.getFile()));
 
-        DocDao docDao = new DocDao();
-        docDao.setUpEntity(fileDto);
+        DocDao docDao = DocDao.valueOf(fileDto);
         docDao.setDocUserId(userService.getUser(CommonUtil.getCurrentUser()).getName());
         return docRepo.save(docDao);
     }
@@ -118,43 +96,36 @@ public class DocComponent {
     /**
      * 게시판글 또는 댓글의 이미지를 수정 시 수행되는 서비스 메소드 입니다.
      *
-     * @param boardId
-     * @param cmtId
      * @param multiPartFile
      * @return transactKey type of String
-     * @throws Exception
      */
     @Transactional
-    public String updateDoc(int boardId, int cmtId, List<MultipartFile> multiPartFile) throws Exception {
-        BoardDao boardDao = new BoardDao();
-        boardDao.setBoardId(boardId);
-        CommentDao commentDao = new CommentDao();
-        commentDao.setCmtId(cmtId);
-        DocDao docDao = new DocDao();
-//        docDao.setBoardId(boardDao);
-//        docDao.setCmtId(commentDao);
+    public DocDao updateDoc(long docId, MultipartFile multiPartFile) {
 
-        String fileTransactKey = "";
+        File file = makeTempFile(multiPartFile);
+        String key = fileHandler.processUploadFile(file);
+        FileDto fileDto = makeFileDto(file, key);
 
-        for (MultipartFile file : multiPartFile) {
-            File tmpFile = new File(FileHandler.getUploadTemporaryDirectory() + File.separator + file.getName());
-            file.transferTo(tmpFile);
+        DocDao orgDoc = docRepo.getOne(docId);
+        String orgKey = orgDoc.getDocPath();
 
-            FileDto fileDto = FileDto.newInstance(makeTempFile(file),
-                    file.getSize(),
-                    file.getOriginalFilename(),
-                    FilenameUtils.getExtension(file.getOriginalFilename()));
+        orgDoc.setUpEntity(fileDto);
+        DocDao updatedDoc = docRepo.save(orgDoc);
 
-            fileDto.setKey(fileHandler.processUploadFile(fileDto.getFile()));
-            docDao.setUpEntity(fileDto);
-            docDao.setDocUserId(CommonUtil.getCurrentUser());
+        fileHandler.deleteFile(orgKey);
 
-            if (docRepo.save(docDao) == null)
-                rollbackFileTransaction(fileTransactKey);
+        return updatedDoc;
+    }
 
-            fileTransactKey = FileTransactionUtil.putFileInfo(fileTransactKey, docDao.getDocId());
-        }
-        return fileTransactKey;
+    public FileDto downDoc(long docId) {
+        Optional<DocDao> optionalDocDao = docRepo.findById(docId);
+        DocDao docDao = optionalDocDao.orElseThrow(() -> new RuntimeException("docId is not Exist"));
+
+        return FileDto.newInstance(
+                fileHandler.processDownloadFile(docDao.getDocPath()),
+                docDao.getDocSize(),
+                docDao.getDocName(),
+                docDao.getDocExt());
     }
 
     public void deleteDoc(long docId) {
@@ -167,15 +138,15 @@ public class DocComponent {
         docRepo.delete(docDao);
     }
 
-    public FileDto downDoc(long docId) {
-        Optional<DocDao> optionalDocDao = docRepo.findById(docId);
-        DocDao docDao = optionalDocDao.orElseThrow(() -> new RuntimeException("docId is not Exist"));
-
+    private FileDto makeFileDto(File file, String key) {
         return FileDto.newInstance(
-                fileHandler.processDownloadFile(docDao.getDocPath()),
-                docDao.getDocSize(),
-                docDao.getDocName(),
-                docDao.getDocExt());
+                file,
+                key,
+                file.length(),
+                file.getName(),
+                FilenameUtils.getExtension(file.getName())
+        );
+
     }
 
     public void rollbackFileTransaction(String fileTransactKey) {
@@ -192,6 +163,32 @@ public class DocComponent {
             e.printStackTrace();
         }
         return tmpFile;
+    }
+
+
+    private Stream<FileDto> streamOfFileDto(Stream<MultipartFile> multipartFileStream) {
+        return multipartFileStream
+                .map(multipartFile -> makeTempFile(multipartFile))
+                .map((file) -> {
+                    String key = fileHandler.processUploadFile(file);
+                    return FileDto.newInstance(
+                            file,
+                            key,
+                            file.length(),
+                            file.getName(),
+                            FilenameUtils.getExtension(file.getName()));
+                });
+    }
+
+    private Stream<Long> streamOfDocIds(Stream<FileDto> fileDtoStream) {
+        String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
+        return fileDtoStream
+                .map(fileDto -> {
+                    DocDao docDao = DocDao.valueOf(fileDto);
+                    docDao.setDocUserId(userName);
+                    docDao.setDocPath(fileDto.getKey());
+                    return docRepo.save(docDao).getDocId();
+                });
     }
 
 

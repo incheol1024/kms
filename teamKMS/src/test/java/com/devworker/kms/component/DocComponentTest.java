@@ -10,16 +10,21 @@ import java.util.List;
 import java.util.Map;
 
 import com.devworker.kms.entity.common.CommentDao;
+import com.devworker.kms.entity.common.DocDao;
+import com.devworker.kms.repo.common.DocRepo;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.http.entity.ContentType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -34,7 +39,10 @@ public class DocComponentTest {
 	
 	@Autowired
 	DocComponent docComponent;
-	
+
+	@Autowired
+	DocRepo docRepo;
+
 	@Mock
 	FileHandler fileHandler;
 
@@ -130,6 +138,20 @@ public class DocComponentTest {
 		fileItem.getOutputStream();
 		MultipartFile multipartFile1 = new CommonsMultipartFile(fileItem);
 		docComponent.addDoc(multipartFile1);
+	}
+
+	@Test
+	@WithMockUser(username = "USER")
+	public void updateDocTest() {
+
+		MockMultipartFile mockMultipartFile = new MockMultipartFile("multipart", "mockupTest.png", MediaType.IMAGE_PNG.getType(), "asdfasdf".getBytes());
+
+		DocDao docDao = docRepo.getOne(500L);
+		docDao.setDocName(mockMultipartFile.getOriginalFilename());
+		docDao.setDocExt(FilenameUtils.getExtension(mockMultipartFile.getOriginalFilename()));
+		docDao.setDocSize(mockMultipartFile.getSize());
+
+
 	}
 
 

@@ -13,12 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.devworker.kms.entity.common.DocDao;
@@ -35,7 +30,7 @@ import com.devworker.kms.component.DocComponent;
 public class DocController {
 
     @Autowired
-    DocComponent docService;
+    DocComponent docComponent;
 
 
     private Logger logger = LoggerFactory.getLogger(DocController.class);
@@ -49,7 +44,7 @@ public class DocController {
     public FileTransactionDto uploadFileOnComment(
             @RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFiles) {
         multiPartFiles.stream().forEach((multipartFile) ->logger.info(multipartFile.getOriginalFilename()));
-        return docService.addDocs(multiPartFiles);
+        return docComponent.addDocs(multiPartFiles);
     }
 
     @PostMapping("/upload/etc/{id}")
@@ -58,7 +53,7 @@ public class DocController {
             @RequestParam(name = "multiPartFile") List<MultipartFile> multipartFiles) throws RuntimeException {
 
         return null;
-//        return docService.addDoc();
+//        return docComponent.addDoc();
     }
 
     /**
@@ -73,7 +68,7 @@ public class DocController {
 	public String uploadBoardFile(@RequestParam(name = "boardId") BoardDao boardId,
 			@RequestParam(name = "cmtId") int cmtId,
 			@RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFile) throws Exception {
-		return docService.addDoc(boardId, cmtId, multiPartFile);
+		return docComponent.addDoc(boardId, cmtId, multiPartFile);
 	}
 */
 
@@ -83,7 +78,7 @@ public class DocController {
      */
     @GetMapping("/download/{docId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable long docId) throws IOException {
-        FileDto fileDto = docService.downDoc(docId);
+        FileDto fileDto = docComponent.downDoc(docId);
         InputStreamResource resource = new InputStreamResource(new FileInputStream(fileDto.getFile()));
         return ResponseEntity.ok().headers(new HttpHeaders()).contentLength(fileDto.getFileSize())
                 .contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
@@ -91,7 +86,12 @@ public class DocController {
 
     @GetMapping("/list/{boardId}")
     public List<DocDao> listFile(@PathVariable int boardId) {
-        return docService.listDoc(boardId);
+        return docComponent.listDoc(boardId);
+    }
+
+    @PutMapping("/update/{docId}")
+    public DocDao updateFile(@PathVariable long docId, @RequestParam(name = "multiPartFile") MultipartFile multipartFile) {
+        return docComponent.updateDoc(docId, multipartFile);
     }
 
 }

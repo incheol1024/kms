@@ -97,4 +97,10 @@ public class DocDao {
         this.docSize = fileDto.getFileSize();
     }
 
+    public static DocDao valueOf(FileDto fileDto) {
+        DocDao docDao = new DocDao();
+        docDao.setUpEntity(fileDto);
+        return docDao;
+    }
+
 }
