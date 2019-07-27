@@ -23,7 +23,7 @@ public class SecurityProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) {
-		if (authentication.getName().isEmpty() || authentication.getCredentials().toString().isEmpty())
+		/*if (authentication.getName().isEmpty() || authentication.getCredentials().toString().isEmpty())
 			throw new AuthenticationServiceException("id or Password wrong");
 		try {
 			UserDao dao = new UserDao();
@@ -35,7 +35,8 @@ public class SecurityProvider implements AuthenticationProvider {
 			return new UsernamePasswordAuthenticationToken(authentication.getName(), authentication.getCredentials(),grantedAuths);
 		} catch (Exception e) {
 			throw new AuthenticationServiceException(e.getMessage());
-		}
+		}*/
+		return null;
 	}
 
 	@Override

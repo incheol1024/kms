@@ -13,6 +13,10 @@ public class ProjectDto {
     private Date endDate;
     private String manager;
     private String mangerName;
+    private int step;
+    private int grade;
+
+
 
     public String getMangerName() {
         return mangerName;
@@ -70,6 +74,22 @@ public class ProjectDto {
         this.manager = manager;
     }
 
+    public int getStep() {
+        return step;
+    }
+
+    public void setStep(int step) {
+        this.step = step;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
     @JsonIgnore
     public ProjectDao getDao(){
         ProjectDao dao = new ProjectDao();
@@ -79,6 +99,8 @@ public class ProjectDto {
         dao.setEndDate(endDate);
         dao.setStartDate(startDate);
         dao.setManager(manager);
+        dao.setStep(step);
+        dao.setGrade(grade);
         return dao;
     }
 }

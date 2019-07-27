@@ -17,9 +17,9 @@ public class AuthComponent {
 	@Autowired
 	PasswordEncoder encoder;
 
-	public UserDto auth(UserDao dao) {
-		UserDto dbUser = service.getUser(dao.getId());
-		if(!encoder.matches(dao.getPassword(), dbUser.getPassword()))
+	public UserDto auth(String userId, String pass) {
+		UserDto dbUser = service.getUser(userId);
+		if(!encoder.matches(pass, dbUser.getPassword()))
 			throw new AuthenticationCredentialsNotFoundException("not correct Password");
 		return dbUser;
 	}
