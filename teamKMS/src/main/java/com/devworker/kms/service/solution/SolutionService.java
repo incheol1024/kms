@@ -4,8 +4,10 @@ import com.devworker.kms.component.BoardComponent;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
+import com.devworker.kms.dto.solution.SolutionBugDto;
 import com.devworker.kms.dto.solution.SolutionDto;
 import com.devworker.kms.entity.common.BoardDao;
+import com.devworker.kms.entity.solution.SolutionBugDao;
 import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.solution.*;
@@ -33,13 +35,37 @@ public class SolutionService {
 	public Page<BoardDto> getPageList(int menuId, Pageable pageable) {
 		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 	}
-
+	
+	public Page<BoardDto> getPatchList(int menuId, Pageable pageable) {
+		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
+	}
+	
+	public Page<SolutionBugDto> getBugList(int menuId, Pageable pageable) {
+		return solutionBugRepo.getBug(menuId, pageable).map(SolutionBugDao::toDto);
+	}
+	
+	public Page<BoardDto> getSiteList(int menuId, Pageable pageable) {
+		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
+	}
+	
+	public Page<BoardDto> getManualList(int menuId, Pageable pageable) {
+		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
+	}
+	
 	public long registerSolution(SolutionDto solutionDto) {
 		long boardId = boardComponent.register(solutionDto.getBoardDetailDto(),PermissionType.CREATESOL);
 		solutionDto.setBoardId(boardId);
 		return solutionRepo.save(solutionDto.toDao()).getBoardId();
 	}
 
+	public long registerBug(SolutionBugDto solutionBugDto) {
+		long boardId = boardComponent.register(solutionBugDto.getBoardDetailDto(),PermissionType.CREATESOL);
+		solutionBugDto.setBoardId(boardId);
+		solutionBugDto.setManager("ADMIN");
+		solutionBugDto.setCompleted("N");
+		return solutionBugRepo.save(solutionBugDto.toDao()).getBoardId();
+	}
+	
 	public void editSolution(SolutionDto solutionDto) {
 		BoardDetailDto dto = getSolutionById(solutionDto.getBoardId());
 		boardComponent.edit(solutionDto.getBoardDetailDto(),dto,PermissionType.MODIFYSOL);

@@ -1,5 +1,6 @@
 package com.devworker.kms.dto.solution;
 
+import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.entity.solution.SolutionBugDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,6 +11,7 @@ public class SolutionBugDto {
     private
     long menuId;
 
+    private BoardDetailDto boardDetailDto;
     private String manager;
 
     private String completed;
@@ -46,6 +48,10 @@ public class SolutionBugDto {
         this.completed = completed;
     }
 
+    public BoardDetailDto getBoardDetailDto() {
+        return boardDetailDto;
+    }
+    
     @JsonIgnore
     public SolutionBugDao toDao(){
         SolutionBugDao dao = new SolutionBugDao();
