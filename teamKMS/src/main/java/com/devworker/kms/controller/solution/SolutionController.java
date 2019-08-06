@@ -26,7 +26,7 @@ public class SolutionController {
 	}
 
 	@GetMapping("/bug/{menuId}")
-	public Page<SolutionBugDto> getBugList(@PathVariable int menuId, Pageable pageable){
+	public Page<BoardDto> getBugList(@PathVariable int menuId, Pageable pageable){
 		SolutionBugDto solutionbugdto = new SolutionBugDto();
 		solutionbugdto.getBoardDetailDto();
 		return solutionService.getBugList(menuId, pageable);
@@ -53,8 +53,8 @@ public class SolutionController {
 	}
 	
 	@PostMapping("/write/bug")
-	public long solutionBugRegister(@Valid @RequestBody SolutionBugDto solutionBugDto) {
-		return solutionService.registerBug(solutionBugDto);
+	public long solutionBugRegister(@Valid @RequestBody SolutionBugDto solutionBugDto, @Valid @RequestBody SolutionDto solutionDto) {
+		return solutionService.registerBug(solutionBugDto, solutionDto);
 	}
 	
 	@PutMapping

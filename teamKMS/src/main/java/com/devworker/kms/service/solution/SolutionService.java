@@ -7,7 +7,6 @@ import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.solution.SolutionBugDto;
 import com.devworker.kms.dto.solution.SolutionDto;
 import com.devworker.kms.entity.common.BoardDao;
-import com.devworker.kms.entity.solution.SolutionBugDao;
 import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.solution.*;
@@ -28,6 +27,8 @@ public class SolutionService {
 	@Autowired
 	SolutionBugRepo solutionBugRepo;
 	@Autowired
+	SolutionBugRepoImpl solutionBugRepoImpl;
+	@Autowired
 	SolutionRepoImpl solutionRepoImpl;
 	@Autowired
 	BoardComponent boardComponent;
@@ -40,8 +41,8 @@ public class SolutionService {
 		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 	}
 	
-	public Page<SolutionBugDto> getBugList(int menuId, Pageable pageable) {
-		return solutionBugRepo.getBug(menuId, pageable).map(SolutionBugDao::toDto);
+	public Page<BoardDto> getBugList(int menuId, Pageable pageable) {
+		return solutionBugRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 	}
 	
 	public Page<BoardDto> getSiteList(int menuId, Pageable pageable) {
@@ -58,8 +59,10 @@ public class SolutionService {
 		return solutionRepo.save(solutionDto.toDao()).getBoardId();
 	}
 
-	public long registerBug(SolutionBugDto solutionBugDto) {
+	public long registerBug(SolutionBugDto solutionBugDto, SolutionDto solutionDto) {
 		long boardId = boardComponent.register(solutionBugDto.getBoardDetailDto(),PermissionType.CREATESOL);
+		solutionDto.setBoardId(boardId);
+		solutionRepo.save(solutionDto.toDao()).getBoardId();
 		solutionBugDto.setBoardId(boardId);
 		solutionBugDto.setManager("ADMIN");
 		solutionBugDto.setCompleted("N");
