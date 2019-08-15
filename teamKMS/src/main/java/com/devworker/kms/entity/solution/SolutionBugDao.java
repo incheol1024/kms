@@ -2,6 +2,7 @@ package com.devworker.kms.entity.solution;
 
 
 import com.devworker.kms.dto.solution.SolutionBugDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,6 +59,7 @@ public class SolutionBugDao {
         this.menuId = menuId;
     }
 
+    @JsonIgnore
     public SolutionBugDto toDto(){
         SolutionBugDto dto = new SolutionBugDto();
         dto.setBoardId(boardId);

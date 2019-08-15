@@ -7,6 +7,7 @@ import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.solution.SolutionBugDto;
 import com.devworker.kms.dto.solution.SolutionDto;
 import com.devworker.kms.entity.common.BoardDao;
+import com.devworker.kms.entity.solution.SolutionBugDao;
 import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.solution.*;
@@ -34,15 +35,16 @@ public class SolutionService {
 	BoardComponent boardComponent;
 
 	public Page<BoardDto> getPageList(int menuId, Pageable pageable) {
-		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
+		return solutionBugRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 	}
 	
 	public Page<BoardDto> getPatchList(int menuId, Pageable pageable) {
 		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 	}
 	
-	public Page<BoardDto> getBugList(int menuId, Pageable pageable) {
-		return solutionBugRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
+	public Page<SolutionBugDto> getBugList(int menuId, Pageable pageable) {
+//		return solutionBugRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
+		return solutionBugRepoImpl.getPageBugList(menuId, pageable).map(SolutionBugDao::toDto);
 	}
 	
 	public Page<BoardDto> getSiteList(int menuId, Pageable pageable) {

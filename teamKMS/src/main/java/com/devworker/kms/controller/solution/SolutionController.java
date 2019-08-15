@@ -25,19 +25,18 @@ public class SolutionController {
 		return solutionService.getPageList(menuId, pageable);
 	}
 
-	@GetMapping("/bug/{menuId}")
-	public Page<BoardDto> getBugList(@PathVariable int menuId, Pageable pageable){
-		SolutionBugDto solutionbugdto = new SolutionBugDto();
-		solutionbugdto.getBoardDetailDto();
+	@GetMapping("/{menuId}/bug")
+	public Page<SolutionBugDto> getBugList(@PathVariable int menuId, Pageable pageable){
+		solutionService.getPageList(menuId, pageable);
 		return solutionService.getBugList(menuId, pageable);
 	}
 		
-	@GetMapping("/site/{menuId}")
+	@GetMapping("/{menuId}/site")
 	public Page<BoardDto> getSiteList(@PathVariable int menuId, Pageable pageable){
 		return solutionService.getPageList(menuId, pageable);
 	}
 	
-	@GetMapping("/manual/{menuId}")
+	@GetMapping("/{menuId}/manual")
 	public Page<BoardDto> getManualList(@PathVariable int menuId, Pageable pageable){
 		return solutionService.getPageList(menuId, pageable);
 	}
@@ -46,7 +45,7 @@ public class SolutionController {
 	public BoardDetailDto getSolutionById(@PathVariable String menuId, @PathVariable Long id) {
 		return solutionService.getSolutionById(id);
 	}
-	
+		
 	@PostMapping("/write")
 	public long solutionRegister(@Valid @RequestBody SolutionDto solutionDto) {
 		return solutionService.registerSolution(solutionDto);
