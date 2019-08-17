@@ -13,8 +13,8 @@ public class ProjectDto {
     private Date endDate;
     private String manager;
     private String mangerName;
-    private int step;
-    private int grade;
+    private String step;
+    private String grade;
 
 
 
@@ -74,19 +74,19 @@ public class ProjectDto {
         this.manager = manager;
     }
 
-    public int getStep() {
+    public  String getStep() {
         return step;
     }
 
-    public void setStep(int step) {
+    public void setStep(String step) {
         this.step = step;
     }
 
-    public int getGrade() {
+    public String getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(String grade) {
         this.grade = grade;
     }
 

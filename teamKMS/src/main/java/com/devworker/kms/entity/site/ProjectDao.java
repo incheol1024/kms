@@ -29,9 +29,9 @@ public class ProjectDao {
     @Column(name = "MANAGER")
     private String manager;
     @Column(name = "step")
-    private int step;
+    private String step;
     @Column(name = "grade")
-    private int grade;
+    private String grade;
 
     public int getSiteId() {
         return siteId;
@@ -81,19 +81,19 @@ public class ProjectDao {
         this.manager = manager;
     }
 
-    public int getStep() {
+    public String getStep() {
         return step;
     }
 
-    public void setStep(int step) {
+    public void setStep(String step) {
         this.step = step;
     }
 
-    public int getGrade() {
+    public String getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(String grade) {
         this.grade = grade;
     }
 
