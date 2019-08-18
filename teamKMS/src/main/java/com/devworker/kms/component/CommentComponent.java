@@ -1,5 +1,6 @@
 package com.devworker.kms.component;
 
+import com.devworker.kms.component.board.BoardComponent;
 import com.devworker.kms.dic.LikeType;
 import com.devworker.kms.dto.common.CommentDto;
 import com.devworker.kms.entity.common.BoardDao;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Comment Service 클래스 입니다. Comment와 관련 된 CRUD 메소드가 구현되어 있습니다.

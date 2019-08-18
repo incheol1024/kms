@@ -1,6 +1,6 @@
 package com.devworker.kms.repo.common;
 
-import com.devworker.kms.component.BoardComponent;
+import com.devworker.kms.component.board.BoardComponent;
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.repo.qna.QnaRepoImpl;
 import com.devworker.kms.repo.solution.SolutionRepoImpl;

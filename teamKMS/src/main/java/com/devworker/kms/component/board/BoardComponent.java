@@ -1,9 +1,8 @@
-package com.devworker.kms.component;
+package com.devworker.kms.component.board;
 
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.FtsDto;
 import com.devworker.kms.dto.common.BoardDetailDto;
-import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.common.BoardRepo;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Component
 public class BoardComponent {
@@ -30,26 +28,9 @@ public class BoardComponent {
 	@Autowired
 	FTSService ftsService;
 
-	public SelectJoinStep<Record6<UInteger, String, String, Date, Date, Integer>> select(){
-		return boardRepoImpl.select();
+	public BoardBuilder getBoardListBuilder(TableField...fields){
+		return new BoardBuilder(boardRepoImpl.select(fields));
 	}
-
-	public SelectJoinStep<Record7<UInteger, String, String, Date, Date, Integer, String>> selectWithContent(){
-		return boardRepoImpl.selectWithContent();
-	}
-
-	public SelectWithTiesAfterOffsetStep paging(SelectSeekStepN step, Pageable pageable){
-		return boardRepoImpl.paging(step, pageable);
-	}
-
-	public SelectSeekStepN sorting(SelectConditionStep<Record6<UInteger, String, String, Date, Date, Integer>> step, Pageable pageable){
-		return boardRepoImpl.sorting(step, pageable);
-	}
-
-	public Condition boardIdEq(TableField field){
-		return boardRepoImpl.boardIdEq(field);
-	}
-
 
 	public long register(BoardDetailDto dto,PermissionType type) {
 		if(!AclUtil.checkPermission(type))

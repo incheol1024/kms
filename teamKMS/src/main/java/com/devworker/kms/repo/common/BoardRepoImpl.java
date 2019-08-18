@@ -10,54 +10,24 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
 
 @Repository
 public class BoardRepoImpl {
     @Autowired
     DSLContext context;
 
-    KmsBoard table = KmsBoard.KMS_BOARD;
+    private KmsBoard table = KmsBoard.KMS_BOARD;
 
-    public SelectJoinStep<Record6<UInteger, String, String, Date, Date, Integer>> select() {
-        return context.select(table.BOARD_ID, table.SUBJECT, table.USER_ID, table.REG_DATE, table.UPD_DATE, table.HITS)
-                .from(table);
-    }
-
-    public SelectJoinStep<Record7<UInteger, String, String, Date, Date, Integer, String>> selectWithContent() {
-        return context.select(table.BOARD_ID, table.SUBJECT, table.USER_ID, table.REG_DATE, table.UPD_DATE, table.HITS, table.CONTENTS)
-                .from(table);
-    }
-
-    public SelectWithTiesAfterOffsetStep paging(SelectSeekStepN step, Pageable pageable){
-        return step.limit((int) pageable.getOffset(), pageable.getPageSize());
-    }
-
-    public SelectSeekStepN sorting(SelectConditionStep<Record6<UInteger, String, String, Date, Date, Integer>> step, Pageable pageable){
-        return step.orderBy(getSortFields(pageable.getSort()));
-    }
-
-    public Condition boardIdEq(TableField field){
-        return table.BOARD_ID.eq(field);
-    }
-
-    private Collection<SortField<?>> getSortFields(Sort sortSpecification) {
-        Collection<SortField<?>> querySortFields = new ArrayList<>();
-        for (Sort.Order specifiedField : sortSpecification) {
-            String sortFieldName = specifiedField.getProperty();
-            Sort.Direction sortDirection = specifiedField.getDirection();
-            TableField tableField = getTableField(sortFieldName);
-            SortField<?> querySortField = sortDirection == Sort.Direction.ASC ? tableField.asc() : tableField.desc();
-            querySortFields.add(querySortField);
-        }
-        return querySortFields;
-    }
-
-    private TableField getTableField(String sortFieldName) {
-        switch (sortFieldName){
-            case "regDate" : return table.REG_DATE;
-            case "subject" : return table.SUBJECT;
-            default: return table.BOARD_ID;
-        }
+    public SelectJoinStep select(TableField...fields) {
+        TableField[] defaultField = new TableField[]{table.BOARD_ID, table.SUBJECT, table.USER_ID, table.REG_DATE, table.UPD_DATE, table.HITS};
+        if (fields == null)
+            return context.select(defaultField).from(table);
+        List list = new ArrayList(Arrays.asList(fields));
+        list.addAll(Arrays.asList(defaultField));
+        return context.select(list).from(table);
     }
 }

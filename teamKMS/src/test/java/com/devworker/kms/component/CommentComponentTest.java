@@ -4,35 +4,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import com.devworker.kms.component.board.BoardComponent;
 import com.devworker.kms.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import com.devworker.kms.component.CommentComponent;
 import com.devworker.kms.dto.common.CommentDto;
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.common.CommentDao;
 import com.devworker.kms.repo.common.CommentRepo;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.xml.stream.events.Comment;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)

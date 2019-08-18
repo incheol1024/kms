@@ -1,6 +1,6 @@
 package com.devworker.kms.service.site;
 
-import com.devworker.kms.component.BoardComponent;
+import com.devworker.kms.component.board.BoardComponent;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
@@ -8,7 +8,6 @@ import com.devworker.kms.dto.site.ProjectBoardDto;
 import com.devworker.kms.dto.site.ProjectDto;
 import com.devworker.kms.dto.site.SiteDto;
 import com.devworker.kms.entity.common.BoardDao;
-import com.devworker.kms.entity.site.ProjectBoardDao;
 import com.devworker.kms.entity.site.ProjectDao;
 import com.devworker.kms.entity.site.SiteDao;
 import com.devworker.kms.exception.NotAllowException;
@@ -18,20 +17,12 @@ import com.devworker.kms.repo.site.ProjectBoardRepoImpl;
 import com.devworker.kms.repo.site.ProjectRepo;
 import com.devworker.kms.repo.site.SiteRepo;
 import com.devworker.kms.util.AclUtil;
-import com.devworker.kms.util.CommonUtil;
-import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

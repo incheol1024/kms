@@ -1,6 +1,6 @@
 package com.devworker.kms.service.solution;
 
-import com.devworker.kms.component.BoardComponent;
+import com.devworker.kms.component.board.BoardComponent;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;

@@ -1,16 +1,13 @@
 package com.devworker.kms.repo.common;
 
-import com.devworker.kms.component.BoardComponent;
+import com.devworker.kms.component.board.BoardComponent;
 import com.devworker.kms.service.FTSService;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jooq.AutoConfigureJooq;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.transaction.annotation.Transactional;
 
 @TestConfiguration
 @AutoConfigureJooq

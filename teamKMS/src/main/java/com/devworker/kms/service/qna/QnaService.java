@@ -1,19 +1,15 @@
 package com.devworker.kms.service.qna;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import javax.transaction.Transactional;
 
-import com.devworker.kms.component.BoardComponent;
+import com.devworker.kms.component.board.BoardComponent;
 import com.devworker.kms.dic.PermissionType;
 import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
-import com.devworker.kms.entity.qna.QnaCodeDaoId;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.qna.QnaRepoImpl;
 import org.slf4j.Logger;
@@ -23,13 +19,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.devworker.kms.entity.MenuDao;
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.qna.QnaCodeDao;
 import com.devworker.kms.repo.MenuRepo;
 import com.devworker.kms.repo.common.BoardRepo;
-import com.devworker.kms.repo.common.CommentRepo;
-import com.devworker.kms.repo.common.DocRepo;
 import com.devworker.kms.repo.qna.QnaCodeRepo;
 import com.devworker.kms.util.CommonUtil;
 
