@@ -10,7 +10,7 @@ public class FileHandlerTest {
     @Test
     public void propStaticTest() {
 
-        String tempDir = FileHandler.DefaultTemporaryDirectory;
+        String tempDir = FileHandler.DEFUALT_ROOT_PATH;
         Assertions.assertThat(tempDir).isNotNull().isNotEmpty();
         System.out.println(tempDir);
     }
@@ -23,6 +23,7 @@ public class FileHandlerTest {
 
     @Test
     public void getDownloadDirTest() {
+        System.out.println(FileHandler.getDownloadTemporaryDirectory());
         Assertions.assertThat(FileHandler.getDownloadTemporaryDirectory()).isNotEmpty().startsWith("C:");
     }
 
