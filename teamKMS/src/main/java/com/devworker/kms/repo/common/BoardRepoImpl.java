@@ -24,9 +24,9 @@ public class BoardRepoImpl {
 
     public SelectJoinStep select(TableField...fields) {
         TableField[] defaultField = new TableField[]{table.BOARD_ID, table.SUBJECT, table.USER_ID, table.REG_DATE, table.UPD_DATE, table.HITS};
-        if (fields == null)
+        if (fields == null || fields.length == 0)
             return context.select(defaultField).from(table);
-        List list = new ArrayList(Arrays.asList(fields));
+        List<TableField> list = new ArrayList<>(Arrays.asList(fields));
         list.addAll(Arrays.asList(defaultField));
         return context.select(list).from(table);
     }

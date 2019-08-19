@@ -34,11 +34,15 @@ public class BoardBuilder {
         return this;
     }
 
-    public BoardBuilder sorting(Pageable pageable) {
+    public BoardBuilder sorting(Sort sort) {
+        return sorting(sort,null);
+    }
+
+    public BoardBuilder sorting(Sort sort,TableField field) {
         if (step instanceof SelectJoinStep)
-            step = ((SelectJoinStep) step).orderBy(getSortFields(pageable.getSort()));
+            step = ((SelectJoinStep) step).orderBy(getSortFields(sort,field));
         else if (step instanceof SelectWhereStep)
-            step = ((SelectWhereStep) step).orderBy(getSortFields(pageable.getSort()));
+            step = ((SelectWhereStep) step).orderBy(getSortFields(sort,field));
         return this;
     }
 
@@ -51,13 +55,15 @@ public class BoardBuilder {
             return ((SelectSeekStepN) step).limit((int) pageable.getOffset(), pageable.getPageSize());
     }
 
-    private Collection<SortField<?>> getSortFields(Sort sortSpecification) {
+    private Collection<SortField<?>> getSortFields(Sort sortSpecification, TableField field) {
         Collection<SortField<?>> querySortFields = new ArrayList<>();
         for (Sort.Order specifiedField : sortSpecification) {
             String sortFieldName = specifiedField.getProperty();
             Sort.Direction sortDirection = specifiedField.getDirection();
-            TableField tableField = getTableField(sortFieldName);
-            SortField<?> querySortField = sortDirection == Sort.Direction.ASC ? tableField.asc() : tableField.desc();
+            TableField target = field;
+            if(target == null)
+                target = getTableField(sortFieldName);
+            SortField<?> querySortField = sortDirection == Sort.Direction.ASC ? target.asc() : target.desc();
             querySortFields.add(querySortField);
         }
         return querySortFields;

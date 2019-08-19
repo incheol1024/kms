@@ -32,7 +32,7 @@ public class QnaRepoImpl {
         List list = boardComponent.getBoardListBuilder()
                 .join(kmsQnaCode,kmsQnaCode.BOARD_ID)
                 .where(kmsQnaCode.MENU_ID.eq(UInteger.valueOf(menuId)))
-                .sorting(pageable)
+                .sorting(pageable.getSort())
                 .paging(pageable)
                 .fetchInto(BoardDao.class);
         return new PageImpl<>(list, pageable, totalCount);

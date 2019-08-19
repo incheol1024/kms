@@ -27,7 +27,7 @@ public class SolutionRepoImpl {
         long totalCount = getCount(menuId);
 
         List list = boardComponent.getBoardListBuilder().join(kmsSolution,kmsSolution.BOARD_ID).where(kmsSolution.MENU_ID.eq(UInteger.valueOf(menuId)))
-            .sorting(pageable).paging(pageable).fetchInto(BoardDao.class);
+            .sorting(pageable.getSort()).paging(pageable).fetchInto(BoardDao.class);
         return new PageImpl<BoardDao>(list, pageable, totalCount);
     }
 

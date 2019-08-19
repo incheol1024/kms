@@ -31,7 +31,7 @@ public class ProjectBoardRepoImpl {
         List list =  boardComponent.getBoardListBuilder()
                 .join(kmsProjectBoard,kmsProjectBoard.BOARD_ID)
                 .where(kmsProjectBoard.PROJECT_ID.eq(UInteger.valueOf(projectId)))
-                .sorting(pageable)
+                .sorting(pageable.getSort())
                 .paging(pageable)
                 .fetchInto(BoardDao.class);
         return new PageImpl(list, pageable, totalCount);

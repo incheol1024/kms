@@ -31,7 +31,7 @@ public class SolutionBugRepoImpl{
         List list = boardComponent.getBoardListBuilder()
                 .join(kmsSolution,kmsSolution.BOARD_ID)
                 .where(kmsSolution.MENU_ID.eq(UInteger.valueOf(menuId)))
-                .sorting(pageable)
+                .sorting(pageable.getSort())
                 .paging(pageable)
                 .fetchInto(BoardDao.class);
        return new PageImpl<BoardDao>(list, pageable, totalCount);
@@ -43,7 +43,7 @@ public class SolutionBugRepoImpl{
         List list = boardComponent.getBoardListBuilder(kmsSolutionBug.MANAGER, kmsSolutionBug.COMPLETED)
                 .join(kmsSolutionBug,kmsSolutionBug.BOARD_ID)
                 .where(kmsSolutionBug.MENU_ID.eq(UInteger.valueOf(menuId)))
-                .sorting(pageable)
+                .sorting(pageable.getSort())
                 .paging(pageable)
                 .fetchInto(SolutionBugDao.class);
        return new PageImpl<SolutionBugDao>(list, pageable, totalCount);
