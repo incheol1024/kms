@@ -1,6 +1,5 @@
 package com.devworker.kms.entity.solution;
 
-import com.devworker.kms.dto.solution.SolutionBugDto;
 import com.devworker.kms.dto.solution.SolutionPatchDto;
 
 import javax.persistence.Column;

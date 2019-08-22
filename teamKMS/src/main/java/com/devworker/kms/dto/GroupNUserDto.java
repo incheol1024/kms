@@ -4,8 +4,6 @@ import io.swagger.annotations.ApiModel;
 import org.springframework.data.domain.Page;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 @ApiModel(description = "특정 그룹의 자식 그룹,유저를 가져올때만 쓰임")
 public class GroupNUserDto {

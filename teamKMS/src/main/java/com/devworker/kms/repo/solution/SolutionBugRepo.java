@@ -1,8 +1,6 @@
 package com.devworker.kms.repo.solution;
 
-import com.devworker.kms.dto.solution.SolutionBugDto;
 import com.devworker.kms.entity.solution.SolutionBugDao;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

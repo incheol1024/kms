@@ -49,7 +49,7 @@ public class TeamKmsApplication {
     @Bean
     public MultipartResolver multiPartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(100 * 1024 * 1024);
+        multipartResolver.setMaxUploadSize(100 * 1024 * 1024L);
         return multipartResolver;
     }
 

@@ -1,19 +1,15 @@
 package com.devworker.kms.repo.common;
 
-import org.jooq.*;
+import org.jooq.DSLContext;
+import org.jooq.SelectJoinStep;
+import org.jooq.TableField;
 import org.jooq.generated.kms.tables.KmsBoard;
-import org.jooq.types.UInteger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Repository
 public class BoardRepoImpl {

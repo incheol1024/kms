@@ -1,14 +1,11 @@
 package com.devworker.kms.component;
 
+import com.devworker.kms.dto.UserDto;
 import com.devworker.kms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import com.devworker.kms.entity.UserDao;
-import com.devworker.kms.dto.UserDto;
 
 @Component
 public class AuthComponent {

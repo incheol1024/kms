@@ -34,7 +34,7 @@ public class SolutionBugRepoImpl{
                 .sorting(pageable.getSort())
                 .paging(pageable)
                 .fetchInto(BoardDao.class);
-       return new PageImpl<BoardDao>(list, pageable, totalCount);
+       return new PageImpl<>(list, pageable, totalCount);
     }
     
     public Page<SolutionBugDao> getPageBugList(int menuId, Pageable pageable) {
@@ -46,7 +46,7 @@ public class SolutionBugRepoImpl{
                 .sorting(pageable.getSort())
                 .paging(pageable)
                 .fetchInto(SolutionBugDao.class);
-       return new PageImpl<SolutionBugDao>(list, pageable, totalCount);
+       return new PageImpl<>(list, pageable, totalCount);
     }
     
     private long getCount(int menuId) {

@@ -10,13 +10,10 @@ import com.devworker.kms.repo.common.BoardRepoImpl;
 import com.devworker.kms.service.FTSService;
 import com.devworker.kms.util.AclUtil;
 import com.devworker.kms.util.CommonUtil;
-import org.jooq.*;
-import org.jooq.types.UInteger;
+import org.jooq.TableField;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Component
