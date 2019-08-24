@@ -66,4 +66,8 @@ public class SolutionController {
 		solutionService.deleteSolution(boardId);
 	}
 
+	@DeleteMapping("/bug/{boardId}")
+	public void solutionBugDelete(@PathVariable int boardId) {
+		solutionService.deleteSolutionBug(boardId);
+	}
 }

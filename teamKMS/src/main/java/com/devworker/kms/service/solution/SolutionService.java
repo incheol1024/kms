@@ -43,7 +43,6 @@ public class SolutionService {
 	}
 	
 	public Page<SolutionBugDto> getBugList(int menuId, Pageable pageable) {
-//		return solutionBugRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 		return solutionBugRepoImpl.getPageBugList(menuId, pageable).map(SolutionBugDao::toDto);
 	}
 	
@@ -84,8 +83,21 @@ public class SolutionService {
 		boardComponent.delete(id);
 	}
 
+	public void deleteSolutionBug(long id) {
+		BoardDetailDto dto = getSolutionBugById(id);
+		if(!AclUtil.checkPermission(dto.getUserId() , PermissionType.DELETESOL))
+			throw new NotAllowException("You Have not Delete SolutionBug Board Permission");
+		solutionBugRepo.deleteById(id);
+		boardComponent.delete(id);
+	}
+	
 	public BoardDetailDto getSolutionById(Long id) {
 		solutionRepo.findById(id).orElseThrow(() -> new NotExistException("Solution Board Not Found"));
+		return boardComponent.getBoard(id,PermissionType.MODIFYSOL);
+	}
+	
+	public BoardDetailDto getSolutionBugById(Long id) {
+		solutionBugRepo.findById(id).orElseThrow(() -> new NotExistException("SolutionBug Board Not Found"));
 		return boardComponent.getBoard(id,PermissionType.MODIFYSOL);
 	}
 }
