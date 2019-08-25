@@ -12,6 +12,9 @@ import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.solution.*;
 import com.devworker.kms.util.AclUtil;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +37,7 @@ public class SolutionService {
 	@Autowired
 	BoardComponent boardComponent;
 
+	//Get List
 	public Page<BoardDto> getPageList(int menuId, Pageable pageable) {
 		return solutionBugRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 	}
@@ -43,7 +47,7 @@ public class SolutionService {
 	}
 	
 	public Page<SolutionBugDto> getBugList(int menuId, Pageable pageable) {
-		return solutionBugRepoImpl.getPageBugList(menuId, pageable).map(SolutionBugDao::toDto);
+		return solutionBugRepo.getBug(menuId, pageable).map(SolutionBugDao::toDto);
 	}
 	
 	public Page<BoardDto> getSiteList(int menuId, Pageable pageable) {
@@ -54,27 +58,39 @@ public class SolutionService {
 		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 	}
 	
+	//Register
 	public long registerSolution(SolutionDto solutionDto) {
 		long boardId = boardComponent.register(solutionDto.getBoardDetailDto(),PermissionType.CREATESOL);
 		solutionDto.setBoardId(boardId);
 		return solutionRepo.save(solutionDto.toDao()).getBoardId();
 	}
 
-	public long registerBug(SolutionBugDto solutionBugDto, SolutionDto solutionDto) {
+	public long registerBug(SolutionBugDto solutionBugDto) {
 		long boardId = boardComponent.register(solutionBugDto.getBoardDetailDto(),PermissionType.CREATESOL);
-		solutionDto.setBoardId(boardId);
-		solutionRepo.save(solutionDto.toDao()).getBoardId();
 		solutionBugDto.setBoardId(boardId);
 		solutionBugDto.setManager("ADMIN");
 		solutionBugDto.setCompleted("N");
 		return solutionBugRepo.save(solutionBugDto.toDao()).getBoardId();
 	}
 	
+	//Edit
 	public void editSolution(SolutionDto solutionDto) {
+		System.out.println("solution id : " + solutionDto.getBoardId());
+		System.out.println("solution id : " + solutionDto.getBoardDetailDto().getBoardId());
+		
 		BoardDetailDto dto = getSolutionById(solutionDto.getBoardId());
 		boardComponent.edit(solutionDto.getBoardDetailDto(),dto,PermissionType.MODIFYSOL);
 	}
 
+	public void editSolutionBug(SolutionBugDto solutionBugDto) {
+		solutionBugRepo.findById(solutionBugDto.getBoardId()).orElseThrow(() -> new NotExistException("Not Found SolutionBug"));
+		SolutionBugDao dao = solutionBugDto.toDao();
+		solutionBugRepo.save(dao);
+		BoardDetailDto dto = getSolutionBugById(solutionBugDto.getBoardId());
+		boardComponent.edit(solutionBugDto.getBoardDetailDto(),dto,PermissionType.MODIFYSOL);
+	}
+	
+	//Delete
 	public void deleteSolution(long id) {
 		BoardDetailDto dto = getSolutionById(id);
 		if(!AclUtil.checkPermission(dto.getUserId() , PermissionType.DELETESOL))
@@ -91,11 +107,11 @@ public class SolutionService {
 		boardComponent.delete(id);
 	}
 	
+	//getter
 	public BoardDetailDto getSolutionById(Long id) {
 		solutionRepo.findById(id).orElseThrow(() -> new NotExistException("Solution Board Not Found"));
 		return boardComponent.getBoard(id,PermissionType.MODIFYSOL);
 	}
-	
 	public BoardDetailDto getSolutionBugById(Long id) {
 		solutionBugRepo.findById(id).orElseThrow(() -> new NotExistException("SolutionBug Board Not Found"));
 		return boardComponent.getBoard(id,PermissionType.MODIFYSOL);

@@ -2,11 +2,14 @@ package com.devworker.kms.entity.solution;
 
 
 import com.devworker.kms.dto.solution.SolutionBugDto;
+import com.devworker.kms.entity.common.BoardDao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,6 +19,10 @@ public class SolutionBugDao {
     @Column(name = "board_id")
     private
     long boardId;
+    
+    @OneToOne
+	@JoinColumn(name = "board_id", referencedColumnName = "board_id")
+	private BoardDao boardDao;
 
     @Column(name = "menu_id")
     private
@@ -62,6 +69,7 @@ public class SolutionBugDao {
     @JsonIgnore
     public SolutionBugDto toDto(){
         SolutionBugDto dto = new SolutionBugDto();
+        dto.setDetailBoard(boardDao.getBoardDetailDto());
         dto.setBoardId(boardId);
         dto.setCompleted(completed);
         dto.setManager(manager);

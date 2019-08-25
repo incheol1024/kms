@@ -8,6 +8,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface SolutionBugRepo extends PagingAndSortingRepository<SolutionBugDao, Long> {
-	@Query ("select t from SolutionBugDao t")	
+	@Query ("select t from SolutionBugDao t where t.menuId = :menuId")	
     Page<SolutionBugDao> getBug(@Param("menuId")int menuId, Pageable pageable);
 }

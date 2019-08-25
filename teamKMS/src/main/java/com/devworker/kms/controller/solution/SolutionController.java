@@ -52,13 +52,18 @@ public class SolutionController {
 	}
 	
 	@PostMapping("/write/bug")
-	public long solutionBugRegister(@Valid @RequestBody SolutionBugDto solutionBugDto, @Valid @RequestBody SolutionDto solutionDto) {
-		return solutionService.registerBug(solutionBugDto, solutionDto);
+	public long solutionBugRegister(@Valid @RequestBody SolutionBugDto solutionBugDto) {
+		return solutionService.registerBug(solutionBugDto);
 	}
 	
 	@PutMapping
 	public void solutionEdit(@Valid @RequestBody SolutionDto solutionDto) {
 		solutionService.editSolution(solutionDto);
+	}
+	
+	@PutMapping("/bug")
+	public void solutionBugEdit(@Valid @RequestBody SolutionBugDto solutionBugDto) {
+		solutionService.editSolutionBug(solutionBugDto);
 	}
 	
 	@DeleteMapping("/{boardId}")

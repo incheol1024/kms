@@ -34,7 +34,7 @@ public interface FileHandler {
         return checkTemporaryDirectory(DEFAULT_TEMPORARY_DOWNLOAD_PATH);
     }
 
-    private static String checkTemporaryDirectory(Path directoryPath) {
+    static String checkTemporaryDirectory(Path directoryPath) {
 
         try {
             if (!Files.exists(directoryPath))

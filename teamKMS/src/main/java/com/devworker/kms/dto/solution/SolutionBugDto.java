@@ -52,6 +52,10 @@ public class SolutionBugDto {
         return boardDetailDto;
     }
     
+    public void setDetailBoard(BoardDetailDto boardDetailDto) {
+    	this.boardDetailDto = boardDetailDto;
+	}
+    
     @JsonIgnore
     public SolutionBugDao toDao(){
         SolutionBugDao dao = new SolutionBugDao();
@@ -61,4 +65,6 @@ public class SolutionBugDto {
         dao.setMenuId(menuId);
         return dao;
     }
+
+	
 }
