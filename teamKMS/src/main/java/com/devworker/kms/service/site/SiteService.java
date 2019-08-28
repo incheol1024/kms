@@ -62,6 +62,10 @@ public class SiteService {
         return projectRepo.save(dto.getDao()).getProjectId();
     }
 
+    public int editProject(ProjectDto dto) {
+        return projectRepo.save(dto.getDao()).getProjectId();
+    }
+
     public void deleteProject(int siteId, int projectId) {
         projectRepo.deleteById(projectId);
     }

@@ -26,7 +26,7 @@ public class SiteController {
         return siteService.getAllSite(menuId);
     }
 
-    @PutMapping
+    @PostMapping
     public int addSite(@RequestBody SiteDto dto){
         return siteService.addSite(dto);
     }
@@ -41,11 +41,14 @@ public class SiteController {
         return siteService.getSiteProjects(menuId, siteId,pageable);
     }
 
-    @PutMapping("/{siteId}")
+    @PostMapping("/{siteId}")
     public int addProject(@RequestBody ProjectDto dto, @PathVariable String siteId){
         return siteService.addProject(dto);
     }
-
+    @PutMapping("/editProject")
+    public int editProject(@RequestBody ProjectDto dto, @PathVariable String siteId){
+        return siteService.editProject(dto);
+    }
     @DeleteMapping("/{siteId}/{projectId}")
     public void deleteProject(@PathVariable int siteId, @PathVariable int projectId){
         siteService.deleteProject(siteId, projectId);
