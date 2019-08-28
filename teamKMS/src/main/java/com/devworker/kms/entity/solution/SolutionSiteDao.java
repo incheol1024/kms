@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "KMS_Solution_Site")
+@Table(name = "KMS_Solution_SITE")
 public class SolutionSiteDao {
     @Id
     @Column(name = "board_id")

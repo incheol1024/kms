@@ -15,8 +15,8 @@ public class SolutionPatchDto {
     private
     long menuId;
 
-    @Column(name = "impotance")
-    private String impotance;
+    @Column(name = "importance")
+    private String importance;
 
     @Column(name = "version")
     private String version;
@@ -37,12 +37,12 @@ public class SolutionPatchDto {
         this.menuId = menuId;
     }
 
-    public String getImpotance() {
-        return impotance;
+    public String getImportance() {
+        return importance;
     }
 
-    public void setImpotance(String impotance) {
-        this.impotance = impotance;
+    public void setImportance(String impotance) {
+        this.importance = impotance;
     }
 
     public String getVersion() {
@@ -56,7 +56,7 @@ public class SolutionPatchDto {
     public SolutionPatchDao toDao(){
         SolutionPatchDao dao = new SolutionPatchDao();
         dao.setBoardId(boardId);
-        dao.setImpotance(impotance);
+        dao.setImportance(importance);
         dao.setMenuId(menuId);
         dao.setVersion(version);
         return dao;

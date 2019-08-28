@@ -6,6 +6,8 @@ import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.solution.SolutionBugDto;
 import com.devworker.kms.dto.solution.SolutionDto;
+import com.devworker.kms.dto.solution.SolutionPatchDto;
+import com.devworker.kms.dto.solution.SolutionSiteDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,33 +22,34 @@ public class SolutionController {
 	@Autowired
 	SolutionService solutionService;
 
-	@GetMapping("/{menuId}") // /patch/{menuId} 로 변경
-	public Page<BoardDto> getPatchList(@PathVariable int menuId, Pageable pageable){
+	//Get Page List
+	@GetMapping("/{menuId}") // {menuId}/manual 로 변경
+	public Page<BoardDto> getList(@PathVariable int menuId, Pageable pageable){
 		return solutionService.getPageList(menuId, pageable);
 	}
 
 	@GetMapping("/{menuId}/bug")
 	public Page<SolutionBugDto> getBugList(@PathVariable int menuId, Pageable pageable){
-		solutionService.getPageList(menuId, pageable);
 		return solutionService.getBugList(menuId, pageable);
 	}
 		
 	@GetMapping("/{menuId}/site")
-	public Page<BoardDto> getSiteList(@PathVariable int menuId, Pageable pageable){
-		return solutionService.getPageList(menuId, pageable);
+	public Page<SolutionSiteDto> getSiteList(@PathVariable int menuId, Pageable pageable){
+		return solutionService.getSiteList(menuId, pageable);
 	}
 	
-	@GetMapping("/{menuId}/manual")
-	public Page<BoardDto> getManualList(@PathVariable int menuId, Pageable pageable){
-		return solutionService.getPageList(menuId, pageable);
+	@GetMapping("/{menuId}/patch")
+	public Page<SolutionPatchDto> getPatchList(@PathVariable int menuId, Pageable pageable){
+		return solutionService.getPatchList(menuId, pageable);
 	}
 	
 	@GetMapping("/{menuId}/{id}")
 	public BoardDetailDto getSolutionById(@PathVariable String menuId, @PathVariable Long id) {
 		return solutionService.getSolutionById(id);
 	}
-		
-	@PostMapping("/write")
+	
+	//Write Page
+	@PostMapping("/write") // /write/manual로 변경
 	public long solutionRegister(@Valid @RequestBody SolutionDto solutionDto) {
 		return solutionService.registerSolution(solutionDto);
 	}
@@ -56,7 +59,18 @@ public class SolutionController {
 		return solutionService.registerBug(solutionBugDto);
 	}
 	
-	@PutMapping
+	@PostMapping("/write/site")
+	public long solutionSiteRegister(@Valid @RequestBody SolutionSiteDto solutionSiteDto) {
+		return solutionService.registerSite(solutionSiteDto);
+	}
+	
+	@PostMapping("/write/patch")
+	public long solutionPatchRegister(@Valid @RequestBody SolutionPatchDto solutionPatchDto) {
+		return solutionService.registerManual(solutionPatchDto);
+	}
+	
+	//Edit Page
+	@PutMapping // /patch로 변경
 	public void solutionEdit(@Valid @RequestBody SolutionDto solutionDto) {
 		solutionService.editSolution(solutionDto);
 	}
@@ -66,7 +80,18 @@ public class SolutionController {
 		solutionService.editSolutionBug(solutionBugDto);
 	}
 	
-	@DeleteMapping("/{boardId}")
+	@PutMapping("/site")
+	public void solutionSiteEdit(@Valid @RequestBody SolutionSiteDto solutionSiteDto) {
+		solutionService.editSolutionSite(solutionSiteDto);
+	}
+	
+	@PutMapping("/manual")
+	public void solutionPatchEdit(@Valid @RequestBody SolutionPatchDto solutionPatchDto) {
+		solutionService.editSolutionPatch(solutionPatchDto);
+	}
+	
+	//Delete Page
+	@DeleteMapping("/{boardId}") // /patch/boardid 로 변경
 	public void solutionDelete(@PathVariable int boardId) {
 		solutionService.deleteSolution(boardId);
 	}
@@ -74,5 +99,15 @@ public class SolutionController {
 	@DeleteMapping("/bug/{boardId}")
 	public void solutionBugDelete(@PathVariable int boardId) {
 		solutionService.deleteSolutionBug(boardId);
+	}
+	
+	@DeleteMapping("/site/{boardId}")
+	public void solutionSiteDelete(@PathVariable int boardId) {
+		solutionService.deleteSolutionSite(boardId);
+	}
+	
+	@DeleteMapping("/patch/{boardId}")
+	public void solutionPatchDelete(@PathVariable int boardId) {
+		solutionService.deleteSolutionPatch(boardId);
 	}
 }

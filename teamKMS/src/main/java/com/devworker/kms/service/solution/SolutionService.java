@@ -6,14 +6,20 @@ import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.dto.common.BoardDto;
 import com.devworker.kms.dto.solution.SolutionBugDto;
 import com.devworker.kms.dto.solution.SolutionDto;
+import com.devworker.kms.dto.solution.SolutionPatchDto;
+import com.devworker.kms.dto.solution.SolutionSiteDto;
 import com.devworker.kms.entity.common.BoardDao;
 import com.devworker.kms.entity.solution.SolutionBugDao;
+import com.devworker.kms.entity.solution.SolutionPatchDao;
+import com.devworker.kms.entity.solution.SolutionSiteDao;
 import com.devworker.kms.exception.NotAllowException;
 import com.devworker.kms.exception.NotExistException;
 import com.devworker.kms.repo.solution.*;
 import com.devworker.kms.util.AclUtil;
 
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,20 +48,16 @@ public class SolutionService {
 		return solutionBugRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 	}
 	
-	public Page<BoardDto> getPatchList(int menuId, Pageable pageable) {
-		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
-	}
-	
 	public Page<SolutionBugDto> getBugList(int menuId, Pageable pageable) {
 		return solutionBugRepo.getBug(menuId, pageable).map(SolutionBugDao::toDto);
 	}
 	
-	public Page<BoardDto> getSiteList(int menuId, Pageable pageable) {
-		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
+	public Page<SolutionSiteDto> getSiteList(int menuId, Pageable pageable) {
+		return solutionSiteRepo.getSite(menuId, pageable).map(SolutionSiteDao::toDto);
 	}
 	
-	public Page<BoardDto> getManualList(int menuId, Pageable pageable) {
-		return solutionRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
+	public Page<SolutionPatchDto> getPatchList(int menuId, Pageable pageable) {
+		return solutionPatchRepo.getPatch(menuId, pageable).map(SolutionPatchDao::toDto);
 	}
 	
 	//Register
@@ -73,11 +75,18 @@ public class SolutionService {
 		return solutionBugRepo.save(solutionBugDto.toDao()).getBoardId();
 	}
 	
+	public long registerSite(@Valid SolutionSiteDto solutionSiteDto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public long registerManual(@Valid SolutionPatchDto solutionPatchDto) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	//Edit
 	public void editSolution(SolutionDto solutionDto) {
-		System.out.println("solution id : " + solutionDto.getBoardId());
-		System.out.println("solution id : " + solutionDto.getBoardDetailDto().getBoardId());
-		
 		BoardDetailDto dto = getSolutionById(solutionDto.getBoardId());
 		boardComponent.edit(solutionDto.getBoardDetailDto(),dto,PermissionType.MODIFYSOL);
 	}
@@ -88,6 +97,16 @@ public class SolutionService {
 		solutionBugRepo.save(dao);
 		BoardDetailDto dto = getSolutionBugById(solutionBugDto.getBoardId());
 		boardComponent.edit(solutionBugDto.getBoardDetailDto(),dto,PermissionType.MODIFYSOL);
+	}
+	
+	public void editSolutionSite(@Valid SolutionSiteDto solutionSiteDto) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void editSolutionPatch(@Valid SolutionPatchDto solutionPatchDto) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	//Delete
@@ -107,6 +126,16 @@ public class SolutionService {
 		boardComponent.delete(id);
 	}
 	
+	public void deleteSolutionSite(int boardId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteSolutionPatch(int boardId) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	//getter
 	public BoardDetailDto getSolutionById(Long id) {
 		solutionRepo.findById(id).orElseThrow(() -> new NotExistException("Solution Board Not Found"));
@@ -116,4 +145,7 @@ public class SolutionService {
 		solutionBugRepo.findById(id).orElseThrow(() -> new NotExistException("SolutionBug Board Not Found"));
 		return boardComponent.getBoard(id,PermissionType.MODIFYSOL);
 	}
+
+	
+
 }
