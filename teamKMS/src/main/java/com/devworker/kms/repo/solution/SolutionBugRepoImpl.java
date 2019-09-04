@@ -25,7 +25,7 @@ public class SolutionBugRepoImpl{
     private KmsSolution kmsSolution = KmsSolution.KMS_SOLUTION;
     private KmsSolutionBug kmsSolutionBug = KmsSolutionBug.KMS_SOLUTION_BUG;
     
-    public Page<BoardDao> getPageList(int menuId, Pageable pageable) {
+    public Page<BoardDao> getPageList(Long menuId, Pageable pageable) {
         long totalCount = getCount(menuId);
 
         List list = boardComponent.getBoardListBuilder()
@@ -37,7 +37,7 @@ public class SolutionBugRepoImpl{
        return new PageImpl<>(list, pageable, totalCount);
     }
     
-    public Page<SolutionBugDao> getPageBugList(int menuId, Pageable pageable) {
+    public Page<SolutionBugDao> getPageBugList(Long menuId, Pageable pageable) {
         long totalCount = getBugCount(menuId);
 
         List list = boardComponent.getBoardListBuilder(kmsSolutionBug.MANAGER, kmsSolutionBug.COMPLETED)
@@ -49,7 +49,7 @@ public class SolutionBugRepoImpl{
        return new PageImpl<>(list, pageable, totalCount);
     }
     
-    private long getCount(int menuId) {
+    private long getCount(Long menuId) {
         return context.fetchCount(
                 boardComponent.getBoardListBuilder()
                         .join(kmsSolution,kmsSolution.BOARD_ID)
@@ -57,7 +57,7 @@ public class SolutionBugRepoImpl{
         );
     }
 
-    private long getBugCount(int menuId){
+    private long getBugCount(Long menuId){
         return context.fetchCount(
                 boardComponent.getBoardListBuilder(kmsSolutionBug.MANAGER, kmsSolutionBug.COMPLETED)
                         .join(kmsSolutionBug,kmsSolutionBug.BOARD_ID)

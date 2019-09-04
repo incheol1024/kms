@@ -44,19 +44,19 @@ public class SolutionService {
 	BoardComponent boardComponent;
 
 	//Get List
-	public Page<BoardDto> getPageList(int menuId, Pageable pageable) {
+	public Page<BoardDto> getPageList(Long menuId, Pageable pageable) {
 		return solutionBugRepoImpl.getPageList(menuId, pageable).map(BoardDao::getBoardDto);
 	}
 	
-	public Page<SolutionBugDto> getBugList(int menuId, Pageable pageable) {
+	public Page<SolutionBugDto> getBugList(Long menuId, Pageable pageable) {
 		return solutionBugRepo.getBug(menuId, pageable).map(SolutionBugDao::toDto);
 	}
 	
-	public Page<SolutionSiteDto> getSiteList(int menuId, Pageable pageable) {
+	public Page<SolutionSiteDto> getSiteList(Long menuId, Pageable pageable) {
 		return solutionSiteRepo.getSite(menuId, pageable).map(SolutionSiteDao::toDto);
 	}
 	
-	public Page<SolutionPatchDto> getPatchList(int menuId, Pageable pageable) {
+	public Page<SolutionPatchDto> getPatchList(Long menuId, Pageable pageable) {
 		return solutionPatchRepo.getPatch(menuId, pageable).map(SolutionPatchDao::toDto);
 	}
 	
@@ -76,13 +76,19 @@ public class SolutionService {
 	}
 	
 	public long registerSite(@Valid SolutionSiteDto solutionSiteDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		long boardId = boardComponent.register(solutionSiteDto.getBoardDetailDto(),PermissionType.CREATESOL);
+		solutionSiteDto.setBoardId(boardId);
+//		solutionSiteDto.setSiteId(siteId);
+//		solutionSiteDto.setVersion(version);
+		return solutionSiteRepo.save(solutionSiteDto.toDao()).getBoardId();
 	}
 
 	public long registerManual(@Valid SolutionPatchDto solutionPatchDto) {
-		// TODO Auto-generated method stub
-		return 0;
+		long boardId = boardComponent.register(solutionPatchDto.getBoardDetailDto(),PermissionType.CREATESOL);
+		solutionPatchDto.setBoardId(boardId);
+//		solutionPatchDto.setImportance(impotance);
+//		solutionPatchDto.setVersion(version);
+		return solutionPatchRepo.save(solutionPatchDto.toDao()).getBoardId();
 	}
 	
 	//Edit

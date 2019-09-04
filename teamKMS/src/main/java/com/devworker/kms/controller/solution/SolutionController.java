@@ -24,27 +24,27 @@ public class SolutionController {
 
 	//Get Page List
 	@GetMapping("/{menuId}") // {menuId}/manual 로 변경
-	public Page<BoardDto> getList(@PathVariable int menuId, Pageable pageable){
+	public Page<BoardDto> getList(@PathVariable Long menuId, Pageable pageable){
 		return solutionService.getPageList(menuId, pageable);
 	}
 
 	@GetMapping("/{menuId}/bug")
-	public Page<SolutionBugDto> getBugList(@PathVariable int menuId, Pageable pageable){
+	public Page<SolutionBugDto> getBugList(@PathVariable Long menuId, Pageable pageable){
 		return solutionService.getBugList(menuId, pageable);
 	}
 		
 	@GetMapping("/{menuId}/site")
-	public Page<SolutionSiteDto> getSiteList(@PathVariable int menuId, Pageable pageable){
+	public Page<SolutionSiteDto> getSiteList(@PathVariable Long menuId, Pageable pageable){
 		return solutionService.getSiteList(menuId, pageable);
 	}
 	
 	@GetMapping("/{menuId}/patch")
-	public Page<SolutionPatchDto> getPatchList(@PathVariable int menuId, Pageable pageable){
+	public Page<SolutionPatchDto> getPatchList(@PathVariable Long menuId, Pageable pageable){
 		return solutionService.getPatchList(menuId, pageable);
 	}
 	
 	@GetMapping("/{menuId}/{id}")
-	public BoardDetailDto getSolutionById(@PathVariable String menuId, @PathVariable Long id) {
+	public BoardDetailDto getSolutionById(@PathVariable Long menuId, @PathVariable Long id) {
 		return solutionService.getSolutionById(id);
 	}
 	

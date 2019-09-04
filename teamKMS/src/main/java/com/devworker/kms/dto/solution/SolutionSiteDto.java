@@ -1,26 +1,18 @@
 package com.devworker.kms.dto.solution;
 
+import com.devworker.kms.dto.common.BoardDetailDto;
 import com.devworker.kms.entity.solution.SolutionSiteDao;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 
 public class SolutionSiteDto {
-    @Id
-    @Column(name = "board_id")
-    private
-    long boardId;
-
-    @Column(name = "menu_id")
-    private
-    long menuId;
-
-    @Column(name = "site_id")
+    private long boardId;
+    private long menuId;
     private int siteId;
-
-    @Column(name = "version")
     private String version;
-
+    private BoardDetailDto boardDetailDto;
+    
     public long getBoardId() {
         return boardId;
     }
@@ -52,7 +44,15 @@ public class SolutionSiteDto {
     public void setVersion(String version) {
         this.version = version;
     }
+    
+	public BoardDetailDto getBoardDetailDto() {
+		return boardDetailDto;
+	}
 
+    public void setDetailBoard(BoardDetailDto boardDetailDto) {
+    	this.boardDetailDto = boardDetailDto;
+	}
+	
     public SolutionSiteDao toDao(){
         SolutionSiteDao dao = new SolutionSiteDao();
         dao.setBoardId(boardId);
@@ -61,4 +61,5 @@ public class SolutionSiteDto {
         dao.setVersion(version);
         return dao;
     }
+    
 }
