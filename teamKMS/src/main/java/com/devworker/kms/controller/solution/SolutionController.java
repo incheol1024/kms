@@ -66,7 +66,7 @@ public class SolutionController {
 	
 	@PostMapping("/write/patch")
 	public long solutionPatchRegister(@Valid @RequestBody SolutionPatchDto solutionPatchDto) {
-		return solutionService.registerManual(solutionPatchDto);
+		return solutionService.registerPatch(solutionPatchDto);
 	}
 	
 	//Edit Page

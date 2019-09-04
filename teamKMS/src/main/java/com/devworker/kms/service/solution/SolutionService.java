@@ -78,16 +78,24 @@ public class SolutionService {
 	public long registerSite(@Valid SolutionSiteDto solutionSiteDto) {
 		long boardId = boardComponent.register(solutionSiteDto.getBoardDetailDto(),PermissionType.CREATESOL);
 		solutionSiteDto.setBoardId(boardId);
-//		solutionSiteDto.setSiteId(siteId);
-//		solutionSiteDto.setVersion(version);
+
+		//length 체크, null값 체크, 예외값 체크, 
+		if(solutionSiteDto.getSiteId() == 0) 
+			solutionSiteDto.setSiteId(3);
+		if(solutionSiteDto.getVersion() == null) 
+			solutionSiteDto.setVersion("ver_1.01");
 		return solutionSiteRepo.save(solutionSiteDto.toDao()).getBoardId();
 	}
 
-	public long registerManual(@Valid SolutionPatchDto solutionPatchDto) {
+	public long registerPatch(@Valid SolutionPatchDto solutionPatchDto) {
 		long boardId = boardComponent.register(solutionPatchDto.getBoardDetailDto(),PermissionType.CREATESOL);
 		solutionPatchDto.setBoardId(boardId);
-//		solutionPatchDto.setImportance(impotance);
-//		solutionPatchDto.setVersion(version);
+		
+		//length 체크, null값 체크, 예외값 체크, 
+		if(solutionPatchDto.getImportance() == null) 
+			solutionPatchDto.setImportance("중요도");
+		if(solutionPatchDto.getVersion() == null) 
+			solutionPatchDto.setVersion("ver_1.01");
 		return solutionPatchRepo.save(solutionPatchDto.toDao()).getBoardId();
 	}
 	
@@ -98,7 +106,7 @@ public class SolutionService {
 	}
 
 	public void editSolutionBug(SolutionBugDto solutionBugDto) {
-		solutionBugRepo.findById(solutionBugDto.getBoardId()).orElseThrow(() -> new NotExistException("Not Found SolutionBug"));
+//		solutionBugRepo.findById(solutionBugDto.getBoardId()).orElseThrow(() -> new NotExistException("Not Found SolutionBug"));
 		SolutionBugDao dao = solutionBugDto.toDao();
 		solutionBugRepo.save(dao);
 		BoardDetailDto dto = getSolutionBugById(solutionBugDto.getBoardId());
@@ -106,8 +114,10 @@ public class SolutionService {
 	}
 	
 	public void editSolutionSite(@Valid SolutionSiteDto solutionSiteDto) {
-		// TODO Auto-generated method stub
-		
+		SolutionSiteDao dao = solutionSiteDto.toDao();
+		solutionSiteRepo.save(dao);
+		BoardDetailDto dto = getSolutionBugById(solutionSiteDto.getBoardId());
+		boardComponent.edit(solutionSiteDto.getBoardDetailDto(),dto,PermissionType.MODIFYSOL);
 	}
 
 	public void editSolutionPatch(@Valid SolutionPatchDto solutionPatchDto) {
