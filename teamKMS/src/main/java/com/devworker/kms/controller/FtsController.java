@@ -14,8 +14,7 @@ public class FtsController {
     FTSService ftsService;
 
     @GetMapping
-    public List<FtsDto> getSearchData(@RequestBody FtsDto dto) {
-        return ftsService.findByUser(dto.getName());
+    public List<FtsDto> getSearchData(@RequestParam String word) {
+        return ftsService.findByUser(word);
     }
-
 }
