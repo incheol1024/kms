@@ -39,7 +39,6 @@ public class BoardComponent {
 		long boardId = boardRepo.save(dto.toDao()).getBoardId();
 		FtsDto fts = new FtsDto();
 		fts.setId(boardId);
-		fts.setWord(dto.getContents());
 		fts.setName(dto.getSubject());
 		fts.setUser(dto.getUserId());
 		ftsService.save(fts);
@@ -56,7 +55,6 @@ public class BoardComponent {
 
 		FtsDto fts = new FtsDto();
 		fts.setId(old.getBoardId());
-		fts.setWord(old.getContents());
 		fts.setName(old.getSubject());
 		fts.setUser(old.getUserId());
 		ftsService.save(fts);

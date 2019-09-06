@@ -7,9 +7,6 @@ public class FtsDto {
     private long id;
     private String name;
     private String user;
-    private String word;
-
-
 
     public String getName() {
         return name;
@@ -23,13 +20,6 @@ public class FtsDto {
     }
     public void setUser(String user) {
         this.user = user;
-    }
-
-    public String getWord() {
-        return word;
-    }
-    public void setWord(String word) {
-        this.word = word;
     }
 
     public long getId() {
@@ -46,7 +36,6 @@ public class FtsDto {
         dao.setId(id);
         dao.setName(name);
         dao.setUser(user);
-        dao.setWord(word);
         return dao;
     }
 }

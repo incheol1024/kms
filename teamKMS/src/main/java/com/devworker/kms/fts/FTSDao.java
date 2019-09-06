@@ -11,8 +11,6 @@ public class FTSDao {
 	private String name;	
 	private String user;
 	private String time;	
-	private String word;
-	
 
 	public String getName() {
 		return name;
@@ -41,19 +39,11 @@ public class FTSDao {
 		this.id = id;
 	}
 
-	public String getWord() {
-		return word;
-	}
-	public void setWord(String word) {
-		this.word = word;
-	}
-
 	public FtsDto toDto(){
 		FtsDto dto = new FtsDto();
 		dto.setId(id);
 		dto.setName(name);
 		dto.setUser(user);
-		dto.setWord(word);
 		return dto;
 	}
 }

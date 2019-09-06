@@ -1,14 +1,17 @@
 package com.devworker.kms.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.devworker.kms.dto.FtsDto;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 
 import com.devworker.kms.fts.FTSDao;
 import com.devworker.kms.fts.FTSRepo;
+
+import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 
 @Service
 public class FTSService {
@@ -27,7 +30,13 @@ public class FTSService {
 		repo.deleteById(id);
 	}
 	
-	public List<FtsDto> findByUser(String name) {
-		return repo.findByName(name).stream().map(FTSDao::toDto).collect(Collectors.toList());
+	public Page<FTSDao> find(String word) {
+		SearchQuery searchQuery = new NativeSearchQueryBuilder()
+				.withQuery(multiMatchQuery(word)
+						.field("name")
+						.field("user")
+						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS))
+				.build();
+		return repo.search(searchQuery);
 	}
 }

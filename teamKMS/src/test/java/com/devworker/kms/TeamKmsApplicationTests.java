@@ -151,7 +151,7 @@ public class TeamKmsApplicationTests {
 		dto.setName("aaa");
 		dto.setUser("bbb");
 		ftsService.save(dto);
-		List<FtsDto> findbyuser = ftsService.findByUser("bbb");
+		Page<FTSDao> findbyuser = ftsService.find("bbb");
 		System.out.println(findbyuser);
 	}
 
@@ -167,7 +167,6 @@ public class TeamKmsApplicationTests {
 
 	@Test
 	public void ftsSearchTest() {
-		List<FtsDto> findbyuser = ftsService.findByUser("bbb");
-		assertThat(findbyuser, not(findbyuser.isEmpty()));
+		Page<FTSDao> findbyuser = ftsService.find("bbb");
 	}
 }
