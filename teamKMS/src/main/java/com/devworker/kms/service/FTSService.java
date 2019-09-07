@@ -35,6 +35,7 @@ public class FTSService {
 				.withQuery(multiMatchQuery(word)
 						.field("name")
 						.field("user")
+                        .field("text")
 						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS))
 				.build();
 		return repo.search(searchQuery);

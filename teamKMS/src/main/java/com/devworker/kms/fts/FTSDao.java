@@ -10,7 +10,8 @@ public class FTSDao {
 	private long id;
 	private String name;	
 	private String user;
-	private String time;	
+	private String time;
+	private String text;
 
 	public String getName() {
 		return name;
@@ -39,11 +40,21 @@ public class FTSDao {
 		this.id = id;
 	}
 
-	public FtsDto toDto(){
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public FtsDto toDto(){
 		FtsDto dto = new FtsDto();
 		dto.setId(id);
 		dto.setName(name);
 		dto.setUser(user);
+		dto.setText(text);
+		dto.setTime(time);
 		return dto;
 	}
 }

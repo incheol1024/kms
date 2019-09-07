@@ -41,6 +41,8 @@ public class BoardComponent {
 		fts.setId(boardId);
 		fts.setName(dto.getSubject());
 		fts.setUser(dto.getUserId());
+		fts.setText(dto.getContents());
+		fts.setTime(dto.getUpdDate().toString());
 		ftsService.save(fts);
 		return boardId;
 	}
@@ -57,6 +59,8 @@ public class BoardComponent {
 		fts.setId(old.getBoardId());
 		fts.setName(old.getSubject());
 		fts.setUser(old.getUserId());
+		fts.setText(old.getContents());
+		fts.setTime(old.getUpdDate().toString());
 		ftsService.save(fts);
 
 		boardRepo.save(old.toDao());

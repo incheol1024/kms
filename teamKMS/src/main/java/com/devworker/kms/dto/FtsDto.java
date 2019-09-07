@@ -7,6 +7,8 @@ public class FtsDto {
     private long id;
     private String name;
     private String user;
+    private String text;
+    private String time;
 
     public String getName() {
         return name;
@@ -30,12 +32,31 @@ public class FtsDto {
         this.id = id;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     @JsonIgnore
     public FTSDao toDao(){
         FTSDao dao = new FTSDao();
         dao.setId(id);
         dao.setName(name);
         dao.setUser(user);
+        dao.setText(text);
+        dao.setTime(time);
         return dao;
     }
+
 }
