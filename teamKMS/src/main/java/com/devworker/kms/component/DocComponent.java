@@ -3,7 +3,6 @@ package com.devworker.kms.component;
 import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.dto.common.FileTransactionDto;
 import com.devworker.kms.entity.common.BoardDao;
-import com.devworker.kms.entity.common.CommentDao;
 import com.devworker.kms.entity.common.DocDao;
 import com.devworker.kms.exception.board.FileNotSavedException;
 import com.devworker.kms.repo.common.DocRepo;
@@ -23,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Incheol
@@ -35,17 +33,10 @@ public class DocComponent {
     private DocRepo docRepo;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     @Qualifier(value = "amazonS3")
     private FileHandler fileHandler;
 
     private Logger logger = LoggerFactory.getLogger(DocComponent.class);
-
-    public DocComponent(FileHandler fileHandler) {
-        this.fileHandler = fileHandler;
-    }
 
     /**
      * 글 또는 댓글에 이미지 첨부 시 수행되는 메소드 입니다.
@@ -57,8 +48,12 @@ public class DocComponent {
     @Transactional
     public FileTransactionDto addDocs(List<MultipartFile> files) {
         String fileTransactKey = UUID.randomUUID().toString();
-        Stream<FileDto> fileDtoStream = streamOfFileDto(files.stream());
-        List<Long> successDocIdList = streamOfDocIds(fileDtoStream).collect(Collectors.toList());
+
+        List<Long> successDocIdList =
+                files.stream()
+                .map(this::storeFile) //파일 저장 후 FileDto 로 Mapping 함
+                .map(this::insertEntity) // FileDto 를 이용하여 DB에 저장 후 DocId로 Mapping 함
+                .collect(Collectors.toList());
 
         FileTransactionUtil.putFileInfo(fileTransactKey, successDocIdList);
         FileTransactionDto fileTransactionDto = new FileTransactionDto();
@@ -67,18 +62,28 @@ public class DocComponent {
         return fileTransactionDto;
     }
 
-    @Transactional
-    public DocDao addDoc(MultipartFile multipartFile) {
+    private long insertEntity(FileDto fileDto) {
+        DocDao docDao = DocDao.valueOf(fileDto);
+        docDao.setDocUserId(CommonUtil.getCurrentUser());
+        return docRepo.save(docDao).getDocId();
+    }
 
-        FileDto fileDto = FileDto.newInstance(makeTempFile(multipartFile),
+    private FileDto storeFile(MultipartFile multipartFile) {
+        File file = this.makeTempFile(multipartFile);
+        String key = fileHandler.processUploadFile(file);
+        return FileDto.newInstance(
+                file,
+                key,
                 multipartFile.getSize(),
                 multipartFile.getOriginalFilename(),
                 FilenameUtils.getExtension(multipartFile.getOriginalFilename()));
+    }
 
-        fileDto.setKey(fileHandler.processUploadFile(fileDto.getFile()));
 
-        DocDao docDao = DocDao.valueOf(fileDto);
-        docDao.setDocUserId(userService.getUser(CommonUtil.getCurrentUser()).getName());
+    @Transactional
+    public DocDao addDoc(MultipartFile multipartFile) {
+        DocDao docDao = DocDao.valueOf(storeFile(multipartFile));
+        docDao.setDocUserId(CommonUtil.getCurrentUser());
         return docRepo.save(docDao);
     }
 
@@ -163,32 +168,6 @@ public class DocComponent {
             e.printStackTrace();
         }
         return tmpFile;
-    }
-
-
-    private Stream<FileDto> streamOfFileDto(Stream<MultipartFile> multipartFileStream) {
-        return multipartFileStream
-                .map(multipartFile -> makeTempFile(multipartFile))
-                .map((file) -> {
-                    String key = fileHandler.processUploadFile(file);
-                    return FileDto.newInstance(
-                            file,
-                            key,
-                            file.length(),
-                            file.getName(),
-                            FilenameUtils.getExtension(file.getName()));
-                });
-    }
-
-    private Stream<Long> streamOfDocIds(Stream<FileDto> fileDtoStream) {
-        String userName = userService.getUser(CommonUtil.getCurrentUser()).getName();
-        return fileDtoStream
-                .map(fileDto -> {
-                    DocDao docDao = DocDao.valueOf(fileDto);
-                    docDao.setDocUserId(userName);
-                    docDao.setDocPath(fileDto.getKey());
-                    return docRepo.save(docDao).getDocId();
-                });
     }
 
 

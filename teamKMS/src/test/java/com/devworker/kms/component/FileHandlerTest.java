@@ -4,13 +4,15 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class FileHandlerTest {
 
     @Test
     public void propStaticTest() {
 
-        String tempDir = FileHandler.DEFUALT_ROOT_PATH;
+        String tempDir = FileHandler.DEFAULT_PATH;
         Assertions.assertThat(tempDir).isNotNull().isNotEmpty();
         System.out.println(tempDir);
     }
@@ -27,5 +29,14 @@ public class FileHandlerTest {
         Assertions.assertThat(FileHandler.getDownloadTemporaryDirectory()).isNotEmpty().startsWith("C:");
     }
 
+
+    @Test
+    public void createTempFile() throws IOException {
+        Path path = Files.createTempFile("createtemp","txt");
+
+        Path dir = Files.createTempDirectory("kms");
+        System.out.println(dir);
+        System.out.println(path.toString());
+    }
 
 }

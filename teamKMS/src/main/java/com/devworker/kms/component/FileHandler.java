@@ -1,24 +1,24 @@
 package com.devworker.kms.component;
 
 import com.devworker.kms.util.CommonUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URI;
+import java.nio.file.*;
+import java.nio.file.attribute.FileAttribute;
 
-@Service
+@Component
 public interface FileHandler {
 
-    String DEFUALT_ROOT_PATH = System.getProperty("java.io.tmpdir");
+    String DEFAULT_PATH = System.getProperty("java.io.tmpdir");
 
-//    String DefaultTemporaryDirectory = System.getProperty("java.io.tmpdir") + File.separator + "kms." + System.currentTimeMillis();
+    Path DEFAULT_TEMPORARY_UPLOAD_PATH = Paths.get(DEFAULT_PATH, "kms", CommonUtil.getCurrentUser(), "upload");
 
-    Path DEFAULT_TEMPORARY_UPLOAD_PATH = Paths.get(DEFUALT_ROOT_PATH, "kms", CommonUtil.getCurrentUser(), "upload");
-
-    Path DEFAULT_TEMPORARY_DOWNLOAD_PATH = Paths.get(DEFUALT_ROOT_PATH, "kms", CommonUtil.getCurrentUser(), "download");
+    Path DEFAULT_TEMPORARY_DOWNLOAD_PATH = Paths.get(DEFAULT_PATH, "kms", CommonUtil.getCurrentUser(), "download");
 
     String processUploadFile(File file);
 

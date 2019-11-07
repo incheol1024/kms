@@ -121,7 +121,7 @@ public class DocComponentTest {
 
 		assertThat(testFile).isFile();
 		MockMultipartFile mockMultipartFile = new MockMultipartFile("file1", new FileInputStream(testFile));
-		DocComponent docComponent = new DocComponent(fileHandler);
+		DocComponent docComponent = new DocComponent();
 		File actual =docComponent.makeTempFile(mockMultipartFile);
 		
 		assertThat(actual).isFile();
