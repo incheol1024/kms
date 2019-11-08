@@ -1,12 +1,8 @@
 package com.devworker.kms.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.devworker.kms.aspect.ExecutionTimeLogging;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -30,12 +26,14 @@ public abstract class CommonUtil {
 		return PageRequest.of(0,size);
 	}
 
+	@ExecutionTimeLogging
 	public static <T> String toJson(T t)  {
+		String jsonString = "";
 		try {
-			return objectMapper.writeValueAsString(t);
+			jsonString = objectMapper.writeValueAsString(t);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			return e.getMessage();
 		}
+		return jsonString;
 	}
 }
