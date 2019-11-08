@@ -1,7 +1,9 @@
 package com.devworker.kms.component;
 
-import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.util.StringKeyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
@@ -18,7 +20,6 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
 
 @Component
 @Qualifier(value = "amazonS3")
@@ -28,9 +29,14 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     @Value(value = "${amazon.s3.bucket}")
     private String bucket;
 
+    @Autowired
+    FileHandler fileHandlerRetryProxy;
+
     private static final S3Client s3Client = getS3Client();
 
-    private String uploadFile(File file) {
+    private static Logger logger = LoggerFactory.getLogger(FileHandlerImplAmazonS3.class);
+
+    private String uploadFile(File file) throws Exception {
 
         String key = StringKeyUtil.generateUniqueKey();
         boolean putSuccess = s3Client
@@ -42,64 +48,45 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
         if (putSuccess)
             return key;
 
-        throw new RuntimeException();
+        throw new Exception("Fail uplaod file. file Name=" + file.getCanonicalPath());
     }
 
-    private GetObjectResponse downloadFile(String key, File file) {
+    private File downloadFile(String key, File file) throws Exception {
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        ResponseInputStream<GetObjectResponse> responseInputStream = s3Client
+                .getObject((getObjectRequestBuilder) -> getObjectRequestBuilder.bucket(bucket).key(key).build());
+        responseInputStream.transferTo(fileOutputStream);
 
+        if (responseInputStream.response().sdkHttpResponse().isSuccessful())
+            return file;
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-            ResponseInputStream<GetObjectResponse> responseInputStream = s3Client
-                    .getObject((getObjectReqeustBuilder) -> {
-                        getObjectReqeustBuilder.bucket(bucket).key(key).build();
-                    });
-            responseInputStream.transferTo(fileOutputStream);
-
-            return responseInputStream.response();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        throw new Exception("Fail downlaod file. key=" + key);
     }
 
     @Override
     public String processUploadFile(File file) {
-        return uploadFile(file);
+        String key = null;
+        try {
+            key = uploadFile(file);
+        } catch (Exception e) {
+            logger.error("{}", e);
+            e.printStackTrace();
+            fileHandlerRetryProxy.processUploadFile(file);
+        }
+        return key;
     }
 
     @Override
     public File processDownloadFile(String key) {
-
         File tmp = new File(FileHandler.getDownloadTemporaryDirectory() + File.separator + key);
-        GetObjectResponse getObjectResponse = downloadFile(key, tmp);
-
-        if (getObjectResponse != null && getObjectResponse.sdkHttpResponse().isSuccessful())
-            return tmp;
-
-        throw new RuntimeException("Fail to download file, key =" + key);
+        try {
+            tmp = downloadFile(key, tmp);
+        } catch (Exception e){
+            logger.error("{}", e);
+            e.printStackTrace();
+        }
+        return tmp;
     }
-
-    /*
-    @Override
-    public FileDto processUploadFile(FileDto fileDto) {
-        String key = uploadFile(fileDto.getFile());
-        fileDto.setKey(key);
-        return fileDto;
-    }
-
-    @Override
-    public FileDto processDownloadFile(FileDto fileDto) {
-
-        File getTmpFile = new File(FileHandler.getDownloadTemporaryDirectory() + fileDto.getKey());
-        GetObjectResponse getObjectResponse = downloadFile(fileDto.getKey(), getTmpFile);
-
-        if (getObjectResponse != null && getObjectResponse.sdkHttpResponse().isSuccessful())
-            return FileDto.builder().setFile(getTmpFile).build();
-
-        throw new RuntimeException();
-    }
-
-*/
 
 
     @Override
