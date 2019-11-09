@@ -48,7 +48,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
         if (putSuccess)
             return key;
 
-        throw new Exception("Fail uplaod file. file Name=" + file.getCanonicalPath());
+        throw new Exception("Fail upload file. file Name=" + file.getCanonicalPath());
     }
 
     private File downloadFile(String key, File file) throws Exception {
@@ -60,7 +60,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
         if (responseInputStream.response().sdkHttpResponse().isSuccessful())
             return file;
 
-        throw new Exception("Fail downlaod file. key=" + key);
+        throw new Exception("Fail download file. key=" + key);
     }
 
     @Override

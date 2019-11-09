@@ -22,9 +22,9 @@ public class FileHandlerRetryProxy implements FileHandler {
 
     @Override
     public String processUploadFile(File file) {
-        String retryKey = "";
+        String retryKey;
         for (int i = 0; i < retryNumber; i++) {
-            logger.warn("retry {} upload file", i);
+            logger.warn("retrying {} upload file", i);
             retryKey = fileHandler.processUploadFile(file);
             if (Objects.nonNull(retryKey))
                 return retryKey;
@@ -36,12 +36,30 @@ public class FileHandlerRetryProxy implements FileHandler {
 
     @Override
     public File processDownloadFile(String key) {
-        return null;
+        File file;
+        for (int i = 0; i < retryNumber; i++) {
+            logger.warn("retrying {} download file", i);
+            file = fileHandler.processDownloadFile(key);
+            if (Objects.nonNull(file))
+                return file;
+        }
+
+        logger.error("Fail download file retry number={}", retryNumber);
+        throw new RuntimeException("Fail download file retry number= " + retryNumber);
     }
 
     @Override
     public boolean deleteFile(String key) {
-        return false;
+        boolean result;
+        for (int i = 0; i < retryNumber; i++) {
+            logger.warn("retrying {} delete file", i);
+            result = fileHandler.deleteFile(key);
+            if (result == true)
+                return true;
+        }
+
+        logger.error("Fail delete file retry number={}", retryNumber);
+        throw new RuntimeException("Fail delete file retry number=" + retryNumber);
     }
 
 
