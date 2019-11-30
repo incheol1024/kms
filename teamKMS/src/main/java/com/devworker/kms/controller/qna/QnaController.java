@@ -25,7 +25,6 @@ public class QnaController {
 
     @GetMapping("/{menuId}")
     public Page<BoardDto> findQnaPage(@PathVariable int menuId, Pageable pageable) {
-
         logger.debug("menuId = {}", menuId);
         logger.debug("Pageable = {}", pageable);
         return qnaService.getQnaPage(menuId, pageable);

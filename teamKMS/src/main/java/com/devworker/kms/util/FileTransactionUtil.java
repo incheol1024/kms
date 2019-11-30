@@ -1,10 +1,7 @@
 package com.devworker.kms.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.devworker.kms.exception.board.FileMemoryNotContainsKeyException;
 import com.devworker.kms.exception.board.FileMemoryNotRemovedException;
@@ -15,13 +12,13 @@ import com.devworker.kms.exception.board.FileTransactionException;
  * @version 1.0 파일에 대한 트랜잭션을 처리하기 위해 파일 정보를 임시로 저장하기 위한 FileTransactionUtil 클래스
  * 입니다.
  */
-public class FileTransactionUtil {
+public final class FileTransactionUtil {
 
     /**
      * HashMap field is storing fileData and UUID key which converted to String
      * Object
      */
-    private static final Map<String, List<Long>> fileData = new HashMap<String, List<Long>>();
+    private static final ConcurrentHashMap<String, Hashtable<String, List<Long>>> fileData = new ConcurrentHashMap<>();
 
     /**
      * FileTransactionUtil class do not allow create object, because it is UTIL
@@ -34,30 +31,21 @@ public class FileTransactionUtil {
     /**
      * @param key   We use java.util.UUID for HashMap key, so parameter should be
      *              converted to String
-     * @param docId value, is considered File Id
+     * @param docIds value, is considered File Ids
      * @return
      * @author Hwang In Cheol
      */
-    public static String putFileInfo(String key, long docId) {
-
-        if (key != null && fileData.containsKey(key)) {
-            List<Long> fileList = fileData.get(key);
-            fileList.add(docId);
-            return key;
-        }
-
-        String newKey = UUID.randomUUID().toString();
-        List<Long> fileList = new ArrayList<Long>();
-        fileList.add(docId);
-        fileData.put(newKey, fileList);
-        return newKey;
-    }
-
     public static String putFileInfo(String key, List<Long> docIds) {
-        fileData.put(key, docIds);
-        return key;
+        return putFileInfo(key, null, docIds);
     }
 
+    public static String putFileInfo(String key, String userId, List<Long> docIds) {
+        Hashtable<String, List<Long>> hashtable = new Hashtable();
+        if (Objects.nonNull(hashtable.put(userId, docIds)) && Objects.nonNull(fileData.put(key, hashtable)))
+            return key;
+
+        throw new RuntimeException("file transaction information is not stored");
+    }
 
     /**
      * @param key We use java.util.UUID for HashMap key, so parameter should be
@@ -66,7 +54,7 @@ public class FileTransactionUtil {
      * @author Hwang In Cheol
      */
     public static int getFileCount(String key) {
-        return fileData.get(key).size();
+        return fileData.get(key).get(CommonUtil.getCurrentUser()).size();
     }
 
     /**
@@ -75,7 +63,7 @@ public class FileTransactionUtil {
      * @author Hwang In Cheol
      */
     public static List<Long> getFileList(String key) {
-        return fileData.get(key);
+        return fileData.get(key).get(CommonUtil.getCurrentUser());
     }
 
     /**
@@ -87,9 +75,13 @@ public class FileTransactionUtil {
      * @throws FileTransactionException
      * @author Hwang In Cheol
      */
-    private static boolean isSameTransaction(String key, int expectedFileCount) throws FileTransactionException {
+    private static boolean isSameTransaction(String key, String userId, int expectedFileCount) throws FileTransactionException {
+
         if (!fileData.containsKey(key))
             throw new FileTransactionException("File Transact key is not found.");
+
+        if(!fileData.get(key).containsKey(userId))
+            throw new FileTransactionException("UserId is not found.");
 
         return expectedFileCount == getFileCount(key) ? true : false;
     }
@@ -102,9 +94,9 @@ public class FileTransactionUtil {
      * throw FileTransactionException
      * @author Hwang In Cheol
      */
-    public static List<Long> findSameTransaction(String key, int expectedFileCount) {
+    public static List<Long> findSameTransaction(String key, String userId, int expectedFileCount) {
 
-        if (isSameTransaction(key, expectedFileCount))
+        if (isSameTransaction(key, userId, expectedFileCount))
             return getFileList(key);
 
         throw new FileTransactionException("File count is not same.");
@@ -120,15 +112,19 @@ public class FileTransactionUtil {
         if (!fileData.containsKey(key))
             throw new FileMemoryNotContainsKeyException();
 
-        List<Long> returnFileData = fileData.remove(key);
+        List<Long> returnFileData = fileData.get(key).get(CommonUtil.getCurrentUser());
+
         if (returnFileData != null) {
             returnFileData.clear();
-            boolean isClear = returnFileData.isEmpty();
+            fileData.get(key).clear();
+            boolean fileIsClear = returnFileData.isEmpty();
+            Hashtable hashtable= fileData.remove(key);
 
-            if (!isClear)
+            if (!fileIsClear || hashtable == null)
                 throw new FileMemoryNotRemovedException("File Data Refs is not clear.");
 
             returnFileData = null;
+            hashtable = null;
             return;
         }
         throw new FileMemoryNotRemovedException();

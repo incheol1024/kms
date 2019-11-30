@@ -13,6 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,12 +21,15 @@ import com.devworker.kms.entity.common.DocDao;
 import com.devworker.kms.dto.common.FileTransactionDto;
 import com.devworker.kms.component.DocComponent;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * @author Hwang In Cheol
  * @version 1.0
  * 파일 처리하는 컨트롤러 입니다.
  */
-@RestController
+//@RestController
+@Controller
 @RequestMapping("/file")
 public class DocController {
 
@@ -42,8 +46,9 @@ public class DocController {
      */
     @PostMapping("/upload/comment")
     public FileTransactionDto uploadFileOnComment(
-            @RequestParam(name = "multiPartFile") List<MultipartFile> multiPartFiles) {
-        multiPartFiles.stream().forEach((multipartFile) ->logger.info(multipartFile.getOriginalFilename()));
+            @RequestParam(value = "multiPartFile") List<MultipartFile> multiPartFiles) {
+        multiPartFiles.stream().forEach(multipartFile -> logger.info("=========controller filesize======== {}", multipartFile.getSize()));
+        multiPartFiles.stream().forEach((multipartFile) -> logger.info(multipartFile.getOriginalFilename()));
         return docComponent.addDocs(multiPartFiles);
     }
 

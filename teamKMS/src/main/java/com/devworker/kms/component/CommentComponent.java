@@ -9,6 +9,7 @@ import com.devworker.kms.entity.common.DocDao;
 import com.devworker.kms.exception.board.CommentNotFoundException;
 import com.devworker.kms.repo.common.CommentRepo;
 import com.devworker.kms.service.UserService;
+import com.devworker.kms.util.CommonUtil;
 import com.devworker.kms.util.FileTransactionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Comment Service 클래스 입니다. Comment와 관련 된 CRUD 메소드가 구현되어 있습니다.
@@ -56,13 +59,14 @@ public class CommentComponent {
      * @return 트랜잭션이 정상 처리 되면 등록된 CommentDto 객체를 리턴합니다.
      */
     public CommentDto addCommentAndFile(CommentDto commentDto) {
-
         String fileTransactKey = commentDto.getFileTransactKey();
         int fileCount = commentDto.getFileCount();
 
-        List<Long> docIds = FileTransactionUtil.findSameTransaction(fileTransactKey, fileCount);
+        List<Long> docIds = FileTransactionUtil.findSameTransaction(fileTransactKey, CommonUtil.getCurrentUser(), fileCount);
         CommentDao commentDao = CommentDao.valueOf(commentDto);
-        docIds.stream().forEach((docId) -> commentDao.addDoc(new DocDao(docId)));
+        docIds.stream()
+                .peek(docId -> logger.info("Add DocId {} Comment {}", docIds, commentDto))
+                .forEach(docId -> commentDao.addDoc(new DocDao(docId)));
         return commentRepo
                 .findById(commentRepo.save(commentDao).getCmtId())
                 .orElseThrow(CommentNotFoundException::new)
@@ -87,6 +91,7 @@ public class CommentComponent {
      *
      * @param cmtId must not be {@literal null}. Comment ID 값이 되야 합니다.
      */
+    @Transactional
     public void deleteComment(long cmtId) {
         Optional<CommentDao> optionalCommentDao = commentRepo.findById(cmtId);
         CommentDao commentDao = optionalCommentDao
@@ -94,11 +99,7 @@ public class CommentComponent {
 
         List<DocDao> docDaos = commentDao.getDocDaos();
         if (!docDaos.isEmpty())
-            docDaos.stream().forEach((docDao) -> {
-                docComponent.deleteDoc(docDao.getDocId());
-            });
-
-//        commentDao = commentRepo.findById(cmtId).;
+            docComponent.deleteDocs(docDaos.stream().map((docDao) -> docDao.getDocId()).collect(Collectors.toList()));
 
         commentRepo.delete(commentDao);
     }

@@ -7,13 +7,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.core.Is;
+import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,6 +38,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import net.minidev.json.parser.JSONParser;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.DispatcherServlet;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @RunWith(value = SpringJUnit4ClassRunner.class)
@@ -53,6 +55,22 @@ public class DocControllerTest {
 
 	@Autowired
 	ObjectMapper objectMapper;
+
+
+
+	private MockMultipartFile mockMultipartFile;
+
+	@Before
+	public void setUp() throws IOException {
+		Path path = Paths.get("D:/app/filetest.txt");
+		String name = "multiPartFile";
+		String fileName = path.getFileName().toString();
+		String contentType = "text/plain";
+		InputStream inputStream = Files.newInputStream(path, StandardOpenOption.READ);
+		mockMultipartFile = new MockMultipartFile(name, fileName, contentType, inputStream);
+		System.out.println("=============mockMultiPartFileSize========="  + mockMultipartFile.getSize());
+	}
+
 
 	@Test
 	public void _beanNotNullTest() {
@@ -147,6 +165,28 @@ public class DocControllerTest {
 						MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_OCTET_STREAM))
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_OCTET_STREAM))
 				.andDo(MockMvcResultHandlers.print());
+
+	}
+
+
+	@WithMockUser(username = "USER")
+	@Test
+	public void uploadFileForCheckingFileSize() throws Exception {
+
+///upload/comment
+
+        Path path = Paths.get("D:/app/filetest.txt");
+        String name = "multiPartFile";
+        String fileName = path.getFileName().toString();
+        String contentType = "text/plain";
+        InputStream inputStream = Files.newInputStream(path, StandardOpenOption.READ);
+        mockMultipartFile = new MockMultipartFile(name, fileName, contentType, inputStream);
+
+		this.mockMvc
+				.perform(MockMvcRequestBuilders.multipart("/file/upload/comment").file(mockMultipartFile)
+                .file("multiPartFile", "aaa".getBytes()))
+                .andExpect(MockMvcResultMatchers.status().is(200))
+				.andDo(print());
 
 	}
 

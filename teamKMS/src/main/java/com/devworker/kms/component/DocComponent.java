@@ -51,11 +51,12 @@ public class DocComponent {
 
         List<Long> successDocIdList =
                 files.stream()
-                .map(this::storeFile) //파일 저장 후 FileDto 로 Mapping 함
-                .map(this::insertEntity) // FileDto 를 이용하여 DB에 저장 후 DocId로 Mapping 함
-                .collect(Collectors.toList());
+                        .peek(multipartFile -> logger.info("=====service size======={}", multipartFile.getSize()))
+                        .map(this::storeFile) //파일 저장 후 FileDto 로 Mapping 함
+                        .map(this::insertEntity) // FileDto 를 이용하여 DB에 저장 후 DocId로 Mapping 함
+                        .collect(Collectors.toList());
 
-        FileTransactionUtil.putFileInfo(fileTransactKey, successDocIdList);
+        FileTransactionUtil.putFileInfo(fileTransactKey, CommonUtil.getCurrentUser(), successDocIdList);
         FileTransactionDto fileTransactionDto = new FileTransactionDto();
         fileTransactionDto.setFileCount(successDocIdList.size());
         fileTransactionDto.setFileTransactKey(fileTransactKey);
@@ -141,6 +142,10 @@ public class DocComponent {
         DocDao docDao = opDocDao.get();
         fileHandler.deleteFile(docDao.getDocPath());
         docRepo.delete(docDao);
+    }
+
+    public void deleteDocs(List<Long> docIds) {
+        docIds.stream().forEach(this::deleteDoc);
     }
 
     private FileDto makeFileDto(File file, String key) {
