@@ -1,20 +1,9 @@
-/*
 package com.devworker.kms.component;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import com.devworker.kms.dto.common.FileDto;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
+import org.assertj.core.api.Assertions;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -27,116 +16,111 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.multipart.MultipartFile;
-
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.nio.file.Paths;
+import java.util.function.Predicate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @RunWith(value = SpringJUnit4ClassRunner.class)
 public class FileHandlerImplAmazonS3Test {
 
-	@Autowired
-	@Qualifier("fileHandlerImplAmazonS3")
-	FileHandler fileHandler;
+    @Autowired
+    @Qualifier("fileHandlerImplAmazonS3")
+    FileHandler fileHandler;
 
-	File testFile;
-	String downloadKey;
+    private static File testFile;
+    private static String downloadKey;
 
-	MultipartFile multipartFile;
+    private static MultipartFile multipartFile;
 
-	@Autowired
-	ApplicationContext applicationContext;
+    @Autowired
+    ApplicationContext applicationContext;
 
-	@Rule
-	public ExpectedException expectedException = ExpectedException.none();
+    @Rule
+    public ExpectedException expectedException;
 
-	@Before
-	public void setUp() throws FileNotFoundException, IOException {
+    @BeforeClass
+    public static void setUpClass()  throws IOException{
+        testFile = Paths.get("D:/app/upload", "java.jpg").toFile();
+        downloadKey = "1575287924226atputamjyy";
+        multipartFile = new MockMultipartFile("test.png", new FileInputStream(testFile));
 
-		testFile = new File("D:/app/test.png");
-		downloadKey = "15566022162000d4894c1-5a1e-4afb-9d9f-266d91e75315";
-		multipartFile = new MockMultipartFile("test.png", new FileInputStream(testFile));
-	}
+    }
 
-	@Test
-	public void notNullBeanTest() {
-		assertThat(fileHandler).isNotNull().isExactlyInstanceOf(FileHandlerImplAmazonS3.class);
-	}
+    @Before
+    public void setUp() {
+        expectedException = ExpectedException.none();
+    }
 
-	@Test
-	public void uploadFileTest() throws NoSuchMethodException, SecurityException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+    @Test
+    public void notNullBeanTest() {
+        assertThat(fileHandler).isNotNull().isExactlyInstanceOf(FileHandlerImplAmazonS3.class);
+    }
 
-		Method method = fileHandler.getClass().getDeclaredMethod("uploadFile", File.class);
-		method.setAccessible(Boolean.valueOf(true));
-		String actual = (String) method.invoke(fileHandler, testFile);
+    @Test
+    public void uploadFileTest() throws NoSuchMethodException, SecurityException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException {
 
-		assertThat(actual).isNotNull().doesNotContainOnlyWhitespaces().hasSize(23);
-	}
+        Method method = fileHandler.getClass().getDeclaredMethod("uploadFile", File.class);
+        method.setAccessible(Boolean.valueOf(true));
+        String actual = (String) method.invoke(fileHandler, testFile);
 
-	@Test
-	public void processDownloadFileTest() {
-		String downloadKey = "15566297014682RDf1SRpGB";
-		File tmpFile = new File("D:/app/downTmp.png");
-		FileDto fileDto = FileDto.builder().setKey(downloadKey).setFile(tmpFile).build();
+        assertThat(actual).isNotNull().doesNotContainOnlyWhitespaces().hasSize(23);
+    }
 
-		FileDto resultFileDto = fileHandler.processDownloadFile(fileDto);
+    @Test
+    public void processDownloadFileTest() {
+        File file = fileHandler.processDownloadFile(downloadKey);
+        Assertions.assertThat(file)
+                .exists()
+                .canRead()
+                .isNotNull()
+                .isFile()
+                .isInstanceOfSatisfying(File.class, actual -> {
+                    Assertions.assertThat(actual.length()).isEqualTo(file.length());
+                })
+                .isInstanceOf(File.class)
+                ;
+    }
 
-		assertThat(resultFileDto.getFile()).isFile();
+    @Test
+    public void processUploadFileTest() throws Exception {
+        String result = fileHandler.processUploadFile(testFile);
+        System.out.println(result);
+        Assertions.assertThat(result)
+                .isNotNull()
+                .isNotEmpty()
+                .isExactlyInstanceOf(String.class)
+                .doesNotContainOnlyWhitespaces()
+        ;
+    }
 
-	}
+    @Test
+    public void deleteFileTest()  {
+        boolean isDelete = fileHandler.deleteFile("1575283421728rolvpvnwuu");
 
-	@Test
-	public void processUploadFileTest() throws Exception {
-		FileDto expectedFileDto = FileDto.builder().setFileExt(FilenameUtils.getExtension(testFile.getName()))
-				.setFileName(testFile.getName()).setFileSize(FileUtils.sizeOf(testFile)).setFile(testFile).build();
+        Assertions.assertThat(isDelete)
+                .isTrue()
+                .isNotNull()
+                .isExactlyInstanceOf(Boolean.class);
 
-		FileDto fileDto = fileHandler.processUploadFile(expectedFileDto);
-		assertThat(fileDto).isInstanceOf(FileDto.class).isExactlyInstanceOf(FileDto.class);
-		assertThat(fileDto.getKey()).doesNotContainOnlyWhitespaces();
+        //삭제 검증, 조회
+        expectedException.expect(NoSuchKeyException.class);
+        expectedException.expectMessage(CoreMatchers.containsString("The specified key does not exist"));
+        fileHandler.processDownloadFile("1575283421728rolvpvnwuu"); // NoSuchKeyExeception 발생
+    }
 
-	}
+    @Test
+    public void shouldException() {
 
-	@Test
-	public void deleteFileTest() throws Exception {
-		String key = "155660208325552f7b0d8-dfda-4589-996e-199c13978d69";
-		boolean actual = fileHandler.deleteFile(key);
-		assertThat(actual).isTrue();
-		key = "asdfasdfasdfasdfasdfasdfsadf";
-		actual = fileHandler.deleteFile(key);
-
-		// assertThat(actual).isFalse(); // 무조건 False 이여야 하는데 True 가 나옴 아마존 sdk 에서 무조건
-		// true로 줌.
-
-	}
-
-	@Test
-	public void shouldException() {
-		String wrongKey = "akakakakak";
-		FileDto wrongFileDto = FileDto.builder().setKey(wrongKey).build();
-		expectedException.expect(NoSuchKeyException.class);
-		expectedException.expectMessage(CoreMatchers.startsWith("The specified key"));
-		FileDto actualFileDto = fileHandler.processDownloadFile(wrongFileDto);
-		assertThat(actualFileDto).isNull();
-	}
-
-	*/
-/*
-	 * @Test public void shouldBeS3ClientProto() {
-	 * assertThat(applicationContext).isNotNull(); FileHandler fileHandler =
-	 * applicationContext.getBean(FileHandler.class);
-	 * assertThat(fileHandler).isInstanceOf(FileHandlerImplAmazonS3.class);
-	 * FileHandlerImplAmazonS3 amazonS3 = (FileHandlerImplAmazonS3) fileHandler;
-	 * S3Client s3Client = amazonS3.getS3Client();
-	 * assertThat(s3Client).isNotEqualTo(amazonS3.getS3Client()).isNotEqualTo(
-	 * amazonS3.getS3Client()); }
-	 *//*
-
-
-	@Test
-	public void shuoldBeProtoProxy() throws NoSuchFieldException, SecurityException {
-		
-		
-		
-	}
+    }
 }
-*/

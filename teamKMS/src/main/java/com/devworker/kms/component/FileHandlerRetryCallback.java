@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.Objects;
 
 @Component
-public class FileHandlerRetryProxy implements FileHandler {
+public class FileHandlerRetryCallback implements FileHandler {
 
     @Autowired
     FileHandler fileHandler;
@@ -18,7 +18,7 @@ public class FileHandlerRetryProxy implements FileHandler {
     @Value("${file.handle.retry.number}")
     int retryNumber;
 
-    private static Logger logger = LoggerFactory.getLogger(FileHandlerRetryProxy.class);
+    private static Logger logger = LoggerFactory.getLogger(FileHandlerRetryCallback.class);
 
     @Override
     public String processUploadFile(File file) {

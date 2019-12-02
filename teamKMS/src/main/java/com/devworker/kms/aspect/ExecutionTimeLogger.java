@@ -17,8 +17,10 @@ public class ExecutionTimeLogger {
     public Object methodTime(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         long begin = System.currentTimeMillis();
         Object object = proceedingJoinPoint.proceed();
-        logger.debug("========execution time {}ms=========", begin-System.currentTimeMillis());
+
+        logger.debug("==={}===execution time {}ms=========",proceedingJoinPoint.getTarget(),  begin-System.currentTimeMillis());
         return object;
     }
+
 
 }

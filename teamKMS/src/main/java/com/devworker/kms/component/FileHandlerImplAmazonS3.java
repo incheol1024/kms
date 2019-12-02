@@ -1,5 +1,6 @@
 package com.devworker.kms.component;
 
+import com.devworker.kms.aspect.ExecutionTimeLogging;
 import com.devworker.kms.util.StringKeyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,6 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 @Component
 @Qualifier(value = "amazonS3")
@@ -30,7 +30,14 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     private String bucket;
 
     @Autowired
-    FileHandler fileHandlerRetryProxy;
+    FileHandler fileHandlerRetryCallback;
+
+    /*public  FileHandlerImplAmazonS3() {}
+
+    @Autowired
+    public FileHandlerImplAmazonS3(FileHandler fileHandlerRetryCallback) {
+        this.fileHandlerRetryCallback = fileHandlerRetryCallback;
+    }*/
 
     private static final S3Client s3Client = getS3Client();
 
@@ -64,6 +71,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
     }
 
     @Override
+    @ExecutionTimeLogging
     public String processUploadFile(File file) {
         String key = null;
         try {
@@ -71,7 +79,7 @@ public class FileHandlerImplAmazonS3 implements FileHandler {
         } catch (Exception e) {
             logger.error("{}", e);
             e.printStackTrace();
-            fileHandlerRetryProxy.processUploadFile(file);
+            fileHandlerRetryCallback.processUploadFile(file);
         }
         return key;
     }
