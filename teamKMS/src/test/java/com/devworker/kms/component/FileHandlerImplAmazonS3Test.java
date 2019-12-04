@@ -20,12 +20,8 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.file.Paths;
-import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,17 +60,6 @@ public class FileHandlerImplAmazonS3Test {
     @Test
     public void notNullBeanTest() {
         assertThat(fileHandler).isNotNull().isExactlyInstanceOf(FileHandlerImplAmazonS3.class);
-    }
-
-    @Test
-    public void uploadFileTest() throws NoSuchMethodException, SecurityException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException {
-
-        Method method = fileHandler.getClass().getDeclaredMethod("uploadFile", File.class);
-        method.setAccessible(Boolean.valueOf(true));
-        String actual = (String) method.invoke(fileHandler, testFile);
-
-        assertThat(actual).isNotNull().doesNotContainOnlyWhitespaces().hasSize(23);
     }
 
     @Test

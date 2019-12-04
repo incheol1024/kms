@@ -1,6 +1,7 @@
 package com.devworker.kms;
 
 import io.swagger.annotations.ApiOperation;
+import org.apache.tika.Tika;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -47,13 +48,6 @@ public class TeamKmsApplication {
     }
 
     @Bean
-    public MultipartResolver multiPartResolver() {
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(100 * 1024 * 1024L);
-        return multipartResolver;
-    }
-
-    @Bean
     @Order (0)
     public MultipartFilter multipartFilter() {
         MultipartFilter multipartFilter = new MultipartFilter();
@@ -92,4 +86,10 @@ public class TeamKmsApplication {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+    @Bean
+    public Tika tika() {
+        return new Tika();
+    }
+
 }

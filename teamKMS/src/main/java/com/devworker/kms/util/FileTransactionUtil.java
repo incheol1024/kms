@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.devworker.kms.exception.board.FileMemoryNotContainsKeyException;
 import com.devworker.kms.exception.board.FileMemoryNotRemovedException;
 import com.devworker.kms.exception.board.FileTransactionException;
+import com.google.common.collect.HashBasedTable;
 
 /**
  * @author Hwang In Cheol
@@ -29,8 +30,8 @@ public final class FileTransactionUtil {
     }
 
     /**
-     * @param key   We use java.util.UUID for HashMap key, so parameter should be
-     *              converted to String
+     * @param key    We use java.util.UUID for HashMap key, so parameter should be
+     *               converted to String
      * @param docIds value, is considered File Ids
      * @return
      * @author Hwang In Cheol
@@ -41,10 +42,9 @@ public final class FileTransactionUtil {
 
     public static String putFileInfo(String key, String userId, List<Long> docIds) {
         Hashtable<String, List<Long>> hashtable = new Hashtable();
-        if (Objects.nonNull(hashtable.put(userId, docIds)) && Objects.nonNull(fileData.put(key, hashtable)))
-            return key;
-
-        throw new RuntimeException("file transaction information is not stored");
+        hashtable.put(userId, docIds);
+        fileData.put(key, hashtable);
+        return key;
     }
 
     /**
@@ -80,7 +80,7 @@ public final class FileTransactionUtil {
         if (!fileData.containsKey(key))
             throw new FileTransactionException("File Transact key is not found.");
 
-        if(!fileData.get(key).containsKey(userId))
+        if (!fileData.get(key).containsKey(userId))
             throw new FileTransactionException("UserId is not found.");
 
         return expectedFileCount == getFileCount(key) ? true : false;
@@ -118,7 +118,7 @@ public final class FileTransactionUtil {
             returnFileData.clear();
             fileData.get(key).clear();
             boolean fileIsClear = returnFileData.isEmpty();
-            Hashtable hashtable= fileData.remove(key);
+            Hashtable hashtable = fileData.remove(key);
 
             if (!fileIsClear || hashtable == null)
                 throw new FileMemoryNotRemovedException("File Data Refs is not clear.");

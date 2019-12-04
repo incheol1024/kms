@@ -68,7 +68,7 @@ public class DocController {
      * @return fileTransactKey of String type
      * @throws Exception
      */
-/*	
+/*
 	@PostMapping("/upload/common")
 	public String uploadBoardFile(@RequestParam(name = "boardId") BoardDao boardId,
 			@RequestParam(name = "cmtId") int cmtId,
@@ -86,12 +86,7 @@ public class DocController {
         FileDto fileDto = docComponent.downDoc(docId);
         InputStreamResource resource = new InputStreamResource(new FileInputStream(fileDto.getFile()));
         return ResponseEntity.ok().headers(new HttpHeaders()).contentLength(fileDto.getFileSize())
-                .contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
-    }
-
-    @GetMapping("/list/{boardId}")
-    public List<DocDao> listFile(@PathVariable int boardId) {
-        return docComponent.listDoc(boardId);
+                .contentType(MediaType.IMAGE_PNG).body(resource);
     }
 
     @PutMapping("/update/{docId}")

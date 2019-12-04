@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import com.devworker.kms.component.BeanUtilComponent;
+import com.fasterxml.jackson.databind.util.BeanUtil;
+import org.apache.tika.Tika;
+import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
 public class FileUtil {
@@ -26,5 +30,15 @@ public class FileUtil {
 
 		return path + File.separator;
 	}
+
+	public static String getContentType() {
+		BeanUtilComponent.getBean(Tika.class);
+		return "";
+	}
+
+	public static MediaType getMediaType() {
+		return null;
+	}
+
 
 }
