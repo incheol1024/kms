@@ -1,8 +1,10 @@
 package com.devworker.kms.component;
 
+import com.devworker.kms.dto.common.FileDto;
 import com.devworker.kms.dto.common.FileTransactionDto;
 import com.devworker.kms.entity.common.DocDao;
 import com.devworker.kms.repo.common.DocRepo;
+import com.devworker.kms.util.FileUtil;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -19,6 +21,8 @@ import org.mockito.Answers;
 import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
+import org.mockito.internal.verification.Times;
+import org.mockito.verification.VerificationMode;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -35,10 +39,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.READ;
 import static org.assertj.core.api.Assertions.anyOf;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 public class DocComponentTest {
 
@@ -54,8 +60,6 @@ public class DocComponentTest {
     /**
      * Filelds used @Before for initialize every time unit @Test Method
      */
-    private DocComponent docComponent;
-
     private DocRepo docRepo;
 
     private FileHandler fileHandler;
@@ -64,6 +68,7 @@ public class DocComponentTest {
 
     private DocDao testDocDao;
 
+    private FileUtil mockFileUtil;
 
     @BeforeClass
     public static void setUpClass() throws IOException {
@@ -82,32 +87,32 @@ public class DocComponentTest {
 
         files = new ArrayList<>();
 
-        for(int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1000; i++) {
             files.add(mockMultipartFile);
         }
     }
 
     @Before
     public void setUp() throws Exception {
-        fileHandler = Mockito.mock(FileHandler.class);
-        docRepo = Mockito.mock(DocRepo.class);
-        testFile = Mockito.mock(File.class);
-        testDocDao = Mockito.mock(DocDao.class);
+        fileHandler = mock(FileHandler.class);
+        docRepo = mock(DocRepo.class);
+        testFile = mock(File.class);
+        testDocDao = mock(DocDao.class);
+        mockFileUtil = mock(FileUtil.class);
     }
 
     @Test
     public void notNullObjectTest() {
-        assertThat(docComponent).isNotNull();
         assertThat(fileHandler).isNotNull();
     }
 
     @Test
     public void addDocs() {
         BDDMockito.given(fileHandler.processUploadFile(testFile)).willReturn("return file key");
-        Mockito.when(fileHandler.processUploadFile(testFile)).thenReturn("return file key");
-        Mockito.when(docRepo.save(ArgumentMatchers.any(DocDao.class))).thenReturn(testDocDao);
+        when(fileHandler.processUploadFile(testFile)).thenReturn("return file key");
+        when(docRepo.save(ArgumentMatchers.any(DocDao.class))).thenReturn(testDocDao);
 
-        DocComponent docComponent = new DocComponent(fileHandler, docRepo);
+        DocComponent docComponent = new DocComponent(fileHandler, docRepo, mockFileUtil);
         FileTransactionDto fileTransactionDto = docComponent.addDocs(files);
 
         Assertions.assertThat(fileTransactionDto)
@@ -119,59 +124,58 @@ public class DocComponentTest {
     }
 
     @Test
-    public void downDocTest() {
+    public void downDoc() {
+        File mockDownFile = mock(File.class);
+
+        when(mockDownFile.getPath()).thenReturn("D:/app/test.txt");
+        when(mockFileUtil.getContentType(ArgumentMatchers.any(File.class))).thenReturn("text/plain");
+
+        DocDao mockDocDao = mock(DocDao.class);
+        when(mockDocDao.getDocId()).thenReturn(1L);
+        when(mockDocDao.getDocPath()).thenReturn("doc path");
+        when(mockDocDao.getDocExt()).thenReturn("doc Ext");
+        when(mockDocDao.getDocSize()).thenReturn(1L);
+        when(mockDocDao.getDocUserId()).thenReturn("doc user");
+        when(mockDocDao.getDocName()).thenReturn("doc name");
+
+        when(fileHandler.processDownloadFile(ArgumentMatchers.any(String.class))).thenReturn(mockDownFile);
+        when(docRepo.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(mockDocDao));
+
+        DocComponent docComponent = new DocComponent(fileHandler, docRepo, mockFileUtil);
+        FileDto actual = docComponent.downDoc(1L);
+
+        verify(fileHandler, times(1)).processDownloadFile(anyString());
+        verify(docRepo, times(1)).findById(anyLong());
+
+        Assertions.assertThat(actual)
+                .isNotNull()
+                .isInstanceOf(FileDto.class)
+                .isExactlyInstanceOf(FileDto.class)
+                .matches(fileDto -> fileDto.getFileName().equals(mockDocDao.getDocName()))
+                .matches(fileDto -> fileDto.getFile() == mockDownFile)
+                .matches(fileDto -> fileDto.getFileSize() == mockDocDao.getDocSize())
+                .matches(fileDto -> fileDto.getContentType() == "text/plain");
 
     }
+
 
     @Test
-    public void multipartFileTest() throws FileNotFoundException, IOException {
+    public void deleteDoc() {
+        DocDao mockDocDao = mock(DocDao.class);
+        when(mockDocDao.getDocPath()).thenReturn("doc path");
 
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file1", new FileInputStream(testFile));
-        MultipartFile multiPartFile = mockMultipartFile;
+        when(docRepo.findById(anyLong())).thenReturn(Optional.of(mockDocDao));
+        when(fileHandler.deleteFile(anyString())).thenReturn(true);
 
-        assertThat(multiPartFile.getOriginalFilename()).isEqualTo(testFile.getName());
-        multiPartFile.transferTo(new File("D:/app/multiPartTest.txt"));
+        DocComponent docComponent = new DocComponent(fileHandler, docRepo, mockFileUtil);
+        docComponent.deleteDoc(anyLong());
 
-    }
-
-    @Test
-    @WithMockUser(username = "USER")
-    public void makeTempFile() throws IllegalStateException, IOException {
-
-        assertThat(testFile).isFile();
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("file1", new FileInputStream(testFile));
-//		DocComponent docComponent = new DocComponent();
-        File actual = docComponent.makeTempFile(mockMultipartFile);
-
-        assertThat(actual).isFile();
-        System.out.println("file name ~~ " + actual.getName());
-    }
-
-    @Test
-    @WithMockUser(username = "USER")
-    public void addDocTest() throws IOException {
-
-        MultipartFile multipartFile = new MockMultipartFile("multipart", "zzz", "image/png", "aaa".getBytes());
-        FileItemFactory fileItemFactory = new DiskFileItemFactory(10240, new File("D:\\app\\download"));
-        FileItem fileItem = fileItemFactory.createItem("1557298263287w1jl3O7KfY", ContentType.IMAGE_PNG.getMimeType(), true, "aaa");
-        fileItem.getOutputStream();
-        MultipartFile multipartFile1 = new CommonsMultipartFile(fileItem);
-        docComponent.addDoc(multipartFile1);
-    }
-
-    @Test
-    @WithMockUser(username = "USER")
-    public void updateDocTest() {
-
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("multipart", "mockupTest.png", MediaType.IMAGE_PNG.getType(), "asdfasdf".getBytes());
-
-        DocDao docDao = docRepo.getOne(500L);
-        docDao.setDocName(mockMultipartFile.getOriginalFilename());
-        docDao.setDocExt(FilenameUtils.getExtension(mockMultipartFile.getOriginalFilename()));
-        docDao.setDocSize(mockMultipartFile.getSize());
-
+        verify(docRepo, times(1)).findById(anyLong());
+        verify(fileHandler, times(1)).deleteFile(anyString());
 
     }
+
+
 
 
 }

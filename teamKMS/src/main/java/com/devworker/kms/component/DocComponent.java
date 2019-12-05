@@ -9,6 +9,7 @@ import com.devworker.kms.repo.common.DocRepo;
 import com.devworker.kms.service.UserService;
 import com.devworker.kms.util.CommonUtil;
 import com.devworker.kms.util.FileTransactionUtil;
+import com.devworker.kms.util.FileUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,24 +33,22 @@ import java.util.stream.Collectors;
 @Component
 public class DocComponent {
 
-    //    @Autowired
     private DocRepo docRepo;
 
-    //    @Autowired
-//    @Qualifier(value = "amazonS3")
     private FileHandler fileHandler;
 
+    private FileUtil fileUtil;
 
-    private Logger logger = LoggerFactory.getLogger(DocComponent.class);
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public DocComponent(
             @Autowired
-            @Qualifier(value = "amazonS3")
-                    FileHandler fileHandler,
-            @Autowired
-                    DocRepo docRepo) {
+            @Qualifier(value = "amazonS3") FileHandler fileHandler,
+            @Autowired DocRepo docRepo,
+            @Autowired FileUtil fileUtil) {
         this.fileHandler = fileHandler;
         this.docRepo = docRepo;
+        this.fileUtil = fileUtil;
     }
 
 
@@ -88,15 +87,13 @@ public class DocComponent {
         File file = this.makeTempFile(multipartFile);
         String key = fileHandler.processUploadFile(file);
 
-        return null;
-/*
-        return FileDto.newInstance(
-                file,
-                key,
-                multipartFile.getSize(),
-                multipartFile.getOriginalFilename(),
-                FilenameUtils.getExtension(multipartFile.getOriginalFilename()));
-*/
+        return FileDto.builder()
+                .file(file)
+                .key(key)
+                .fileSize(multipartFile.getSize())
+                .fileName(multipartFile.getOriginalFilename())
+                .fileExt(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
+                .build();
     }
 
 
@@ -127,14 +124,15 @@ public class DocComponent {
     public FileDto downDoc(long docId) {
         Optional<DocDao> optionalDocDao = docRepo.findById(docId);
         DocDao docDao = optionalDocDao.orElseThrow(() -> new RuntimeException("docId is not Exist"));
-        return null;
-/*
-        return FileDto.newInstance(
-                fileHandler.processDownloadFile(docDao.getDocPath()),
-                docDao.getDocSize(),
-                docDao.getDocName(),
-                docDao.getDocExt());
-*/
+        File downFile = fileHandler.processDownloadFile(docDao.getDocPath());
+
+        return FileDto.builder()
+                .file(downFile)
+                .fileSize(docDao.getDocSize())
+                .fileName(docDao.getDocName())
+                .fileExt(docDao.getDocExt())
+                .contentType(fileUtil.getContentType(downFile))
+                .build();
     }
 
     public void deleteDoc(long docId) {
@@ -143,33 +141,14 @@ public class DocComponent {
             throw new RuntimeException("Doc is not found");
 
         DocDao docDao = opDocDao.get();
-        fileHandler.deleteFile(docDao.getDocPath());
         docRepo.delete(docDao);
+        if (!fileHandler.deleteFile(docDao.getDocPath()))
+            throw new RuntimeException("Fail Delete File. " + fileHandler.getClass()); //EventPush ?
+
     }
 
     public void deleteDocs(List<Long> docIds) {
         docIds.stream().forEach(this::deleteDoc);
-    }
-
-    private FileDto makeFileDto(File file, String key) {
-        return FileDto.builder()
-                .file(file)
-                .key(key)
-                .fileExt(FilenameUtils.getExtension(file.getName()))
-                .fileSize(file.length())
-                .fileName(file.getName())
-                .build();
-
-        /*
-        return FileDto.newInstance(
-                file,
-                key,
-                file.length(),
-                file.getName(),
-                FilenameUtils.getExtension(file.getName())
-        );
-*/
-
     }
 
     public void rollbackFileTransaction(String fileTransactKey) {
