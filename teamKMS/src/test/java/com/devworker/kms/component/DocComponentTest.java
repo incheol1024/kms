@@ -115,6 +115,8 @@ public class DocComponentTest {
         DocComponent docComponent = new DocComponent(fileHandler, docRepo, mockFileUtil);
         FileTransactionDto fileTransactionDto = docComponent.addDocs(files);
 
+        verify(docRepo, times(1000)).save(any(DocDao.class));
+
         Assertions.assertThat(fileTransactionDto)
                 .isNotNull()
                 .isInstanceOf(FileTransactionDto.class)
