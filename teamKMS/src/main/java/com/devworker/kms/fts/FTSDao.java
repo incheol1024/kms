@@ -4,11 +4,13 @@ import com.devworker.kms.dto.FtsDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import javax.persistence.Entity;
+
 @Document(indexName="posts", type="posts")
 public class FTSDao {
 	@Id
 	private long id;
-	private String name;	
+	private String name;
 	private String user;
 	private String time;
 	private String text;

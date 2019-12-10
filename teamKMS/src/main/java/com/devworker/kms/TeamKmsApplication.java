@@ -2,8 +2,16 @@ package com.devworker.kms;
 
 import io.swagger.annotations.ApiOperation;
 import org.apache.tika.Tika;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.TransportAddress;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -11,6 +19,8 @@ import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,13 +36,17 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.net.InetAddress;
 import java.util.Objects;
 
 @EnableAsync
 @EnableCaching
 @EnableSwagger2
-@EnableElasticsearchRepositories (basePackages = "com.devworker.kms.fts")
-@SpringBootApplication
+@EnableElasticsearchRepositories(basePackages = "com.devworker.kms.fts")
+@SpringBootApplication(
+        exclude = {ElasticsearchAutoConfiguration.class
+                , ElasticsearchDataAutoConfiguration.class
+                , ElasticsearchRepositoriesAutoConfiguration.class})
 public class TeamKmsApplication {
     public static void main(String[] args) {
         SpringApplication.run(TeamKmsApplication.class, args);
@@ -48,7 +62,7 @@ public class TeamKmsApplication {
     }
 
     @Bean
-    @Order (0)
+    @Order(0)
     public MultipartFilter multipartFilter() {
         MultipartFilter multipartFilter = new MultipartFilter();
         multipartFilter.setMultipartResolverBeanName("multipartReso‌​lver");
@@ -90,6 +104,17 @@ public class TeamKmsApplication {
     @Bean
     public Tika tika() {
         return new Tika();
+    }
+
+    @Bean
+    public Client client() throws Exception{
+        TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
+                .addTransportAddress(new TransportAddress(InetAddress.getByName("ec2-54-180-2-83.ap-northeast-2.compute.amazonaws.com"), 9300));
+        return client;
+    }
+    @Bean
+    public ElasticsearchOperations elasticsearchTemplate() throws Exception {
+        return new ElasticsearchTemplate(client());
     }
 
 }

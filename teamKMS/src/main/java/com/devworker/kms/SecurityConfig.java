@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
+    @Autowired// for test, should may be required=false
     SecurityProvider securityProvider;
 
     @Override
