@@ -15,13 +15,13 @@ import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
 
 @Service
 public class FTSService {
-	@Autowired
+	@Autowired(required = false)
 	FTSRepo repo;
-	
+
 	public long getCount() {
 		return repo.count();
 	}
-	
+
 	public void save(FtsDto dto) {
 		repo.save(dto.toDao());
 	}
@@ -29,7 +29,7 @@ public class FTSService {
 	public void delete(long id){
 		repo.deleteById(id);
 	}
-	
+
 	public Page<FTSDao> find(String word) {
 		SearchQuery searchQuery = new NativeSearchQueryBuilder()
 				.withQuery(multiMatchQuery(word)
@@ -38,6 +38,7 @@ public class FTSService {
                         .field("text")
 						.type(MultiMatchQueryBuilder.Type.BEST_FIELDS))
 				.build();
-		return repo.search(searchQuery);
+//		return repo.search(searchQuery);
+		return null;
 	}
 }

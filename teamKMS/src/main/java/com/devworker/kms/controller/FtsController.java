@@ -5,10 +5,10 @@ import com.devworker.kms.service.FTSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+//@RestController
 @RequestMapping("/fts")
 public class FtsController {
-    @Autowired
+    @Autowired(required = false)
     FTSService ftsService;
 
     @GetMapping

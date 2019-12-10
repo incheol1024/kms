@@ -1,7 +1,13 @@
 package com.devworker.kms.fts;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface FTSRepo extends ElasticsearchRepository<FTSDao,Long>{
+@Repository
+public interface FTSRepo extends JpaRepository
+//        extends ElasticsearchRepository<FTSDao,Long>
+{
 
 }
+
